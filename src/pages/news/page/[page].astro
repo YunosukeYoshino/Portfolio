@@ -1,0 +1,60 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { getBlogs } from "../../../library/microcms";
+import type { GetStaticPathsOptions } from "astro";
+
+export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
+  const page = await getBlogs({ limit: 1000 });
+  return paginate(page.contents, { pageSize: 3 });
+};
+const { page } = Astro.props;
+---
+
+<Layout title={`page ${page.currentPage} | tech`} description="2">
+  <main>
+    <ul>
+      {/* page.dataでページデータを表示 */}
+      {
+        page.data.map((page) => {
+          return (
+            <li>
+              <a href={page.id}>
+                {page.title}
+                <img
+                  src={page.eyecatch.url}
+                  width={page.eyecatch.width}
+                  height={page.eyecatch.heigth}
+                  alt={page.eyecatch.alt}
+                  decoding="async"
+                />
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <nav>
+      {/* page.currentPageで現在ページ、page.lastPageで総ページ数を表示 */}
+      <p>page {page.currentPage}/{page.lastPage}</p>
+      <ul>
+        {/* page.url.prevがある場合は前ページへのリンクを表示 */}
+        {
+          page.url.prev && (
+            <li>
+              <a href={page.url.prev}>PREV</a>
+            </li>
+          )
+        }
+        {/* page.url.nextがある場合は次ページへのリンクを表示 */}
+        {
+          page.url.next && (
+            <li>
+              <a href={page.url.next}>NEXT</a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
+  </main>
+</Layout>

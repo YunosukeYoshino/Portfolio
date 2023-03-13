@@ -1,0 +1,27 @@
+/* ----------------------------------
+	utility
+	ユーティリティクラスを定義
+------------------------------------ */
+
+@use "../global" as *;
+
+// pc時非表示
+.u-dn-md-min {
+  @include mq {
+    display: none;
+  }
+}
+
+// sp時非表示
+.u-dn-md-max {
+  @include mq(md, max) {
+    display: none;
+  }
+}
+
+// クリアフィックス
+.u-cf::after {
+  display: block;
+  clear: both;
+  content: "";
+}

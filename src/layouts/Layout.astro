@@ -1,0 +1,34 @@
+---
+import { SEO, Props as AstroSeoProps } from "astro-seo";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import LocalScripts from "../components/LocalScripts.astro";
+
+export type Props = AstroSeoProps & {
+  title: string;
+  description: string;
+};
+
+import "destyle.css";
+import "src/assets/scss/style.scss";
+import "src/assets/css/app.css";
+const { title, description, ...seoProps }: Props = Astro.props;
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="format-detection" content="email=no,telephone=no,address=no" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <SEO {...seoProps} />
+    <LocalScripts />
+  </head>
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>

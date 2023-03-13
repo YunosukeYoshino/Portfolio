@@ -1,0 +1,61 @@
+/* ----------------------------------
+	Layout footer
+------------------------------------ */
+
+@use "../global" as *;
+
+.l-footer {
+  @include mq(md) {
+    padding: pxtovw(20, "pc");
+  }
+
+  padding: pxtovw(15, "sp");
+  background: rgb(207 109 109);
+
+  &__logo {
+    @include mq(md, max) {
+      width: 100%;
+      text-align: center;
+    }
+
+    @include mq(md) {
+      max-width: 200px;
+    }
+  }
+
+  &__menu {
+    display: flex;
+
+    @include mq(md, max) {
+      flex-wrap: wrap;
+    }
+
+    gap: pxtovw(40, "sp");
+
+    @include mq(md) {
+      gap: pxtovw(100, "pc");
+    }
+
+    justify-content: center;
+
+    & > * + * {
+      @include mq(md, max) {
+        width: calc(50% - rem(40));
+      }
+    }
+  }
+
+  &__title {
+    display: block;
+  }
+
+  &__list {
+    * + * {
+      margin-top: pxtovw(8, "sp");
+
+      @include mq(md) {
+        margin-top: pxtovw(10, "pc");
+      }
+    }
+  }
+}

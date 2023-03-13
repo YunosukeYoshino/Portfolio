@@ -1,0 +1,75 @@
+/* ----------------------------------
+	mediaquery
+	メディアクエリのmixin
+------------------------------------ */
+
+@use "sass:map";
+
+$mq-breakpoints: (
+  "xs": 321px,
+  "sm": 576px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px,
+) !default;
+
+@mixin mq($breakpoint: md, $rule: min) {
+  $breakpoint: map.get($mq-breakpoints, $breakpoint);
+
+  @if $rule == max {
+    $breakpoint: $breakpoint - 1px;
+  }
+
+  @media screen and (#{$rule}-width: $breakpoint) {
+    @content;
+  }
+}
+
+// カスタムmax-widthメディアクエリ
+@mixin mq_custom($breakPoint) {
+  @media (max-width: $breakPoint) {
+    @content;
+  }
+}
+
+// hover動作が使えるかつ、ポインターがマウスポインターのデバイスのみを指定するメディアクエリ
+@mixin mq_hover {
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
+}
+
+@mixin z-map($z-map) {
+  @each $name, $value in $z-map {
+    #{$name}: #{$value};
+  }
+}
+
+// font-size, line-height
+// -------------------------
+// mixin for setting font-size and line-height with base values
+@mixin f($size: font-size(base), $lh: $size + 8) {
+  font-size: $size * 1px;
+  font-size: ($size / 16) * 1rem;
+  line-height: $lh / $size;
+}
+
+// mixin for setting font-size and line-height with custom values
+@mixin fz($size: font-size(base), $lh: $size * 1.5) {
+  font-size: $size * 1px;
+  font-size: ($size / 16) * 1rem;
+  line-height: $lh / $size;
+}
+
+// mixin for setting font-size and line-height with custom values and vw unit
+@mixin fzvw($size: font-size(base), $lh: $size * 1.5, $device: "pc") {
+  @if $device == "pc" {
+    font-size: ($size * 100 / 1280) * 1vw;
+    line-height: $lh / $size;
+  }
+
+  @if $device == "sp" {
+    font-size: ($size * 100 / 375) * 1vw;
+    line-height: $lh / $size;
+  }
+}

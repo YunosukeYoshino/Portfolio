@@ -1,0 +1,10 @@
+@use "../global" as *;
+
+.c-details__title {
+  display: flex;
+  align-items: center;
+}
+
+.c-details__summary {
+  display: block;
+}

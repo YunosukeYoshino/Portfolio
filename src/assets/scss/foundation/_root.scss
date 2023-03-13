@@ -1,0 +1,34 @@
+/* ----------------------------------
+	CSSカスタムプロパティ
+------------------------------------ */
+@use "../global" as *;
+
+:root {
+  // 色の指定
+  --main-color: #333;
+  --sub-color: #fff;
+  --text-color: #333;
+
+  // 文字サイズ
+  --xl: 3.2rem;
+  --lg: 2.4rem;
+  --md: 1.6rem;
+  --sm: 1.4rem;
+  --ss: 1.2rem;
+
+  // z-index
+  --index-header: 100;
+  --index-modal: 200;
+  --index-animation: 1000;
+
+  @include z-map(
+    (
+      --z-header: 0,
+      --z-modal-header: 10,
+      --z-modal-humburger: 20,
+    )
+  );
+
+  // inner幅
+  --inner: 110rem;
+}

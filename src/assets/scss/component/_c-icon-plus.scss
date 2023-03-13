@@ -1,0 +1,32 @@
+@use "../global" as *;
+
+.c-icon-plus {
+  position: relative;
+  display: inline-block;
+  width: rem(24);
+  height: rem(24);
+
+  &::before,
+  &::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 50%;
+    height: rem(2);
+    content: "";
+    background: #fff;
+    transition: all 0.4s;
+    transform: translate(-50%, -50%);
+  }
+
+  &::before {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}
+
+.js-details[open="true"] {
+  .c-icon-plus::before {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}

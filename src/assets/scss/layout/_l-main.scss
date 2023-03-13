@@ -1,0 +1,13 @@
+/* ----------------------------------
+	Layout
+    main
+------------------------------------ */
+
+@use "../global" as *;
+
+.l-main {
+  max-width: rem(1400);
+  min-height: calc(100svh - $header-height);
+  padding: rem(60) rem(20);
+  margin: 0 auto;
+}

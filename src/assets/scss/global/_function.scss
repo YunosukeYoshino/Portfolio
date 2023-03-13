@@ -1,0 +1,44 @@
+/* ----------------------------------
+	functions SCSSの関数
+------------------------------------ */
+
+@use "sass:map";
+@use "sass:math";
+
+// size
+// --------------------------------------------------
+$pc-size: (
+  max: 1400,
+  base: 1280,
+  inner: 1040,
+);
+$sp-size: (
+  base: 375,
+  inner: 305,
+);
+
+@function widthPc($key) {
+  @return map.get($pc-size, $key);
+}
+
+@function widthSp($key) {
+  @return map.get($sp-size, $key);
+}
+
+// rem() pxをremに変換する
+$baseFontSize: 16;
+
+@function rem($px) {
+  @return calc($px / $baseFontSize * 1rem);
+}
+
+// pxのフォントサイズをvw単位に変換
+@function pxtovw($value, $device) {
+  @if $device == "pc" {
+    @return math.div($value * 100, widthPc(base)) * 1vw;
+  }
+
+  @if $device == "sp" {
+    @return math.div($value * 100, widthSp(base)) * 1vw;
+  }
+}

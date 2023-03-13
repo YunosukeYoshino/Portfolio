@@ -1,0 +1,10 @@
+---
+import Blog from "src/components/Blog.astro";
+import Layout from "src/layouts/Layout.astro";
+---
+
+<Layout title="Welcome to Astro" description="Build faster websites with Astro">
+  <main class="l-main">
+    <Blog limit={300} />
+  </main>
+</Layout>

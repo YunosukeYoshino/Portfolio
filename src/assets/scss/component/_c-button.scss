@@ -1,0 +1,29 @@
+/* ----------------------------------
+	component
+    Button
+------------------------------------ */
+
+.c-button {
+  display: inline-block;
+
+  // コンポーネント本体には共通のスタイルのみ
+  padding: 10px 20px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+
+  // Modifierでスタイルを拡張
+  &--primary {
+    background-color: #1aa6e0;
+  }
+
+  &--secondary {
+    background-color: #e0891a;
+  }
+
+  &--full-width {
+    display: block;
+    width: 100%;
+  }
+}

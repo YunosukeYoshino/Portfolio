@@ -1,0 +1,27 @@
+---
+import Blog from "src/components/Blog.astro";
+import Layout from "src/layouts/Layout.astro";
+---
+
+<style lang="scss">
+  @use "/src/assets/scss/global" as *;
+
+  .hp_mobileOnly {
+    font-family: sans-serif;
+    font-size: 24px;
+
+    @include mq_custom(1155px) {
+      color: red;
+    }
+
+    @include mq(md) {
+      font-size: 16px;
+    }
+  }
+</style>
+
+<Layout title="Welcome to Astro" description="Build faster websites with Astro">
+  <main class="l-main">
+    <Blog limit={3} />
+  </main>
+</Layout>

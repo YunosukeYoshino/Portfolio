@@ -1,0 +1,35 @@
+---
+//microCMS呼び出し
+import { getBlogs } from "../library/microcms";
+const limit: number = Astro.props.limit; //limit数
+const response = await getBlogs({ fields: ["id", "title", "eyecatch"], limit });
+---
+
+<ul>
+  {
+    response.contents.map((content: any) => (
+      <li>
+        <a href={content.id}>
+          <p class="publishedAt">公開日時：{content.publishedAt}</p>
+
+          {content.title}
+          <img
+            src={content.eyecatch.url}
+            width={content.eyecatch.width}
+            height={content.eyecatch.heigth}
+            alt={content.eyecatch.alt}
+            decoding="async"
+          />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  main {
+    max-width: 60ch;
+    padding: 1em;
+    margin: auto;
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+const links = [
+  { href: "/", label: "TOP" },
+  { href: "/about", label: "ABOUT" },
+  { href: "/contact", label: "CONTACT" },
+];
+---
+
+<header class="l-header">
+  <nav class="l-header__menu">
+    <h1 class="l-header__logo">
+      <img src="" alt="ロゴ" width="" height="" />
+    </h1>
+    <button class="c-humburger js-humburger" title="Menu">
+      <span class="c-humburger__line c-humburger__line--1"></span>
+      <span class="c-humburger__line c-humburger__line--2"></span>
+      <span class="c-humburger__line c-humburger__line--3"></span>
+    </button>
+    <ul class="l-header__list">
+      {
+        links.map((item) => (
+          <li class="l-header__item">
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
