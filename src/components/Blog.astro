@@ -2,7 +2,7 @@
 //microCMS呼び出し
 import { getBlogs } from "../library/microcms";
 const limit: number = Astro.props.limit; //limit数
-const response = await getBlogs({ fields: ["id", "title", "eyecatch"], limit });
+const response = await getBlogs({ fields: ["id", "title", "eyecatch", "publishedAt", "author"], limit });
 ---
 
 <ul>
@@ -11,7 +11,7 @@ const response = await getBlogs({ fields: ["id", "title", "eyecatch"], limit });
       <li>
         <a href={content.id}>
           <p class="publishedAt">公開日時：{content.publishedAt}</p>
-
+          <p class="author">Author：{content.author}</p>
           {content.title}
           <img
             src={content.eyecatch.url}
