@@ -1,0 +1,32 @@
+/* ----------------------------------
+	Project
+    article Page
+------------------------------------ */
+
+.p-article__upperInfo {
+  display: flex;
+  gap: 60px;
+  margin-bottom: 50px;
+}
+
+.p-article__title {
+  margin-bottom: 80px;
+  font-size: 40px;
+}
+
+.p-article__post {
+  padding: 0 16%;
+
+  h2 {
+    padding-bottom: 4px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 1px solid #ececec;
+  }
+
+  p {
+    line-height: 2;
+    letter-spacing: 0.07em;
+  }
+}
