@@ -6,6 +6,7 @@
 .p-article__upperInfo {
   display: flex;
   gap: 60px;
+  align-items: center;
   margin-bottom: 50px;
 }
 
@@ -29,4 +30,9 @@
     line-height: 2;
     letter-spacing: 0.07em;
   }
+}
+
+.p-article__category {
+  padding-bottom: 4px;
+  border-bottom: 1px solid#222;
 }

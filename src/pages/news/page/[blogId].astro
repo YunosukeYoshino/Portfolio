@@ -32,7 +32,7 @@ $("pre code").each((_: any, elm: any) => {
 <Layout title="My first blog with Astro" description="詳細">
   <main>
     <h1 class="title">{blog.title}</h1>
-    <p class="publishedAt">公開日時：{blog.publishedAt}</p>
+    <p class="publishedAt">公開日時：{new Date(blog.publishedAt).toLocaleDateString("ja-JP")}</p>
     <div class="post" set:html={$.html()} />
     <img
       src={blog.eyecatch.url}
