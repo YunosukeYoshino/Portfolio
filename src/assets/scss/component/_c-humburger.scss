@@ -12,14 +12,14 @@ $translateX: 0;
 .c-humburger {
   position: relative;
   z-index: var(--z-modal-humburger);
+  display: block;
+  width: $width-line;
+  height: $height-icon;
+  mix-blend-mode: difference;
 
   @include mq(md) {
     display: none;
   }
-
-  display: block;
-  width: $width-line;
-  height: $height-icon;
 
   &__line {
     position: absolute;
@@ -28,6 +28,7 @@ $translateX: 0;
     width: $width-line;
     height: $height-line;
     background: $color;
+    filter: invert(100%);
     border-radius: (calc($height-line / 2));
     transition: all $transition-time;
 

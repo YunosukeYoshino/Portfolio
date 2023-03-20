@@ -2,37 +2,56 @@
 	Project
     article Page
 ------------------------------------ */
+@use "../global" as *;
 
 .p-article__upperInfo {
   display: flex;
-  gap: 60px;
+  gap: clampvw(24, 30, 1280);
   align-items: center;
-  margin-bottom: 50px;
+  margin-bottom: rem(50);
 }
 
 .p-article__title {
-  margin-bottom: 80px;
-  font-size: 40px;
+  margin-bottom: rem(80);
+  font-size: clampvw(24, 40, 1280);
+  font-weight: 500;
+}
+
+.p-article__thumbnail {
+  margin-bottom: rem(80);
 }
 
 .p-article__post {
-  padding: 0 16%;
+  & > :is(h1, h2, h3, h4, h5) {
+    margin-top: rem(40);
+  }
+
+  & > :is(h1, h2, h3) {
+    padding-bottom: rem(4);
+    margin-bottom: rem(20);
+    font-weight: 500;
+    border-bottom: 1px solid var(--main-color);
+  }
 
   h2 {
-    padding-bottom: 4px;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    border-bottom: 1px solid #ececec;
+    font-size: clampvw(24, 28, 1280);
   }
 
   p {
+    font-size: clampvw(20, 24, 1280);
     line-height: 2;
     letter-spacing: 0.07em;
+  }
+
+  pre code {
+    display: block;
+    margin: rem(20) 0;
+    border-radius: 10px;
   }
 }
 
 .p-article__category {
-  padding-bottom: 4px;
+  padding-bottom: rem(4);
+  font-size: clampvw(14, 16, 1280);
   border-bottom: 1px solid#222;
 }

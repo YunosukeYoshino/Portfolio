@@ -42,3 +42,13 @@ $baseFontSize: 16;
     @return math.div($value * 100, widthSp(base)) * 1vw;
   }
 }
+
+// clamp 可変サイズ関数
+@function clampvw($min, $max, $vp: 1920) {
+  $min-size: calc($min / $baseFontSize * 1rem);
+  $max-size: calc($max / $baseFontSize * 1rem);
+  $num: calc($max / $vp) * 100vw;
+  $size_vw: $num;
+
+  @return clamp($min-size, $size_vw, $max-size);
+}

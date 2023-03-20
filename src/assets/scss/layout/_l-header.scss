@@ -5,23 +5,41 @@
 
 @use "../global" as *;
 
+:root {
+  --mix-blend-mode: difference;
+}
+
 .l-header {
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
+  width: 100%;
   height: $header-height;
   padding: rem(20);
-  background: rgb(173 173 255);
+  backdrop-filter: blur(10px);
+  mix-blend-mode: var(--mix-blend-mode);
+
+  @include mq(md) {
+    color: #a7a7a7;
+  }
 
   &__menu {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+
+    @include mq(md) {
+      justify-content: center;
+    }
+
     width: 100%;
   }
 
   &__list {
     display: none;
-    gap: rem(20);
+    gap: clampvw(20, 60, 1280);
+    font-size: clampvw(14, 16, 1280);
 
     @include mq(md) {
       display: flex;

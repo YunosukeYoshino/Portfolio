@@ -10,4 +10,17 @@
   min-height: calc(100svh - $header-height);
   padding: rem(60) rem(20);
   margin: 0 auto;
+
+  &::after {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    content: "";
+    background-color: rgb(255 255 255 / 28%);
+    backdrop-filter: saturate(120%) blur(20px);
+    backface-visibility: hidden;
+  }
 }
