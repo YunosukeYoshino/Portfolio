@@ -25,10 +25,36 @@ const { title, description, ...seoProps }: Props = Astro.props;
     <title>{title}</title>
     <SEO {...seoProps} />
     <LocalScripts />
+    <style>
+      #gradient-canvas {
+        position: fixed;
+        top: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+
+        --gradient-color-1: #6fb4ec;
+        --gradient-color-2: #bcecf0;
+        --gradient-color-3: #b49cf2;
+        --gradient-color-4: #cccff5;
+      }
+    </style>
   </head>
   <body>
     <Header />
-    <slot />
+    <canvas id="gradient-canvas" data-transition-in></canvas>
+    <main class="l-main">
+      <slot />
+    </main>
     <Footer />
+    <script>
+      import { Gradient } from "../library/Gradient";
+
+      // Create your instance
+      const gradient = new Gradient();
+
+      // Call `initGradient` with the selector to your canvas
+      gradient.initGradient("#gradient-canvas");
+    </script>
   </body>
 </html>

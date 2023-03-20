@@ -10,7 +10,7 @@ const response = await getBlogs({ fields: ["id", "title", "eyecatch", "published
     response.contents.map((content: any) => (
       <li>
         <a href={content.id}>
-          <p class="publishedAt">公開日時：{new Date(content.publishedAt).toLocaleDateString("ja-JP")}</p>
+          <p class="publishedAt">{new Date(content.publishedAt).toLocaleDateString("ja-JP").replace(/\//g, ".")}</p>
           <p class="author">Author：{content.author}</p>
           {content.title}
           <img
