@@ -21,7 +21,7 @@ export type Blog = {
   eyecatch: {
     url: string;
     width: number;
-    heigth: number;
+    height: number;
     alt: string;
   };
 };

@@ -1,6 +1,5 @@
 ---
 import { SEO, Props as AstroSeoProps } from "astro-seo";
-import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import LocalScripts from "../components/LocalScripts.astro";
 
@@ -46,7 +45,6 @@ const { title, description, ...seoProps }: Props = Astro.props;
     <main class="l-main">
       <slot />
     </main>
-    <Footer />
     <script>
       import { Gradient } from "../library/Gradient";
 

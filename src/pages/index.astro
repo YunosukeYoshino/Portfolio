@@ -1,25 +1,39 @@
 ---
+import About from "src/components/About.astro";
 import Blog from "src/components/Blog.astro";
+import MainVisual from "src/components/MainVisual.astro";
 import Layout from "src/layouts/Layout.astro";
 ---
 
 <style lang="scss">
   @use "/src/assets/scss/global" as *;
 
-  .hp_mobileOnly {
-    font-family: sans-serif;
-    font-size: 24px;
-
-    @include mq_custom(1155px) {
-      color: red;
-    }
+  .p-contactArea__mailLink {
+    display: block;
+    font-family: $f_Lola;
+    font-size: clampvw(18, 40, 1280);
+    text-align: center;
 
     @include mq(md) {
-      font-size: 16px;
+      font-size: clampvw(48, 90, 1920);
     }
   }
 </style>
 
 <Layout title="Welcome to Astro" description="Build faster websites with Astro">
-  <Blog limit={3} />
+  <MainVisual />
+  <About />
+  <section class="p-mainArticleList u-spacer" data-space="max:80px min:144px">
+    <header>
+      <h1 class="p-sectionUpperText">Article</h1>
+    </header>
+    <Blog limit={6} column={2} />
+  </section>
+
+  <section class="p-contactArea u-spacer" data-space="max:80px min:144px">
+    <header>
+      <h1 class="p-sectionUpperText">Contact</h1>
+    </header>
+    <a class="p-contactArea__mailLink" href="mailto:yunosukeyoshino@gmail.com"> yunosukeyoshino@gmail.com</a>
+  </section>
 </Layout>

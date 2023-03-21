@@ -1,0 +1,75 @@
+---
+import Layout from "src/layouts/Layout.astro";
+import { getBlogs } from "../../../library/microcms";
+import type { GetStaticPathsOptions } from "astro";
+
+export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
+  const page = await getBlogs({ limit: 1000 });
+  return paginate(page.contents, { pageSize: 9 });
+};
+const { page } = Astro.props;
+---
+
+<Layout title="Article List" description="技術記事一覧です。">
+  <div class={`l-grid p-articleList  l-grid--col-4`}>
+    {/* page.dataでページデータを表示 */}
+    {
+      page.data.map(
+        (page: {
+          publishedAt: string | number | Date;
+          id: string | URL | null | undefined;
+          title: unknown;
+          eyecatch: {
+            url: string | null | undefined;
+            width: string | number | null | undefined;
+            heigth: string | number | null | undefined;
+            alt: string | null | undefined;
+          };
+        }) => {
+          return (
+            <div class="l-grid__item p-articleList__item">
+              <a class="p-articleList__Link" href={page.id}>
+                <figure class="p-articleList__thumnail">
+                  <img
+                    src={page.eyecatch.url}
+                    width={page.eyecatch.width}
+                    height={page.eyecatch.height}
+                    alt={page.eyecatch.alt}
+                    decoding="async"
+                  />
+                </figure>
+              </a>
+              <p class="p-articleList__publishedAt">
+                {new Date(page.publishedAt).toLocaleDateString("ja-JP").replace(/\//g, ".")}
+              </p>
+              <p class="p-articleList__title">{page.title}</p>
+            </div>
+          );
+        },
+      )
+    }
+  </div>
+
+  <nav>
+    {/* page.currentPageで現在ページ、page.lastPageで総ページ数を表示 */}
+    <p>page {page.currentPage}/{page.lastPage}</p>
+    <ul>
+      {/* page.url.prevがある場合は前ページへのリンクを表示 */}
+      {
+        page.url.prev && (
+          <li>
+            <a href={page.url.prev}>PREV</a>
+          </li>
+        )
+      }
+      {/* page.url.nextがある場合は次ページへのリンクを表示 */}
+      {
+        page.url.next && (
+          <li>
+            <a href={page.url.next}>NEXT</a>
+          </li>
+        )
+      }
+    </ul>
+  </nav>
+</Layout>

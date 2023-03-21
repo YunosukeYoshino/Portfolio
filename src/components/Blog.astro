@@ -2,34 +2,31 @@
 //microCMS呼び出し
 import { getBlogs } from "../library/microcms";
 const limit: number = Astro.props.limit; //limit数
+const column: number = Astro.props.column; //column数
 const response = await getBlogs({ fields: ["id", "title", "eyecatch", "publishedAt", "author"], limit });
 ---
 
-<ul>
+<div class={`l-grid p-articleList  l-grid--col-${column}`}>
   {
     response.contents.map((content: any) => (
-      <li>
-        <a href={content.id}>
-          <p class="publishedAt">{new Date(content.publishedAt).toLocaleDateString("ja-JP").replace(/\//g, ".")}</p>
-          <p class="author">Author：{content.author}</p>
-          {content.title}
-          <img
-            src={content.eyecatch.url}
-            width={content.eyecatch.width}
-            height={content.eyecatch.heigth}
-            alt={content.eyecatch.alt}
-            decoding="async"
-          />
+      <div class="l-grid__item p-articleList__item">
+        <a class="p-articleList__Link" href={content.id}>
+          <figure class="p-articleList__thumnail">
+            <img
+              src={content.eyecatch.url}
+              width={content.eyecatch.width}
+              height={content.eyecatch.height}
+              alt={content.eyecatch.alt}
+              decoding="async"
+            />
+          </figure>
         </a>
-      </li>
+
+        <p class="p-articleList__publishedAt">
+          {new Date(content.publishedAt).toLocaleDateString("ja-JP").replace(/\//g, ".")}
+        </p>
+        <p class="p-articleList__title">{content.title}</p>
+      </div>
     ))
   }
-</ul>
-
-<style>
-  main {
-    max-width: 60ch;
-    padding: 1em;
-    margin: auto;
-  }
-</style>
+</div>
