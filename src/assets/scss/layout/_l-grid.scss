@@ -1,0 +1,20 @@
+/* ----------------------------------
+	Layout
+    grid
+------------------------------------ */
+
+@use "../global" as *;
+
+.l-grid {
+  display: grid;
+  row-gap: pxtovw(48, pc);
+  column-gap: pxtovw(48, pc);
+}
+
+.l-grid--col-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.l-grid--col-4 {
+  grid-template-columns: repeat(4, 1fr);
+}

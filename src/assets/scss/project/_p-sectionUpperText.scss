@@ -1,0 +1,13 @@
+/* ----------------------------------
+	Project
+    sectionUpperText
+------------------------------------ */
+
+@use "../global" as *;
+
+.p-sectionUpperText {
+  margin-bottom: pxtovw(80, pc);
+  font-family: $f_Lola;
+  font-size: pxtovw(60, pc);
+  border-bottom: 1px solid var(--main-color);
+}
