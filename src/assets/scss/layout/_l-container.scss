@@ -1,0 +1,10 @@
+/* ----------------------------------
+	Layout container
+------------------------------------ */
+
+@use "../global" as *;
+
+.l-container {
+  max-width: rem(1400);
+  margin: 0 auto;
+}

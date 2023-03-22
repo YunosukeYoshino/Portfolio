@@ -11,7 +11,7 @@ const { page } = Astro.props;
 ---
 
 <Layout title="Article List" description="技術記事一覧です。">
-  <div class={`l-grid p-articleList  l-grid--col-4`}>
+  <div class={`l-container  l-grid p-articleList  l-grid--col-3`}>
     {/* page.dataでページデータを表示 */}
     {
       page.data.map(
@@ -22,7 +22,7 @@ const { page } = Astro.props;
           eyecatch: {
             url: string | null | undefined;
             width: string | number | null | undefined;
-            heigth: string | number | null | undefined;
+            height: string | number | null | undefined;
             alt: string | null | undefined;
           };
         }) => {
