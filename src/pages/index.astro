@@ -23,14 +23,14 @@ import Layout from "src/layouts/Layout.astro";
 <Layout title="Welcome to Astro" description="Build faster websites with Astro">
   <MainVisual />
   <About />
-  <section class="p-mainArticleList u-spacer" data-space="max:80px min:144px">
+  <section class="p-mainArticleList u-spacer" data-space="max:80px min:144px" id="article">
     <header>
       <h1 class="p-sectionUpperText">Article</h1>
     </header>
     <Blog limit={6} column={2} />
   </section>
 
-  <section class="p-contactArea u-spacer" data-space="max:80px min:144px">
+  <section class="p-contactArea u-spacer" data-space="max:80px min:144px" id="contact">
     <header>
       <h1 class="p-sectionUpperText">Contact</h1>
     </header>
