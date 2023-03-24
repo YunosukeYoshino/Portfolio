@@ -30,16 +30,25 @@ $("pre code").each((_: any, elm: any) => {
 ---
 
 <Layout title="My first blog with Astro" description="詳細">
-  <main>
-    <h1 class="title">{blog.title}</h1>
-    <p class="publishedAt">公開日時：{new Date(blog.publishedAt).toLocaleDateString("ja-JP")}</p>
-    <div class="post" set:html={$.html()} />
+  <div class="l-main__inner">
+    <div class="p-article__upperInfo">
+      <p class="p-article__publishedAt">
+        <time>{new Date(blog.publishedAt).toLocaleDateString("ja-JP").replace(/\//g, ".")}</time>
+      </p>
+      <p class={`p-article__category p-article__category--${blog.category.id}`} data-category-id={blog.category.id}>
+        {blog.category.name}
+      </p>
+    </div>
+    <h1 class="p-article__title">{blog.title}</h1>
+
     <img
+      class="p-article__thumbnail"
       src={blog.eyecatch.url}
       width={blog.eyecatch.width}
       height={blog.eyecatch.height}
       alt={blog.eyecatch.alt}
       decoding="async"
     />
-  </main>
+    <div class="p-article__post" set:html={$.html()} />
+  </div>
 </Layout>
