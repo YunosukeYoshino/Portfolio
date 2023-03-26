@@ -25,8 +25,9 @@
   @include z-map(
     (
       --z-header: 0,
-      --z-modal-header: 10,
-      --z-modal-humburger: 20,
+      --z-modal-header: 20,
+      --z-modal-humburger: 21,
+      --z-canvas: -1,
     )
   );
 

@@ -4,13 +4,13 @@ const Hamburger = () => {
     menu.classList.toggle("is-active");
 
     if (menu.classList.contains("is-active")) {
-      document.body.style.setProperty("--mix-blend-mode", "none");
       document.body.style.setProperty("position", "fixed");
       document.body.style.setProperty("width", "100%");
+      document.body.style.setProperty("--z-canvas", "2");
     } else {
-      document.body.style.removeProperty("--mix-blend-mode");
       document.body.style.removeProperty("position");
       document.body.style.removeProperty("width");
+      document.body.style.removeProperty("--z-canvas");
     }
   });
 };
