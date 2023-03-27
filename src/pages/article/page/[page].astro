@@ -10,8 +10,17 @@ export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
 const { page } = Astro.props;
 ---
 
+<style lang="scss">
+  @use "/src/assets/scss/global" as *;
+
+  .c-pageNation__menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+  }
+</style>
 <Layout title="Article List" description="技術記事一覧です。">
-  <div class={`l-container  l-grid p-articleList  l-grid--col-3`}>
+  <div class={`l-container  l-grid p-articleList  l-grid--col-3 md_l-grid--col-2 mb-24`}>
     {/* page.dataでページデータを表示 */}
     {
       page.data.map(
@@ -50,26 +59,31 @@ const { page } = Astro.props;
     }
   </div>
 
-  <nav>
+  <nav class="c-pageNation">
     {/* page.currentPageで現在ページ、page.lastPageで総ページ数を表示 */}
-    <p>page {page.currentPage}/{page.lastPage}</p>
-    <ul>
+
+    <ul class="c-pageNation__menu">
       {/* page.url.prevがある場合は前ページへのリンクを表示 */}
-      {
-        page.url.prev && (
-          <li>
-            <a href={page.url.prev}>PREV</a>
-          </li>
-        )
-      }
+      <li class="c-pageNation__item">
+        {
+          page.url.prev && (
+            <a class="c-pageNation__link c-pageNation__link--prev" href={page.url.prev}>
+              PREV
+            </a>
+          )
+        }
+      </li>
+      <li class="c-pageNation__item">{page.currentPage}/{page.lastPage}</li>
       {/* page.url.nextがある場合は次ページへのリンクを表示 */}
-      {
-        page.url.next && (
-          <li>
-            <a href={page.url.next}>NEXT</a>
-          </li>
-        )
-      }
+      <li class="c-pageNation__item">
+        {
+          page.url.next && (
+            <a class="c-pageNation__link c-pageNation__link--next" href={page.url.next}>
+              NEXT
+            </a>
+          )
+        }
+      </li>
     </ul>
   </nav>
 </Layout>

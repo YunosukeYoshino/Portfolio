@@ -5,11 +5,15 @@
   @use "/src/assets/scss/global" as *;
 
   .p-about__body {
-    max-width: pxtovw(900, pc);
     margin-left: auto;
-    font-size: pxtovw(24, pc);
+    font-size: pxtovw(18, sp);
     line-height: 2;
     letter-spacing: 0.08em;
+
+    @include mq(md) {
+      max-width: pxtovw(900, pc);
+      font-size: pxtovw(24, pc);
+    }
   }
 </style>
 
