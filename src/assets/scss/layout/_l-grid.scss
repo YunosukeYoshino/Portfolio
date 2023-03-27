@@ -15,6 +15,12 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+.md_l-grid--col-2 {
+  @include mq(md, max) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .l-grid--col-3 {
   grid-template-columns: repeat(3, 1fr);
 }
