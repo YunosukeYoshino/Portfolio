@@ -24,6 +24,10 @@
 }
 
 .p-article__post {
+  font-size: clampvw(16, 24, 1280);
+  line-height: 2;
+  letter-spacing: 0.07em;
+
   & > :is(h1, h2, h3, h4, h5) {
     margin-top: rem(40);
   }
@@ -39,16 +43,45 @@
     font-size: clampvw(24, 28, 1280);
   }
 
-  p {
-    font-size: clampvw(20, 24, 1280);
-    line-height: 2;
-    letter-spacing: 0.07em;
+  ul {
+    padding-left: 1em;
+    list-style: disc;
+  }
+
+  code {
+    display: block;
+    padding: 1em;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+    font-size: 1rem;
+    color: #d6deeb;
+    background: #011627;
+    border-radius: 10px;
   }
 
   pre code {
     display: block;
     margin: rem(20) 0;
     border-radius: 10px;
+  }
+
+  blockquote {
+    width: fit-content;
+    padding: rem(20) rem(40);
+    margin: rem(10);
+    font-style: italic;
+    background: #fffdfd52;
+    border-radius: 10px;
+  }
+
+  blockquote::before {
+    margin-right: 10px;
+    content: "“";
+  }
+
+  blockquote::after {
+    margin-left: 10px;
+    content: "”";
   }
 }
 

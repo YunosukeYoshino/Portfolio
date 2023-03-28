@@ -8,6 +8,10 @@
 .p-sectionUpperText {
   margin-bottom: pxtovw(80, pc);
   font-family: $f_Lola;
-  font-size: pxtovw(60, pc);
+  font-size: pxtovw(24, sp);
   border-bottom: 1px solid var(--main-color);
+
+  @include mq(md) {
+    font-size: pxtovw(60, pc);
+  }
 }

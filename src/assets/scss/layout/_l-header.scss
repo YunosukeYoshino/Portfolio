@@ -71,6 +71,10 @@ li.l-header__item {
   }
 }
 
+.l-header__item > a {
+  display: block;
+}
+
 .js-humburger.is-active + .l-header__list {
   display: flex;
 }
