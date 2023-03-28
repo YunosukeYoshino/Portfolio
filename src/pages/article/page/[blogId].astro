@@ -29,7 +29,10 @@ $("pre code").each((_: any, elm: any) => {
 // console.log($.html()); // ハイライト済みのHTML
 ---
 
-<Layout title="Yunosuke Yoshino Portfolio" description="詳細">
+<Layout
+  title={`${blog.title || "Article"} | Yunosuke Yoshino Portfolio`}
+  description="This is the portfolio of Yunosuke Yoshino"
+>
   <div class="l-main__inner">
     <div class="p-article__upperInfo">
       <p class="p-article__publishedAt">

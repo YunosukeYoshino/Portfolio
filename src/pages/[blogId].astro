@@ -40,7 +40,10 @@ $("pre code").each((_: any, elm: any) => {
     margin: auto;
   }
 </style>
-<Layout title="My first blog with Astro" description="詳細">
+<Layout
+  title={`${blog.title || "Article"} | Yunosuke Yoshino Portfolio`}
+  description="This is the portfolio of Yunosuke Yoshino"
+>
   <div class="l-main__inner">
     <div class="p-article__upperInfo">
       <p class="p-article__publishedAt">
