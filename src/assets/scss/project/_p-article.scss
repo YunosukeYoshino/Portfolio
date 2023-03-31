@@ -43,6 +43,11 @@
     font-size: clampvw(24, 28, 1280);
   }
 
+  a[href] {
+    color: #696dd9;
+    overflow-wrap: break-word;
+  }
+
   ul {
     padding-left: 1em;
     list-style: disc;
