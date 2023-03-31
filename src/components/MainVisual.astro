@@ -103,12 +103,12 @@
   import gsap from "gsap";
   const TL = gsap.timeline(); //TimeLineメソッドを使うことによって順番にアニメーションを行える
   const TestAnimation = () => {
-    gsap.set(".js-split-text span", { display: "inline-block" });
-    TL.from(".js-split-text span", {
-      autoAlpha: 0 /* visibilityとopacityを合わせたもの*/,
+    gsap.set(".js-split-text span", { display: "inline-block", autoAlpha: 0, y: 40 });
+    TL.to(".js-split-text span", {
+      autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
       duration: 0.6, //animation-duration
       ease: "back.out(1.7)", //ease
-      y: 40, //y方向に移動
+      y: 0, //y方向に移動
       stagger: 0.02, //stagger
     }).to(".p-mainVisual__lowerText", {
       autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
