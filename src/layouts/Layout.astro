@@ -17,10 +17,14 @@ const { title, description, ...seoProps }: Props = Astro.props;
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="format-detection" content="email=no,telephone=no,address=no" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    <!-- アイコン画像の指定 -->
+    <link rel="icon" type="image/png" href="/assets/icons/icon-72x72.png" sizes="72x72" />
+    <link rel="icon" type="image/png" href="/assets/icons/icon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="/assets/icons/icon-128x128.png" sizes="128x128" />
+    <link rel="manifest" href="manifest.json" />
     <title>{title}</title>
     <SEO {...seoProps} />
     <LocalScripts />
