@@ -54,19 +54,22 @@
   }
 
   code {
-    display: block;
-    padding: 1em;
-    margin: 1.25rem 0;
-    overflow-x: auto;
     font-size: 1rem;
-    color: #d6deeb;
-    background: #011627;
-    border-radius: 10px;
   }
 
   pre code {
     display: block;
     margin: rem(20) 0;
+    border-radius: 10px;
+  }
+
+  code:not([class]) {
+    padding: 0.3em 0.5em;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+    color: #b1cfff;
+    white-space: nowrap;
+    background: #011627;
     border-radius: 10px;
   }
 
