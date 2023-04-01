@@ -16,7 +16,7 @@ export default defineConfig({
   integrations: [
     sitemap(),
     purgecss({
-      safelist: [/is-active/],
+      safelist: [/is-active/, /p-safari/],
     }),
     compress(),
     tailwind({ config: { applyBaseStyles: false } }),
