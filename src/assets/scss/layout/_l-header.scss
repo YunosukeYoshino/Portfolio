@@ -30,10 +30,6 @@
     align-items: center;
     justify-content: flex-end;
 
-    @supports (-webkit-touch-callout: none) {
-      mix-blend-mode: var(--mix-blend-mode);
-    }
-
     @include mq(md) {
       justify-content: center;
     }
@@ -70,7 +66,7 @@
 ::-webkit-full-page-media,
 :future,
 :root .l-header {
-  background: #000;
+  mix-blend-mode: unset;
 }
 
 ::-webkit-full-page-media,
@@ -84,6 +80,14 @@
   height: 100%;
   content: "";
   backdrop-filter: blur(10px);
+}
+
+::-webkit-full-page-media,
+:future,
+:root .l-header__menu {
+  z-index: 1;
+  color: #fff;
+  mix-blend-mode: var(--mix-blend-mode);
 }
 
 li.l-header__item {
