@@ -9,19 +9,6 @@
   --mix-blend-mode: difference;
 }
 
-.l-header::after {
-  @supports (-webkit-touch-callout: none) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    content: "";
-    backdrop-filter: blur(10px);
-  }
-}
-
 .l-header {
   position: sticky;
   top: 0;
@@ -33,10 +20,6 @@
   padding: rem(20);
   mix-blend-mode: var(--mix-blend-mode);
   backdrop-filter: blur(10px);
-
-  @supports (-webkit-touch-callout: none) {
-    background: #000;
-  }
 
   @include mq(md) {
     color: #a7a7a7;
@@ -82,6 +65,25 @@
       font-size: clampvw(24, 60, 768);
     }
   }
+}
+
+::-webkit-full-page-media,
+:future,
+:root .l-header {
+  background: #000;
+}
+
+::-webkit-full-page-media,
+:future,
+:root .l-header::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  content: "";
+  backdrop-filter: blur(10px);
 }
 
 li.l-header__item {
