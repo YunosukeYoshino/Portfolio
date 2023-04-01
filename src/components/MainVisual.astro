@@ -27,7 +27,7 @@
   <script>
     import gsap from "gsap";
     const TL = gsap.timeline(); //TimeLineメソッドを使うことによって順番にアニメーションを行える
-    const TestAnimation = () => {
+    const TextAnimation = () => {
       gsap.set(".js-split-text span", { display: "inline-block", autoAlpha: 0, y: 40 });
       gsap.set(".js-split-text", { autoAlpha: 1 });
       TL.to(".js-split-text span", {
@@ -44,9 +44,11 @@
       });
     };
 
-    addEventListener("DOMContentLoaded", TestAnimation);
-
-    {
+    addEventListener("DOMContentLoaded", () => {
+      arraySplit();
+      TextAnimation();
+    });
+    const arraySplit = () => {
       let splitText = document.getElementsByClassName("js-split-text");
       let arraySplitText = [...splitText];
       let text;
@@ -76,6 +78,6 @@
         });
         spanText.innerHTML = newText;
       });
-    }
+    };
   </script>
 </div>
