@@ -9,6 +9,19 @@
   --mix-blend-mode: difference;
 }
 
+.l-header::after {
+  @supports (-webkit-touch-callout: none) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    content: "";
+    backdrop-filter: blur(10px);
+  }
+}
+
 .l-header {
   position: sticky;
   top: 0;
@@ -18,9 +31,12 @@
   width: 100%;
   height: $header-height;
   padding: rem(20);
-  background: #000;
   mix-blend-mode: var(--mix-blend-mode);
   backdrop-filter: blur(10px);
+
+  @supports (-webkit-touch-callout: none) {
+    background: #000;
+  }
 
   @include mq(md) {
     color: #a7a7a7;
@@ -30,6 +46,10 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    @supports (-webkit-touch-callout: none) {
+      mix-blend-mode: var(--mix-blend-mode);
+    }
 
     @include mq(md) {
       justify-content: center;
