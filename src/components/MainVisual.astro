@@ -19,65 +19,86 @@
         stroke="none"
         transform="scale(1,1)"></path>
       <text>
-        <textPath xlink:href="#circle" transform="rotate(45, 50, 50)">YUNOSUKE&nbsp;YOSHINO</textPath>
+        <textPath xlink:href="#circle" startOffset="50%" text-anchor="middle"
+          >YUNOSUKE&nbsp;YOSHINO&nbsp;&nbsp;</textPath
+        >
       </text>
+      <animateTransform
+        xlink:href="#circle"
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 50 50"
+        to="360 50 50"
+        dur="14s"
+        repeatCount="indefinite"></animateTransform>
     </svg>
   </div>
-
-  <script>
-    import gsap from "gsap";
-    const TL = gsap.timeline(); //TimeLineメソッドを使うことによって順番にアニメーションを行える
-    const TextAnimation = () => {
-      gsap.set(".js-split-text span", { display: "inline-block", autoAlpha: 0, y: 40 });
-      gsap.set(".js-split-text", { autoAlpha: 1 });
-      TL.to(".js-split-text span", {
-        autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
-        duration: 0.6, //animation-duration
-        ease: "back.out(1.7)", //ease
-        y: 0, //y方向に移動
-        stagger: 0.06, //stagger
-      }).to(".p-mainVisual__lowerText", {
-        autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
-        duration: 0.4, //animation-duration
-        ease: "back.out(1.7)", //ease
-        "--scale": "scale(1, 1)",
-      });
-    };
-
-    addEventListener("DOMContentLoaded", () => {
-      arraySplit();
-      TextAnimation();
-    });
-    const arraySplit = () => {
-      let splitText = document.getElementsByClassName("js-split-text");
-      let arraySplitText = [...splitText];
-      let text;
-      let newText: string;
-      let spanText;
-
-      const unEscapeHTML = (str: string) => {
-        return str
-          .replace(/(&lt;)/g, "<")
-          .replace(/(&gt;)/g, ">")
-          .replace(/(&quot;)/g, '"')
-          .replace(/(&#39;)/g, "'")
-          .replace(/(&amp;)/g, "&");
-      };
-
-      arraySplitText.forEach((element) => {
-        newText = "";
-        spanText = element;
-        text = unEscapeHTML(element.innerHTML);
-        text.split("").forEach((element: string) => {
-          // 文字列に空白（スペース）がある場合
-          if (element == " ") {
-            newText += "<span>&nbsp;</span>";
-          } else {
-            newText += "<span>" + element + "</span>";
-          }
-        });
-        spanText.innerHTML = newText;
-      });
-    };
-  </script>
 </div>
+
+<script>
+  import gsap from "gsap";
+  const TL = gsap.timeline(); //TimeLineメソッドを使うことによって順番にアニメーションを行える
+  const TextAnimation = () => {
+    gsap.set(".js-split-text span", { display: "inline-block", autoAlpha: 0, y: 40 });
+    gsap.set(".js-split-text", { autoAlpha: 1 });
+    TL.to(".js-split-text span", {
+      autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
+      duration: 0.6, //animation-duration
+      ease: "back.out(1.7)", //ease
+      y: 0, //y方向に移動
+      stagger: 0.06, //stagger
+    }).to(".p-mainVisual__lowerText", {
+      autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
+      duration: 0.4, //animation-duration
+      ease: "back.out(1.7)", //ease
+      "--scale": "scale(1, 1)",
+    });
+  };
+
+  addEventListener("DOMContentLoaded", () => {
+    arraySplit();
+    TextAnimation();
+    animate();
+  });
+  const arraySplit = () => {
+    let splitText = document.getElementsByClassName("js-split-text");
+    let arraySplitText = [...splitText];
+    let text;
+    let newText: string;
+    let spanText;
+
+    const unEscapeHTML = (str: string) => {
+      return str
+        .replace(/(&lt;)/g, "<")
+        .replace(/(&gt;)/g, ">")
+        .replace(/(&quot;)/g, '"')
+        .replace(/(&#39;)/g, "'")
+        .replace(/(&amp;)/g, "&");
+    };
+
+    arraySplitText.forEach((element) => {
+      newText = "";
+      spanText = element;
+      text = unEscapeHTML(element.innerHTML);
+      text.split("").forEach((element: string) => {
+        // 文字列に空白（スペース）がある場合
+        if (element == " ") {
+          newText += "<span>&nbsp;</span>";
+        } else {
+          newText += "<span>" + element + "</span>";
+        }
+      });
+      spanText.innerHTML = newText;
+    });
+  };
+  const textPath = document.querySelector("textPath") as SVGTextPathElement;
+
+  function animate() {
+    let rotation = 0;
+    setInterval(function () {
+      rotation = (rotation + 1) % 360;
+      textPath.setAttribute("transform", "rotate(" + rotation + " 50 50)");
+    }, 10);
+  }
+</script>
