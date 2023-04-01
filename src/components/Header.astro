@@ -25,3 +25,12 @@ const links = [
     </ul>
   </nav>
 </header>
+<script>
+  if (navigator.userAgent.indexOf("Safari") != -1 && navigator.userAgent.indexOf("Chrome") == -1) {
+    // Safariのみに適用するCSSのスタイルを設定する
+    const header = document.querySelector("header");
+    if (header) {
+      header.classList.add("p-safari");
+    }
+  }
+</script>

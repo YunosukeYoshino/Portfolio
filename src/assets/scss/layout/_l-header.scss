@@ -1,6 +1,3 @@
-/* stylelint-disable media-feature-name-no-unknown */
-/* stylelint-disable selector-type-no-unknown */
-
 /* ----------------------------------
 	Layout
     header
@@ -66,16 +63,12 @@
   }
 }
 
-@media screen and (min-device-pixel-ratio: 0) {
-  _::-webkit-full-page-media,
-  _:future,
-  :root .l-header {
+.p-safari {
+  &.l-header {
     mix-blend-mode: initial;
   }
 
-  _::-webkit-full-page-media,
-  _:future,
-  :root .l-header::after {
+  &.l-header::after {
     position: absolute;
     top: 0;
     left: 0;
@@ -86,9 +79,7 @@
     backdrop-filter: blur(10px);
   }
 
-  _::-webkit-full-page-media,
-  _:future,
-  :root .l-header__menu {
+  &.l-header .l-header__menu {
     z-index: 1;
     mix-blend-mode: var(--mix-blend-mode);
   }
