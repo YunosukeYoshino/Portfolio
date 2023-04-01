@@ -64,13 +64,11 @@
 }
 
 ::-webkit-full-page-media,
-:future,
 :root .l-header {
   mix-blend-mode: unset;
 }
 
 ::-webkit-full-page-media,
-:future,
 :root .l-header::after {
   position: absolute;
   top: 0;
@@ -83,7 +81,6 @@
 }
 
 ::-webkit-full-page-media,
-:future,
 :root .l-header__menu {
   z-index: 1;
   mix-blend-mode: var(--mix-blend-mode);
