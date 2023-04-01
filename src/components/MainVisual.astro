@@ -1,89 +1,15 @@
 ---
 ---
 
-<style lang="scss">
-  @use "/src/assets/scss/global" as *;
-
-  .p-mainVisual__circle {
-    position: absolute;
-    top: 130px;
-    right: pxtovw(40, pc);
-    width: 100%;
-    max-width: pxtovw(200, pc);
-    font-family: $f_Lola;
-    letter-spacing: 0.78em;
-
-    svg {
-      transform: scale(1) rotate3d(-1, -1, 0, -10deg) skewY(-20deg);
-    }
-
-    text {
-      font-size: rem(14);
-      letter-spacing: 0.47em;
-      transform-origin: center;
-      animation: spin 14s linear infinite;
-    }
-  }
-
-  .p-mainVisual {
-    margin-bottom: pxtovw(400, pc);
-  }
-
-  .p-mainVisual__mainText {
-    font-family: $f_Lola;
-    font-size: pxtovw(95, pc);
-    font-weight: 400;
-  }
-
-  .p-mainVisual__upperText {
-    display: flex;
-    flex-direction: column;
-
-    span:nth-child(2) {
-      display: block;
-      margin-left: pxtovw(300, pc);
-    }
-  }
-
-  .p-mainVisual__lowerText {
-    display: flex;
-    gap: pxtovw(60, pc);
-    align-items: center;
-    margin-left: pxtovw(515, pc);
-
-    --scale: scale(0, 1);
-
-    &::before {
-      position: absolute;
-      left: pxtovw(175, pc);
-      display: inline-block;
-      width: pxtovw(300, pc);
-      max-width: rem(300);
-      height: 1px;
-      content: "";
-      background: #222;
-      transition: all 0.3s;
-      transform: var(--scale); /* X方向0、Y方向1 */
-      transform-origin: left top; /* 左上基点 */
-    }
-  }
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-</style>
 <div class="p-mainVisual">
   <h1 class="p-mainVisual__upperText p-mainVisual__mainText">
-    <span class="js-split-text">YUNOSUKE</span>
-    <span class="js-split-text">YOSHINO</span>
+    <span class="js-split-text p-mainVisual__text">YUNOSUKE</span>
+    <span class="js-split-text p-mainVisual__text">YOSHINO</span>
+    <span class="p-mainVisual__lowerText p-mainVisual__mainText">
+      <span class="js-split-text p-mainVisual__text">PORTFOLIO</span>
+    </span>
   </h1>
-  <div class="p-mainVisual__lowerText p-mainVisual__mainText"><span class="js-split-text">PORTFOLIO</span></div>
+
   <div class="p-mainVisual__circle">
     <svg viewBox="0 0 100 100">
       <path
@@ -97,58 +23,59 @@
       </text>
     </svg>
   </div>
-</div>
 
-<script>
-  import gsap from "gsap";
-  const TL = gsap.timeline(); //TimeLineメソッドを使うことによって順番にアニメーションを行える
-  const TestAnimation = () => {
-    gsap.set(".js-split-text span", { display: "inline-block", autoAlpha: 0, y: 40 });
-    TL.to(".js-split-text span", {
-      autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
-      duration: 0.6, //animation-duration
-      ease: "back.out(1.7)", //ease
-      y: 0, //y方向に移動
-      stagger: 0.02, //stagger
-    }).to(".p-mainVisual__lowerText", {
-      autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
-      duration: 0.6, //animation-duration
-      ease: "back.out(1.7)", //ease
-      "--scale": "scale(1, 1)",
-    });
-  };
-
-  addEventListener("DOMContentLoaded", TestAnimation);
-
-  {
-    let splitText = document.getElementsByClassName("js-split-text");
-    let arraySplitText = [...splitText];
-    let text;
-    let newText: string;
-    let spanText;
-
-    const unEscapeHTML = (str: string) => {
-      return str
-        .replace(/(&lt;)/g, "<")
-        .replace(/(&gt;)/g, ">")
-        .replace(/(&quot;)/g, '"')
-        .replace(/(&#39;)/g, "'")
-        .replace(/(&amp;)/g, "&");
+  <script>
+    import gsap from "gsap";
+    const TL = gsap.timeline(); //TimeLineメソッドを使うことによって順番にアニメーションを行える
+    const TestAnimation = () => {
+      gsap.set(".js-split-text span", { display: "inline-block", autoAlpha: 0, y: 40 });
+      gsap.set(".js-split-text", { autoAlpha: 1 });
+      TL.to(".js-split-text span", {
+        autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
+        duration: 0.6, //animation-duration
+        ease: "back.out(1.7)", //ease
+        y: 0, //y方向に移動
+        stagger: 0.06, //stagger
+      }).to(".p-mainVisual__lowerText", {
+        autoAlpha: 1 /* visibilityとopacityを合わせたもの*/,
+        duration: 0.4, //animation-duration
+        ease: "back.out(1.7)", //ease
+        "--scale": "scale(1, 1)",
+      });
     };
 
-    arraySplitText.forEach((element) => {
-      newText = "";
-      spanText = element;
-      text = unEscapeHTML(element.innerHTML);
-      text.split("").forEach((element: string) => {
-        // 文字列に空白（スペース）がある場合
-        if (element == " ") {
-          newText += "<span>&nbsp;</span>";
-        } else {
-          newText += "<span>" + element + "</span>";
-        }
+    addEventListener("DOMContentLoaded", TestAnimation);
+
+    {
+      let splitText = document.getElementsByClassName("js-split-text");
+      let arraySplitText = [...splitText];
+      let text;
+      let newText: string;
+      let spanText;
+
+      const unEscapeHTML = (str: string) => {
+        return str
+          .replace(/(&lt;)/g, "<")
+          .replace(/(&gt;)/g, ">")
+          .replace(/(&quot;)/g, '"')
+          .replace(/(&#39;)/g, "'")
+          .replace(/(&amp;)/g, "&");
+      };
+
+      arraySplitText.forEach((element) => {
+        newText = "";
+        spanText = element;
+        text = unEscapeHTML(element.innerHTML);
+        text.split("").forEach((element: string) => {
+          // 文字列に空白（スペース）がある場合
+          if (element == " ") {
+            newText += "<span>&nbsp;</span>";
+          } else {
+            newText += "<span>" + element + "</span>";
+          }
+        });
+        spanText.innerHTML = newText;
       });
-      spanText.innerHTML = newText;
-    });
-  }
-</script>
+    }
+  </script>
+</div>

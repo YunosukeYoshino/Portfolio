@@ -1,0 +1,90 @@
+/* ----------------------------------
+	Project
+    mainVisual
+------------------------------------ */
+@use "../global" as *;
+
+.p-mainVisual__text {
+  opacity: 0;
+}
+
+.p-mainVisual__circle {
+  position: absolute;
+  top: 130px;
+  right: pxtovw(40, pc);
+  width: 100%;
+  max-width: pxtovw(200, pc);
+  font-family: $f_Lola;
+  letter-spacing: 0.78em;
+
+  svg {
+    transform: scale(1) rotate3d(-1, -1, 0, -10deg) skewY(-20deg);
+  }
+
+  text {
+    font-size: rem(14);
+    letter-spacing: 0.47em;
+    transform-origin: center;
+    animation: spin 14s linear infinite;
+  }
+}
+
+.p-mainVisual {
+  margin-bottom: clampvw(60, 160, 992);
+
+  @include mq(md) {
+    margin-bottom: clampvw(100, 400, 1280);
+  }
+}
+
+.p-mainVisual__mainText {
+  width: fit-content;
+  margin: 0 auto;
+  font-family: $f_Lola;
+  font-size: clampvw(40, 90, 992);
+  font-weight: 400;
+
+  @include mq(lg) {
+    font-size: clampvw(90, 160, 1920);
+  }
+}
+
+.p-mainVisual__upperText {
+  display: flex;
+  flex-direction: column;
+
+  span:nth-child(2) {
+    display: block;
+    margin: auto;
+  }
+}
+
+.p-mainVisual__lowerText {
+  display: flex;
+  gap: pxtovw(60, pc);
+  align-items: center;
+
+  --scale: scale(0, 1);
+
+  &::before {
+    display: inline-block;
+    width: pxtovw(200, pc);
+    max-width: rem(300);
+    height: 1px;
+    content: "";
+    background: #222;
+    transition: all 0.3s;
+    transform: var(--scale); /* X方向0、Y方向1 */
+    transform-origin: left top; /* 左上基点 */
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
