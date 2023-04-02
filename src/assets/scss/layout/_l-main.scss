@@ -10,6 +10,7 @@
   min-height: calc(100svh - $header-height);
   padding: rem(60) rem(20);
   margin: 0 auto;
+  opacity: 0;
 
   &::after {
     position: fixed;
@@ -23,4 +24,12 @@
     backdrop-filter: saturate(120%) blur(20px);
     backface-visibility: hidden;
   }
+}
+
+.l-main__inner {
+  @include mq(md) {
+    max-width: 80vw;
+  }
+
+  margin: auto;
 }

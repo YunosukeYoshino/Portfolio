@@ -31,14 +31,6 @@ $("pre code").each((_: any, elm: any) => {
 
 <style lang="scss">
   @use "/src/assets/scss/global" as *;
-
-  .l-main__inner {
-    @include mq(md) {
-      max-width: 80vw;
-    }
-
-    margin: auto;
-  }
 </style>
 <Layout
   title={`${blog.title || "Article"} | Yunosuke Yoshino Portfolio`}

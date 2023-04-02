@@ -23,70 +23,76 @@ const { page } = Astro.props;
   title={`Article List ${page.currentPage} Page | Yunosuke Yoshino Portfolio`}
   description="This is the portfolio of Yunosuke Yoshino"
 >
-  <div class={`l-container  l-grid p-articleList  l-grid--col-3 md_l-grid--col-2 mb-24`}>
-    {/* page.dataでページデータを表示 */}
-    {
-      page.data.map(
-        (page: {
-          publishedAt: string | number | Date;
-          id: string | URL | null | undefined;
-          title: unknown;
-          eyecatch: {
-            url: string | null | undefined;
-            width: string | number | null | undefined;
-            height: string | number | null | undefined;
-            alt: string | null | undefined;
-          };
-        }) => {
-          return (
-            <div class="l-grid__item p-articleList__item">
-              <a class="p-articleList__Link" href={page.id}>
-                <figure class="p-articleList__thumnail">
-                  <img
-                    src={page.eyecatch.url}
-                    width={page.eyecatch.width}
-                    height={page.eyecatch.height}
-                    alt={page.eyecatch.alt}
-                    decoding="async"
-                  />
-                </figure>
+  <section>
+    <header>
+      <h1 class="p-sectionUpperText">Article</h1>
+    </header>
+
+    <div class={`l-container l-grid p-articleList  l-grid--col-3 md_l-grid--col-2 mb-24`}>
+      {/* page.dataでページデータを表示 */}
+      {
+        page.data.map(
+          (page: {
+            publishedAt: string | number | Date;
+            id: string | URL | null | undefined;
+            title: unknown;
+            eyecatch: {
+              url: string | null | undefined;
+              width: string | number | null | undefined;
+              height: string | number | null | undefined;
+              alt: string | null | undefined;
+            };
+          }) => {
+            return (
+              <div class="l-grid__item p-articleList__item">
+                <a class="p-articleList__Link" href={page.id}>
+                  <figure class="p-articleList__thumnail">
+                    <img
+                      src={page.eyecatch.url}
+                      width={page.eyecatch.width}
+                      height={page.eyecatch.height}
+                      alt={page.eyecatch.alt}
+                      decoding="async"
+                    />
+                  </figure>
+                </a>
+                <p class="p-articleList__publishedAt">
+                  {new Date(page.publishedAt).toLocaleDateString("ja-JP").replace(/\//g, ".")}
+                </p>
+                <p class="p-articleList__title">{page.title}</p>
+              </div>
+            );
+          },
+        )
+      }
+    </div>
+
+    <nav class="c-pageNation">
+      {/* page.currentPageで現在ページ、page.lastPageで総ページ数を表示 */}
+
+      <ul class="c-pageNation__menu">
+        {/* page.url.prevがある場合は前ページへのリンクを表示 */}
+        <li class="c-pageNation__item">
+          {
+            page.url.prev && (
+              <a class="c-pageNation__link c-pageNation__link--prev" href={page.url.prev}>
+                PREV
               </a>
-              <p class="p-articleList__publishedAt">
-                {new Date(page.publishedAt).toLocaleDateString("ja-JP").replace(/\//g, ".")}
-              </p>
-              <p class="p-articleList__title">{page.title}</p>
-            </div>
-          );
-        },
-      )
-    }
-  </div>
-
-  <nav class="c-pageNation">
-    {/* page.currentPageで現在ページ、page.lastPageで総ページ数を表示 */}
-
-    <ul class="c-pageNation__menu">
-      {/* page.url.prevがある場合は前ページへのリンクを表示 */}
-      <li class="c-pageNation__item">
-        {
-          page.url.prev && (
-            <a class="c-pageNation__link c-pageNation__link--prev" href={page.url.prev}>
-              PREV
-            </a>
-          )
-        }
-      </li>
-      <li class="c-pageNation__item">{page.currentPage}/{page.lastPage}</li>
-      {/* page.url.nextがある場合は次ページへのリンクを表示 */}
-      <li class="c-pageNation__item">
-        {
-          page.url.next && (
-            <a class="c-pageNation__link c-pageNation__link--next" href={page.url.next}>
-              NEXT
-            </a>
-          )
-        }
-      </li>
-    </ul>
-  </nav>
+            )
+          }
+        </li>
+        <li class="c-pageNation__item">{page.currentPage}/{page.lastPage}</li>
+        {/* page.url.nextがある場合は次ページへのリンクを表示 */}
+        <li class="c-pageNation__item">
+          {
+            page.url.next && (
+              <a class="c-pageNation__link c-pageNation__link--next" href={page.url.next}>
+                NEXT
+              </a>
+            )
+          }
+        </li>
+      </ul>
+    </nav>
+  </section>
 </Layout>
