@@ -59,7 +59,6 @@
   addEventListener("DOMContentLoaded", () => {
     arraySplit();
     TextAnimation();
-    animate();
   });
   const arraySplit = () => {
     let splitText = document.getElementsByClassName("js-split-text");
@@ -92,13 +91,4 @@
       spanText.innerHTML = newText;
     });
   };
-  const textPath = document.querySelector("textPath") as SVGTextPathElement;
-
-  function animate() {
-    let rotation = 0;
-    setInterval(function () {
-      rotation = (rotation + 1) % 360;
-      textPath.setAttribute("transform", "rotate(" + rotation + " 50 50)");
-    }, 10);
-  }
 </script>

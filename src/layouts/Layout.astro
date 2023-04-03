@@ -24,11 +24,87 @@ const { title, description, ...seoProps }: Props = Astro.props;
     <link rel="icon" type="image/png" href="/assets/icons/icon-72x72.png" sizes="72x72" />
     <link rel="icon" type="image/png" href="/assets/icons/icon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/png" href="/assets/icons/icon-128x128.png" sizes="128x128" />
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <title>{title}</title>
     <SEO {...seoProps} />
     <LocalScripts />
     <style>
+      .p-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 99;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+
+        /* background: #f2f2f2; */
+
+        /* backdrop-filter: blur(90px); */
+
+        background-image: url("/assets/images/noise.png");
+        opacity: 1;
+        transition: 0.4s ease-out opacity;
+      }
+
+      .p-loader__circle::before {
+        z-index: 1;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        content: "";
+        background: rgb(111 180 236);
+        background: linear-gradient(90deg, rgb(111 180 236 / 100%) 0%, rgb(204 207 245 / 100%) 100%);
+        border-radius: 50%;
+        animation: sk-scale 1.5s infinite ease-in-out;
+      }
+
+      .p-loader__circle::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: inline-block;
+        width: 400px;
+        height: 400px;
+        margin: auto;
+        content: "";
+        background: rgb(111 180 236);
+        background: linear-gradient(90deg, rgb(111 180 236 / 100%) 0%, rgb(204 207 245 / 100%) 100%);
+        border-radius: 50%;
+        animation: sk-scaleout 1.5s infinite ease-in-out;
+      }
+
+      /* .isLoaded .p-loader {
+        pointer-events: none;
+        opacity: 0;
+      } */
+
+      @keyframes sk-scaleout {
+        0% {
+          opacity: 0.6;
+          transform: scale(0);
+        }
+
+        100% {
+          opacity: 0;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes sk-scale {
+        0% {
+          transform: scale(1);
+        }
+
+        100% {
+          transform: scale(1.2);
+        }
+      }
+
       #gradient-canvas {
         position: fixed;
         top: 0;
@@ -44,19 +120,28 @@ const { title, description, ...seoProps }: Props = Astro.props;
     </style>
   </head>
   <body>
-    <Header />
     <canvas id="gradient-canvas" data-transition-in></canvas>
-    <main class="l-main">
-      <slot />
-    </main>
+    <div class="p-loader">
+      <div class="p-loader__circle"></div>
+    </div>
+
+    <div class="p-wrapper">
+      <Header />
+      <main class="l-main js-main">
+        <slot />
+      </main>
+    </div>
     <script>
       import { Gradient } from "../library/Gradient";
 
-      // Create your instance
-      const gradient = new Gradient();
+      document.addEventListener("DOMContentLoaded", () => {
+        // Create your instance
+        const gradient = new Gradient();
+        // Call `initGradient` with the selector to your canvas
+        gradient.initGradient("#gradient-canvas");
+      });
 
-      // Call `initGradient` with the selector to your canvas
-      gradient.initGradient("#gradient-canvas");
+      const loadingElement = document.querySelector(".p-loader") as HTMLElement;
     </script>
   </body>
 </html>
