@@ -12,10 +12,15 @@
   position: absolute;
   top: 130px;
   right: pxtovw(40, pc);
+  display: none;
   width: 100%;
   max-width: pxtovw(200, pc);
   font-family: $f_Lola;
   letter-spacing: 0.78em;
+
+  @include mq(xl) {
+    display: inline-block;
+  }
 
   svg {
     transform: scale(1) rotate3d(-1, -1, 0, -10deg) skewY(-20deg);
