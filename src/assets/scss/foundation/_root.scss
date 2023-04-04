@@ -10,27 +10,12 @@
   --text-color: #222;
   --gray-color-70: #707070;
 
-  // 文字サイズ
-  --xl: 3.2rem;
-  --lg: 2.4rem;
-  --md: 1.6rem;
-  --sm: 1.4rem;
-  --ss: 1.2rem;
-
   // z-index
   --index-header: 100;
   --index-modal: 200;
   --index-animation: 1000;
-
-  @include z-map(
-    (
-      --z-header: 0,
-      --z-modal-header: 20,
-      --z-modal-humburger: 21,
-      --z-canvas: -1,
-    )
-  );
-
-  // inner幅
-  --inner: 110rem;
+  --z-header: 0;
+  --z-modal-header: 20;
+  --z-modal-humburger: 21;
+  --z-canvas: -1;
 }
