@@ -5,11 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
   setUpAccordion(); //Accordion
   Hamburger(); //Hamburger Menu
 
-  TL.to(".p-loader", {
-    autoAlpha: 0,
-    duration: 1.8,
-    ease: "back.out(1.7)", //ease
-  });
+  setTimeout(() => {
+    TL.to(".p-loader", {
+      autoAlpha: 0,
+      duration: 1,
+      ease: "back.out(1.7)", //ease
+    });
+  }, 2000);
 
   gsap.to(".js-main", {
     autoAlpha: 1,

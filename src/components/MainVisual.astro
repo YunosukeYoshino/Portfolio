@@ -56,10 +56,13 @@
     });
   };
 
-  addEventListener("DOMContentLoaded", () => {
+  addEventListener("load", () => {
     arraySplit();
-    TextAnimation();
+    setTimeout(() => {
+      TextAnimation();
+    }, 2000);
   });
+
   const arraySplit = () => {
     let splitText = document.getElementsByClassName("js-split-text");
     let arraySplitText = [...splitText];
