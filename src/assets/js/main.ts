@@ -9,15 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
     TL.to(".p-loader", {
       autoAlpha: 0,
       duration: 1,
-      ease: "back.out(1.7)", //ease
+      ease: "power2.inOut", //ease
+    }).to(".js-main", {
+      autoAlpha: 1,
+      duration: 1.2,
+      ease: "power2.inOut", //ease
     });
   }, 2000);
 
-  gsap.to(".js-main", {
-    autoAlpha: 1,
-    duration: 1.8,
-    ease: "back.out(1.7)", //ease
-  });
   // const anchors = document.querySelectorAll<HTMLAnchorElement>("a[href]");
 
   // anchors.forEach((anchor: HTMLAnchorElement) => {
