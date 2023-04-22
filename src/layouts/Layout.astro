@@ -33,6 +33,18 @@ const { title, description, ...seoProps }: Props = Astro.props;
       src="//typesquare.com/3/tsst/script/ja/typesquare.js?641200e6ba2c4c9ea7f95bf7ac1e02e5"
       charset="utf-8"
     ></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRP8GWXT3P"></script>
+    <script lang="js">
+      /* eslint-disable no-undef */
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-XRP8GWXT3P");
+    </script>
     <style>
       .p-loader {
         position: fixed;
