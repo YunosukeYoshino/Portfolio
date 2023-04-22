@@ -7,7 +7,7 @@ import purgecss from "astro-purgecss";
 
 export default defineConfig({
   // Your final, deployed URL
-  site: "https://www.my-site.dev",
+  site: "https://www.yunosukeyoshino.com",
   // The base path to deploy to
   base: "/",
   server: {
