@@ -1,6 +1,7 @@
 // https://astro.build/config
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
+import vercel from "@astrojs/vercel/static";
 import { defineConfig } from "astro/config";
 import compress from "astro-compress";
 import purgecss from "astro-purgecss";
@@ -13,6 +14,9 @@ export default defineConfig({
   server: {
     host: true,
   },
+  adapter: vercel({
+    analytics: true,
+  }),
   integrations: [
     sitemap(),
     purgecss({

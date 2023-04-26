@@ -1,10 +1,8 @@
 ---
-import { inject } from "@vercel/analytics/*";
 import { SEO, Props as AstroSeoProps } from "astro-seo";
 import Header from "../components/Header.astro";
 import LocalScripts from "../components/LocalScripts.astro";
 
-inject();
 export type Props = AstroSeoProps & {
   title: string;
   description: string;
