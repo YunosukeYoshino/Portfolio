@@ -1,4 +1,5 @@
 // https://astro.build/config
+import prefetch from "@astrojs/prefetch";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/static";
@@ -24,6 +25,7 @@ export default defineConfig({
     }),
     compress(),
     tailwind({ config: { applyBaseStyles: false } }),
+    prefetch({ selector: "a[href^='/article/']" }),
   ],
   vite: {
     build: {
