@@ -86,3 +86,16 @@ summary::-webkit-details-marker {
   display: none;
 }
 /* stylelint-enable */
+
+#gradient-canvas {
+  position: fixed;
+  top: 0;
+  z-index: var(--z-canvas);
+  width: 100%;
+  height: 100%;
+
+  --gradient-color-1: #6fb4ec;
+  --gradient-color-2: #bcecf0;
+  --gradient-color-3: #b49cf2;
+  --gradient-color-4: #cccff5;
+}
