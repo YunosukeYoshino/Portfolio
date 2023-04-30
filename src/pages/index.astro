@@ -5,49 +5,6 @@ import MainVisual from "src/components/MainVisual.astro";
 import Layout from "src/layouts/Layout.astro";
 ---
 
-<style lang="scss">
-  @use "/src/assets/scss/global" as *;
-
-  .p-contactArea__mailLink {
-    position: relative;
-    display: block;
-    width: fit-content;
-    margin: 0 auto;
-    overflow: hidden;
-    font-family: $f_Lola;
-    font-size: clampvw(18, 40, 1280);
-    text-align: center;
-
-    @include mq(md) {
-      font-size: clampvw(48, 90, 1920);
-    }
-  }
-
-  span[aria-hidden] {
-    display: block;
-    transition: 0.4s all ease-out;
-  }
-
-  .p-contactArea__mail {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    transition: 0.4s all ease-out;
-    transform: translateY(-100%);
-  }
-
-  .p-contactArea__mailLink:hover {
-    .p-contactArea__mail {
-      transform: translateY(0);
-    }
-
-    span[aria-hidden] {
-      transform: translateY(100%);
-    }
-  }
-</style>
-
 <Layout title="Yunosuke Yoshino Portfolio" description="This is the portfolio of Yunosuke Yoshino">
   <MainVisual />
   <About />
