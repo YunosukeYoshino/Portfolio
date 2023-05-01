@@ -10,15 +10,6 @@ export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
 const { page } = Astro.props;
 ---
 
-<style lang="scss">
-  @use "/src/assets/scss/global" as *;
-
-  .c-pageNation__menu {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    text-align: center;
-  }
-</style>
 <Layout
   title={`Article List ${page.currentPage} Page | Yunosuke Yoshino Portfolio`}
   description="This is the portfolio of Yunosuke Yoshino"
