@@ -18,7 +18,8 @@
     "fix": "run-p fix:*",
     "fix:eslint": "npm run lint:eslint -- --fix",
     "fix:prettier": "prettier --write \"**/*.{astro,json,jsonc}\"",
-    "fix:stylelint": "npm run lint:stylelint -- --fix"
+    "fix:stylelint": "npm run lint:stylelint -- --fix",
+    "lih": "lighthouse http://localhost:3000 --output-path=./reports/report.html"
   },
   "dependencies": {
     "@astrojs/sitemap": "^1.0.0",
@@ -47,6 +48,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "gsap": "^3.11.4",
     "highlight.js": "^11.7.0",
+    "lighthouse": "^10.2.0",
     "lint-staged": "^13.1.0",
     "markuplint": "^3.2.0",
     "microcms-js-sdk": "^2.3.2",
