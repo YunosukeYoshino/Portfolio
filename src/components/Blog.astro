@@ -10,7 +10,7 @@ const response = await getBlogs({ fields: ["id", "title", "eyecatch", "published
   {
     response.contents.map((content: any) => (
       <div class="l-grid__item p-articleList__item">
-        <a class="p-articleList__Link" href={content.id}>
+        <a class="p-articleList__Link" href={"article/page/" + content.id}>
           <figure class="p-articleList__thumnail">
             <img
               src={content.eyecatch.url}
