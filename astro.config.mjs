@@ -15,6 +15,9 @@ export default defineConfig({
   server: {
     host: true,
   },
+  experimental: {
+    router: "spa",
+  },
   adapter: vercel({
     analytics: true,
   }),

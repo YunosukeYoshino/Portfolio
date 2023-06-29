@@ -24,7 +24,6 @@
   "dependencies": {
     "@astrojs/sitemap": "^1.0.0",
     "@astrojs/tailwind": "^3.0.1",
-    "astro": "^2.0.2",
     "astro-compress": "^1.1.28",
     "astro-purgecss": "^2.0.0",
     "astro-seo": "^0.7.0",
@@ -37,6 +36,7 @@
     "@markuplint/astro-parser": "^3.2.0",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
+    "astro": "^0.0.0-spa-20230519211519",
     "autoprefixer": "^10.4.13",
     "cheerio": "^1.0.0-rc.12",
     "eslint": "^8.32.0",
