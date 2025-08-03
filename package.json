@@ -18,11 +18,13 @@
     "lih": "lighthouse http://localhost:3000 --output-path=./reports/report.html"
   },
   "dependencies": {
+    "@shikijs/transformers": "^3.9.1",
     "clsx": "^2.1.1",
     "next": "^15.1.8",
     "postcss-preset-env": "^10.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "shiki": "^3.9.1",
     "tailwind-merge": "^2.5.4",
     "undici": "^7.13.0"
   },

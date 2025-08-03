@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
+import CodeHighlight from '@/components/CodeHighlight'
 import { getAllBlogIds, getBlogDetail } from '@/lib/microcms'
 import { generateMetadata as createMetadata, formatDate } from '@/lib/utils'
 import type { BlogPageProps } from '@/types'
@@ -49,44 +50,25 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
     return (
       <>
         <Header />
-        <main className="l-main">
-          <article className="py-16 md:py-24">
+        <main className="l-main bg-white">
+          <article className="py-24 md:py-32">
             <div className="container-custom">
-              {/* Breadcrumb */}
-              <nav className="mb-8" aria-label="パンくずリスト">
-                <ol className="flex items-center space-x-2 text-sm text-gray-500">
-                  <li>
-                    <Link href="/" className="hover:text-gray-700 transition-colors">
-                      Home
-                    </Link>
-                  </li>
-                  <li>/</li>
-                  <li>
-                    <Link href="/article/page/1" className="hover:text-gray-700 transition-colors">
-                      Article
-                    </Link>
-                  </li>
-                  <li>/</li>
-                  <li className="text-gray-900">{blog.title}</li>
-                </ol>
-              </nav>
-
               {/* Article Header */}
-              <header className="mb-12">
-                <div className="flex items-center justify-between mb-6">
-                  <span className="px-3 py-1 bg-blue-50 text-blue-600 text-sm font-medium rounded-full">
+              <header className="mb-16">
+                <div className="flex items-center justify-between mb-8">
+                  <span className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium uppercase tracking-wide">
                     {blog.category.name}
                   </span>
-                  <time dateTime={blog.publishedAt} className="text-gray-500">
+                  <time dateTime={blog.publishedAt} className="text-gray-500 uppercase tracking-wide text-sm">
                     {formatDate(blog.publishedAt)}
                   </time>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-8">
+                <h1 className="text-section-title text-display text-black leading-tight mb-12 uppercase tracking-tight">
                   {blog.title}
                 </h1>
 
-                <div className="relative aspect-[16/9] rounded-lg overflow-hidden">
+                <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-gray-200">
                   <Image
                     src={blog.eyecatch.url}
                     alt={blog.eyecatch.alt || blog.title}
@@ -100,21 +82,18 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
 
               {/* Article Content */}
               <div className="max-w-4xl mx-auto">
-                <div
-                  className="prose prose-lg max-w-none prose-blue prose-headings:font-bold prose-a:text-blue-600 hover:prose-a:text-blue-800"
-                  dangerouslySetInnerHTML={{ __html: blog.content }}
-                />
+                <CodeHighlight content={blog.content} />
               </div>
 
               {/* Article Footer */}
-              <footer className="mt-16 pt-8 border-t border-gray-200">
+              <footer className="mt-20 pt-8 border-t border-gray-200">
                 <div className="flex justify-center">
                   <Link
-                    href="/article/page/1"
-                    className="inline-flex items-center px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                    href="/article"
+                    className="group relative inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-black border border-black hover:bg-black hover:text-white transition-all duration-300 ease-out overflow-hidden"
                   >
                     <svg
-                      className="mr-2 w-4 h-4"
+                      className="w-4 h-4 transition-transform group-hover:-translate-x-1"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -126,7 +105,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
                         d="M15 19l-7-7 7-7"
                       />
                     </svg>
-                    記事一覧に戻る
+                    <span className="uppercase tracking-wide">BACK TO ARTICLES</span>
                   </Link>
                 </div>
               </footer>

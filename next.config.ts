@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     typedRoutes: true,
   },
 
+  // External packages for server components
+  serverExternalPackages: ['shiki'],
+
   // Site configuration
   env: {
     SITE_URL: 'https://www.yunosukeyoshino.com',

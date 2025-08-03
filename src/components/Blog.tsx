@@ -6,6 +6,7 @@ import type { BlogListProps } from '@/types'
 
 interface BlogProps extends BlogListProps {
   className?: string
+  showViewAllButton?: boolean
 }
 
 export default async function Blog({
@@ -13,6 +14,7 @@ export default async function Blog({
   column = 2,
   page = 1,
   className = '',
+  showViewAllButton = true,
 }: BlogProps) {
   try {
     const offset = (page - 1) * limit
@@ -92,27 +94,29 @@ export default async function Blog({
             ))}
           </div>
 
-          <div className="mt-20 flex justify-center">
-            <a
-              href="/article"
-              className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
-            >
-              <span className="uppercase tracking-wide">VIEW ALL ARTICLES</span>
-              <svg
-                className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+          {showViewAllButton && (
+            <div className="mt-20 flex justify-center">
+              <a
+                href="/article"
+                className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </a>
-          </div>
+                <span className="uppercase tracking-wide">VIEW ALL ARTICLES</span>
+                <svg
+                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </a>
+            </div>
+          )}
         </div>
       </div>
     )

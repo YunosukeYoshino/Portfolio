@@ -42,7 +42,7 @@ function BlogSection() {
 function ContactSection() {
   return (
     <section
-      className="p-contactArea border-t border-black/10 bg-white py-24 md:py-32"
+      className="p-contactArea border-t border-black/10 bg-gray-50 py-24 md:py-32"
       id="contact"
     >
       <div className="container-custom">
