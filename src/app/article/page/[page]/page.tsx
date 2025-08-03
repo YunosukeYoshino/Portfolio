@@ -1,0 +1,200 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import Blog from '@/components/Blog'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
+import { getBlogs } from '@/lib/microcms'
+import { generateMetadata as createMetadata } from '@/lib/utils'
+import type { BlogListPageProps } from '@/types'
+
+const BLOGS_PER_PAGE = 12
+
+// Generate static params for pagination
+export async function generateStaticParams() {
+  try {
+    const { totalCount } = await getBlogs({ limit: 1 })
+    const totalPages = Math.ceil(totalCount / BLOGS_PER_PAGE)
+
+    return Array.from({ length: totalPages }, (_, i) => ({
+      page: String(i + 1),
+    }))
+  } catch (error) {
+    console.error('Error generating static params:', error)
+    return [{ page: '1' }]
+  }
+}
+
+// Generate metadata
+export async function generateMetadata({ params }: BlogListPageProps): Promise<Metadata> {
+  const { page } = await params
+  const pageNum = parseInt(page, 10)
+
+  return createMetadata({
+    title: pageNum === 1 ? 'Articles' : `Articles - Page ${pageNum}`,
+    description: 'フロントエンド開発、UI/UXデザイン、Web技術に関する記事一覧',
+    url: `/article/page/${pageNum}`,
+  })
+}
+
+function Pagination({ currentPage, totalPages }: { currentPage: number; totalPages: number }) {
+  const pages = []
+  const maxVisible = 5
+
+  let start = Math.max(1, currentPage - Math.floor(maxVisible / 2))
+  const end = Math.min(totalPages, start + maxVisible - 1)
+
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1)
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+
+  return (
+    <nav
+      className="c-pageNation flex justify-center items-center space-x-2"
+      aria-label="ページネーション"
+    >
+      {/* Previous */}
+      {currentPage > 1 && (
+        <Link
+          href={`/article/page/${currentPage - 1}`}
+          className="px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+          aria-label="前のページ"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </Link>
+      )}
+
+      {/* First page */}
+      {start > 1 && (
+        <>
+          <Link
+            href="/article/page/1"
+            className="px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            1
+          </Link>
+          {start > 2 && <span className="px-2 text-gray-400">…</span>}
+        </>
+      )}
+
+      {/* Page numbers */}
+      {pages.map((page) => (
+        <Link
+          key={page}
+          href={`/article/page/${page}`}
+          className={`px-3 py-2 rounded transition-colors ${
+            page === currentPage ? 'bg-blue-600 text-white' : 'text-gray-700 hover:text-blue-600'
+          }`}
+          aria-current={page === currentPage ? 'page' : undefined}
+        >
+          {page}
+        </Link>
+      ))}
+
+      {/* Last page */}
+      {end < totalPages && (
+        <>
+          {end < totalPages - 1 && <span className="px-2 text-gray-400">…</span>}
+          <Link
+            href={`/article/page/${totalPages}`}
+            className="px-3 py-2 text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            {totalPages}
+          </Link>
+        </>
+      )}
+
+      {/* Next */}
+      {currentPage < totalPages && (
+        <Link
+          href={`/article/page/${currentPage + 1}`}
+          className="px-3 py-2 text-gray-500 hover:text-gray-700 transition-colors"
+          aria-label="次のページ"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
+      )}
+    </nav>
+  )
+}
+
+export default async function BlogListPage({ params }: BlogListPageProps) {
+  try {
+    const { page } = await params
+    const currentPage = parseInt(page, 10)
+
+    if (isNaN(currentPage) || currentPage < 1) {
+      notFound()
+    }
+
+    const { totalCount } = await getBlogs({ limit: 1 })
+    const totalPages = Math.ceil(totalCount / BLOGS_PER_PAGE)
+
+    if (currentPage > totalPages && totalPages > 0) {
+      notFound()
+    }
+
+    return (
+      <>
+        <Header />
+        <main className="l-main">
+          <div className="py-16 md:py-24">
+            <div className="container-custom">
+              {/* Breadcrumb */}
+              <nav className="mb-8" aria-label="パンくずリスト">
+                <ol className="flex items-center space-x-2 text-sm text-gray-500">
+                  <li>
+                    <Link href="/" className="hover:text-gray-700 transition-colors">
+                      Home
+                    </Link>
+                  </li>
+                  <li>/</li>
+                  <li className="text-gray-900">Article</li>
+                  {currentPage > 1 && (
+                    <>
+                      <li>/</li>
+                      <li className="text-gray-900">Page {currentPage}</li>
+                    </>
+                  )}
+                </ol>
+              </nav>
+
+              {/* Page Header */}
+              <header className="text-center mb-12">
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  {currentPage === 1 ? 'Articles' : `Articles - Page ${currentPage}`}
+                </h1>
+                <p className="text-gray-600">
+                  フロントエンド開発、UI/UXデザイン、Web技術に関する記事
+                </p>
+              </header>
+
+              {/* Blog List */}
+              <Blog limit={BLOGS_PER_PAGE} column={3} page={currentPage} className="mb-12" />
+
+              {/* Pagination */}
+              {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} />}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    )
+  } catch (error) {
+    console.error('Error loading blog list:', error)
+    notFound()
+  }
+}

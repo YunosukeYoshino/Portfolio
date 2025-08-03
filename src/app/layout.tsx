@@ -1,0 +1,105 @@
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import Script from 'next/script'
+import { cn } from '@/lib/utils'
+import ClientLoader from '@/components/ClientLoader'
+import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Yunosuke Yoshino Portfolio',
+    template: '%s | Yunosuke Yoshino Portfolio',
+  },
+  description: 'This is the portfolio of Yunosuke Yoshino',
+  keywords: ['portfolio', 'web development', 'frontend', 'Yunosuke Yoshino'],
+  authors: [{ name: 'Yunosuke Yoshino', url: 'https://www.yunosukeyoshino.com' }],
+  creator: 'Yunosuke Yoshino',
+  publisher: 'Yunosuke Yoshino',
+  metadataBase: new URL('https://www.yunosukeyoshino.com'),
+  openGraph: {
+    type: 'website',
+    locale: 'ja_JP',
+    url: 'https://www.yunosukeyoshino.com',
+    siteName: 'Yunosuke Yoshino Portfolio',
+    title: 'Yunosuke Yoshino Portfolio',
+    description: 'This is the portfolio of Yunosuke Yoshino',
+    images: [
+      {
+        url: '/assets/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Yunosuke Yoshino Portfolio',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Yunosuke Yoshino Portfolio',
+    description: 'This is the portfolio of Yunosuke Yoshino',
+    images: ['/assets/images/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  manifest: '/manifest.json',
+  icons: {
+    icon: [
+      { url: '/assets/icons/icon-72x72.png', sizes: '72x72', type: 'image/png' },
+      { url: '/assets/icons/icon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/assets/icons/icon-128x128.png', sizes: '128x128', type: 'image/png' },
+    ],
+    apple: [{ url: '/assets/icons/apple-touch-icon.png' }],
+  },
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ja" className={cn(inter.variable, 'antialiased')} data-scroll-behavior="smooth">
+      <head>
+        <meta name="format-detection" content="email=no,telephone=no,address=no" />
+        <Script
+          id="typesquare"
+          src="//typesquare.com/3/tsst/script/ja/typesquare.js?641200e6ba2c4c9ea7f95bf7ac1e02e5"
+          strategy="beforeInteractive"
+        />
+      </head>
+      <body>
+        <canvas id="gradient-canvas" data-transition-in></canvas>
+        <ClientLoader />
+        <div className="p-wrapper">{children}</div>
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-XRP8GWXT3P"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XRP8GWXT3P');
+          `}
+        </Script>
+
+        {/* Gradient and Loader Scripts */}
+        <Script src="/lib/gradient.js" strategy="afterInteractive" />
+        <Script id="gradient-init" strategy="afterInteractive">
+          {`
+            if (typeof Gradient !== 'undefined') {
+              const gradient = new Gradient();
+              gradient.initGradient('#gradient-canvas');
+            }
+          `}
+        </Script>
+      </body>
+    </html>
+  )
+}
