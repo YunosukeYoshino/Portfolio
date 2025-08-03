@@ -73,16 +73,18 @@ body {
   position: fixed;
   width: 20px;
   height: 20px;
-  background: var(--foreground);
+  background: #ffffff;
+  border: 2px solid #000000;
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
   transition: transform 0.1s ease;
+  transform: translate(-50%, -50%);
 }
 
 .custom-cursor.hover {
-  transform: scale(2);
+  transform: translate(-50%, -50%) scale(2);
 }
 
 /* Selection styles */

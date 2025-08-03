@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function About() {
   return (
     <section className="p-about py-24 md:py-32 bg-gray-50 border-t border-black/10" id="about">
@@ -59,13 +61,14 @@ export default function About() {
               <div className="relative w-full aspect-square max-w-md mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-br from-black/5 via-black/2 to-transparent rounded-2xl"></div>
                 <div className="absolute inset-4 border border-black/20 rounded-xl"></div>
-                <div className="absolute inset-8 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-black rounded-full flex items-center justify-center">
-                      <span className="text-white text-2xl font-bold">Y</span>
-                    </div>
-                    <p className="text-xs text-gray-600 uppercase tracking-wider font-medium">Portfolio 2024</p>
-                  </div>
+                <div className="relative w-full h-full rounded-lg overflow-hidden">
+                  <Image
+                    src="/assets/images/my-image.jpg"
+                    alt="Yunosuke Yoshino - Frontend Developer"
+                    fill
+                    className="object-cover object-[-70px]"
+                    sizes="(max-width: 768px) 100vw, 400px"
+                  />
                 </div>
               </div>
             </div>
