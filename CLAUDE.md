@@ -8,8 +8,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run preview` - Build and start production server
-- `npm run lint` - Run all linters (ESLint, TypeScript, Prettier)
+- `npm run lint` - Run all linters (Biome, TypeScript)
 - `npm run fix` - Auto-fix linting issues across all tools
+- `npm run format` - Format code with Biome
+- `npm run check` - Check code quality with Biome
+- `npm run ci` - Run Biome in CI mode
 - `npm run lih` - Run Lighthouse performance audit on localhost:3000
 
 ## Architecture Overview
@@ -22,7 +25,9 @@ This is a Next.js 15 portfolio site with App Router, fully migrated from Astro. 
 - **TypeScript**: Strict type safety with experimental typedRoutes
 - **microCMS**: Headless CMS for blog articles
 - **Tailwind CSS + SCSS**: Hybrid styling with CSS Modules
+- **Shiki**: Server-side code highlighting with dual themes
 - **GSAP**: Animation library for interactive elements
+- **Biome**: Fast linter and formatter (replaces ESLint/Prettier)
 - **Vercel**: Deployment platform optimized for Next.js
 
 ### Project Structure
@@ -74,23 +79,29 @@ Follows FLOCSS methodology with CSS Modules:
 - **Code Splitting**: Automatic route-based splitting
 - **Streaming**: Progressive page rendering
 
+### Code Highlighting System
+- **Shiki**: Server-side code syntax highlighting
+- **Dual themes**: GitHub Light/Dark theme support
+- **Server Component**: `CodeHighlight` processes HTML content server-side
+- **External package**: Shiki configured as `serverExternalPackages`
+- **Blog integration**: Automatically highlights code blocks in microCMS content
+
 ### Linting & Code Quality
-The project enforces strict code quality with:
-- ESLint with Next.js and TypeScript rules
-- TypeScript strict mode with experimental features
-- Prettier for code formatting
-- Pre-commit hooks with lint-staged
-- Type-safe routing with experimental typedRoutes
+The project uses Biome for fast, comprehensive code quality:
+- **Biome**: Single tool for linting, formatting, and organizing imports
+- **TypeScript**: Strict mode with experimental typedRoutes
+- **Configuration**: Custom rules for React/Next.js best practices
+- **Parallel execution**: All lint commands run in parallel with `npm-run-all`
 
-## Migration Notes
+### Custom Cursor Implementation
+- **Component**: `CustomCursor.tsx` tracks mouse position and hover states
+- **Styling**: Uses `mix-blend-mode: difference` for automatic color inversion
+- **Integration**: Included in root layout for site-wide functionality
+- **Interactions**: Scales up on hover over interactive elements
 
-This project was migrated from Astro to Next.js 15. Backup files are stored in:
-- `astro-backup/`: Original Astro configuration files
-- `package.json.astro`: Original Astro package.json
-- `tsconfig.json.astro`: Original Astro TypeScript config
-
-The migration maintained all functionality while adding:
-- Better performance with Server Components
-- Enhanced SEO with streaming and built-in metadata
-- Type-safe routing
-- Modern React 19 features
+### Design System
+- **Reference**: Based on https://www.ecrin.digital/en analysis
+- **Theme**: White background with black text, minimalist aesthetic
+- **Typography**: Bold uppercase headings with tight tracking
+- **Components**: Modern border-style buttons with hover effects
+- **Layout**: Clean grid systems with consistent spacing
