@@ -24,13 +24,16 @@ const API_CONFIG = {
 console.log('microCMS config:', {
   serviceDomain: API_CONFIG.serviceDomain,
   apiKeyLength: API_CONFIG.apiKey?.length || 0,
-  baseUrl: API_CONFIG.baseUrl
+  baseUrl: API_CONFIG.baseUrl,
 })
 
 // Helper function to make API requests
-const apiRequest = async <T>(endpoint: string, params?: Record<string, string | number>): Promise<T> => {
+const apiRequest = async <T>(
+  endpoint: string,
+  params?: Record<string, string | number>
+): Promise<T> => {
   const url = new URL(`${API_CONFIG.baseUrl}/${endpoint}`)
-  
+
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
@@ -58,7 +61,9 @@ const shouldUseMockData = (): boolean => {
 }
 
 // API functions with proper error handling and development fallbacks
-export const getBlogs = async (queries?: Record<string, string | number>): Promise<BlogResponse> => {
+export const getBlogs = async (
+  queries?: Record<string, string | number>
+): Promise<BlogResponse> => {
   // Return mock data immediately if using placeholder credentials
   if (shouldUseMockData()) {
     console.warn('Using mock blog data for development (placeholder credentials detected)')
@@ -80,7 +85,7 @@ export const getBlogs = async (queries?: Record<string, string | number>): Promi
     console.error('Error details:', {
       message: error instanceof Error ? error.message : 'Unknown error',
       name: error instanceof Error ? error.name : 'Error',
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
     })
 
     // Return mock data in development mode when API fails

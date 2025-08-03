@@ -1,69 +1,139 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [currentTime, setCurrentTime] = useState('')
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date()
+      const tokyoTime = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Tokyo',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }).format(now)
+      setCurrentTime(tokyoTime)
+    }
+
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
-    <header className="l-header fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md">
-      <div className="container-custom flex items-center justify-between py-4">
-        <Link href="/" className="text-xl font-bold text-gray-900">
+    <header className="l-header fixed top-0 z-50 w-full border-b border-white/10 bg-black/90 py-1 backdrop-blur-md">
+      <div className="container-custom flex items-center justify-between py-6">
+        {/* Left: Logo */}
+        <Link
+          href="/"
+          className="text-display text-lg font-bold tracking-tight text-white"
+        >
           Yunosuke Yoshino
         </Link>
 
-        <button
-          className={cn('c-humburger md:hidden', isMenuOpen && 'is-active')}
-          onClick={toggleMenu}
-          aria-label="メニューを開く"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
-        <nav
-          className={cn(
-            'l-header__nav',
-            'fixed top-0 right-0 h-full w-80 bg-white/95 backdrop-blur-md',
-            'transform transition-transform duration-300 ease-in-out',
-            'md:relative md:w-auto md:h-auto md:bg-transparent md:backdrop-blur-none',
-            'md:transform-none md:transition-none',
-            isMenuOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
-          )}
-        >
-          <ul className="flex flex-col pt-20 px-8 space-y-6 md:flex-row md:pt-0 md:px-0 md:space-y-0 md:space-x-8">
+        {/* Center: Navigation - Hidden on mobile */}
+        <nav className="hidden md:flex">
+          <ul className="flex space-x-8">
             <li>
               <Link
                 href="/#about"
-                className="block text-lg text-gray-700 hover:text-gray-900 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-medium uppercase tracking-wide text-white transition-colors duration-300 hover:text-gray-300"
               >
-                About
+                ABOUT
               </Link>
             </li>
             <li>
               <Link
                 href="/#article"
-                className="block text-lg text-gray-700 hover:text-gray-900 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+                className="text-sm font-medium uppercase tracking-wide text-white transition-colors duration-300 hover:text-gray-300"
               >
-                Article
+                WORKS
               </Link>
             </li>
             <li>
               <Link
                 href="/#contact"
-                className="block text-lg text-gray-700 hover:text-gray-900 transition-colors"
+                className="text-sm font-medium uppercase tracking-wide text-white transition-colors duration-300 hover:text-gray-300"
+              >
+                CONTACT
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* Right: CTA + Time Display */}
+        <div className="hidden items-center space-x-6 md:flex">
+          <Link
+            href="/#contact"
+            className="bg-white px-6 py-2 text-sm font-medium uppercase tracking-wide text-black transition-colors duration-300 hover:bg-gray-200"
+          >
+            LET'S GET STARTED
+          </Link>
+
+          <div className="grid items-center text-xs uppercase tracking-wider text-gray-400">
+            <div>TOKYO,</div>
+            <div>{currentTime}</div>
+          </div>
+        </div>
+
+        <button
+          className={cn(
+            'c-humburger md:hidden flex flex-col w-6 h-6 justify-center items-center space-y-1 ml-auto',
+            isMenuOpen && 'is-active'
+          )}
+          onClick={toggleMenu}
+          aria-label="メニューを開く"
+        >
+          <span className="block h-0.5 w-full bg-white transition-transform"></span>
+          <span className="block h-0.5 w-full bg-white transition-opacity"></span>
+          <span className="block h-0.5 w-full bg-white transition-transform"></span>
+        </button>
+
+        {/* Mobile Menu */}
+        <nav
+          className={cn(
+            'l-header__nav',
+            'fixed top-0 right-0 h-full w-80 bg-black/95 backdrop-blur-md border-l border-white/10',
+            'transform transition-transform duration-500 ease-out md:hidden',
+            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          )}
+        >
+          <ul className="flex flex-col space-y-8 px-8 pt-24">
+            <li>
+              <Link
+                href="/#about"
+                className="block text-base font-medium uppercase tracking-wide text-gray-300 transition-colors duration-300 hover:text-white"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Contact
+                ABOUT
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/#article"
+                className="block text-base font-medium uppercase tracking-wide text-gray-300 transition-colors duration-300 hover:text-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                WORKS
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/#contact"
+                className="block text-base font-medium uppercase tracking-wide text-gray-300 transition-colors duration-300 hover:text-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                CONTACT
               </Link>
             </li>
           </ul>
@@ -72,7 +142,7 @@ export default function Header() {
         {/* Overlay for mobile menu */}
         {isMenuOpen && (
           <div
-            className="fixed inset-0 bg-black/20 z-40 md:hidden"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
             onClick={() => setIsMenuOpen(false)}
           />
         )}

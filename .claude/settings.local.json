@@ -6,7 +6,8 @@
       "mcp__serena__list_dir",
       "mcp__serena__get_symbols_overview",
       "mcp__serena__write_memory",
-      "mcp__playwright__browser_take_screenshot"
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_navigate"
     ],
     "deny": []
   }

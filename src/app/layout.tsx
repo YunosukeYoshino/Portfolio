@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
-import { cn } from '@/lib/utils'
 import ClientLoader from '@/components/ClientLoader'
+import CustomCursor from '@/components/CustomCursor'
+import { cn } from '@/lib/utils'
 import './globals.css'
 
 const inter = Inter({
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <canvas id="gradient-canvas" data-transition-in></canvas>
+        <CustomCursor />
         <ClientLoader />
         <div className="p-wrapper">{children}</div>
 

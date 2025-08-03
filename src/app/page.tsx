@@ -7,18 +7,27 @@ import MainVisual from '@/components/MainVisual'
 
 function BlogSection() {
   return (
-    <section className="p-mainArticleList py-16 md:py-24" id="article">
+    <section className="p-mainArticleList bg-white py-24 md:py-32" id="article">
       <div className="container-custom">
-        <header className="text-center mb-12">
-          <h2 className="p-sectionUpperText text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Article
-          </h2>
-        </header>
+        <div className="mb-16 flex items-end justify-between">
+          <header>
+            <h2 className="text-section-title text-display mb-6 uppercase tracking-tight text-black">
+              ARTICLES
+            </h2>
+            <p className="max-w-2xl text-lg text-gray-600">
+              Technical articles and insights about frontend development, UI/UX
+              design, and modern web technologies.
+            </p>
+          </header>
+        </div>
         <Suspense
           fallback={
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="bg-gray-200 rounded-lg aspect-[4/3] animate-pulse" />
+                <div
+                  key={i}
+                  className="aspect-[4/3] animate-pulse rounded-lg bg-gray-200"
+                />
               ))}
             </div>
           }
@@ -32,31 +41,67 @@ function BlogSection() {
 
 function ContactSection() {
   return (
-    <section className="p-contactArea py-16 md:py-24 bg-gray-50" id="contact">
-      <div className="container-custom text-center">
-        <header className="mb-12">
-          <h2 className="p-sectionUpperText text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Contact
+    <section
+      className="p-contactArea border-t border-black/10 bg-white py-24 md:py-32"
+      id="contact"
+    >
+      <div className="container-custom">
+        <header className="mb-16">
+          <h2 className="text-section-title text-display mb-6 uppercase tracking-tight text-black">
+            Let's Work Together
           </h2>
-        </header>
-        <div className="max-w-2xl mx-auto">
-          <p className="text-gray-600 mb-8 leading-relaxed">
-            お仕事のご依頼、ご相談がございましたら、 お気軽にお問い合わせください。
+          <p className="max-w-2xl text-lg text-gray-600">
+            Ready to bring your digital vision to life? Let's collaborate and
+            create something extraordinary.
           </p>
-          <a
-            className="p-contactArea__mailLink inline-block group"
-            href="mailto:yunosukeyoshino@gmail.com"
-          >
-            <span className="p-contactArea__mail block text-2xl md:text-3xl font-medium text-blue-600 group-hover:text-blue-800 transition-colors mb-2">
-              yunosukeyoshino@gmail.com
-            </span>
-            <span
-              className="text-sm text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity"
-              aria-hidden="true"
+        </header>
+
+        <div className="grid items-center gap-16 md:grid-cols-2">
+          <div>
+            <p className="mb-8 text-lg leading-relaxed text-gray-700">
+              お仕事のご依頼、ご相談がございましたら、お気軽にお問い合わせください。
+              <br />
+              <br />
+              Available for freelance projects, collaborations, and full-time
+              opportunities.
+            </p>
+
+            <a
+              className="p-contactArea__mailLink group inline-block"
+              href="mailto:yunosukeyoshino@gmail.com"
             >
-              Click to send email
-            </span>
-          </a>
+              <span className="p-contactArea__mail mb-2 block text-2xl font-light text-black transition-colors duration-300 group-hover:text-gray-700 md:text-3xl">
+                yunosukeyoshino@gmail.com
+              </span>
+              <span
+                className="text-sm uppercase tracking-wider text-gray-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                aria-hidden="true"
+              >
+                Click to send email
+              </span>
+            </a>
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex items-center space-x-4">
+              <div className="h-2 w-2 rounded-full bg-black"></div>
+              <span className="text-sm uppercase tracking-wider text-gray-600">
+                Currently based in Japan
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="h-2 w-2 rounded-full bg-black"></div>
+              <span className="text-sm uppercase tracking-wider text-gray-600">
+                Available for remote work
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="h-2 w-2 rounded-full bg-black"></div>
+              <span className="text-sm uppercase tracking-wider text-gray-600">
+                Response within 24 hours
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
