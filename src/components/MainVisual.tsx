@@ -77,7 +77,7 @@ export default function MainVisual() {
             </h1>
             <h2 className="text-display mb-8 font-black tracking-tight text-white drop-shadow-2xl">
               <span className="block bg-gradient-to-r from-orange-200 via-orange-300 to-white bg-clip-text text-6xl uppercase leading-none text-transparent md:text-8xl lg:text-8xl">
-                PORTFOLIO
+                FRONTEND DEVELOPER
               </span>
             </h2>
             <p

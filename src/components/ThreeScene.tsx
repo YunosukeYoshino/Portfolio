@@ -43,7 +43,7 @@ export default function ThreeScene({ className }: ThreeSceneProps) {
       near: 0.1,
       far: performanceMode === 'low' ? 100 : 1000,
     },
-    dpr: performanceMode === 'low' ? [1, 1.5] : [1, 2],
+    dpr: performanceMode === 'low' ? ([1, 1.5] as [number, number]) : ([1, 2] as [number, number]),
     gl: {
       antialias: true, // 常にアンチエイリアスを有効にしてフリッカーを防ぐ
       alpha: true,
@@ -53,7 +53,7 @@ export default function ThreeScene({ className }: ThreeSceneProps) {
       preserveDrawingBuffer: true, // フリッカー防止
       premultipliedAlpha: false, // アルファブレンドの問題を防ぐ
       failIfMajorPerformanceCaveat: false,
-      precision: 'highp' as WebGLRenderingContextAttributes['precision'], // 高精度レンダリング
+      precision: 'highp', // 高精度レンダリング
     },
     shadows: performanceMode !== 'low',
     flat: performanceMode === 'low',

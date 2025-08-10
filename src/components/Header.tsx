@@ -138,7 +138,7 @@ export default function Header() {
           }}
         >
           {/* Menu Header */}
-          <div className="border-b border-white/15 px-8 py-6 bg-black/20">
+          <div className="border-b border-white/15 bg-black/20 px-8 py-6">
             <div className="text-xs uppercase tracking-widest text-gray-300">Menu</div>
           </div>
 
@@ -147,13 +147,13 @@ export default function Header() {
             <li className="group">
               <Link
                 href="/#about"
-                className="flex items-center justify-between py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:text-gray-100 hover:pl-2 group-hover:bg-white/8 rounded-lg px-3 -mx-3"
+                className="group-hover:bg-white/8 -mx-3 flex items-center justify-between rounded-lg px-3 py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:pl-2 hover:text-gray-100"
                 onClick={() => setIsMenuOpen(false)}
                 style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)' }}
               >
                 <span>About</span>
                 <svg
-                  className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1"
+                  className="h-4 w-4 transform opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -170,13 +170,13 @@ export default function Header() {
             <li className="group">
               <Link
                 href="/#article"
-                className="flex items-center justify-between py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:text-gray-100 hover:pl-2 group-hover:bg-white/8 rounded-lg px-3 -mx-3"
+                className="group-hover:bg-white/8 -mx-3 flex items-center justify-between rounded-lg px-3 py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:pl-2 hover:text-gray-100"
                 onClick={() => setIsMenuOpen(false)}
                 style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)' }}
               >
                 <span>Articles</span>
                 <svg
-                  className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1"
+                  className="h-4 w-4 transform opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -193,13 +193,13 @@ export default function Header() {
             <li className="group">
               <Link
                 href="/#contact"
-                className="flex items-center justify-between py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:text-gray-100 hover:pl-2 group-hover:bg-white/8 rounded-lg px-3 -mx-3"
+                className="group-hover:bg-white/8 -mx-3 flex items-center justify-between rounded-lg px-3 py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:pl-2 hover:text-gray-100"
                 onClick={() => setIsMenuOpen(false)}
                 style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)' }}
               >
                 <span>Contact</span>
                 <svg
-                  className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1"
+                  className="h-4 w-4 transform opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -217,10 +217,9 @@ export default function Header() {
 
           {/* CTA Section */}
           <div className="absolute bottom-0 left-0 right-0 border-t border-white/15 bg-gradient-to-t from-black/70 to-black/20 p-8">
-            aria-label="メニューを閉じる"
             <Link
               href="/#contact"
-              className="block w-full bg-white/15 border-2 border-white/30 text-center py-4 text-sm font-semibold uppercase tracking-wide text-white backdrop-blur-sm transition-all duration-300 hover:bg-white hover:text-black hover:shadow-lg hover:shadow-white/30 hover:border-white rounded-lg"
+              className="block w-full rounded-lg border-2 border-white/30 bg-white/15 py-4 text-center text-sm font-semibold uppercase tracking-wide text-white backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-white hover:text-black hover:shadow-lg hover:shadow-white/30"
               onClick={() => setIsMenuOpen(false)}
               style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.7)' }}
             >
@@ -235,7 +234,7 @@ export default function Header() {
                 Tokyo
               </div>
               <div
-                className="text-sm text-gray-200 font-mono font-medium"
+                className="font-mono text-sm font-medium text-gray-200"
                 style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.7)' }}
               >
                 {currentTime}

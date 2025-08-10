@@ -101,7 +101,6 @@ export function useResponsive3D(): ResponsiveConfig {
       // Optimize renderer settings based on performance level
       if (performanceLevel === 'low') {
         gl.shadowMap.enabled = false
-        gl.antialias = false
       } else {
         gl.shadowMap.enabled = true
         gl.shadowMap.type = performanceLevel === 'high' ? 2 : 1 // PCFSoftShadowMap : PCFShadowMap
