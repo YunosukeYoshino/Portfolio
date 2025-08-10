@@ -31,14 +31,11 @@ export default async function Blog({
           <div className="container-custom">
             <div className="py-8 text-center">
               <p className="mb-2 text-gray-500">
-                {isDevelopment
-                  ? '開発モード: 記事データがありません'
-                  : '記事がありません'}
+                {isDevelopment ? '開発モード: 記事データがありません' : '記事がありません'}
               </p>
               {isDevelopment && (
                 <p className="text-sm text-gray-400">
-                  実際のコンテンツを表示するには、.env.local
-                  にmicroCMSの認証情報を設定してください
+                  実際のコンテンツを表示するには、.env.local にmicroCMSの認証情報を設定してください
                 </p>
               )}
             </div>
@@ -51,14 +48,14 @@ export default async function Blog({
       column === 1
         ? 'grid-cols-1'
         : column === 2
-        ? 'grid-cols-1 md:grid-cols-2'
-        : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          ? 'grid-cols-1 md:grid-cols-2'
+          : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
 
     return (
       <div className={`p-articleList ${className}`}>
         <div className="container-custom">
           <div className={`grid ${gridCols} gap-6 lg:gap-8`}>
-            {blogs.map(blog => (
+            {blogs.map((blog) => (
               <article
                 key={blog.id}
                 className="p-article group overflow-hidden rounded-lg bg-white border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-gray-300"
@@ -78,10 +75,7 @@ export default async function Blog({
                       <span className="rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-600">
                         {blog.category.name}
                       </span>
-                      <time
-                        dateTime={blog.publishedAt}
-                        className="text-sm text-gray-500"
-                      >
+                      <time dateTime={blog.publishedAt} className="text-sm text-gray-500">
                         {formatDate(blog.publishedAt)}
                       </time>
                     </div>
@@ -126,9 +120,7 @@ export default async function Blog({
     return (
       <div className={`p-articleList ${className}`}>
         <div className="container-custom">
-          <p className="py-8 text-center text-red-500">
-            記事の取得に失敗しました
-          </p>
+          <p className="py-8 text-center text-red-500">記事の取得に失敗しました</p>
         </div>
       </div>
     )

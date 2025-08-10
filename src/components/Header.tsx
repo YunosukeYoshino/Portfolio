@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 export default function Header() {
@@ -34,10 +34,7 @@ export default function Header() {
     <header className="l-header fixed top-0 z-50 w-full border-b border-white/10 bg-black/90 py-1 backdrop-blur-md">
       <div className="container-custom flex items-center justify-between py-6">
         {/* Left: Logo */}
-        <Link
-          href="/"
-          className="text-display text-lg font-bold tracking-tight text-white"
-        >
+        <Link href="/" className="text-display text-lg font-bold tracking-tight text-white">
           Yunosuke Yoshino
         </Link>
 
@@ -87,6 +84,7 @@ export default function Header() {
         </div>
 
         <button
+          type="button"
           className={cn(
             'c-humburger md:hidden flex flex-col w-6 h-6 justify-center items-center space-y-1 ml-auto',
             isMenuOpen && 'is-active'
@@ -141,9 +139,11 @@ export default function Header() {
 
         {/* Overlay for mobile menu */}
         {isMenuOpen && (
-          <div
+          <button
+            type="button"
             className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
             onClick={() => setIsMenuOpen(false)}
+            aria-label="メニューを閉じる"
           />
         )}
       </div>

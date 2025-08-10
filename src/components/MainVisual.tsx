@@ -57,7 +57,8 @@ export default function MainVisual() {
             ref={descriptionRef}
             className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed font-light uppercase tracking-wide"
           >
-            YOU HAVE A PROJECT IDEA BUT YOU'RE LOST WITH ALL THE TECH STUFF? LET ME HANDLE IT AND MAKE IT HAPPEN!
+            YOU HAVE A PROJECT IDEA BUT YOU'RE LOST WITH ALL THE TECH STUFF? LET ME HANDLE IT AND
+            MAKE IT HAPPEN!
           </p>
 
           <div className="mt-12 flex items-center space-x-8">

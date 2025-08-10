@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "preview": "next build && next start",
+    "typecheck": "tsc --noEmit",
     "lint": "run-p lint:*",
     "lint:biome": "biome check .",
     "lint:tsc": "tsc --noEmit",
@@ -17,7 +18,8 @@
     "ci": "biome ci .",
     "lih": "lighthouse http://localhost:3000 --output-path=./reports/report.html",
     "deploy": "npm run build && npx wrangler pages deploy out --project-name=yunosuke-portfolio --branch=main --commit-dirty=true",
-    "deploy:preview": "npm run build && npx wrangler pages deploy out --project-name=yunosuke-portfolio --branch=preview --commit-dirty=true"
+    "deploy:preview": "npm run build && npx wrangler pages deploy out --project-name=yunosuke-portfolio --branch=preview --commit-dirty=true",
+    "prepare": "husky"
   },
   "dependencies": {
     "@next/third-parties": "^15.4.6",
@@ -38,9 +40,10 @@
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
-    "eslint": "^9.32.0",
     "gsap": "^3.12.8",
+    "husky": "^9.1.7",
     "lighthouse": "^12.2.1",
+    "lint-staged": "^16.1.5",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.5.1",
     "sass": "^1.83.0",
@@ -48,6 +51,14 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
     "typescript": "^5.7.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "biome check --write --unsafe"
+    ],
+    "*.{json,md,css,scss}": [
+      "biome format --write"
+    ]
   },
   "volta": {
     "node": "22.12.0"

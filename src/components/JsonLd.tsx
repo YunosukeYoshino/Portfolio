@@ -1,8 +1,8 @@
 interface JsonLdProps {
-  data: Record<string, any>
+  data: Record<string, unknown>
 }
 
-function sanitizeJsonLd(obj: any): string {
+function sanitizeJsonLd(obj: Record<string, unknown>): string {
   return JSON.stringify(obj, null, 2).replace(/</g, '\\u003c')
 }
 
@@ -10,6 +10,7 @@ export default function JsonLd({ data }: JsonLdProps) {
   return (
     <script
       type="application/ld+json"
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires dangerouslySetInnerHTML for structured data
       dangerouslySetInnerHTML={{
         __html: sanitizeJsonLd(data),
       }}
@@ -23,13 +24,9 @@ export const createPersonSchema = () => ({
   '@type': 'Person',
   name: '芳野悠之助',
   alternateName: 'Yunosuke Yoshino',
-  description:
-    'フロントエンドエンジニア。React、Next.js、モダンなWeb技術を専門としています。',
+  description: 'フロントエンドエンジニア。React、Next.js、モダンなWeb技術を専門としています。',
   url: 'https://yunosukeyoshino.com',
-  sameAs: [
-    'https://github.com/YunosukeYoshino',
-    'https://twitter.com/YunosukeYoshino',
-  ],
+  sameAs: ['https://github.com/YunosukeYoshino', 'https://twitter.com/YunosukeYoshino'],
   jobTitle: 'フロントエンドエンジニア',
   worksFor: {
     '@type': 'Organization',
@@ -65,8 +62,7 @@ export const createWebsiteSchema = () => ({
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate:
-        'https://yunosukeyoshino.com/article?search={search_term_string}',
+      urlTemplate: 'https://yunosukeyoshino.com/article?search={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -84,9 +80,7 @@ export const createBlogSchema = () => ({
   publisher: createPersonSchema(),
 })
 
-export const createBreadcrumbSchema = (
-  items: Array<{ name: string; url: string }>
-) => ({
+export const createBreadcrumbSchema = (items: Array<{ name: string; url: string }>) => ({
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: items.map((item, index) => ({

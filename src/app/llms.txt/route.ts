@@ -31,7 +31,7 @@ This is the portfolio website of Yunosuke Yoshino, a frontend developer speciali
 ### Blog Articles
 ${blogsResponse.contents
   .map(
-    blog => `- ${blog.title}: ${baseUrl}/article/${blog.id}
+    (blog) => `- ${blog.title}: ${baseUrl}/article/${blog.id}
   Published: ${new Date(blog.publishedAt).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',

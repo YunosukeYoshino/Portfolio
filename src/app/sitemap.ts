@@ -31,7 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
 
     // Add blog post pages
-    const blogRoutes = blogsResponse.contents.map(blog => ({
+    const blogRoutes = blogsResponse.contents.map((blog) => ({
       url: `${baseUrl}/article/${blog.id}`,
       lastModified: new Date(blog.updatedAt || blog.publishedAt),
       changeFrequency: 'monthly' as const,

@@ -6,10 +6,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import CodeHighlight from '@/components/CodeHighlight'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import JsonLd, {
-  createArticleSchema,
-  createBreadcrumbSchema,
-} from '@/components/JsonLd'
+import JsonLd, { createArticleSchema, createBreadcrumbSchema } from '@/components/JsonLd'
 import { getAllBlogIds, getBlogDetail } from '@/lib/microcms'
 import { generateMetadata as createMetadata, formatDate } from '@/lib/utils'
 import type { BlogPageProps } from '@/types'
@@ -18,19 +15,16 @@ import type { BlogPageProps } from '@/types'
 export async function generateStaticParams() {
   try {
     const blogIds = await getAllBlogIds()
-    return blogIds.map(id => ({
+    return blogIds.map((id) => ({
       slug: id,
     }))
-  } catch (error) {
-    console.error('Error generating static params:', error)
+  } catch (_error) {
     return []
   }
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({
-  params,
-}: BlogPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   try {
     const { slug } = await params
     const blog = await getBlogDetail(slug)
@@ -84,7 +78,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
             <div className="container-custom">
               {/* Breadcrumb */}
               <Breadcrumb items={breadcrumbItems} className="mb-8" />
-              
+
               {/* Article Header */}
               <header className="mb-16">
                 <div className="mb-8 flex items-center justify-between">
@@ -132,6 +126,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path
                         strokeLinecap="round"
@@ -140,9 +135,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
                         d="M15 19l-7-7 7-7"
                       />
                     </svg>
-                    <span className="uppercase tracking-wide">
-                      BACK TO ARTICLES
-                    </span>
+                    <span className="uppercase tracking-wide">BACK TO ARTICLES</span>
                   </Link>
                 </div>
               </footer>

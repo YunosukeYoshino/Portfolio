@@ -1,7 +1,7 @@
+import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
-import { GoogleAnalytics } from '@next/third-parties/google'
 import ClientLoader from '@/components/ClientLoader'
 import CustomCursor from '@/components/CustomCursor'
 import { cn } from '@/lib/utils'
@@ -79,22 +79,11 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="ja"
-      className={cn(inter.variable, 'antialiased')}
-      data-scroll-behavior="smooth"
-    >
+    <html lang="ja" className={cn(inter.variable, 'antialiased')} data-scroll-behavior="smooth">
       <head>
-        <meta
-          name="format-detection"
-          content="email=no,telephone=no,address=no"
-        />
+        <meta name="format-detection" content="email=no,telephone=no,address=no" />
         <Script
           id="typesquare"
           src="//typesquare.com/3/tsst/script/ja/typesquare.js?641200e6ba2c4c9ea7f95bf7ac1e02e5"

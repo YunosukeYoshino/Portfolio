@@ -3,7 +3,11 @@ import About from '@/components/About'
 import Blog from '@/components/Blog'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import JsonLd, { createPersonSchema, createWebsiteSchema, createBreadcrumbSchema } from '@/components/JsonLd'
+import JsonLd, {
+  createBreadcrumbSchema,
+  createPersonSchema,
+  createWebsiteSchema,
+} from '@/components/JsonLd'
 import MainVisual from '@/components/MainVisual'
 
 function BlogSection() {
@@ -16,17 +20,18 @@ function BlogSection() {
               ARTICLES
             </h2>
             <p className="max-w-2xl text-lg text-gray-600">
-              Technical articles and insights about frontend development, UI/UX
-              design, and modern web technologies.
+              Technical articles and insights about frontend development, UI/UX design, and modern
+              web technologies.
             </p>
           </header>
         </div>
         <Suspense
           fallback={
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
+              {/* biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton items don't need complex keys */}
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
-                  key={i}
+                  key={`skeleton-${i}`}
                   className="aspect-[4/3] animate-pulse rounded-lg bg-gray-200"
                 />
               ))}
@@ -52,8 +57,8 @@ function ContactSection() {
             Let's Work Together
           </h2>
           <p className="max-w-2xl text-lg text-gray-600">
-            Ready to bring your digital vision to life? Let's collaborate and
-            create something extraordinary.
+            Ready to bring your digital vision to life? Let's collaborate and create something
+            extraordinary.
           </p>
         </header>
 
@@ -63,8 +68,7 @@ function ContactSection() {
               お仕事のご依頼、ご相談がございましたら、お気軽にお問い合わせください。
               <br />
               <br />
-              Available for freelance projects, collaborations, and full-time
-              opportunities.
+              Available for freelance projects, collaborations, and full-time opportunities.
             </p>
 
             <a

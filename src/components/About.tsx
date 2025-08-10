@@ -5,7 +5,9 @@ export default function About() {
     <section className="p-about py-24 md:py-32 bg-gray-50 border-t border-black/10" id="about">
       <div className="container-custom">
         <header className="mb-16">
-          <h2 className="text-section-title text-display text-black mb-6 uppercase tracking-tight">About Me</h2>
+          <h2 className="text-section-title text-display text-black mb-6 uppercase tracking-tight">
+            About Me
+          </h2>
           <p className="text-gray-600 text-lg max-w-2xl">
             Passionate about creating digital experiences that bridge the gap between technology and
             human interaction.

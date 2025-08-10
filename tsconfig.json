@@ -29,5 +29,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "astro-backup/**/*", "scripts-backup/**/*"]
+  "exclude": ["node_modules", "astro-backup/**/*", "scripts-backup/**/*", "src/lib/imageLoader.js"]
 }

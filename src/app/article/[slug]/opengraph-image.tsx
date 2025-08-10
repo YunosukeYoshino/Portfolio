@@ -83,7 +83,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
             >
               Y
             </div>
-            
+
             <div
               style={{
                 fontSize: 24,
@@ -100,9 +100,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
         ...size,
       }
     )
-  } catch (error) {
-    console.error('Error generating OG image:', error)
-    
+  } catch (_error) {
     return new ImageResponse(
       <div
         style={{

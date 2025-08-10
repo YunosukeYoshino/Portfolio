@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import type { Route } from 'next'
+import Link from 'next/link'
 
 interface BreadcrumbItem {
   name: string
@@ -25,20 +25,13 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           )}
           {index === items.length - 1 ? (
-            <span
-              className="font-medium text-gray-900"
-              aria-current="page"
-            >
+            <span className="font-medium text-gray-900" aria-current="page">
               {item.name}
             </span>
           ) : (

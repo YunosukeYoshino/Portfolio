@@ -7,8 +7,8 @@ import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import JsonLd, {
   createBlogSchema,
-  createWebsiteSchema,
   createBreadcrumbSchema,
+  createWebsiteSchema,
 } from '@/components/JsonLd'
 import { getBlogs } from '@/lib/microcms'
 import { generateMetadata as createMetadata } from '@/lib/utils'
@@ -25,16 +25,13 @@ export async function generateStaticParams() {
     return Array.from({ length: totalPages }, (_, i) => ({
       page: String(i + 1),
     }))
-  } catch (error) {
-    console.error('Error generating static params:', error)
+  } catch (_error) {
     return [{ page: '1' }]
   }
 }
 
 // Generate metadata
-export async function generateMetadata({
-  params,
-}: BlogListPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: BlogListPageProps): Promise<Metadata> {
   const { page } = await params
   const pageNum = parseInt(page, 10)
 
@@ -52,13 +49,7 @@ export async function generateMetadata({
   }
 }
 
-function Pagination({
-  currentPage,
-  totalPages,
-}: {
-  currentPage: number
-  totalPages: number
-}) {
+function Pagination({ currentPage, totalPages }: { currentPage: number; totalPages: number }) {
   const pages = []
   const maxVisible = 5
 
@@ -85,12 +76,7 @@ function Pagination({
           className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300"
           aria-label="前のページ"
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -115,7 +101,7 @@ function Pagination({
       )}
 
       {/* Page numbers */}
-      {pages.map(page => (
+      {pages.map((page) => (
         <Link
           key={page}
           href={`/article/page/${page}`}
@@ -133,9 +119,7 @@ function Pagination({
       {/* Last page */}
       {end < totalPages && (
         <>
-          {end < totalPages - 1 && (
-            <span className="px-2 text-gray-400">…</span>
-          )}
+          {end < totalPages - 1 && <span className="px-2 text-gray-400">…</span>}
           <Link
             href={`/article/page/${totalPages}`}
             className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 font-medium"
@@ -152,18 +136,8 @@ function Pagination({
           className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300"
           aria-label="次のページ"
         >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </Link>
       )}
@@ -200,8 +174,7 @@ export default async function BlogListPage({ params }: BlogListPageProps) {
     const breadcrumbSchema = createBreadcrumbSchema([
       { name: 'ホーム', url: 'https://yunosukeyoshino.com' },
       {
-        name:
-          currentPage === 1 ? '記事一覧' : `記事一覧 - ${currentPage}ページ目`,
+        name: currentPage === 1 ? '記事一覧' : `記事一覧 - ${currentPage}ページ目`,
         url: `https://yunosukeyoshino.com/article/page/${currentPage}`,
       },
     ])
@@ -217,17 +190,15 @@ export default async function BlogListPage({ params }: BlogListPageProps) {
             <div className="container-custom">
               {/* Breadcrumb */}
               <Breadcrumb items={breadcrumbItems} className="mb-8" />
-              
+
               {/* Page Header */}
               <header className="mb-16">
                 <h1 className="text-section-title text-display text-black mb-6 uppercase tracking-tight">
-                  {currentPage === 1
-                    ? 'ARTICLES'
-                    : `ARTICLES - PAGE ${currentPage}`}
+                  {currentPage === 1 ? 'ARTICLES' : `ARTICLES - PAGE ${currentPage}`}
                 </h1>
                 <p className="text-gray-600 text-lg max-w-2xl">
-                  Technical articles and insights about frontend development,
-                  UI/UX design, and modern web technologies.
+                  Technical articles and insights about frontend development, UI/UX design, and
+                  modern web technologies.
                 </p>
               </header>
 
@@ -241,9 +212,7 @@ export default async function BlogListPage({ params }: BlogListPageProps) {
               />
 
               {/* Pagination */}
-              {totalPages > 1 && (
-                <Pagination currentPage={currentPage} totalPages={totalPages} />
-              )}
+              {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} />}
             </div>
           </div>
         </main>

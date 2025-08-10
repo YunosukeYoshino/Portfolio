@@ -46,11 +46,7 @@ const nextConfig: NextConfig = {
   // Deployment optimization
   ...(process.env.NODE_ENV === 'production' && {
     generateBuildId: async () => {
-      return (
-        process.env.CF_PAGES_COMMIT_SHA ||
-        process.env.VERCEL_GIT_COMMIT_SHA ||
-        'development'
-      )
+      return process.env.CF_PAGES_COMMIT_SHA || process.env.VERCEL_GIT_COMMIT_SHA || 'development'
     },
   }),
 }

@@ -37,6 +37,15 @@
         "noDuplicateObjectKeys": "error",
         "noImplicitAnyLet": "error"
       },
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "noStaticElementInteractions": "off",
+        "useKeyWithClickEvents": "off",
+        "useButtonType": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
+      },
       "complexity": {
         "noBannedTypes": "error",
         "noUselessConstructor": "error",
