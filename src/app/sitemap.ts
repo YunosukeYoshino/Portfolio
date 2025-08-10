@@ -55,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [...routes, ...blogRoutes, ...paginationRoutes]
   } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: <explanation>
+    // biome-ignore lint/suspicious/noConsole: Required for debugging API errors during build
     console.error('Error generating sitemap:', error)
     // Return at least static routes if blog fetching fails
     return routes
