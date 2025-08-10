@@ -28,10 +28,9 @@ function BlogSection() {
         <Suspense
           fallback={
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
-              {/* biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton items don't need complex keys */}
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
-                  key={`skeleton-${i}`}
+                  key={`skeleton-article-${i}`}
                   className="aspect-[4/3] animate-pulse rounded-lg bg-gray-200"
                 />
               ))}

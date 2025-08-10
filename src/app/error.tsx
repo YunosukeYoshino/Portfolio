@@ -4,16 +4,14 @@ import { useEffect } from 'react'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 
-export default function Error({
+export default function ErrorPage({
   error,
   reset,
 }: {
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  useEffect(() => {
-    console.error('Application error:', error)
-  }, [error])
+  useEffect(() => {}, [])
 
   return (
     <>
