@@ -34,15 +34,12 @@ export async function generateMetadata({
   try {
     const { slug } = await params
     const blog = await getBlogDetail(slug)
-    const siteUrl = process.env.SITE_URL || 'https://yunosukeyoshino.com'
-    const ogImageUrl = `${siteUrl}/api/og/article/${blog.id}`
 
     return {
       ...createMetadata({
         title: blog.title,
         description: blog.content.replace(/<[^>]*>/g, '').slice(0, 160),
         url: `/article/${blog.id}`,
-        image: ogImageUrl,
       }),
       alternates: {
         canonical: `https://yunosukeyoshino.com/article/${blog.id}`,
