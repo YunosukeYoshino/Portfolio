@@ -85,10 +85,10 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-300 text-sm">
             © {currentYear} Yunosuke Yoshino — Crafted with care
           </p>
-          <p className="text-gray-600 text-xs mt-2 md:mt-0">
+          <p className="text-gray-400 text-xs mt-2 md:mt-0">
             Built with Next.js, TypeScript & Tailwind CSS
           </p>
         </div>
