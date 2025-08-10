@@ -38,7 +38,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           flexDirection: 'column',
           alignItems: 'flex-start',
           justifyContent: 'space-between',
-          backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          backgroundImage: 'linear-gradient(135deg, #fb923c 0%, #f97316 50%, #ea580c 100%)',
           padding: 60,
         }}
       >
@@ -84,18 +84,14 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 width: 60,
                 height: 60,
                 borderRadius: 30,
-                backgroundColor: '#6b7280',
                 marginRight: 20,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: 24,
-                fontWeight: 600,
+                overflow: 'hidden',
+                border: '3px solid #e5e7eb',
+                backgroundImage: `url(https://yunosukeyoshino.com/assets/images/my-image.jpg)`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
               }}
-            >
-              Y
-            </div>
+            />
 
             <div
               style={{
@@ -123,7 +119,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          backgroundImage: 'linear-gradient(135deg, #fb923c 0%, #f97316 50%, #ea580c 100%)',
           color: 'white',
           fontSize: 48,
           fontWeight: 600,

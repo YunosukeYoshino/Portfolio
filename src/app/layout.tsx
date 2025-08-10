@@ -16,10 +16,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Yunosuke Yoshino Portfolio',
-    template: '%s | Yunosuke Yoshino Portfolio',
+    default: 'Yunosuke Yoshino｜Portfolio',
+    template: '%s | Yunosuke Yoshino',
   },
-  description: 'This is the portfolio of Yunosuke Yoshino',
+  description: 'Frontend Engineer specializing in React, Next.js, TypeScript',
   keywords: ['portfolio', 'web development', 'frontend', 'Yunosuke Yoshino'],
   authors: [{ name: 'Yunosuke Yoshino', url: 'https://yunosukeyoshino.com' }],
   creator: 'Yunosuke Yoshino',
@@ -33,22 +33,13 @@ export const metadata: Metadata = {
     locale: 'ja_JP',
     url: 'https://yunosukeyoshino.com',
     siteName: 'Yunosuke Yoshino Portfolio',
-    title: 'Yunosuke Yoshino Portfolio',
-    description: 'This is the portfolio of Yunosuke Yoshino',
-    images: [
-      {
-        url: '/assets/images/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Yunosuke Yoshino Portfolio',
-      },
-    ],
+    title: 'Yunosuke Yoshino｜Portfolio',
+    description: 'Frontend Engineer specializing in React, Next.js, TypeScript',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Yunosuke Yoshino Portfolio',
-    description: 'This is the portfolio of Yunosuke Yoshino',
-    images: ['/assets/images/og-image.jpg'],
+    title: 'Yunosuke Yoshino｜Portfolio',
+    description: 'Frontend Engineer specializing in React, Next.js, TypeScript',
   },
   robots: {
     index: true,
