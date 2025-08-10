@@ -88,7 +88,7 @@ export default async function Image() {
 
           <div
             style={{
-              fontSize: 24,
+              fontSize: 40,
               fontWeight: 500,
               color: '#374151',
             }}
