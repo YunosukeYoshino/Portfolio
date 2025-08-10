@@ -84,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ja" className={cn(inter.variable, 'antialiased')} data-scroll-behavior="smooth">
       <head>
         <meta name="format-detection" content="email=no,telephone=no,address=no" />
+        <meta name="theme-color" content="#000000e6" />
         <Script
           id="typesquare"
           src="//typesquare.com/3/tsst/script/ja/typesquare.js?641200e6ba2c4c9ea7f95bf7ac1e02e5"

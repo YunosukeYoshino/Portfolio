@@ -4,26 +4,27 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="l-footer bg-black border-t border-white/10 py-16">
+    <footer className="l-footer border-t border-white/10 bg-black/90 py-16">
       <div className="container-custom">
-        <div className="grid md:grid-cols-3 gap-12 mb-12">
+        <div className="mb-12 grid gap-12 md:grid-cols-3">
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-semibold text-white mb-6 text-display">
+            <h3 className="text-display mb-6 text-2xl font-semibold text-white">
               Let's create something amazing together
             </h3>
-            <p className="text-gray-400 leading-relaxed mb-8 text-lg max-w-2xl">
-              Always open to discussing new opportunities, collaborations, and innovative projects.
-              Feel free to reach out if you have an exciting project in mind.
+            <p className="mb-8 max-w-2xl text-lg leading-relaxed text-gray-400">
+              Always open to discussing new opportunities, collaborations, and
+              innovative projects. Feel free to reach out if you have an
+              exciting project in mind.
             </p>
             <div className="flex space-x-6">
               <a
                 href="mailto:yunosukeyoshino@gmail.com"
-                className="text-gray-400 hover:text-white transition-colors duration-300 group"
+                className="group text-gray-400 transition-colors duration-300 hover:text-white"
                 aria-label="Email"
               >
                 <div className="flex items-center space-x-2">
                   <svg
-                    className="w-5 h-5 group-hover:scale-110 transition-transform"
+                    className="h-5 w-5 transition-transform group-hover:scale-110"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -42,12 +43,12 @@ export default function Footer() {
                 href="https://github.com/YunosukeYoshino"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors duration-300 group"
+                className="group text-gray-400 transition-colors duration-300 hover:text-white"
                 aria-label="GitHub"
               >
                 <div className="flex items-center space-x-2">
                   <svg
-                    className="w-5 h-5 group-hover:scale-110 transition-transform"
+                    className="h-5 w-5 transition-transform group-hover:scale-110"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -60,7 +61,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-medium mb-6 text-white uppercase text-sm tracking-wider">
+            <h4 className="mb-6 text-sm font-medium uppercase tracking-wider text-white">
               Site Navigation
             </h4>
             <ul className="space-y-4">
@@ -68,13 +69,13 @@ export default function Footer() {
                 { href: '/#about' as const, label: 'About' },
                 { href: '/#article' as const, label: 'Work' },
                 { href: '/#contact' as const, label: 'Contact' },
-              ].map((item) => (
+              ].map(item => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-gray-400 hover:text-white transition-colors duration-300 text-sm block group"
+                    className="group block text-sm text-gray-400 transition-colors duration-300 hover:text-white"
                   >
-                    <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">
+                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
                       {item.label}
                     </span>
                   </Link>
@@ -84,11 +85,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-300 text-sm">
+        <div className="flex flex-col items-center justify-between border-t border-white/10 pt-8 md:flex-row">
+          <p className="text-sm text-gray-300">
             © {currentYear} Yunosuke Yoshino — Crafted with care
           </p>
-          <p className="text-gray-400 text-xs mt-2 md:mt-0">
+          <p className="mt-2 text-xs text-gray-400 md:mt-0">
             Built with Next.js, TypeScript & Tailwind CSS
           </p>
         </div>
