@@ -74,12 +74,11 @@ export default function MainVisual() {
               <span className="block bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-6xl uppercase leading-none text-transparent md:text-8xl lg:text-9xl">
                 YUNOSUKE YOSHINO
               </span>
-            </h1>
-            <h2 className="text-display mb-8 font-black tracking-tight text-white drop-shadow-2xl">
               <span className="block bg-gradient-to-r from-orange-200 via-orange-300 to-white bg-clip-text text-6xl uppercase leading-none text-transparent md:text-8xl lg:text-8xl">
                 FRONTEND DEVELOPER
               </span>
-            </h2>
+            </h1>
+
             <p
               ref={descriptionRef}
               className="max-w-2xl text-lg font-light uppercase leading-relaxed tracking-wide text-gray-200 drop-shadow-lg md:text-xl"
