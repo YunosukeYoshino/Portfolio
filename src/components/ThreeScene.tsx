@@ -38,8 +38,8 @@ export default function ThreeScene({ className }: ThreeSceneProps) {
 
   const canvasSettings = {
     camera: {
-      position: [0, 0, 5] as [number, number, number],
-      fov: 75,
+      position: [0, 0, 8] as [number, number, number],
+      fov: 90,
       near: 0.1,
       far: performanceMode === 'low' ? 100 : 1000,
     },

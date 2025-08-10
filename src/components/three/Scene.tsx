@@ -4,8 +4,8 @@ import { ContactShadows, Environment } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import InteractiveScene from './InteractiveScene'
-import SimpleMorphingSphere from './SimpleMorphingSphere'
+import InteractiveScene, { useMousePosition } from './InteractiveScene'
+import MetaBallEffect from './MetaBallEffect'
 
 // Abstract geometric shape with morphing capabilities
 function _MorphingGeometry() {
@@ -163,53 +163,10 @@ function _MorphingGeometry() {
   )
 }
 
-// Particle system for ambient effects
-function ParticleField() {
-  const pointsRef = useRef<THREE.Points>(null)
-
-  const particlesGeometry = useMemo(() => {
-    const geometry = new THREE.BufferGeometry()
-    const positions = new Float32Array(1000 * 3)
-    const colors = new Float32Array(1000 * 3)
-
-    for (let i = 0; i < 1000; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 20
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 20
-
-      colors[i * 3] = Math.random()
-      colors[i * 3 + 1] = Math.random()
-      colors[i * 3 + 2] = Math.random()
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-
-    return geometry
-  }, [])
-
-  const particleMaterial = useMemo(() => {
-    return new THREE.PointsMaterial({
-      size: 0.05,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending,
-    })
-  }, [])
-
-  useFrame((state) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.x = state.clock.elapsedTime * 0.05
-      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.03
-    }
-  })
-
-  return <points ref={pointsRef} geometry={particlesGeometry} material={particleMaterial} />
-}
+// Particle system removed to focus on metaballs
 
 // Floating geometric shapes
-function FloatingShapes() {
+function _FloatingShapes() {
   const shapes = useMemo(() => {
     return Array.from({ length: 8 }, (_, i) => ({
       id: i,
@@ -280,6 +237,18 @@ function FloatingShape({
   )
 }
 
+// Wrapper component that uses mouse position context
+function MetaBallEffectWrapper({ performanceMode }: { performanceMode: 'auto' | 'high' | 'low' }) {
+  const mousePosition = useMousePosition()
+
+  return (
+    <MetaBallEffect
+      mousePosition={mousePosition}
+      performanceMode={performanceMode === 'low' ? 'low' : 'high'}
+    />
+  )
+}
+
 // Main scene component
 export default function Scene({
   performanceMode = 'high',
@@ -324,12 +293,10 @@ export default function Scene({
       {performanceMode !== 'low' && <Environment preset="city" background={false} />}
       <fog attach="fog" args={['#000000', 8, performanceMode === 'low' ? 20 : 30]} />
 
-      {/* Simple morphing sphere */}
-      <SimpleMorphingSphere />
+      {/* Interactive MetaBall Effect */}
+      <MetaBallEffectWrapper performanceMode={performanceMode} />
 
-      {/* Conditional effects based on performance */}
-      {performanceMode === 'high' && <ParticleField />}
-      {performanceMode !== 'low' && <FloatingShapes />}
+      {/* Focus on metaballs only - particles removed */}
 
       {/* Ground shadows - subtle and clean */}
       {performanceMode !== 'low' && (

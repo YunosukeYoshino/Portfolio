@@ -1,8 +1,13 @@
 'use client'
 
 import { useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
+import { createContext, useContext, useRef } from 'react'
 import type * as THREE from 'three'
+
+// Context for sharing mouse position across components
+const MouseContext = createContext<{ x: number; y: number }>({ x: 0, y: 0 })
+
+export const useMousePosition = () => useContext(MouseContext)
 
 interface InteractiveSceneProps {
   children: React.ReactNode
@@ -11,13 +16,21 @@ interface InteractiveSceneProps {
 export default function InteractiveScene({ children }: InteractiveSceneProps) {
   const groupRef = useRef<THREE.Group>(null)
 
-  // シンプルな自動カメラ動作
+  // Automatic floating camera movement
   useFrame((state) => {
-    // 基本的な浮遊感のあるカメラ動作
     if (groupRef.current) {
+      // Subtle rotation based on time for floating effect
       groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.1) * 0.05
+      groupRef.current.rotation.x = Math.cos(state.clock.elapsedTime * 0.08) * 0.03
     }
   })
 
-  return <group ref={groupRef}>{children}</group>
+  // Provide default mouse position for compatibility
+  const defaultMousePosition = { x: 0, y: 0 }
+
+  return (
+    <MouseContext.Provider value={defaultMousePosition}>
+      <group ref={groupRef}>{children}</group>
+    </MouseContext.Provider>
+  )
 }
