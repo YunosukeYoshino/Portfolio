@@ -74,7 +74,7 @@ export default function Header() {
             href="/#contact"
             className="bg-white px-6 py-2 text-sm font-medium uppercase tracking-wide text-black transition-colors duration-300 hover:bg-gray-200"
           >
-            LET'S GET STARTED
+            Let's Work Together
           </Link>
 
           <div className="grid items-center text-xs uppercase tracking-wider text-gray-400">

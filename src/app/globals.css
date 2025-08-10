@@ -221,20 +221,45 @@ body {
   }
 }
 
-/* Code highlighting styles */
-.prose pre[class*="language-"] {
-  @apply bg-gray-900 border border-gray-800 rounded-lg;
+/* Highlight.js Code Highlighting */
+.prose pre {
+  @apply rounded-lg overflow-x-auto my-6 p-4 border border-gray-700;
+  background-color: #0d1117 !important;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  tab-size: 2;
 }
 
-.prose code[class*="language-"] {
-  @apply text-gray-300;
-}
-
-.prose :not(pre) > code[class*="language-"] {
-  @apply bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm;
+.prose pre code {
+  @apply text-sm leading-relaxed block;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  font-family: inherit;
 }
 
 /* Inline code styling */
 .prose :not(pre) > code {
-  @apply bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm font-mono;
+  @apply bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+  font-size: 0.85em;
+}
+
+/* Scrollbar for code blocks */
+.prose pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.prose pre::-webkit-scrollbar-track {
+  background: #21262d;
+  border-radius: 4px;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background: #484f58;
+  border-radius: 4px;
+}
+
+.prose pre::-webkit-scrollbar-thumb:hover {
+  background: #6e7681;
 }
