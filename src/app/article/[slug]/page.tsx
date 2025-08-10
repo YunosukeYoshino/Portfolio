@@ -28,13 +28,36 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   try {
     const { slug } = await params
     const blog = await getBlogDetail(slug)
+    const siteUrl = process.env.SITE_URL || 'https://yunosukeyoshino.com'
+
+    const baseMetadata = createMetadata({
+      title: blog.title,
+      description: blog.content.replace(/<[^>]*>/g, '').slice(0, 160),
+      url: `/article/${blog.id}`,
+    })
 
     return {
-      ...createMetadata({
-        title: blog.title,
-        description: blog.content.replace(/<[^>]*>/g, '').slice(0, 160),
-        url: `/article/${blog.id}`,
-      }),
+      ...baseMetadata,
+      openGraph: {
+        ...baseMetadata.openGraph,
+        type: 'article',
+        images: [
+          {
+            url: `${siteUrl}/article/${blog.id}/opengraph-image`,
+            width: 1200,
+            height: 630,
+            alt: blog.title,
+          },
+        ],
+        publishedTime: blog.publishedAt,
+        modifiedTime: blog.updatedAt,
+        authors: ['Yunosuke Yoshino'],
+        section: blog.category.name,
+      },
+      twitter: {
+        ...baseMetadata.twitter,
+        images: [`${siteUrl}/article/${blog.id}/opengraph-image`],
+      },
       alternates: {
         canonical: `https://yunosukeyoshino.com/article/${blog.id}`,
       },

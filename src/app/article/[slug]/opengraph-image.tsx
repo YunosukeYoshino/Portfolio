@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-key */
 import { ImageResponse } from 'next/og'
-import { getBlogDetail } from '@/lib/microcms'
+import { getAllBlogIds, getBlogDetail } from '@/lib/microcms'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 export const dynamic = 'force-static'
 export const revalidate = 86400 // 24 hours
 export const alt = 'Article'
@@ -12,9 +12,22 @@ export const size = {
 }
 export const contentType = 'image/png'
 
-export default async function Image({ params }: { params: { slug: string } }) {
+// Generate static params for pre-rendering OG images
+export async function generateStaticParams() {
   try {
-    const blog = await getBlogDetail(params.slug)
+    const blogIds = await getAllBlogIds()
+    return blogIds.map((id) => ({
+      slug: id,
+    }))
+  } catch (_error) {
+    return []
+  }
+}
+
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
+  try {
+    const { slug } = await params
+    const blog = await getBlogDetail(slug)
 
     return new ImageResponse(
       <div
