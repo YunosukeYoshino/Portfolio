@@ -14,8 +14,10 @@ const nextConfig: NextConfig = {
     SITE_URL: 'https://www.yunosukeyoshino.com',
   },
 
-  // Image optimization
+  // Image optimization with custom loader for Cloudflare Pages
   images: {
+    loader: 'custom',
+    loaderFile: './src/lib/imageLoader.js',
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -38,13 +40,13 @@ const nextConfig: NextConfig = {
     includePaths: ['./src/styles'],
   },
 
-  // Build optimization
-  output: 'standalone',
+  // Build optimization - static export for Cloudflare Pages
+  output: 'export',
 
-  // Vercel deployment
+  // Deployment optimization
   ...(process.env.NODE_ENV === 'production' && {
     generateBuildId: async () => {
-      return process.env.VERCEL_GIT_COMMIT_SHA || 'development'
+      return process.env.CF_PAGES_COMMIT_SHA || process.env.VERCEL_GIT_COMMIT_SHA || 'development'
     },
   }),
 }
