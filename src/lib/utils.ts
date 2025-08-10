@@ -29,7 +29,7 @@ export function generateMetadata({
   url?: string
   image?: string
 }) {
-  const siteUrl = process.env.SITE_URL || 'https://www.yunosukeyoshino.com'
+  const siteUrl = process.env.SITE_URL || 'https://yunosukeyoshino.com'
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl
   const ogImage = image || `${siteUrl}/assets/images/og-image.jpg`
 

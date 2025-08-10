@@ -67,7 +67,7 @@ For professional inquiries or collaboration opportunities, please visit the main
         'Cache-Control': 'public, max-age=86400, s-maxage=86400',
       },
     })
-  } catch (error) {
+  } catch {
     // Fallback content if blog fetching fails
     const fallbackContent = `# Yunosuke Yoshino Portfolio
 

@@ -20,16 +20,17 @@ export const metadata: Metadata = {
   },
   description: 'This is the portfolio of Yunosuke Yoshino',
   keywords: ['portfolio', 'web development', 'frontend', 'Yunosuke Yoshino'],
-  authors: [
-    { name: 'Yunosuke Yoshino', url: 'https://www.yunosukeyoshino.com' },
-  ],
+  authors: [{ name: 'Yunosuke Yoshino', url: 'https://yunosukeyoshino.com' }],
   creator: 'Yunosuke Yoshino',
   publisher: 'Yunosuke Yoshino',
-  metadataBase: new URL('https://www.yunosukeyoshino.com'),
+  metadataBase: new URL('https://yunosukeyoshino.com'),
+  alternates: {
+    canonical: 'https://yunosukeyoshino.com',
+  },
   openGraph: {
     type: 'website',
     locale: 'ja_JP',
-    url: 'https://www.yunosukeyoshino.com',
+    url: 'https://yunosukeyoshino.com',
     siteName: 'Yunosuke Yoshino Portfolio',
     title: 'Yunosuke Yoshino Portfolio',
     description: 'This is the portfolio of Yunosuke Yoshino',

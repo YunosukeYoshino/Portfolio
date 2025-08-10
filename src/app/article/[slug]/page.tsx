@@ -2,9 +2,13 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import CodeHighlight from '@/components/CodeHighlight'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import CodeHighlight from '@/components/CodeHighlight'
+import JsonLd, {
+  createArticleSchema,
+  createBreadcrumbSchema,
+} from '@/components/JsonLd'
 import { getAllBlogIds, getBlogDetail } from '@/lib/microcms'
 import { generateMetadata as createMetadata, formatDate } from '@/lib/utils'
 import type { BlogPageProps } from '@/types'
@@ -13,7 +17,7 @@ import type { BlogPageProps } from '@/types'
 export async function generateStaticParams() {
   try {
     const blogIds = await getAllBlogIds()
-    return blogIds.map((id) => ({
+    return blogIds.map(id => ({
       slug: id,
     }))
   } catch (error) {
@@ -23,17 +27,24 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: BlogPageProps): Promise<Metadata> {
   try {
     const { slug } = await params
     const blog = await getBlogDetail(slug)
 
-    return createMetadata({
-      title: blog.title,
-      description: blog.content.replace(/<[^>]*>/g, '').slice(0, 160),
-      url: `/article/${blog.id}`,
-      image: blog.eyecatch.url,
-    })
+    return {
+      ...createMetadata({
+        title: blog.title,
+        description: blog.content.replace(/<[^>]*>/g, '').slice(0, 160),
+        url: `/article/${blog.id}`,
+        image: blog.eyecatch.url,
+      }),
+      alternates: {
+        canonical: `https://yunosukeyoshino.com/article/${blog.id}`,
+      },
+    }
   } catch {
     return createMetadata({
       title: 'Article Not Found',
@@ -47,28 +58,43 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
     const { slug } = await params
     const blog = await getBlogDetail(slug)
 
+    const articleSchema = createArticleSchema(blog)
+    const breadcrumbSchema = createBreadcrumbSchema([
+      { name: 'ホーム', url: 'https://yunosukeyoshino.com' },
+      { name: '記事一覧', url: 'https://yunosukeyoshino.com/article' },
+      {
+        name: blog.title,
+        url: `https://yunosukeyoshino.com/article/${blog.id}`,
+      },
+    ])
+
     return (
       <>
+        <JsonLd data={articleSchema} />
+        <JsonLd data={breadcrumbSchema} />
         <Header />
         <main className="l-main bg-white">
           <article className="py-24 md:py-32">
             <div className="container-custom">
               {/* Article Header */}
               <header className="mb-16">
-                <div className="flex items-center justify-between mb-8">
-                  <span className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium uppercase tracking-wide">
+                <div className="mb-8 flex items-center justify-between">
+                  <span className="bg-gray-100 px-4 py-2 text-sm font-medium uppercase tracking-wide text-gray-700">
                     {blog.category.name}
                   </span>
-                  <time dateTime={blog.publishedAt} className="text-gray-500 uppercase tracking-wide text-sm">
+                  <time
+                    dateTime={blog.publishedAt}
+                    className="text-sm uppercase tracking-wide text-gray-500"
+                  >
                     {formatDate(blog.publishedAt)}
                   </time>
                 </div>
 
-                <h1 className="text-section-title text-display text-black leading-tight mb-12 uppercase tracking-tight">
+                <h1 className="text-section-title text-display mb-12 uppercase leading-tight tracking-tight text-black">
                   {blog.title}
                 </h1>
 
-                <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-gray-200">
+                <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-gray-200">
                   <Image
                     src={blog.eyecatch.url}
                     alt={blog.eyecatch.alt || blog.title}
@@ -81,19 +107,19 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
               </header>
 
               {/* Article Content */}
-              <div className="max-w-4xl mx-auto">
+              <div className="mx-auto max-w-4xl">
                 <CodeHighlight content={blog.content} />
               </div>
 
               {/* Article Footer */}
-              <footer className="mt-20 pt-8 border-t border-gray-200">
+              <footer className="mt-20 border-t border-gray-200 pt-8">
                 <div className="flex justify-center">
                   <Link
                     href="/article"
-                    className="group relative inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-black border border-black hover:bg-black hover:text-white transition-all duration-300 ease-out overflow-hidden"
+                    className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
                   >
                     <svg
-                      className="w-4 h-4 transition-transform group-hover:-translate-x-1"
+                      className="h-4 w-4 transition-transform group-hover:-translate-x-1"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -105,7 +131,9 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
                         d="M15 19l-7-7 7-7"
                       />
                     </svg>
-                    <span className="uppercase tracking-wide">BACK TO ARTICLES</span>
+                    <span className="uppercase tracking-wide">
+                      BACK TO ARTICLES
+                    </span>
                   </Link>
                 </div>
               </footer>
@@ -116,6 +144,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
       </>
     )
   } catch (error) {
+    // biome-ignore lint/suspicious/noConsole: Required for debugging API errors during build
     console.error('Error loading blog detail:', error)
     notFound()
   }

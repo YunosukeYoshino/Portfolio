@@ -3,6 +3,7 @@ import About from '@/components/About'
 import Blog from '@/components/Blog'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
+import JsonLd, { createPersonSchema, createWebsiteSchema, createBreadcrumbSchema } from '@/components/JsonLd'
 import MainVisual from '@/components/MainVisual'
 
 function BlogSection() {
@@ -109,8 +110,17 @@ function ContactSection() {
 }
 
 export default function HomePage() {
+  const personSchema = createPersonSchema()
+  const websiteSchema = createWebsiteSchema()
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'ホーム', url: 'https://yunosukeyoshino.com' },
+  ])
+
   return (
     <>
+      <JsonLd data={personSchema} />
+      <JsonLd data={websiteSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Header />
       <main className="l-main">
         <MainVisual />
