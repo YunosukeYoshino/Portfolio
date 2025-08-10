@@ -58,7 +58,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         >
           <div
             style={{
-              fontSize: blog.title.length > 30 ? 48 : 60,
+              fontSize: blog.title.length > 48 ? 64 : 80,
               fontWeight: 700,
               color: '#1a1a1a',
               lineHeight: 1.2,
@@ -121,7 +121,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           justifyContent: 'center',
           backgroundImage: 'linear-gradient(135deg, #fb923c 0%, #f97316 50%, #ea580c 100%)',
           color: 'white',
-          fontSize: 48,
+          fontSize: 64,
           fontWeight: 600,
         }}
       >
