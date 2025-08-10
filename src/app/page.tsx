@@ -12,7 +12,7 @@ import MainVisual from '@/components/MainVisual'
 
 function BlogSection() {
   return (
-    <section className="p-mainArticleList bg-white py-24 md:py-32" id="article">
+    <section className="bg-white py-24 md:py-32" id="article">
       <div className="container-custom">
         <div className="mb-16 flex items-end justify-between">
           <header>
@@ -46,10 +46,7 @@ function BlogSection() {
 
 function ContactSection() {
   return (
-    <section
-      className="p-contactArea border-t border-black/10 bg-gray-50 py-24 md:py-32"
-      id="contact"
-    >
+    <section className="border-t border-black/10 bg-gray-50 py-24 md:py-32" id="contact">
       <div className="container-custom">
         <header className="mb-16">
           <h2 className="text-section-title text-display mb-6 uppercase tracking-tight text-black">
@@ -70,11 +67,8 @@ function ContactSection() {
               Available for freelance projects, collaborations, and full-time opportunities.
             </p>
 
-            <a
-              className="p-contactArea__mailLink group inline-block"
-              href="mailto:yunosukeyoshino@gmail.com"
-            >
-              <span className="p-contactArea__mail mb-2 block text-2xl font-light text-black transition-colors duration-300 group-hover:text-gray-700 md:text-3xl">
+            <a className="group inline-block" href="mailto:yunosukeyoshino@gmail.com">
+              <span className="mb-2 block text-2xl font-light text-black transition-colors duration-300 group-hover:text-gray-700 md:text-3xl">
                 yunosukeyoshino@gmail.com
               </span>
               <span
@@ -125,7 +119,7 @@ export default function HomePage() {
       <JsonLd data={websiteSchema} />
       <JsonLd data={breadcrumbSchema} />
       <Header />
-      <main className="l-main">
+      <main>
         <MainVisual />
         <About />
         <BlogSection />

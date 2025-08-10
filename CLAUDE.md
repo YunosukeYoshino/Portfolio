@@ -24,7 +24,7 @@ This is a Next.js 15 portfolio site with App Router, fully migrated from Astro. 
 - **React 19**: Latest React with Server Components
 - **TypeScript**: Strict type safety with experimental typedRoutes
 - **microCMS**: Headless CMS for blog articles
-- **Tailwind CSS + SCSS**: Hybrid styling with CSS Modules
+- **Tailwind CSS**: Utility-first CSS framework for rapid styling
 - **Shiki**: Server-side code highlighting with dual themes
 - **GSAP**: Animation library for interactive elements
 - **Biome**: Fast linter and formatter (replaces ESLint/Prettier)
@@ -35,7 +35,6 @@ This is a Next.js 15 portfolio site with App Router, fully migrated from Astro. 
 - `src/components/`: React components (Header, Footer, Blog, etc.)
 - `src/lib/`: Utility functions including microCMS client
 - `src/types/`: TypeScript type definitions
-- `src/styles/`: SCSS modules following FLOCSS methodology
 
 ### microCMS Integration
 The `src/lib/microcms.ts` file contains:
@@ -52,12 +51,11 @@ The `src/lib/microcms.ts` file contains:
 - **Error Boundaries**: Graceful error handling at route level
 
 ### Styling Architecture
-Follows FLOCSS methodology with CSS Modules:
+Uses Tailwind CSS utility-first approach:
 - **Foundation**: Base styles and reset (`globals.css`)
-- **Layout**: Grid and layout components (l-*)
-- **Component**: Reusable UI components (c-*)
-- **Project**: Page-specific styles (p-*)
-- **Utility**: Tailwind utility classes
+- **Utilities**: Tailwind utility classes for styling components
+- **Custom Classes**: `container-custom` and design-specific utilities
+- **Component Styling**: All styling done inline with Tailwind utilities
 
 ### Environment Variables Required
 - `MICROCMS_SERVICE_DOMAIN`: microCMS service domain

@@ -12,7 +12,6 @@ A modern portfolio website built with Next.js 15, featuring a blog powered by mi
 
 ### Styling
 - **Tailwind CSS** - Utility-first CSS framework
-- **SCSS Modules** - Component-scoped styles following FLOCSS methodology
 - **GSAP** - Professional-grade animation library
 
 ### Code Quality
@@ -48,7 +47,7 @@ src/
 ├── lib/                # Utilities and API clients
 │   └── microcms.ts     # microCMS client with type safety
 ├── types/              # TypeScript type definitions
-└── styles/             # Global styles and SCSS modules
+└── styles/             # Global styles
     └── globals.css     # Base styles and Tailwind directives
 ```
 
@@ -107,12 +106,11 @@ npm run lih          # Run Lighthouse audit
 - Client Components marked with `'use client'` for interactivity
 - microCMS data fetched server-side with ISR support
 
-### Styling Architecture (FLOCSS)
-- **Foundation**: Base styles and resets
-- **Layout**: Grid and container components (l-*)
-- **Component**: Reusable UI components (c-*)
-- **Project**: Page-specific styles (p-*)
-- **Utility**: Tailwind utility classes
+### Styling Architecture
+- **Tailwind CSS**: Utility-first approach for all component styling
+- **Global Styles**: Base styles and CSS variables in globals.css
+- **Custom Utilities**: Project-specific utility classes (container-custom, text-display)
+- **Component-scoped**: All styling handled inline with Tailwind utilities
 
 ### Performance Optimizations
 - Static generation with `generateStaticParams` for blog posts

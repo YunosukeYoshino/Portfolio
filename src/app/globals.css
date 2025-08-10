@@ -23,7 +23,6 @@
 
 /* Base Styles */
 html {
-  scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: var(--border) var(--background);
 }
@@ -94,7 +93,7 @@ body {
 }
 
 /* Loader Styles */
-.p-loader {
+.loader {
   position: fixed;
   top: 0;
   left: 0;
@@ -108,12 +107,12 @@ body {
   transition: opacity 0.5s ease-in-out;
 }
 
-.p-loader.is-hidden {
+.loader.is-hidden {
   opacity: 0;
   pointer-events: none;
 }
 
-.p-loader__circle {
+.loader-circle {
   width: 40px;
   height: 40px;
   border: 2px solid #f3f3f3;

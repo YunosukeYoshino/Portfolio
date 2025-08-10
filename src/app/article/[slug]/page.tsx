@@ -96,7 +96,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
         <JsonLd data={articleSchema} />
         <JsonLd data={breadcrumbSchema} />
         <Header />
-        <main className="l-main bg-white">
+        <main className="bg-white">
           <article className="py-24 md:py-32">
             <div className="container-custom">
               {/* Breadcrumb */}

@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import ClientLoader from '@/components/ClientLoader'
 import CustomCursor from '@/components/CustomCursor'
+import LenisProvider from '@/components/LenisProvider'
 import { cn } from '@/lib/utils'
 import './globals.css'
 
@@ -95,7 +96,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <canvas id="gradient-canvas" data-transition-in></canvas>
         <CustomCursor />
         <ClientLoader />
-        <div className="p-wrapper">{children}</div>
+        <LenisProvider>
+          <div>{children}</div>
+        </LenisProvider>
 
         <GoogleAnalytics gaId="G-7C1W0FTJR6" />
       </body>

@@ -31,7 +31,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header className="l-header fixed top-0 z-[9997] w-full border-b border-white/10 bg-black/90 py-1 backdrop-blur-md">
+    <header className="fixed top-0 z-[9997] w-full border-b border-white/10 bg-black/90 py-1 backdrop-blur-md">
       <div className="container-custom flex items-center justify-between py-6">
         {/* Left: Logo */}
         <Link href="/" className="text-display text-lg font-bold tracking-tight text-white">
@@ -86,7 +86,7 @@ export default function Header() {
         <button
           type="button"
           className={cn(
-            'c-hamburger md:hidden relative flex flex-col w-8 h-8 justify-center items-center p-1',
+            'md:hidden relative flex flex-col w-8 h-8 justify-center items-center p-1',
             'rounded-lg transition-all duration-300 hover:bg-white/10 active:scale-95',
             'z-[100000]',
             isMenuOpen && 'is-active'
@@ -118,8 +118,7 @@ export default function Header() {
         {/* Mobile Menu */}
         <nav
           className={cn(
-            'l-header__nav',
-            'fixed top-0 right-0 h-screen w-80',
+            'fixed top-0 right-0 h-screen w-80 bg-black',
             'backdrop-blur-2xl backdrop-saturate-150',
             'border-l border-gray-300/30 shadow-2xl',
             'transform transition-all duration-700 ease-out md:hidden',
@@ -127,15 +126,6 @@ export default function Header() {
             'z-[99999]',
             isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
           )}
-          style={{
-            background:
-              'linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(30, 30, 30, 0.92) 50%, rgba(15, 15, 15, 0.95) 100%)',
-            backdropFilter: 'blur(32px) saturate(1.8) brightness(1.1)',
-            boxShadow:
-              'inset 1px 0 0 rgba(255,255,255,0.15), -20px 0 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
-            position: 'fixed',
-            zIndex: 99999,
-          }}
         >
           {/* Menu Header */}
           <div className="border-b border-white/15 bg-black/20 px-8 py-6">
@@ -217,14 +207,6 @@ export default function Header() {
 
           {/* CTA Section */}
           <div className="absolute bottom-0 left-0 right-0 border-t border-white/15 bg-gradient-to-t from-black/70 to-black/20 p-8">
-            <Link
-              href="/#contact"
-              className="block w-full rounded-lg border-2 border-white/30 bg-white/15 py-4 text-center text-sm font-semibold uppercase tracking-wide text-white backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-white hover:text-black hover:shadow-lg hover:shadow-white/30"
-              onClick={() => setIsMenuOpen(false)}
-              style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.7)' }}
-            >
-              Let's Work Together
-            </Link>
             {/* Time Display */}
             <div className="mt-6 text-center">
               <div

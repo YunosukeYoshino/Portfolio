@@ -4,7 +4,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="l-footer border-t border-white/10 bg-black/90 py-16">
+    <footer className="border-t border-white/10 bg-black/90 py-16">
       <div className="container-custom">
         <div className="mb-12 grid gap-12 md:grid-cols-3">
           <div className="md:col-span-2">
@@ -12,9 +12,8 @@ export default function Footer() {
               Let's create something amazing together
             </h3>
             <p className="mb-8 max-w-2xl text-lg leading-relaxed text-gray-400">
-              Always open to discussing new opportunities, collaborations, and
-              innovative projects. Feel free to reach out if you have an
-              exciting project in mind.
+              Always open to discussing new opportunities, collaborations, and innovative projects.
+              Feel free to reach out if you have an exciting project in mind.
             </p>
             <div className="flex space-x-6">
               <a
@@ -69,7 +68,7 @@ export default function Footer() {
                 { href: '/#about' as const, label: 'About' },
                 { href: '/#article' as const, label: 'Work' },
                 { href: '/#contact' as const, label: 'Contact' },
-              ].map(item => (
+              ].map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

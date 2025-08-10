@@ -16,7 +16,7 @@ export default function ErrorPage({
   return (
     <>
       <Header />
-      <main className="l-main">
+      <main>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center max-w-md">
             <h1 className="text-6xl font-bold text-red-300 mb-4">!</h1>

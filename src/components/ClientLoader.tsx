@@ -17,8 +17,8 @@ export default function ClientLoader() {
   if (!isLoading) return null
 
   return (
-    <div className={`p-loader ${!isLoading ? 'is-hidden' : ''}`}>
-      <div className="p-loader__circle"></div>
+    <div className={`loader ${!isLoading ? 'is-hidden' : ''}`}>
+      <div className="loader-circle"></div>
     </div>
   )
 }

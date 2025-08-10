@@ -27,7 +27,7 @@ export default async function Blog({
     if (!blogs || blogs.length === 0) {
       const isDevelopment = process.env.NODE_ENV === 'development'
       return (
-        <div className={`p-articleList ${className}`}>
+        <div className={className}>
           <div className="container-custom">
             <div className="py-8 text-center">
               <p className="mb-2 text-gray-500">
@@ -52,13 +52,13 @@ export default async function Blog({
           : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
 
     return (
-      <div className={`p-articleList ${className}`}>
+      <div className={className}>
         <div className="container-custom">
           <div className={`grid ${gridCols} gap-6 lg:gap-8`}>
             {blogs.map((blog) => (
               <article
                 key={blog.id}
-                className="p-article group overflow-hidden rounded-lg bg-white border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-gray-300"
+                className="group overflow-hidden rounded-lg bg-white border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-gray-300"
               >
                 <Link href={`/article/${blog.id}`} className="block">
                   <div className="relative aspect-[16/9] overflow-hidden">
@@ -118,7 +118,7 @@ export default async function Blog({
     // biome-ignore lint/suspicious/noConsole: Error logging is necessary for debugging
     console.error('Error fetching blogs:', error)
     return (
-      <div className={`p-articleList ${className}`}>
+      <div className={className}>
         <div className="container-custom">
           <p className="py-8 text-center text-red-500">記事の取得に失敗しました</p>
         </div>

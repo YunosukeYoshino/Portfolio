@@ -65,10 +65,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
   }
 
   return (
-    <nav
-      className="c-pageNation flex justify-center items-center space-x-2"
-      aria-label="ページネーション"
-    >
+    <nav className="flex justify-center items-center space-x-2" aria-label="ページネーション">
       {/* Previous */}
       {currentPage > 1 && (
         <Link
@@ -185,7 +182,7 @@ export default async function BlogListPage({ params }: BlogListPageProps) {
         <JsonLd data={websiteSchema} />
         <JsonLd data={breadcrumbSchema} />
         <Header />
-        <main className="l-main bg-white">
+        <main className="bg-white">
           <div className="py-24 md:py-32">
             <div className="container-custom">
               {/* Breadcrumb */}
