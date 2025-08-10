@@ -85,9 +85,17 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col items-center justify-between border-t border-white/10 pt-8 md:flex-row">
-          <p className="text-sm text-gray-300">
-            © {currentYear} Yunosuke Yoshino — Crafted with care
-          </p>
+          <div className="flex flex-col items-center space-y-2 md:flex-row md:space-x-6 md:space-y-0">
+            <p className="text-sm text-gray-300">
+              © {currentYear} Yunosuke Yoshino — Crafted with care
+            </p>
+            <Link
+              href="/privacy-policy"
+              className="text-xs text-gray-400 transition-colors duration-300 hover:text-white"
+            >
+              プライバシーポリシー
+            </Link>
+          </div>
           <p className="mt-2 text-xs text-gray-400 md:mt-0">
             Built with Next.js, TypeScript & Tailwind CSS
           </p>
