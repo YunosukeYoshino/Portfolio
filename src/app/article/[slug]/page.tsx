@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import Breadcrumb from '@/components/Breadcrumb'
 import CodeHighlight from '@/components/CodeHighlight'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
@@ -33,13 +34,15 @@ export async function generateMetadata({
   try {
     const { slug } = await params
     const blog = await getBlogDetail(slug)
+    const siteUrl = process.env.SITE_URL || 'https://yunosukeyoshino.com'
+    const ogImageUrl = `${siteUrl}/api/og/article/${blog.id}`
 
     return {
       ...createMetadata({
         title: blog.title,
         description: blog.content.replace(/<[^>]*>/g, '').slice(0, 160),
         url: `/article/${blog.id}`,
-        image: blog.eyecatch.url,
+        image: ogImageUrl,
       }),
       alternates: {
         canonical: `https://yunosukeyoshino.com/article/${blog.id}`,
@@ -57,6 +60,12 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
   try {
     const { slug } = await params
     const blog = await getBlogDetail(slug)
+
+    const breadcrumbItems = [
+      { name: 'ホーム', url: '/' },
+      { name: '記事一覧', url: '/article' },
+      { name: blog.title, url: `/article/${blog.id}` },
+    ]
 
     const articleSchema = createArticleSchema(blog)
     const breadcrumbSchema = createBreadcrumbSchema([
@@ -76,6 +85,9 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
         <main className="l-main bg-white">
           <article className="py-24 md:py-32">
             <div className="container-custom">
+              {/* Breadcrumb */}
+              <Breadcrumb items={breadcrumbItems} className="mb-8" />
+              
               {/* Article Header */}
               <header className="mb-16">
                 <div className="mb-8 flex items-center justify-between">

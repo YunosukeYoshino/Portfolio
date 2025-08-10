@@ -1,17 +1,17 @@
-import Script from 'next/script'
-
 interface JsonLdProps {
   data: Record<string, any>
 }
 
+function sanitizeJsonLd(obj: any): string {
+  return JSON.stringify(obj, null, 2).replace(/</g, '\\u003c')
+}
+
 export default function JsonLd({ data }: JsonLdProps) {
   return (
-    <Script
-      id="json-ld"
+    <script
       type="application/ld+json"
-      strategy="beforeInteractive"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(data, null, 2),
+        __html: sanitizeJsonLd(data),
       }}
     />
   )
@@ -21,9 +21,10 @@ export default function JsonLd({ data }: JsonLdProps) {
 export const createPersonSchema = () => ({
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: '吉野雄之介',
+  name: '芳野悠之助',
   alternateName: 'Yunosuke Yoshino',
-  description: 'フロントエンドエンジニア。React、Next.js、モダンなWeb技術を専門としています。',
+  description:
+    'フロントエンドエンジニア。React、Next.js、モダンなWeb技術を専門としています。',
   url: 'https://yunosukeyoshino.com',
   sameAs: [
     'https://github.com/YunosukeYoshino',
@@ -52,11 +53,11 @@ export const createPersonSchema = () => ({
 export const createWebsiteSchema = () => ({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: '吉野雄之介 ポートフォリオ',
+  name: '芳野悠之助 ポートフォリオ',
   alternateName: 'Yunosuke Yoshino Portfolio',
   url: 'https://yunosukeyoshino.com',
   description:
-    '吉野雄之介のポートフォリオサイト。フロントエンド開発、UI/UXデザイン、モダンなWeb技術に関する技術記事とプロジェクトを紹介しています。',
+    '芳野悠之助のポートフォリオサイト。フロントエンド開発、UI/UXデザイン、モダンなWeb技術に関する技術記事とプロジェクトを紹介しています。',
   inLanguage: 'ja-JP',
   author: createPersonSchema(),
   publisher: createPersonSchema(),
@@ -64,7 +65,8 @@ export const createWebsiteSchema = () => ({
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://yunosukeyoshino.com/article?search={search_term_string}',
+      urlTemplate:
+        'https://yunosukeyoshino.com/article?search={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -73,7 +75,7 @@ export const createWebsiteSchema = () => ({
 export const createBlogSchema = () => ({
   '@context': 'https://schema.org',
   '@type': 'Blog',
-  name: '吉野雄之介の技術ブログ',
+  name: '芳野悠之助の技術ブログ',
   description:
     'フロントエンド開発、UI/UXデザイン、モダンなWeb技術について書いた技術記事をまとめています。',
   url: 'https://yunosukeyoshino.com/article',
@@ -82,7 +84,9 @@ export const createBlogSchema = () => ({
   publisher: createPersonSchema(),
 })
 
-export const createBreadcrumbSchema = (items: Array<{ name: string; url: string }>) => ({
+export const createBreadcrumbSchema = (
+  items: Array<{ name: string; url: string }>
+) => ({
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: items.map((item, index) => ({

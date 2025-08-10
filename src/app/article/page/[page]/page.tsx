@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Blog from '@/components/Blog'
+import Breadcrumb from '@/components/Breadcrumb'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import JsonLd, {
@@ -186,6 +187,14 @@ export default async function BlogListPage({ params }: BlogListPageProps) {
       notFound()
     }
 
+    const breadcrumbItems = [
+      { name: 'ホーム', url: '/' },
+      {
+        name: currentPage === 1 ? '記事一覧' : `記事一覧 - ${currentPage}ページ目`,
+        url: currentPage === 1 ? '/article' : `/article/page/${currentPage}`,
+      },
+    ]
+
     const blogSchema = createBlogSchema()
     const websiteSchema = createWebsiteSchema()
     const breadcrumbSchema = createBreadcrumbSchema([
@@ -206,6 +215,9 @@ export default async function BlogListPage({ params }: BlogListPageProps) {
         <main className="l-main bg-white">
           <div className="py-24 md:py-32">
             <div className="container-custom">
+              {/* Breadcrumb */}
+              <Breadcrumb items={breadcrumbItems} className="mb-8" />
+              
               {/* Page Header */}
               <header className="mb-16">
                 <h1 className="text-section-title text-display text-black mb-6 uppercase tracking-tight">

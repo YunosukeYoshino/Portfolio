@@ -57,7 +57,7 @@ export default function Header() {
                 href="/#article"
                 className="text-sm font-medium uppercase tracking-wide text-white transition-colors duration-300 hover:text-gray-300"
               >
-                WORKS
+                ARTICLES
               </Link>
             </li>
             <li>
