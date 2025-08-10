@@ -14,11 +14,11 @@ interface BreadcrumbProps {
 export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
   return (
     <nav
-      className={`flex items-center space-x-1 text-sm text-gray-500 ${className}`}
+      className={`flex items-center space-x-1 text-sm text-gray-500 overflow-x-auto ${className}`}
       aria-label="パンくずリスト"
     >
       {items.map((item, index) => (
-        <div key={item.url} className="flex items-center">
+        <div key={item.url} className="flex items-center whitespace-nowrap">
           {index > 0 && (
             <svg
               className="mx-2 h-3 w-3 text-gray-400"
