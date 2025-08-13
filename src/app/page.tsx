@@ -67,9 +67,9 @@ function ContactSection() {
               Available for freelance projects, collaborations, and full-time opportunities.
             </p>
 
-            <a className="group inline-block" href="mailto:yunosukeyoshino@gmail.com">
+            <a className="group inline-block" href="mailto:info@yunosukeyoshino.com">
               <span className="mb-2 block text-2xl font-light text-black transition-colors duration-300 group-hover:text-gray-700 md:text-3xl">
-                yunosukeyoshino@gmail.com
+                info@yunosukeyoshino.com
               </span>
               <span
                 className="text-sm uppercase tracking-wider text-gray-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100"

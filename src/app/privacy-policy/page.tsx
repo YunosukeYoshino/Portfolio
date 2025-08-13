@@ -87,10 +87,10 @@ export default function PrivacyPolicyPage() {
               <p className="mb-4 leading-relaxed text-gray-700">
                 このプライバシーポリシーやお客様のデータに関してご質問がございましたら、
                 <a
-                  href="mailto:yunosukeyoshino@gmail.com"
+                  href="mailto:info@yunosukeyoshino.com"
                   className="text-blue-600 transition-colors hover:text-blue-800"
                 >
-                  yunosukeyoshino@gmail.com
+                  info@yunosukeyoshino.com
                 </a>
                 までお気軽にお問い合わせください。
               </p>

@@ -22,6 +22,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
     "@next/third-parties": "^15.4.6",
     "@react-three/drei": "^10.6.1",
     "@react-three/fiber": "^9.3.0",
@@ -34,11 +35,14 @@
     "postcss-preset-env": "^10.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.62.0",
+    "resend": "^6.0.1",
     "schema-dts": "^1.1.5",
     "shiki": "^3.9.1",
     "tailwind-merge": "^2.5.4",
     "three": "^0.179.1",
-    "undici": "^7.13.0"
+    "undici": "^7.13.0",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.3",
