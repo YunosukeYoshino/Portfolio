@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Suspense } from 'react'
 import About from '@/components/About'
 import Blog from '@/components/Blog'
@@ -67,17 +68,28 @@ function ContactSection() {
               Available for freelance projects, collaborations, and full-time opportunities.
             </p>
 
-            <a className="group inline-block" href="mailto:info@yunosukeyoshino.com">
-              <span className="mb-2 block text-2xl font-light text-black transition-colors duration-300 group-hover:text-gray-700 md:text-3xl">
-                info@yunosukeyoshino.com
+            <Link
+              href="/contact"
+              className="group relative inline-flex items-center justify-center px-8 py-4 bg-black text-white font-bold uppercase tracking-wider border-2 border-black overflow-hidden transition-all duration-500 hover:bg-black hover:text-white hover:scale-105 hover:shadow-2xl"
+            >
+              <span className="relative z-10 flex items-center space-x-2">
+                <span>CONTACT</span>
+                <svg
+                  className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
               </span>
-              <span
-                className="text-sm uppercase tracking-wider text-gray-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                aria-hidden="true"
-              >
-                Click to send email
-              </span>
-            </a>
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </Link>
           </div>
 
           <div className="space-y-6">

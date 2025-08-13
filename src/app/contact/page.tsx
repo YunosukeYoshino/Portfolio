@@ -12,13 +12,13 @@ export default function ContactPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white pt-24">
-        <div className="container-custom py-20">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold uppercase tracking-tighter mb-4">
+      <main className="min-h-screen bg-white py-24 md:py-40">
+        <div className="container-custom">
+          <div className="mx-auto max-w-2xl">
+            <h1 className="mb-4 text-4xl font-bold uppercase tracking-tighter md:text-6xl">
               CONTACT
             </h1>
-            <p className="text-lg text-gray-600 mb-12">
+            <p className="mb-12 text-lg text-gray-600">
               お仕事のご依頼、ご相談などお気軽にお問い合わせください。
             </p>
 

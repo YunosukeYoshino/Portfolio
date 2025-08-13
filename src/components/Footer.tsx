@@ -17,7 +17,7 @@ export default function Footer() {
             </p>
             <div className="flex space-x-6">
               <a
-                href="mailto:info@yunosukeyoshino.com"
+                href="/contact"
                 className="group text-gray-400 transition-colors duration-300 hover:text-white"
                 aria-label="Email"
               >
