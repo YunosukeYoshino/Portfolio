@@ -48,7 +48,12 @@ export default function ContactForm() {
     setSubmitStatus({ type: null, message: '' })
 
     try {
-      const response = await fetch('/api/contact', {
+      const apiUrl =
+        process.env.NODE_ENV === 'production'
+          ? 'https://yunosukeyoshino.com/api/contact'
+          : '/api/contact'
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
