@@ -1,5 +1,16 @@
 import { z } from 'zod'
 
+interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void
+  passThroughOnException(): void
+}
+
+type PagesFunction<Env = unknown> = (context: {
+  request: Request
+  env: Env
+  waitUntil: ExecutionContext['waitUntil']
+}) => Response | Promise<Response>
+
 export interface Env {
   RESEND_API_KEY: string
   DISCORD_WEBHOOK_URL?: string
