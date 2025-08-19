@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export interface Env {
   RESEND_API_KEY: string
-  DISCORD_WEBHOOK_URL: string
+  DISCORD_WEBHOOK_URL?: string
 }
 
 const contactSchema = z.object({
