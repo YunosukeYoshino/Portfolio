@@ -67,7 +67,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "biome check --write --unsafe"
+      "biome check --write --unsafe",
+      "tsc --noEmit"
     ],
     "*.{json,md,css,scss}": [
       "biome format --write"
