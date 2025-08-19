@@ -153,7 +153,6 @@ async function sendResendEmail(apiKey: string, data: z.infer<typeof contactSchem
   })
 
   if (!confirmResponse.ok) {
-    console.error('Failed to send confirmation email')
   }
 
   const result = await mainResponse.json()
@@ -189,7 +188,8 @@ async function sendDiscordNotification(webhookUrl: string, data: z.infer<typeof 
           },
           {
             name: '💬 メッセージ',
-            value: data.message.length > 1024 ? `${data.message.substring(0, 1021)}...` : data.message,
+            value:
+              data.message.length > 1024 ? `${data.message.substring(0, 1021)}...` : data.message,
             inline: false,
           },
         ],
@@ -209,9 +209,7 @@ async function sendDiscordNotification(webhookUrl: string, data: z.infer<typeof 
       },
       body: JSON.stringify(discordPayload),
     })
-  } catch (error) {
-    console.error('Discord webhook error:', error)
-  }
+  } catch (_error) {}
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
@@ -228,24 +226,19 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // Send emails via Resend
     const emailResult = await sendResendEmail(context.env.RESEND_API_KEY, validatedData)
 
-    // Send Discord notification
+    // Send Discord notification in background
     if (context.env.DISCORD_WEBHOOK_URL) {
-      await sendDiscordNotification(context.env.DISCORD_WEBHOOK_URL, validatedData)
+      context.waitUntil(sendDiscordNotification(context.env.DISCORD_WEBHOOK_URL, validatedData))
     }
 
-    return new Response(
-      JSON.stringify({ message: 'メールを送信しました', id: emailResult.id }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders,
-        },
-      }
-    )
+    return new Response(JSON.stringify({ message: 'メールを送信しました', id: emailResult.id }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        ...corsHeaders,
+      },
+    })
   } catch (error) {
-    console.error('Contact form error:', error)
-
     if (error instanceof z.ZodError) {
       return new Response(
         JSON.stringify({ error: '入力データが無効です', details: error.issues }),
