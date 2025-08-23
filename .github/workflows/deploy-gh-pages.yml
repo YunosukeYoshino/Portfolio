@@ -4,7 +4,8 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
+  repository_dispatch:
+    types: [ repository_dispatch ]
 permissions:
   contents: read
 
@@ -16,19 +17,19 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     name: Build and Deploy to Cloudflare Pages
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: ${{ env.BUN_VERSION }}
-          
+
       - name: Install dependencies
         run: bun install
-        
+
       - name: Build application
         run: bun run build
         env:
@@ -36,31 +37,31 @@ jobs:
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           SITE_URL: https://yunosuke-portfolio.pages.dev
-          
+
       - name: Deploy to Cloudflare Pages via Wrangler
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy out --project-name=yunosuke-portfolio --branch=main
-          
+
       - name: Create deployment status
         if: success()
         run: |
           echo "🚀 Deployment successful!"
           echo "📄 Site URL: https://yunosuke-portfolio.pages.dev"
-          
+
       - name: API Deployment Alternative (Fallback)
         if: failure()
         run: |
           echo "⚠️ Wrangler deployment failed, trying API method..."
-          
+
           # プロジェクト存在確認
           PROJECT_CHECK=$(curl -s -X GET \
             "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/yunosuke-portfolio" \
             -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
             -H "Content-Type: application/json")
-          
+
           if echo "$PROJECT_CHECK" | grep -q '"success":false'; then
             echo "📝 Creating new project..."
             CREATE_RESPONSE=$(curl -s -X POST \
@@ -76,7 +77,7 @@ jobs:
                   "root_dir": ""
                 }
               }')
-            
+
             if echo "$CREATE_RESPONSE" | grep -q '"success":true'; then
               echo "✅ Project created successfully"
             else
@@ -87,6 +88,6 @@ jobs:
           else
             echo "✅ Project exists"
           fi
-          
+
           echo "ℹ️ Manual file upload required via Cloudflare Dashboard"
           echo "📁 Build files are ready in ./out directory"
