@@ -4,7 +4,6 @@ import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import ClientLoader from '@/components/ClientLoader'
 import CustomCursor from '@/components/CustomCursor'
-import LenisProvider from '@/components/LenisProvider'
 import { cn } from '@/lib/utils'
 import './globals.css'
 
@@ -77,19 +76,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="format-detection" content="email=no,telephone=no,address=no" />
         <meta name="theme-color" content="#000000e6" />
-        <Script
-          id="typesquare"
-          src="//typesquare.com/3/tsst/script/ja/typesquare.js?641200e6ba2c4c9ea7f95bf7ac1e02e5"
-          strategy="beforeInteractive"
-        />
       </head>
       <body>
-        <canvas id="gradient-canvas" data-transition-in></canvas>
+        <canvas className="gradient-canvas" data-transition-in />
         <CustomCursor />
         <ClientLoader />
-        <LenisProvider>
           <div>{children}</div>
-        </LenisProvider>
 
         <GoogleAnalytics gaId="G-7C1W0FTJR6" />
       </body>
