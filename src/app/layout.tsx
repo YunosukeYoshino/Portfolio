@@ -78,7 +78,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#000000e6" />
       </head>
       <body>
-        <canvas className="gradient-canvas" data-transition-in />
         <CustomCursor />
         <ClientLoader />
           <div>{children}</div>
