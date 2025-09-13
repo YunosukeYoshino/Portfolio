@@ -54,6 +54,10 @@
         "noNonNullAssertion": "warn",
         "useImportType": "error",
         "useConst": "error"
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
       }
     }
   },

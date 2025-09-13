@@ -24,7 +24,10 @@ export default function ThreeScene({ className }: ThreeSceneProps) {
         navigator.userAgent
       )
       const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4
-      const hasLimitedMemory = 'deviceMemory' in navigator && (navigator as any).deviceMemory <= 4
+      const hasLimitedMemory =
+        'deviceMemory' in navigator &&
+        (navigator as Navigator & { deviceMemory?: number }).deviceMemory &&
+        (navigator as Navigator & { deviceMemory: number }).deviceMemory <= 4
 
       if (isMobile || isLowEndDevice || hasLimitedMemory) {
         setPerformanceMode('low')

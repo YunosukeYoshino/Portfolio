@@ -50,8 +50,12 @@ export function usePerformanceMonitor() {
 
         // Get memory usage if available (Chrome only)
         let memoryUsage: number | undefined
-        if ('memory' in performance && (performance as any).memory) {
-          const memory = (performance as any).memory
+        if (
+          'memory' in performance &&
+          (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory
+        ) {
+          const memory = (performance as Performance & { memory: { usedJSHeapSize: number } })
+            .memory
           memoryUsage = memory.usedJSHeapSize / 1024 / 1024 // MB
         }
 

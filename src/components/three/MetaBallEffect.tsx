@@ -10,8 +10,8 @@ interface MetaBallEffectProps {
 }
 
 export default function MetaBallEffect({
-  mousePosition = { x: 0, y: 0 },
-  performanceMode = 'high',
+  mousePosition: _mousePosition = { x: 0, y: 0 },
+  performanceMode: _performanceMode = 'high',
 }: MetaBallEffectProps) {
   const meshRef = useRef<THREE.Mesh>(null)
   const materialRef = useRef<THREE.ShaderMaterial>(null)

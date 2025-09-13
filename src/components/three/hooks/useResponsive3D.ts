@@ -19,7 +19,7 @@ interface ResponsiveConfig {
 }
 
 export function useResponsive3D(): ResponsiveConfig {
-  const { gl, viewport } = useThree()
+  const { gl } = useThree()
   const [config, setConfig] = useState<ResponsiveConfig>({
     isDesktop: true,
     isTablet: false,

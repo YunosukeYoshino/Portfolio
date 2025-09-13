@@ -29,9 +29,16 @@ function BlogSection() {
         <Suspense
           fallback={
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
-              {Array.from({ length: 6 }).map((_, i) => (
+              {[
+                'skeleton-1',
+                'skeleton-2',
+                'skeleton-3',
+                'skeleton-4',
+                'skeleton-5',
+                'skeleton-6',
+              ].map((skeletonId) => (
                 <div
-                  key={`skeleton-article-${i}`}
+                  key={skeletonId}
                   className="aspect-[4/3] animate-pulse rounded-lg bg-gray-200"
                 />
               ))}

@@ -5,7 +5,7 @@ import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 
 export default function ErrorPage({
-  error,
+  error: _error,
   reset,
 }: {
   error: Error & { digest?: string }
@@ -27,6 +27,7 @@ export default function ErrorPage({
             </p>
             <div className="space-x-4">
               <button
+                type="button"
                 onClick={reset}
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
               >

@@ -77,9 +77,9 @@ export default function ShapeIndicator() {
 
         {/* 形状インジケーターのドット */}
         <div className="flex justify-center mt-3 space-x-2">
-          {shapeNames.map((_, index) => (
+          {shapeNames.map((shapeName, index) => (
             <div
-              key={index}
+              key={`shape-indicator-${shapeName}`}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 index === currentIndex
                   ? 'bg-white scale-125'

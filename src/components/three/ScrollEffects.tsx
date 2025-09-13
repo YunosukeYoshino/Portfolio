@@ -122,7 +122,7 @@ export default function ScrollEffects() {
       <group ref={ringsRef}>
         {rings.map((ring, index) => (
           <mesh
-            key={index}
+            key={`ring-${index}-${ring.geometry.uuid}`}
             geometry={ring.geometry}
             material={ring.material}
             position={[0, 0, 0]}
