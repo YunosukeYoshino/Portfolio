@@ -65,7 +65,7 @@
       "biome check --write --unsafe",
       "tsc --noEmit"
     ],
-    "*.{json,md,css,scss}": [
+    "*.{json,css,scss}": [
       "biome format --write"
     ]
   },
