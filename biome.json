@@ -14,7 +14,6 @@
       "public/**",
       "astro-backup/**",
       "scripts-backup/**",
-      "src/lib/gradient.js",
       "*.config.js",
       "next-env.d.ts"
     ]

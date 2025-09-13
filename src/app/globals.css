@@ -13,11 +13,12 @@
   --accent: #000000;
   --accent-hover: #333333;
   --border: #e5e5e5;
-  --font-typesquare: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",
-    "メイリオ", Meiryo, "MS ゴシック", "MS Gothic", sans-serif;
-  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  --font-typesquare:
+    "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "MS ゴシック",
+    "MS Gothic", sans-serif;
+  --font-display:
+    "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 /* Base Styles */
@@ -212,8 +213,7 @@ body {
 .prose pre {
   @apply rounded-lg overflow-x-auto my-6 p-4 border border-gray-700;
   background-color: #0d1117 !important;
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro",
-    monospace;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
   font-size: 0.875rem;
   line-height: 1.7;
   tab-size: 2;

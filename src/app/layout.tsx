@@ -1,7 +1,6 @@
 import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Script from 'next/script'
 import ClientLoader from '@/components/ClientLoader'
 import CustomCursor from '@/components/CustomCursor'
 import { cn } from '@/lib/utils'
@@ -80,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <CustomCursor />
         <ClientLoader />
-          <div>{children}</div>
+        <div>{children}</div>
 
         <GoogleAnalytics gaId="G-7C1W0FTJR6" />
       </body>

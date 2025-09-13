@@ -22,7 +22,7 @@ function SimpleAnchorHandler() {
             // Use native smooth scroll instead of lenis
             targetElement.scrollIntoView({
               behavior: 'smooth',
-              block: 'start'
+              block: 'start',
             })
             // Add small offset
             setTimeout(() => {
