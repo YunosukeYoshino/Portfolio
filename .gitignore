@@ -46,3 +46,4 @@ astro-backup/
 *.astro.bak
 package.json.astro
 tsconfig.json.astro
+settings.local.json
