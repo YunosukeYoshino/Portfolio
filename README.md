@@ -5,21 +5,25 @@ A modern portfolio website built with Next.js 15, featuring a blog powered by mi
 ## Tech Stack
 
 ### Core
-- **Next.js 15** - React framework with App Router
+- **Next.js 15** - React framework with App Router and static export
 - **React 19** - Latest React with Server Components
-- **TypeScript** - Type-safe development with strict mode
+- **TypeScript** - Type-safe development with strict mode and typedRoutes
 - **microCMS** - Headless CMS for blog content management
+- **Bun** - Fast package manager and JavaScript runtime
 
-### Styling
-- **Tailwind CSS** - Utility-first CSS framework
-- **GSAP** - Professional-grade animation library
+### Styling & Animation
+- **Tailwind CSS** - Utility-first CSS framework with custom utilities
+- **GSAP** - Professional-grade animation library for interactions
+- **Custom Cursor** - Interactive cursor with blend mode effects
 
-### Code Quality
+### Code Quality & Performance
 - **Biome** - Fast linter and formatter (replaces ESLint/Prettier)
-- **Lighthouse** - Performance auditing
+- **Shiki** - Server-side syntax highlighting with dual themes
+- **Lighthouse** - Performance auditing and optimization
+- **Husky** - Git hooks for code quality enforcement
 
 ### Deployment
-- **Vercel** - Optimized hosting for Next.js applications
+- **Cloudflare Pages** - Static site hosting with global CDN
 
 ## Features
 
@@ -28,8 +32,9 @@ A modern portfolio website built with Next.js 15, featuring a blog powered by mi
 - 🎨 **Syntax Highlighting** - Server-side code highlighting with Shiki (GitHub themes)
 - 🖱️ **Custom Cursor** - Interactive cursor with blend mode effects
 - 📱 **Responsive Design** - Mobile-first approach with adaptive layouts
-- 🚀 **Performance Optimized** - Static generation, image optimization, and code splitting
-- 🔍 **SEO Ready** - Metadata API and structured data
+- 🚀 **Performance Optimized** - Static export, image optimization, and code splitting
+- 🔍 **SEO Ready** - Metadata API, structured data, and Google Analytics integration
+- 🌐 **Three.js Integration** - 3D graphics with React Three Fiber
 
 ## Project Structure
 
@@ -55,8 +60,8 @@ src/
 
 ### Prerequisites
 
-- Node.js 18.17 or later
-- npm or yarn package manager
+- Node.js 22.12 or later (configured with Volta)
+- Bun package manager
 - microCMS account and API keys
 
 ### Environment Variables
@@ -73,30 +78,31 @@ SITE_URL=https://your-domain.com
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Start development server
-npm run dev
+bun run dev
 
 # Build for production
-npm run build
+bun run build
 
 # Start production server
-npm run start
+bun run start
 ```
 
 ### Development Commands
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run preview      # Build and preview production
-npm run lint         # Run all linters
-npm run fix          # Auto-fix linting issues
-npm run format       # Format code with Biome
-npm run check        # Check code quality
-npm run lih          # Run Lighthouse audit
+bun run dev          # Start development server
+bun run build        # Build for production
+bun run start        # Start production server
+bun run preview      # Build and preview production
+bun run lint         # Run all linters (Biome, TypeScript)
+bun run fix          # Auto-fix linting issues
+bun run format       # Format code with Biome
+bun run check        # Check code quality with Biome
+bun run ci           # Run Biome in CI mode
+bun run lih          # Run Lighthouse audit on localhost:3000
 ```
 
 ## Architecture Details
@@ -113,11 +119,12 @@ npm run lih          # Run Lighthouse audit
 - **Component-scoped**: All styling handled inline with Tailwind utilities
 
 ### Performance Optimizations
-- Static generation with `generateStaticParams` for blog posts
-- Automatic image optimization with next/image
-- Font optimization with next/font
-- Route-based code splitting
-- Streaming with Suspense boundaries
+- Static export for CDN-friendly deployment
+- Custom image loader optimized for Cloudflare Pages
+- Font optimization with next/font (Inter with variable font loading)
+- Route-based code splitting with App Router
+- Server Components for reduced client-side JavaScript
+- Shiki server-side code highlighting (zero client-side JS)
 
 ### Code Highlighting
 - Server-side syntax highlighting with Shiki
@@ -127,24 +134,24 @@ npm run lih          # Run Lighthouse audit
 
 ## Deployment
 
-### Vercel (Recommended)
+### Cloudflare Pages (Current)
+
+This project is configured for static export and deployed on Cloudflare Pages:
 
 1. Push your code to GitHub
-2. Import project to Vercel
-3. Configure environment variables
-4. Deploy automatically on push to main
+2. Connect repository to Cloudflare Pages
+3. Configure build settings:
+   - Build command: `bun run build`
+   - Build output directory: `out`
+4. Set environment variables in Cloudflare dashboard
+5. Deploy automatically on push to main
 
-### Docker/Custom Server
+### Build Configuration
 
-The project supports standalone output for containerization:
-
-```bash
-# Build standalone output
-npm run build
-
-# The standalone server will be in .next/standalone
-node .next/standalone/server.js
-```
+The project uses static export (`output: 'export'`) in `next.config.ts` for Cloudflare Pages compatibility:
+- Custom image loader for optimization
+- Static HTML generation for all pages
+- Automatic build ID generation from Git commit SHA
 
 ## Design Philosophy
 
@@ -158,10 +165,11 @@ The site follows a minimalist design approach inspired by modern portfolio sites
 ## Contributing
 
 Contributions are welcome! Please ensure:
-1. Code passes all lint checks (`npm run lint`)
-2. Follow existing code style and patterns
-3. Test thoroughly in development
-4. Update types when modifying data structures
+1. Use Bun as the package manager (`bun install`, `bun run lint`)
+2. Code passes all lint checks (`bun run lint` - Biome + TypeScript)
+3. Follow existing code style and patterns
+4. Test thoroughly in development with mock data support
+5. Update types when modifying data structures
 
 ## License
 

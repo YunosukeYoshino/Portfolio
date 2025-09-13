@@ -2,18 +2,21 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Development Commands
+## Package Manager
 
-- `npm run dev` - Start Next.js development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run preview` - Build and start production server
-- `npm run lint` - Run all linters (Biome, TypeScript)
-- `npm run fix` - Auto-fix linting issues across all tools
-- `npm run format` - Format code with Biome
-- `npm run check` - Check code quality with Biome
-- `npm run ci` - Run Biome in CI mode
-- `npm run lih` - Run Lighthouse performance audit on localhost:3000
+**IMPORTANT: This project uses Bun as the package manager.** Use `bun` commands instead of `npm` for all operations:
+
+- `bun install` - Install dependencies (instead of npm install)
+- `bun run dev` - Start Next.js development server
+- `bun run build` - Build for production
+- `bun run start` - Start production server
+- `bun run preview` - Build and start production server
+- `bun run lint` - Run all linters (Biome, TypeScript)
+- `bun run fix` - Auto-fix linting issues across all tools
+- `bun run format` - Format code with Biome
+- `bun run check` - Check code quality with Biome
+- `bun run ci` - Run Biome in CI mode
+- `bun run lih` - Run Lighthouse performance audit on localhost:3000
 
 ## Architecture Overview
 
@@ -38,10 +41,11 @@ This is a Next.js 15 portfolio site with App Router, fully migrated from Astro. 
 
 ### microCMS Integration
 The `src/lib/microcms.ts` file contains:
-- Server-side data fetching with error handling
-- Type-safe API functions for blogs
-- Static generation helpers for build optimization
-- ISR (Incremental Static Regeneration) support
+- Server-side data fetching with comprehensive error handling
+- Type-safe API functions for blogs with mock data fallbacks
+- Development mode support with placeholder credentials
+- Static generation helpers (`getAllBlogIds`, `getPaginatedBlogs`)
+- Graceful degradation for API failures in development
 
 ### App Router Architecture
 - **Server Components**: Default for data fetching and SEO
@@ -65,10 +69,10 @@ Uses Tailwind CSS utility-first approach:
 ### Build Configuration
 - Next.js 15 with App Router
 - Experimental typedRoutes for type-safe navigation
-- Image optimization with next/image
-- Font optimization with next/font
-- Vercel deployment optimizations
-- Standalone output for Docker/custom deployment
+- Static export for Cloudflare Pages deployment (`output: 'export'`)
+- Custom image loader for Cloudflare optimization
+- Font optimization with next/font (Inter)
+- External packages configuration for Shiki server-side rendering
 
 ### Performance Features
 - **Server Components**: Reduced client bundle size
