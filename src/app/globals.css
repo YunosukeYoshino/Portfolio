@@ -87,6 +87,20 @@ body {
   transform: translate(-50%, -50%) scale(2);
 }
 
+/* Hide custom cursor on mobile devices */
+@media (max-width: 768px) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
+/* Also hide on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
 /* Selection styles */
 ::selection {
   background: var(--foreground);

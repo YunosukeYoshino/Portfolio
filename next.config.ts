@@ -1,10 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  // Enable experimental features
-  experimental: {
-    typedRoutes: true,
-  },
+  // Enable typed routes for type-safe links
+  typedRoutes: true,
 
   // External packages for server components
   serverExternalPackages: ['shiki'],
