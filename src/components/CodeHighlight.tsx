@@ -35,15 +35,17 @@ async function highlightCodeBlocks(html: string): Promise<string> {
     if (language) {
       detectedLang = language as BundledLanguage
     } else {
-      // Simple heuristics for auto-detection
-      if (
-        decodedCode.includes('import') ||
-        decodedCode.includes('const') ||
-        decodedCode.includes('function')
-      ) {
+      // Robust language detection using regex
+      if (/import|export|const|let|var|class|function|=>|React\.|\(props\)/.test(decodedCode)) {
         detectedLang = 'javascript'
-      } else if (decodedCode.includes('npm ') || decodedCode.includes('npx ')) {
+      } else if (
+        /\b(npm|npx|yarn|bun|pnpm|cd|ls|git|docker)\b/.test(decodedCode) ||
+        decodedCode.startsWith('$ ')
+      ) {
         detectedLang = 'bash'
+      } else if (/\bpackage:|class\s+\w+:|interface\s+\w+:|type\s+\w+\s*=/.test(decodedCode)) {
+        // TypeScript-specific detection
+        detectedLang = 'typescript'
       }
     }
 
@@ -55,7 +57,10 @@ async function highlightCodeBlocks(html: string): Promise<string> {
       })
 
       result = result.replace(fullMatch, highlighted)
-    } catch (_error) {}
+    } catch (_error) {
+      // Fallback to original content if highlighting fails
+      result = result.replace(fullMatch, fullMatch)
+    }
   }
 
   return result
