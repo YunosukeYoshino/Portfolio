@@ -43,8 +43,13 @@ async function highlightCodeBlocks(html: string): Promise<string> {
         decodedCode.startsWith('$ ')
       ) {
         detectedLang = 'bash'
-      } else if (/\bpackage:|class\s+\w+:|interface\s+\w+:|type\s+\w+\s*=/.test(decodedCode)) {
-        // TypeScript-specific detection
+      } else if (
+        /\btype\s+\w+\s*=/.test(decodedCode) ||
+        /\binterface\s+\w+\s*\{/.test(decodedCode) ||
+        /\bclass\s+\w+\s+(extends|implements)\b/.test(decodedCode) ||
+        /\benum\s+\w+\s*\{/.test(decodedCode)
+      ) {
+        // TypeScript-specific detection (avoid Python "class Foo:" false positives)
         detectedLang = 'typescript'
       }
     }
@@ -57,7 +62,11 @@ async function highlightCodeBlocks(html: string): Promise<string> {
       })
 
       result = result.replace(fullMatch, highlighted)
-    } catch (_error) {
+      // biome-ignore lint/suspicious/noExplicitAny: Error object type is dynamic
+    } catch (_error: any) {
+      // biome-ignore lint/suspicious/noConsole: Development debugging
+      if (process.env.NODE_ENV === 'development') {
+      }
       // Fallback to original content if highlighting fails
       result = result.replace(fullMatch, fullMatch)
     }
@@ -67,14 +76,45 @@ async function highlightCodeBlocks(html: string): Promise<string> {
 }
 
 function decodeHtmlEntities(text: string): string {
+  // Common named HTML entities
   const entities: Record<string, string> = {
     '&lt;': '<',
     '&gt;': '>',
     '&amp;': '&',
     '&quot;': '"',
     '&#39;': "'",
+    '&apos;': "'",
     '&nbsp;': ' ',
+    '&copy;': '©',
+    '&reg;': '®',
+    '&trade;': '™',
+    '&euro;': '€',
+    '&pound;': '£',
+    '&yen;': '¥',
+    '&hellip;': '…',
+    '&mdash;': '—',
+    '&ndash;': '–',
+    '&laquo;': '«',
+    '&raquo;': '»',
+    '&ldquo;': '"',
+    '&rdquo;': '"',
+    '&lsquo;': '\u2018',
+    '&rsquo;': '\u2019',
   }
 
-  return text.replace(/&[#\w]+;/g, (entity) => entities[entity] || entity)
+  return text.replace(/&(?:#x([0-9a-fA-F]+)|#(\d+)|(\w+));/g, (entity, hex, dec, named) => {
+    // Numeric entity (hex): &#x27; -> '
+    if (hex) {
+      return String.fromCharCode(Number.parseInt(hex, 16))
+    }
+    // Numeric entity (decimal): &#39; -> '
+    if (dec) {
+      return String.fromCharCode(Number.parseInt(dec, 10))
+    }
+    // Named entity: &apos; -> '
+    if (named) {
+      return entities[`&${named};`] || entity
+    }
+    return entity
+  })
 }
