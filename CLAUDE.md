@@ -23,15 +23,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a Next.js 15 portfolio site with App Router, fully migrated from Astro. It integrates with microCMS as a headless CMS for blog content and uses Server Components for optimal performance.
 
 ### Key Technologies
-- **Next.js 15**: React framework with App Router and Server Components
+- **Next.js 15**: React framework with App Router, Server Components, static export
 - **React 19**: Latest React with Server Components
-- **TypeScript**: Strict type safety with experimental typedRoutes
+- **TypeScript 5.9**: Strict mode with experimental typedRoutes
+- **Bun**: Package manager and JavaScript runtime
 - **microCMS**: Headless CMS for blog articles
-- **Tailwind CSS**: Utility-first CSS framework for rapid styling
-- **Shiki**: Server-side code highlighting with dual themes
+- **Tailwind CSS 4.1**: Utility-first CSS with new `@theme` and `@plugin` directives
+- **Shiki**: Server-side code highlighting (GitHub Dark theme)
 - **GSAP**: Animation library for interactive elements
 - **Biome**: Fast linter and formatter (replaces ESLint/Prettier)
-- **Vercel**: Deployment platform optimized for Next.js
+- **Cloudflare Pages**: Deployment platform with static export
 
 ### Project Structure
 - `src/app/`: Next.js App Router pages and layouts
@@ -41,11 +42,12 @@ This is a Next.js 15 portfolio site with App Router, fully migrated from Astro. 
 
 ### microCMS Integration
 The `src/lib/microcms.ts` file contains:
-- Server-side data fetching with comprehensive error handling
-- Type-safe API functions for blogs with mock data fallbacks
-- Development mode support with placeholder credentials
-- Static generation helpers (`getAllBlogIds`, `getPaginatedBlogs`)
-- Graceful degradation for API failures in development
+- **Server-side Fetching**: Direct fetch API with `X-MICROCMS-API-KEY` header
+- **Type Safety**: TypeScript interfaces for `Blog` and `BlogResponse`
+- **Development Mode**: Supports placeholder credentials for local development
+- **Error Handling**: Comprehensive error handling with fallback to mock data
+- **API Functions**: `getBlogs()`, `getBlogDetail()`, `getAllBlogIds()`, `getPaginatedBlogs()`
+- **Static Generation**: Helpers for `generateStaticParams` in App Router
 
 ### App Router Architecture
 - **Server Components**: Default for data fetching and SEO
@@ -54,11 +56,13 @@ The `src/lib/microcms.ts` file contains:
 - **Streaming**: Suspense boundaries for loading states
 - **Error Boundaries**: Graceful error handling at route level
 
-### Styling Architecture
-Uses Tailwind CSS utility-first approach:
-- **Foundation**: Base styles and reset (`globals.css`)
-- **Utilities**: Tailwind utility classes for styling components
-- **Custom Classes**: `container-custom` and design-specific utilities
+### Styling Architecture (Tailwind CSS v4)
+**IMPORTANT**: Project uses Tailwind CSS v4 with breaking changes from v3:
+- **CSS-First Configuration**: `@import "tailwindcss"` and `@plugin "@tailwindcss/typography"` in `globals.css`
+- **@theme Directive**: CSS variables defined in `@theme` block (replaces JavaScript config theme)
+- **@layer System**: Proper cascade with `@layer base`, `@layer components`, `@layer utilities`
+- **PostCSS Plugin**: Uses `@tailwindcss/postcss` instead of `tailwindcss` plugin
+- **Typography Plugin**: Loaded via `@plugin` directive in CSS, not JavaScript config
 - **Component Styling**: All styling done inline with Tailwind utilities
 
 ### Environment Variables Required
@@ -67,12 +71,18 @@ Uses Tailwind CSS utility-first approach:
 - `SITE_URL`: Production site URL for metadata
 
 ### Build Configuration
-- Next.js 15 with App Router
-- Experimental typedRoutes for type-safe navigation
-- Static export for Cloudflare Pages deployment (`output: 'export'`)
-- Custom image loader for Cloudflare optimization
-- Font optimization with next/font (Inter)
-- External packages configuration for Shiki server-side rendering
+- **Static Export**: `output: 'export'` in `next.config.ts` for Cloudflare Pages
+- **Custom Image Loader**: `src/lib/imageLoader.js` for Cloudflare optimization
+- **Build ID**: Auto-generated from Git commit SHA (`CF_PAGES_COMMIT_SHA`)
+- **Experimental Features**: `typedRoutes: true` for type-safe navigation
+- **Server Packages**: Shiki configured as `serverExternalPackages`
+- **Font Optimization**: Inter font with next/font variable loading
+
+### Deployment Commands
+- `bun run deploy` - Deploy to production (main branch)
+- `bun run deploy:preview` - Deploy to preview environment
+- **Cloudflare Wrangler**: Uses `npx wrangler pages deploy` with `out/` directory
+- **Build Output**: Static files in `out/` directory after `next build`
 
 ### Performance Features
 - **Server Components**: Reduced client bundle size
@@ -82,18 +92,21 @@ Uses Tailwind CSS utility-first approach:
 - **Streaming**: Progressive page rendering
 
 ### Code Highlighting System
-- **Shiki**: Server-side code syntax highlighting
-- **Dual themes**: GitHub Light/Dark theme support
-- **Server Component**: `CodeHighlight` processes HTML content server-side
-- **External package**: Shiki configured as `serverExternalPackages`
-- **Blog integration**: Automatically highlights code blocks in microCMS content
+- **Shiki**: Server-side syntax highlighting (zero client-side JS)
+- **Implementation**: `CodeHighlight.tsx` async Server Component
+- **Language Detection**: Auto-detects JavaScript/Bash when language class is missing
+- **Theme**: GitHub Dark theme with inline styles
+- **External package**: Shiki configured as `serverExternalPackages` in `next.config.ts`
+- **Blog integration**: Processes `<pre><code>` blocks from microCMS HTML content
 
 ### Linting & Code Quality
 The project uses Biome for fast, comprehensive code quality:
-- **Biome**: Single tool for linting, formatting, and organizing imports
-- **TypeScript**: Strict mode with experimental typedRoutes
-- **Configuration**: Custom rules for React/Next.js best practices
-- **Parallel execution**: All lint commands run in parallel with `npm-run-all`
+- **Biome**: Single tool for linting, formatting, and organizing imports (replaces ESLint/Prettier)
+- **Configuration**: `biome.json` with custom rules for React/Next.js
+- **Key Rules**: No console (warn), no debugger (error), organize imports on save
+- **Parallel execution**: `bun run lint` runs Biome + TypeScript in parallel with `npm-run-all`
+- **Git Hooks**: Husky + lint-staged for pre-commit formatting
+- **TypeScript**: Strict mode with `typedRoutes` experimental feature
 
 ### Custom Cursor Implementation
 - **Component**: `CustomCursor.tsx` tracks mouse position and hover states
