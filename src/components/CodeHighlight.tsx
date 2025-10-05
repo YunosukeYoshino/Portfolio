@@ -30,8 +30,8 @@ async function highlightCodeBlocks(html: string): Promise<string> {
     // Decode HTML entities
     const decodedCode = decodeHtmlEntities(code)
 
-    // Auto-detect language if not specified
-    let detectedLang: BundledLanguage = 'text'
+    // Auto-detect language if not specified (default to shell for plain text)
+    let detectedLang: BundledLanguage = 'shell'
     if (language) {
       detectedLang = language as BundledLanguage
     } else {
