@@ -47,3 +47,4 @@ astro-backup/
 package.json.astro
 tsconfig.json.astro
 settings.local.json
+.playwright-mcp
