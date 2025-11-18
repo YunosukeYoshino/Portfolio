@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.6/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -7,15 +7,16 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "experimentalScannerIgnores": [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "public/**",
-      "astro-backup/**",
-      "scripts-backup/**",
-      "*.config.js",
-      "next-env.d.ts"
+    "includes": [
+      "**",
+      "!!**/node_modules",
+      "!!**/.next",
+      "!!**/out",
+      "!!**/public",
+      "!!**/astro-backup",
+      "!!**/scripts-backup",
+      "!!**/*.config.js",
+      "!!**/next-env.d.ts"
     ]
   },
   "formatter": {
@@ -70,6 +71,15 @@
   },
   "json": {
     "formatter": {
+      "enabled": true
+    }
+  },
+  "css": {
+    "parser": {
+      "cssModules": false,
+      "tailwindDirectives": true
+    },
+    "linter": {
       "enabled": true
     }
   },

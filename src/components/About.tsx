@@ -19,7 +19,9 @@ export default function About() {
 
     const setupAnimation = () => {
       // 既存のScrollTriggerを削除
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+      ScrollTrigger.getAll().forEach((trigger) => {
+        trigger.kill()
+      })
 
       if (mediaQuery.matches) {
         // デスクトップ: Pin機能を使用
@@ -46,7 +48,9 @@ export default function About() {
 
     return () => {
       mediaQuery.removeEventListener('change', setupAnimation)
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+      ScrollTrigger.getAll().forEach((trigger) => {
+        trigger.kill()
+      })
     }
   }, [])
 
