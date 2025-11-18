@@ -64,9 +64,6 @@ async function highlightCodeBlocks(html: string): Promise<string> {
       result = result.replace(fullMatch, highlighted)
       // biome-ignore lint/suspicious/noExplicitAny: Error object type is dynamic
     } catch (_error: any) {
-      // biome-ignore lint/suspicious/noConsole: Development debugging
-      if (process.env.NODE_ENV === 'development') {
-      }
       // Fallback to original content if highlighting fails
       result = result.replace(fullMatch, fullMatch)
     }
