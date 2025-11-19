@@ -1,27 +1,22 @@
 'use client'
 
+import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { cn } from '@/lib/utils'
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentTime, setCurrentTime] = useState('')
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date()
-      const tokyoTime = new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'Asia/Tokyo',
+      const timeString = now.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false,
-      }).format(now)
-      setCurrentTime(tokyoTime)
+        hour12: true,
+      })
+      setCurrentTime(timeString)
     }
 
     updateTime()
@@ -31,218 +26,106 @@ export default function Header() {
   }, [])
 
   return (
-    <header className="fixed top-0 z-[9997] w-full border-b border-white/10 bg-black/90 py-1 backdrop-blur-md">
-      <div className="container-custom flex items-center justify-between py-6">
-        {/* Left: Logo */}
-        <Link href="/" className="text-display text-lg font-bold tracking-tight text-white">
-          Yunosuke Yoshino
-        </Link>
+    <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-8 flex justify-between items-start z-50 text-[#111]">
+      <Link
+        href="/"
+        className="font-display font-bold text-lg tracking-tight hover-trigger z-50 leading-tight"
+        data-cursor="hover"
+      >
+        YUNOSUKE
+        <br />
+        YOSHINO
+      </Link>
 
-        {/* Center: Navigation - Hidden on mobile */}
-        <nav className="hidden md:flex">
-          <ul className="flex space-x-8">
-            <li>
-              <Link
-                href="/#about"
-                className="text-sm font-medium uppercase tracking-wide text-white transition-colors duration-300 hover:text-gray-300"
-              >
-                ABOUT
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/#article"
-                className="text-sm font-medium uppercase tracking-wide text-white transition-colors duration-300 hover:text-gray-300"
-              >
-                ARTICLES
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/#contact"
-                className="text-sm font-medium uppercase tracking-wide text-white transition-colors duration-300 hover:text-gray-300"
-              >
-                CONTACT
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* Right: CTA + Time Display */}
-        <div className="hidden items-center space-x-6 md:flex">
-          <Link
-            href="/#contact"
-            className="bg-white px-6 py-2 text-sm font-medium uppercase tracking-wide text-black transition-colors duration-300 hover:bg-gray-200"
-          >
-            Let's Work Together
+      <div className="hidden md:flex flex-col items-end gap-1 text-xs font-mono uppercase tracking-wide z-50">
+        <div className="flex gap-8 mb-2">
+          <Link href="#about" className="hover:opacity-50 transition-opacity hover-trigger">
+            About
           </Link>
+          <Link href="#works" className="hover:opacity-50 transition-opacity hover-trigger">
+            Works
+          </Link>
+          <Link href="#articles" className="hover:opacity-50 transition-opacity hover-trigger">
+            Articles
+          </Link>
+          <Link href="#contact" className="hover:opacity-50 transition-opacity hover-trigger">
+            Contact
+          </Link>
+        </div>
+        <span className="opacity-40">Tokyo, Japan</span>
+        <span className="opacity-40">{currentTime}</span>
+      </div>
 
-          <div className="grid items-center text-xs uppercase tracking-wider text-gray-400">
-            <div>TOKYO,</div>
+      <button
+        type="button"
+        className="md:hidden hover-trigger z-50"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label="Toggle menu"
+      >
+        <Menu className="w-6 h-6" />
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Menu */}
+      <div
+        className={`fixed top-0 right-0 h-screen w-80 bg-white shadow-2xl transform transition-transform duration-300 z-50 md:hidden ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="p-8">
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen(false)}
+            className="absolute top-6 right-6 text-2xl"
+            aria-label="Close menu"
+          >
+            ×
+          </button>
+
+          <nav className="mt-16 flex flex-col gap-6 text-lg font-mono uppercase">
+            <Link
+              href="#about"
+              onClick={() => setIsMenuOpen(false)}
+              className="hover:opacity-50 transition-opacity"
+            >
+              About
+            </Link>
+            <Link
+              href="#works"
+              onClick={() => setIsMenuOpen(false)}
+              className="hover:opacity-50 transition-opacity"
+            >
+              Works
+            </Link>
+            <Link
+              href="#articles"
+              onClick={() => setIsMenuOpen(false)}
+              className="hover:opacity-50 transition-opacity"
+            >
+              Articles
+            </Link>
+            <Link
+              href="#contact"
+              onClick={() => setIsMenuOpen(false)}
+              className="hover:opacity-50 transition-opacity"
+            >
+              Contact
+            </Link>
+          </nav>
+
+          <div className="mt-12 text-xs font-mono uppercase tracking-wide text-gray-400">
+            <div>Tokyo, Japan</div>
             <div>{currentTime}</div>
           </div>
         </div>
-
-        <button
-          type="button"
-          className={cn(
-            'md:hidden relative flex flex-col w-8 h-8 justify-center items-center p-1',
-            'rounded-lg transition-all duration-300 hover:bg-white/10 active:scale-95',
-            'z-[100000]',
-            isMenuOpen && 'is-active'
-          )}
-          onClick={toggleMenu}
-          aria-label={isMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
-          style={{ zIndex: 100000 }}
-        >
-          <span
-            className={cn(
-              'block h-0.5 w-5 bg-white transition-all duration-500 ease-in-out transform',
-              isMenuOpen ? 'rotate-45 translate-y-1.5' : 'translate-y-0'
-            )}
-          />
-          <span
-            className={cn(
-              'block h-0.5 w-5 bg-white transition-all duration-300 ease-in-out my-1',
-              isMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'
-            )}
-          />
-          <span
-            className={cn(
-              'block h-0.5 w-5 bg-white transition-all duration-500 ease-in-out transform',
-              isMenuOpen ? '-rotate-45 -translate-y-1.5' : 'translate-y-0'
-            )}
-          />
-        </button>
-
-        {/* Mobile Menu */}
-        <nav
-          className={cn(
-            'fixed top-0 right-0 h-screen w-80 bg-black',
-            'backdrop-blur-2xl backdrop-saturate-150',
-            'border-l border-gray-300/30 shadow-2xl',
-            'transform transition-all duration-700 ease-out md:hidden',
-            'before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent before:pointer-events-none',
-            'z-[99999]',
-            isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-          )}
-        >
-          {/* Menu Header */}
-          <div className="border-b border-white/15 bg-black/20 px-8 py-6">
-            <div className="text-xs uppercase tracking-widest text-gray-300">Menu</div>
-          </div>
-
-          {/* Navigation Items */}
-          <ul className="flex flex-col px-8 pt-12">
-            <li className="group">
-              <Link
-                href="/#about"
-                className="group-hover:bg-white/8 -mx-3 flex items-center justify-between rounded-lg px-3 py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:pl-2 hover:text-gray-100"
-                onClick={() => setIsMenuOpen(false)}
-                style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)' }}
-              >
-                <span>About</span>
-                <svg
-                  className="h-4 w-4 transform opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </Link>
-            </li>
-            <li className="group">
-              <Link
-                href="/#article"
-                className="group-hover:bg-white/8 -mx-3 flex items-center justify-between rounded-lg px-3 py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:pl-2 hover:text-gray-100"
-                onClick={() => setIsMenuOpen(false)}
-                style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)' }}
-              >
-                <span>Articles</span>
-                <svg
-                  className="h-4 w-4 transform opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </Link>
-            </li>
-            <li className="group">
-              <Link
-                href="/#contact"
-                className="group-hover:bg-white/8 -mx-3 flex items-center justify-between rounded-lg px-3 py-4 text-lg font-semibold uppercase tracking-wide text-white transition-all duration-300 hover:pl-2 hover:text-gray-100"
-                onClick={() => setIsMenuOpen(false)}
-                style={{ textShadow: '0 1px 3px rgba(0, 0, 0, 0.8)' }}
-              >
-                <span>Contact</span>
-                <svg
-                  className="h-4 w-4 transform opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </Link>
-            </li>
-          </ul>
-
-          {/* CTA Section */}
-          <div className="absolute bottom-0 left-0 right-0 border-t border-white/15 bg-gradient-to-t from-black/70 to-black/20 p-8">
-            {/* Time Display */}
-            <div className="mt-6 text-center">
-              <div
-                className="text-xs uppercase tracking-widest text-gray-400"
-                style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.6)' }}
-              >
-                Tokyo
-              </div>
-              <div
-                className="font-mono text-sm font-medium text-gray-200"
-                style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.7)' }}
-              >
-                {currentTime}
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        {/* Enhanced Overlay for mobile menu */}
-        <button
-          type="button"
-          className={cn(
-            'fixed inset-0 bg-black/70 backdrop-blur-md md:hidden transition-all duration-700',
-            'bg-gradient-radial from-black/80 via-black/70 to-black/60',
-            'z-[99998]',
-            isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-          )}
-          style={{
-            background:
-              'radial-gradient(circle at center, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.4) 100%)',
-            position: 'fixed',
-            zIndex: 99998,
-          }}
-          onClick={() => setIsMenuOpen(false)}
-        />
       </div>
-    </header>
+    </nav>
   )
 }

@@ -1,8 +1,9 @@
 import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, JetBrains_Mono, Manrope } from 'next/font/google'
 import ClientLoader from '@/components/ClientLoader'
 import CustomCursor from '@/components/CustomCursor'
+import LenisProvider from '@/components/LenisProvider'
 import { cn } from '@/lib/utils'
 import './globals.css'
 
@@ -10,6 +11,18 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+})
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-manrope',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
 })
 
 export const metadata: Metadata = {
@@ -71,15 +84,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja" className={cn(inter.variable, 'antialiased')} data-scroll-behavior="smooth">
+    <html
+      lang="ja"
+      className={cn(inter.variable, manrope.variable, jetbrainsMono.variable, 'antialiased')}
+      data-scroll-behavior="smooth"
+    >
       <head>
         <meta name="format-detection" content="email=no,telephone=no,address=no" />
-        <meta name="theme-color" content="#000000e6" />
+        <meta name="theme-color" content="#F3F3F1" />
       </head>
       <body>
         <CustomCursor />
         <ClientLoader />
-        <div>{children}</div>
+        <LenisProvider>
+          <div>{children}</div>
+        </LenisProvider>
 
         <GoogleAnalytics gaId="G-7C1W0FTJR6" />
       </body>
