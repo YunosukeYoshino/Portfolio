@@ -5,17 +5,31 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 export default function ArticlesHoverEffect() {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null)
+  const [isAnimating, setIsAnimating] = useState(false)
   const hoverRevealRef = useRef<HTMLDivElement>(null)
   const mousePosition = useRef({ x: 0, y: 0 })
   const revealPosition = useRef({ x: 0, y: 0 })
+  const animationIdRef = useRef<number | undefined>(undefined)
 
+  // Mouse move tracking
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       mousePosition.current = { x: e.clientX, y: e.clientY }
     }
 
+    document.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [])
+
+  // Animation loop (only runs when isAnimating is true)
+  useEffect(() => {
+    if (!isAnimating) return
+
     const updateHoverReveal = () => {
-      if (!hoverRevealRef.current) return
+      if (!hoverRevealRef.current || !isAnimating) return
 
       revealPosition.current.x += (mousePosition.current.x - revealPosition.current.x) * 0.1
       revealPosition.current.y += (mousePosition.current.y - revealPosition.current.y) * 0.1
@@ -28,19 +42,21 @@ export default function ArticlesHoverEffect() {
         y: revealPosition.current.y - height / 2,
       })
 
-      requestAnimationFrame(updateHoverReveal)
+      animationIdRef.current = requestAnimationFrame(updateHoverReveal)
     }
 
-    document.addEventListener('mousemove', handleMouseMove)
     updateHoverReveal()
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current)
+      }
     }
-  }, [])
+  }, [isAnimating])
 
   const handleMouseEnter = useCallback((image: string) => {
     setHoveredImage(image)
+    setIsAnimating(true)
     if (hoverRevealRef.current) {
       gsap.to(hoverRevealRef.current, {
         opacity: 1,
@@ -52,6 +68,7 @@ export default function ArticlesHoverEffect() {
   }, [])
 
   const handleMouseLeave = useCallback(() => {
+    setIsAnimating(false)
     if (hoverRevealRef.current) {
       gsap.to(hoverRevealRef.current, {
         opacity: 0,

@@ -17,9 +17,9 @@ const fragmentShader = `
   uniform float uScroll;
   varying vec2 vUv;
 
-  #define MAX_STEPS 100
+  #define MAX_STEPS 50
   #define MAX_DIST 100.0
-  #define SURF_DIST 0.001
+  #define SURF_DIST 0.01
 
   vec3 hash( vec3 p ) {
     p = vec3( dot(p,vec3(127.1,311.7, 74.7)),
@@ -47,7 +47,7 @@ const fragmentShader = `
     float a = 0.5;
     vec3 shift = vec3(100.0);
     mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 3; ++i) {
       v += a * noise(p);
       p.xy *= rot;
       p = p * 2.0 + shift;
@@ -179,12 +179,21 @@ export default function WebGLBackground() {
   useEffect(() => {
     if (!containerRef.current) return
 
+    // Disable on mobile for performance
+    if (window.innerWidth < 768) {
+      return
+    }
+
     const scene = new THREE.Scene()
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
-    const renderer = new THREE.WebGLRenderer({ alpha: false, antialias: false })
+    const renderer = new THREE.WebGLRenderer({
+      alpha: false,
+      antialias: false,
+      powerPreference: 'high-performance',
+    })
 
     renderer.setSize(window.innerWidth, window.innerHeight)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(1) // Fixed at 1 for better performance
     containerRef.current.appendChild(renderer.domElement)
 
     const geometry = new THREE.PlaneGeometry(2, 2)
@@ -233,8 +242,9 @@ export default function WebGLBackground() {
 
     const scrollInterval = setInterval(updateScrollVelocity, 50)
 
-    // Animation loop
+    // Animation loop with visibility check
     const clock = new THREE.Clock()
+    let animationId: number
 
     const animate = () => {
       const elapsedTime = clock.getElapsedTime()
@@ -246,7 +256,7 @@ export default function WebGLBackground() {
       material.uniforms.uScroll.value = currentScrollRef.current
 
       renderer.render(scene, camera)
-      requestAnimationFrame(animate)
+      animationId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -255,6 +265,7 @@ export default function WebGLBackground() {
     return () => {
       window.removeEventListener('resize', handleResize)
       clearInterval(scrollInterval)
+      cancelAnimationFrame(animationId)
       renderer.dispose()
       geometry.dispose()
       material.dispose()

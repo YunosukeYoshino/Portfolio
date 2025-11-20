@@ -33,12 +33,13 @@ export default function LenisProvider({ children }: LenisProviderProps) {
     lenisRef.current = lenis
 
     // Lenis RAF
+    let animationId: number
     function raf(time: number) {
       lenis.raf(time)
-      requestAnimationFrame(raf)
+      animationId = requestAnimationFrame(raf)
     }
 
-    requestAnimationFrame(raf)
+    animationId = requestAnimationFrame(raf)
 
     // Update ScrollTrigger when Lenis scrolls
     lenis.on('scroll', () => {
@@ -70,6 +71,7 @@ export default function LenisProvider({ children }: LenisProviderProps) {
     // Cleanup
     return () => {
       document.removeEventListener('click', handleAnchorClick)
+      cancelAnimationFrame(animationId)
       lenis.destroy()
       for (const trigger of ScrollTrigger.getAll()) {
         trigger.kill()
