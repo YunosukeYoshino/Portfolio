@@ -56,8 +56,6 @@ export default async function ArticlesSection() {
                 date={date}
                 category={article.category.name}
                 image={article.eyecatch.url}
-                onMouseEnter={() => {}}
-                onMouseLeave={() => {}}
               />
             )
           })}

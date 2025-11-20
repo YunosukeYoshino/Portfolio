@@ -8,25 +8,13 @@ interface ArticleItemProps {
   date: string
   category: string
   image: string
-  onMouseEnter: () => void
-  onMouseLeave: () => void
 }
 
-export default function ArticleItem({
-  id,
-  title,
-  date,
-  category,
-  image,
-  onMouseEnter,
-  onMouseLeave,
-}: ArticleItemProps) {
+export default function ArticleItem({ id, title, date, category, image }: ArticleItemProps) {
   return (
     <Link
       href={`/article/${id}` as '/'}
       className="article-link group block bg-[#111] hover:bg-[#161616] transition-colors py-8 px-4 hover-trigger"
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
       data-image={image}
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
