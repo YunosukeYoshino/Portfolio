@@ -65,6 +65,16 @@
     margin: 0;
   }
 
+  /* GPU Acceleration for animated elements */
+  img,
+  video,
+  canvas {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
   html,
   body {
     max-width: 100vw;

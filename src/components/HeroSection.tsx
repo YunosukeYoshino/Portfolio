@@ -12,21 +12,22 @@ export default function HeroSection() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline()
 
+      // Simplified and faster animations
       tl.to('.reveal-anim', {
         y: 0,
         opacity: 1,
-        duration: 1.4,
-        stagger: 0.1,
-        ease: 'power4.out',
-        delay: 0.2,
+        duration: 0.8, // Reduced from 1.4
+        stagger: 0.08, // Reduced from 0.1
+        ease: 'power3.out', // Changed from power4 to power3 for less computation
+        delay: 0.1, // Reduced from 0.2
       }).to(
         '.fade-in-anim',
         {
           opacity: 1,
-          duration: 1,
-          stagger: 0.1,
+          duration: 0.6, // Reduced from 1
+          stagger: 0.08, // Reduced from 0.1
         },
-        '-=0.5'
+        '-=0.3' // Overlap more for faster overall animation
       )
     }, heroRef)
 

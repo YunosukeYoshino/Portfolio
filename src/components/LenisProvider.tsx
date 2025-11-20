@@ -18,14 +18,14 @@ export default function LenisProvider({ children }: LenisProviderProps) {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
-    // Initialize Lenis
+    // Initialize Lenis with performance-optimized settings
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 0.8, // Reduced from 1.2 for faster scroll response
       easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 1.2, // Slightly increased for more responsive scrolling
       touchMultiplier: 2,
       infinite: false,
     })
@@ -41,9 +41,14 @@ export default function LenisProvider({ children }: LenisProviderProps) {
 
     animationId = requestAnimationFrame(raf)
 
-    // Update ScrollTrigger when Lenis scrolls
+    // Throttled ScrollTrigger update for better performance
+    let scrollTriggerTimeout: number | undefined
     lenis.on('scroll', () => {
-      ScrollTrigger.update()
+      if (scrollTriggerTimeout) return
+      scrollTriggerTimeout = window.setTimeout(() => {
+        ScrollTrigger.update()
+        scrollTriggerTimeout = undefined
+      }, 16) // ~60fps throttle
     })
 
     // Handle anchor links
@@ -72,6 +77,9 @@ export default function LenisProvider({ children }: LenisProviderProps) {
     return () => {
       document.removeEventListener('click', handleAnchorClick)
       cancelAnimationFrame(animationId)
+      if (scrollTriggerTimeout) {
+        clearTimeout(scrollTriggerTimeout)
+      }
       lenis.destroy()
       for (const trigger of ScrollTrigger.getAll()) {
         trigger.kill()

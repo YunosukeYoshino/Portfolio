@@ -68,6 +68,7 @@ export default function WorksSection() {
                   src={work.image}
                   alt={work.title}
                   fill
+                  loading="lazy"
                   className="work-img object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors" />
