@@ -5,39 +5,12 @@ import Link from 'next/link'
 const works = [
   {
     id: 1,
-    title: 'SSGform',
-    category: 'SaaS / Development',
-    image:
-      'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop',
-    link: '#',
-    offsetClass: '',
-  },
-  {
-    id: 2,
     title: 'YUNOSUKE Portfolio',
     category: 'Design / WebGL',
     image:
       'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2555&auto=format&fit=crop',
     link: '#',
-    offsetClass: 'md:pt-32',
-  },
-  {
-    id: 3,
-    title: 'Editorial Art',
-    category: 'Art Direction',
-    image:
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
-    link: '#',
     offsetClass: '',
-  },
-  {
-    id: 4,
-    title: 'Corporate Renewal',
-    category: 'Frontend / Jamstack',
-    image:
-      'https://images.unsplash.com/photo-1621600411688-4be93cd68504?q=80&w=2680&auto=format&fit=crop',
-    link: '#',
-    offsetClass: 'md:pt-32',
   },
 ]
 
@@ -56,7 +29,7 @@ export default function WorksSection() {
         <span className="font-mono text-xs text-gray-400 mb-2">(2023 — 2025)</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24 max-w-screen-2xl mx-auto">
+      <div className="grid grid-cols-1 gap-y-24 max-w-screen-xl mx-auto">
         {works.map((work) => (
           <article
             key={work.id}
