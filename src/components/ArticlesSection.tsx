@@ -37,7 +37,7 @@ export default async function ArticlesSection() {
         {/* Hover Image Container */}
         <ArticlesHoverEffect />
 
-        <div className="space-y-px bg-gray-800">
+        <div className="space-y-px bg-gray-800 articles-container">
           {articles.map((article) => {
             // Format date
             const date = new Date(article.publishedAt)
