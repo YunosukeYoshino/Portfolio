@@ -4,15 +4,6 @@ import Link from 'next/link'
 
 const works = [
   {
-    id: 1,
-    title: 'SSGform',
-    category: 'SaaS / Development',
-    image:
-      'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop',
-    link: '#',
-    offsetClass: '',
-  },
-  {
     id: 2,
     title: 'YUNOSUKE Portfolio',
     category: 'Design / WebGL',
@@ -20,15 +11,6 @@ const works = [
       'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2555&auto=format&fit=crop',
     link: '#',
     offsetClass: 'md:pt-32',
-  },
-  {
-    id: 3,
-    title: 'Editorial Art',
-    category: 'Art Direction',
-    image:
-      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
-    link: '#',
-    offsetClass: '',
   },
   {
     id: 4,
