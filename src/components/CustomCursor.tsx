@@ -1,11 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const cursorRef = useRef<HTMLDivElement>(null)
+  const mousePosition = useRef({ x: 0, y: 0 })
+  const cursorPosition = useRef({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const animationIdRef = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     // Check if device is mobile/tablet
@@ -22,7 +25,7 @@ export default function CustomCursor() {
     window.addEventListener('resize', checkMobile)
 
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+      mousePosition.current = { x: e.clientX, y: e.clientY }
     }
 
     const handleMouseEnter = () => setIsHovering(true)
@@ -38,9 +41,27 @@ export default function CustomCursor() {
       el.addEventListener('mouseleave', handleMouseLeave)
     })
 
+    // Animation loop for smooth cursor movement
+    const updateCursorPosition = () => {
+      if (!cursorRef.current) return
+
+      // Smooth lerp
+      cursorPosition.current.x += (mousePosition.current.x - cursorPosition.current.x) * 0.15
+      cursorPosition.current.y += (mousePosition.current.y - cursorPosition.current.y) * 0.15
+
+      cursorRef.current.style.transform = `translate(${cursorPosition.current.x}px, ${cursorPosition.current.y}px)`
+
+      animationIdRef.current = requestAnimationFrame(updateCursorPosition)
+    }
+
+    updateCursorPosition()
+
     return () => {
       window.removeEventListener('resize', checkMobile)
       window.removeEventListener('mousemove', updateMousePosition)
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current)
+      }
       interactiveElements.forEach((el) => {
         el.removeEventListener('mouseenter', handleMouseEnter)
         el.removeEventListener('mouseleave', handleMouseLeave)
@@ -53,13 +74,5 @@ export default function CustomCursor() {
     return null
   }
 
-  return (
-    <div
-      className={`custom-cursor ${isHovering ? 'hover' : ''}`}
-      style={{
-        left: `${mousePosition.x}px`,
-        top: `${mousePosition.y}px`,
-      }}
-    />
-  )
+  return <div ref={cursorRef} className={`custom-cursor ${isHovering ? 'hover' : ''}`} />
 }
