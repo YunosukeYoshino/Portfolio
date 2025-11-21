@@ -90,17 +90,31 @@ export default function ArticlesHoverEffect() {
       }
     }
 
+    const handleSectionLeave = () => {
+      handleMouseLeave()
+    }
+
     const articleLinks = document.querySelectorAll('.article-link')
+    const articlesContainer = document.querySelector('.articles-container')
+
     articleLinks.forEach((link) => {
       link.addEventListener('mouseenter', handleArticleHover)
       link.addEventListener('mouseleave', handleArticleHover)
     })
+
+    // Add listener to the articles container to ensure hover effect resets when leaving the section
+    if (articlesContainer) {
+      articlesContainer.addEventListener('mouseleave', handleSectionLeave)
+    }
 
     return () => {
       articleLinks.forEach((link) => {
         link.removeEventListener('mouseenter', handleArticleHover)
         link.removeEventListener('mouseleave', handleArticleHover)
       })
+      if (articlesContainer) {
+        articlesContainer.removeEventListener('mouseleave', handleSectionLeave)
+      }
     }
   }, [handleMouseEnter, handleMouseLeave])
 
