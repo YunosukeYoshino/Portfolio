@@ -36,22 +36,6 @@ export default function Footer() {
 
           <div className="flex gap-8 font-mono text-xs uppercase tracking-wide">
             <Link
-              href="https://twitter.com/YunosukeYoshino"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-blue-600 transition-colors hover-trigger"
-            >
-              X (Twitter)
-            </Link>
-            <Link
-              href="https://instagram.com/yunosukeyoshino"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-blue-600 transition-colors hover-trigger"
-            >
-              Instagram
-            </Link>
-            <Link
               href="https://github.com/YunosukeYoshino"
               target="_blank"
               rel="noopener noreferrer"

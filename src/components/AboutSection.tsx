@@ -21,7 +21,7 @@ export default function AboutSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm leading-relaxed text-gray-600 font-mono">
             <div className="space-y-6">
               <p>
-                1993年生まれ、広島出身。スポーツの世界からデザインの世界へ転身し、現在は東京を拠点に活動中。
+                1995年生まれ、広島出身。スポーツの世界からデザインの世界へ転身し、現在は東京を拠点に活動中。
                 グラフィックデザインのバックグラウンドを活かし、機能美と視覚的な心地よさを両立させたWebアプリケーション構築を得意としています。
               </p>
             </div>

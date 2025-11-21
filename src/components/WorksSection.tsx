@@ -56,7 +56,7 @@ export default function WorksSection() {
         <span className="font-mono text-xs text-gray-400 mb-2">(2023 — 2025)</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24 max-w-screen-2xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24 max-w-screen-xl mx-auto">
         {works.map((work) => (
           <article
             key={work.id}
