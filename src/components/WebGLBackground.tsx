@@ -179,11 +179,6 @@ export default function WebGLBackground() {
   useEffect(() => {
     if (!containerRef.current) return
 
-    // Disable on mobile for performance
-    if (window.innerWidth < 768) {
-      return
-    }
-
     const scene = new THREE.Scene()
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
     const renderer = new THREE.WebGLRenderer({
