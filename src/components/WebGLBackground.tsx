@@ -122,7 +122,17 @@ const fragmentShader = `
   void main() {
     vec2 uv = (gl_FragCoord.xy - 0.5 * iResolution.xy) / iResolution.y;
 
-    vec3 ro = vec3(0.0, 0.0, 5.0);
+    // Adjust camera distance based on aspect ratio for mobile devices
+    float aspect = iResolution.x / iResolution.y;
+    float cameraDistance = 5.0;
+
+    // If aspect ratio is less than 1.0 (portrait/mobile), move camera back
+    if (aspect < 1.0) {
+      // Smoothly scale camera distance to prevent sphere from being cut off
+      cameraDistance = 5.0 + (1.0 - aspect) * 3.0;
+    }
+
+    vec3 ro = vec3(0.0, 0.0, cameraDistance);
     vec3 rd = normalize(vec3(uv, -1.0));
 
     float d = RayMarch(ro, rd);
