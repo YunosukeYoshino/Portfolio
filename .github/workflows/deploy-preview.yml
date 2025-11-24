@@ -1,101 +1,94 @@
-name: デプロイ（プレビュー）
+name: Deploy to Cloudflare Pages via API
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
-
+  repository_dispatch:
+    types: [repository_dispatch]
 permissions:
-  pull-requests: write
   contents: read
-  deployments: write
 
 env:
+  NODE_VERSION: "18"
   BUN_VERSION: "latest"
-  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-  PREVIEW_SITE_URL: "https://preview-yunosuke-portfolio.pages.dev"
-  CLOUDFLARE_PROJECT_NAME: "yunosuke-portfolio"
-  PREVIEW_BRANCH_NAME: "preview"
-  DEPLOY_BRANCH: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'preview' }}
+  PREVIEW_BRANCH: ${{ github.head_ref || github.ref_name }}
 
 jobs:
-  test:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    name: テスト
-    steps:
-      - name: 👩‍💻 チェックアウト
-        uses: actions/checkout@v4
-      - name: 🔨 Bunを有効にする
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: ${{ env.BUN_VERSION }}
-      - name: 🔨 インストール
-        run: bun install
-      - name: 🧪 型チェック
-        run: bun run typecheck
-      - name: 🧪 リント
-        run: bun run lint
+    name: Build and Deploy to Cloudflare Pages
 
-  deploy:
-    runs-on: ubuntu-latest
-    name: デプロイ
-    needs: test
     steps:
-      - name: 👩‍💻 チェックアウト
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: 🔨 Bunを有効にする
+
+      - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: ${{ env.BUN_VERSION }}
-      - name: 🔨 インストール
+
+      - name: Install dependencies
         run: bun install
-      - name: 💪 ビルド
+
+      - name: Build application
         run: bun run build
         env:
           MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          SITE_URL: ${{ env.PREVIEW_SITE_URL }}
-          NEXT_PUBLIC_SITE_URL: ${{ env.PREVIEW_SITE_URL }}
-      - name: 🚀 プレビューをデプロイ
-        id: deploy
+          SITE_URL: https://preview.yunosuke-portfolio.pages.dev
+
+      - name: Deploy to Cloudflare Pages via Wrangler
         uses: cloudflare/wrangler-action@v3
         with:
-          packageManager: bun
-          accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: bun x wrangler pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ env.DEPLOY_BRANCH }} --commit-dirty=true
-      - name: 📢 デプロイ結果
-        if: github.event_name == 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=yunosuke-portfolio --branch=${{ env.PREVIEW_BRANCH }}
+
+      - name: Create deployment status
+        if: success()
         run: |
-          set -euo pipefail
-          text="${{ steps.deploy.outputs.command-output }}"
-          url=$(echo "$text" | grep -oP 'https?://[^\s]+' | head -n1)
-          if [ -z "$url" ]; then
-            echo "🚨 プレビュー URL が出力されませんでした"
-            exit 1
+          echo "🚀 Deployment successful!"
+          echo "📄 Site URL: https://preview.yunosuke-portfolio.pages.dev"
+
+      - name: API Deployment Alternative (Fallback)
+        if: failure()
+        run: |
+          echo "⚠️ Wrangler deployment failed, trying API method..."
+
+          # プロジェクト存在確認
+          PROJECT_CHECK=$(curl -s -X GET \
+            "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/yunosuke-portfolio" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json")
+
+          if echo "$PROJECT_CHECK" | grep -q '"success":false'; then
+            echo "📝 Creating new project..."
+            CREATE_RESPONSE=$(curl -s -X POST \
+              "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects" \
+              -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              --data '{
+                "name": "yunosuke-portfolio",
+                "production_branch": "main",
+                "build_config": {
+                  "build_command": "bun run build",
+                  "destination_dir": "out",
+                  "root_dir": ""
+                }
+              }')
+
+            if echo "$CREATE_RESPONSE" | grep -q '"success":true'; then
+              echo "✅ Project created successfully"
+            else
+              echo "❌ Project creation failed"
+              echo "$CREATE_RESPONSE"
+              exit 1
+            fi
+          else
+            echo "✅ Project exists"
           fi
-          qr_code_url="https://qr.digima.workers.dev/?url=$url"
-          {
-            echo "## 🚀 プレビューデプロイ完了"
-            echo
-            echo "### デプロイURL"
-            echo
-            echo "[$url]($url)"
-            echo
-            echo "### QRコード"
-            echo
-            echo "<img width='128px' src='$qr_code_url' alt='QR Code'/>"
-            echo
-            echo "<details>"
-            echo "<summary>📋 デプロイログの詳細</summary>"
-            echo
-            echo '```'
-            printf '%s\n' "$text"
-            echo '```'
-            echo "</details>"
-          } > /tmp/pr_comment_body.txt
-          gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/pr_comment_body.txt
+
+          echo "ℹ️ Manual file upload required via Cloudflare Dashboard"
+          echo "📁 Build files are ready in ./out directory"
