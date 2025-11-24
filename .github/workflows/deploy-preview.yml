@@ -1,0 +1,217 @@
+name: デプロイ（プレビュー）
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: read
+  deployments: write
+
+env:
+  BUN_VERSION: "latest"
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: テスト
+    steps:
+      - name: 👩‍💻 チェックアウト
+        uses: actions/checkout@v4
+      - name: 🔨 Bunを有効にする
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: 🔨 インストール
+        run: bun install
+      - name: 🧪 型チェック
+        run: bun run typecheck
+      - name: 🧪 リント
+        run: bun run lint
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: デプロイ
+    needs: test
+    steps:
+      - name: 👩‍💻 チェックアウト
+        uses: actions/checkout@v4
+      - name: 🔨 Bunを有効にする
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+      - name: 🔨 インストール
+        run: bun install
+      - name: 💪 ビルド
+        run: bun run build
+        env:
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          SITE_URL: https://yunosuke-portfolio.pages.dev
+      - name: 🚀 デプロイ
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          packageManager: bun
+          accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: pages deploy out --project-name=yunosuke-portfolio --branch=pr-${{ github.event.pull_request.number }} --commit-dirty=true
+      - name: 📢 デプロイ結果
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Extract deployment URL from output
+          DEPLOYMENT_URL="https://pr-${{ github.event.pull_request.number }}.yunosuke-portfolio.pages.dev"
+          # Create QR code URL
+          QR_CODE_URL="https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${DEPLOYMENT_URL}"
+          # Post comment to PR
+          gh pr comment ${{ github.event.pull_request.number }} --body "## 🚀 プレビューデプロイ完了
+
+          ### デプロイURL
+
+          [$DEPLOYMENT_URL]($DEPLOYMENT_URL)
+
+          ### QRコード
+
+          <img width='128px' src='$QR_CODE_URL' alt='QR Code'/>
+
+          <details>
+          <summary>📋 デプロイログの詳細</summary>
+
+          ```
+          ${{ steps.deploy.outputs.command-output }}
+          ```
+          </details>
+          "
+                - name: ❌ デプロイ失敗時の通知
+                  if: failure()
+                  env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  run: |
+                    gh pr comment ${{ github.event.pull_request.number }} --body "## ❌ プレビューデプロイ失敗
+
+          デプロイ中にエラーが発生しました。詳細は[GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})をご確認ください。"name: デプロイ（プレビュー）
+
+
+
+          on:
+
+            name: デプロイ（プレビュー）
+
+            on:
+              pull_request:
+                branches:
+                  - main
+              workflow_dispatch:
+
+            permissions:
+              pull-requests: write
+              contents: read
+              deployments: write
+
+            env:
+              BUN_VERSION: 'latest'
+              CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+            jobs:
+              test:
+                runs-on: ubuntu-latest
+                name: テスト
+                steps:
+                  - name: 👩‍💻 チェックアウト
+                    uses: actions/checkout@v4
+                  - name: 🔨 Bunを有効にする
+                    uses: oven-sh/setup-bun@v1
+                    with:
+                      bun-version: ${{ env.BUN_VERSION }}
+                  - name: 🔨 インストール
+                    run: bun install
+                  - name: 🧪 型チェック
+                    run: bun run typecheck
+                  - name: 🧪 リント
+                    run: bun run lint
+
+              deploy:
+                runs-on: ubuntu-latest
+                name: デプロイ
+                needs: test
+                steps:
+                  - name: 👩‍💻 チェックアウト
+                    uses: actions/checkout@v4
+                  - name: 🔨 Bunを有効にする
+                    uses: oven-sh/setup-bun@v1
+                    with:
+                      bun-version: ${{ env.BUN_VERSION }}
+                  - name: 🔨 インストール
+                    run: bun install
+                  - name: 💪 ビルド
+                    run: bun run build
+                    env:
+                      MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+                      MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+                      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+                      SITE_URL: https://yunosuke-portfolio.pages.dev
+                  - name: 🚀 デプロイ
+                    id: deploy
+                    uses: cloudflare/wrangler-action@v3
+                    with:
+                      packageManager: bun
+                      accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
+                      apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                      command: pages deploy out --project-name=yunosuke-portfolio --branch=pr-${{ github.event.pull_request.number }} --commit-dirty=true
+                  - name: 📢 デプロイ結果
+                    if: success()
+                    env:
+                      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    run: |
+                      # Extract deployment URL from output
+                      DEPLOYMENT_URL="https://pr-${{ github.event.pull_request.number }}.yunosuke-portfolio.pages.dev"
+                      # Create QR code URL
+                      QR_CODE_URL="https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${DEPLOYMENT_URL}"
+                      # Post comment to PR
+                      gh pr comment ${{ github.event.pull_request.number }} --body "## 🚀 プレビューデプロイ完了
+
+            ### デプロイURL
+
+            [$DEPLOYMENT_URL]($DEPLOYMENT_URL)
+
+            ### QRコード
+
+            <img width='128px' src='$QR_CODE_URL' alt='QR Code'/>
+
+            <details>
+            <summary>📋 デプロイログの詳細</summary>
+
+            ```
+            ${{ steps.deploy.outputs.command-output }}
+            ```
+            </details>
+            "
+                  - name: ❌ デプロイ失敗時の通知
+                    if: failure()
+                    env:
+                      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    run: |
+                      gh pr comment ${{ github.event.pull_request.number }} --body "## ❌ プレビューデプロイ失敗
+
+            デプロイ中にエラーが発生しました。詳細は[GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})をご確認ください。"
+
+                  if: failure()
+
+                  env:
+
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+                  run: |
+
+                    gh pr comment ${{ github.event.pull_request.number }} --body "## ❌ プレビューデプロイ失敗
+
+
+
+          デプロイ中にエラーが発生しました。詳細は[GitHub Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})をご確認ください。"
