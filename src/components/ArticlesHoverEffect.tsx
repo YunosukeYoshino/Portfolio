@@ -94,6 +94,11 @@ export default function ArticlesHoverEffect() {
       handleMouseLeave()
     }
 
+    const handleScroll = () => {
+      // Reset hover effect on scroll
+      handleMouseLeave()
+    }
+
     const articleLinks = document.querySelectorAll('.article-link')
     const articlesContainer = document.querySelector('.articles-container')
 
@@ -107,6 +112,9 @@ export default function ArticlesHoverEffect() {
       articlesContainer.addEventListener('mouseleave', handleSectionLeave)
     }
 
+    // Add scroll listener to reset hover effect when scrolling
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
     return () => {
       articleLinks.forEach((link) => {
         link.removeEventListener('mouseenter', handleArticleHover)
@@ -115,6 +123,7 @@ export default function ArticlesHoverEffect() {
       if (articlesContainer) {
         articlesContainer.removeEventListener('mouseleave', handleSectionLeave)
       }
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [handleMouseEnter, handleMouseLeave])
 
