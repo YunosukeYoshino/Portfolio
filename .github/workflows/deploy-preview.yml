@@ -17,6 +17,7 @@ env:
   PREVIEW_SITE_URL: "https://preview-yunosuke-portfolio.pages.dev"
   CLOUDFLARE_PROJECT_NAME: "yunosuke-portfolio"
   PREVIEW_BRANCH_NAME: "preview"
+  DEPLOY_BRANCH: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'preview' }}
 
 jobs:
   test:
@@ -64,7 +65,7 @@ jobs:
           packageManager: bun
           accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: bun x wrangler pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=pr-${{ github.event.pull_request.number }} --commit-dirty=true
+          command: bun x wrangler pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ env.DEPLOY_BRANCH }} --commit-dirty=true
       - name: 📢 デプロイ結果
         if: github.event_name == 'pull_request'
         env:
