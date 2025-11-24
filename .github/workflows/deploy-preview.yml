@@ -64,7 +64,7 @@ jobs:
           packageManager: bun
           accountId: ${{ env.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=${{ env.PREVIEW_BRANCH_NAME }} --commit-dirty=true
+          command: bun x wrangler pages deploy out --project-name=${{ env.CLOUDFLARE_PROJECT_NAME }} --branch=pr-${{ github.event.pull_request.number }} --commit-dirty=true
       - name: 📢 デプロイ結果
         if: github.event_name == 'pull_request'
         env:
