@@ -78,23 +78,23 @@ jobs:
             exit 1
           fi
           qr_code_url="https://qr.digima.workers.dev/?url=$url"
-          cat <<'EOF' > /tmp/pr_comment_body.txt
-          ## 🚀 プレビューデプロイ完了
-
-          ### デプロイURL
-
-          [$url]($url)
-
-          ### QRコード
-
-          <img width='128px' src='$qr_code_url' alt='QR Code'/>
-
-          <details>
-          <summary>📋 デプロイログの詳細</summary>
-
-          ```
-          $text
-          ```
-          </details>
-          EOF
-                    gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/pr_comment_body.txt
+          {
+            echo "## 🚀 プレビューデプロイ完了"
+            echo
+            echo "### デプロイURL"
+            echo
+            echo "[$url]($url)"
+            echo
+            echo "### QRコード"
+            echo
+            echo "<img width='128px' src='$qr_code_url' alt='QR Code'/>"
+            echo
+            echo "<details>"
+            echo "<summary>📋 デプロイログの詳細</summary>"
+            echo
+            echo '```'
+            printf '%s\n' "$text"
+            echo '```'
+            echo "</details>"
+          } > /tmp/pr_comment_body.txt
+          gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/pr_comment_body.txt
