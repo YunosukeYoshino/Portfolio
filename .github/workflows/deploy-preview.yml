@@ -78,7 +78,7 @@ jobs:
             exit 1
           fi
           qr_code_url="https://qr.digima.workers.dev/?url=$url"
-          cat <<EOF > /tmp/pr_comment_body.txt
+          cat <<'EOF' > /tmp/pr_comment_body.txt
           ## 🚀 プレビューデプロイ完了
 
           ### デプロイURL
@@ -97,4 +97,4 @@ jobs:
           ```
           </details>
           EOF
-          gh pr comment ${{ github.event.pull_request.number }} --body "$(cat /tmp/pr_comment_body.txt)"
+                    gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/pr_comment_body.txt
