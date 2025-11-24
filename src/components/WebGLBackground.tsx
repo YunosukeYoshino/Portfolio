@@ -78,7 +78,16 @@ const fragmentShader = `
 
     q += vec3(sin(t*0.5), cos(t*0.3), sin(t*0.7)) * 0.3;
 
-    float sphere = sdSphere(q, 1.8);
+    // Adjust sphere size based on aspect ratio for mobile devices
+    float aspect = iResolution.x / iResolution.y;
+    float sphereSize = 1.8;
+
+    // For portrait/mobile (aspect < 1.0), reduce sphere size significantly
+    if (aspect < 1.0) {
+      sphereSize = 1.8 * (0.5 + aspect * 0.3);
+    }
+
+    float sphere = sdSphere(q, sphereSize);
 
     float scrollNoise = abs(velocity) * 4.0;
     float displacement = fbm(q * (1.2 + scrollNoise*0.2) + vec3(0.0, t * (0.8 + scrollNoise), 0.0));
