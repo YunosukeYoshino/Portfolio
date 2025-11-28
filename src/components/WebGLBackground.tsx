@@ -15,6 +15,7 @@ const fragmentShader = `
   uniform vec2 iResolution;
   uniform float iTime;
   uniform float uScroll;
+  uniform float uSphereSize;
   varying vec2 vUv;
 
   #define MAX_STEPS 50
@@ -78,7 +79,7 @@ const fragmentShader = `
 
     q += vec3(sin(t*0.5), cos(t*0.3), sin(t*0.7)) * 0.3;
 
-    float sphere = sdSphere(q, 1.8);
+    float sphere = sdSphere(q, uSphereSize);
 
     float scrollNoise = abs(velocity) * 4.0;
     float displacement = fbm(q * (1.2 + scrollNoise*0.2) + vec3(0.0, t * (0.8 + scrollNoise), 0.0));
@@ -201,6 +202,10 @@ export default function WebGLBackground() {
     renderer.setPixelRatio(1) // Fixed at 1 for better performance
     containerRef.current.appendChild(renderer.domElement)
 
+    // Calculate initial sphere size based on aspect ratio
+    const initialAspect = window.innerWidth / window.innerHeight
+    const initialSphereSize = initialAspect < 1.0 ? 1.8 * (0.5 + initialAspect * 0.3) : 1.8
+
     const geometry = new THREE.PlaneGeometry(2, 2)
     const material = new THREE.ShaderMaterial({
       vertexShader,
@@ -209,6 +214,7 @@ export default function WebGLBackground() {
         iTime: { value: 0 },
         iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
         uScroll: { value: 0 },
+        uSphereSize: { value: initialSphereSize },
       },
       depthWrite: false,
       depthTest: false,
@@ -223,6 +229,10 @@ export default function WebGLBackground() {
       const height = window.innerHeight
       renderer.setSize(width, height)
       material.uniforms.iResolution.value.set(width, height)
+
+      // Calculate sphere size based on aspect ratio
+      const aspect = width / height
+      material.uniforms.uSphereSize.value = aspect < 1.0 ? 1.8 * (0.5 + aspect * 0.3) : 1.8
     }
 
     window.addEventListener('resize', handleResize)
