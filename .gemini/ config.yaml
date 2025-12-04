@@ -1,0 +1,10 @@
+# レビュー対象から除外するファイルパターン
+ignore_patterns:
+  - "dist/**"
+
+# 指摘する深刻度の閾値 (LOW, MEDIUM, HIGH, CRITICAL)
+comment_severity_threshold: MEDIUM
+
+# 自動レビューの有効化
+code_review:
+  enabled: true
