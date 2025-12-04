@@ -12,13 +12,11 @@ on:
 
 env:
   JULES_API: https://jules.googleapis.com/v1alpha
-  POLL_INTERVAL: 30
-  MAX_POLLS: 60
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
 
@@ -42,31 +40,9 @@ jobs:
 
           session=$(echo "$response" | jq -r '.name')
           echo "session=$session" >> $GITHUB_OUTPUT
-          echo "✅ Session: $session"
-
-      - name: Wait for completion
-        run: |
-          session="${{ steps.jules.outputs.session }}"
-          for i in $(seq 1 $MAX_POLLS); do
-            state=$(curl -sf "$JULES_API/$session" \
-              -H "X-Goog-Api-Key: ${{ secrets.JULES_API_KEY }}" | jq -r '.state')
-
-            echo "[$i/$MAX_POLLS] State: $state"
-
-            case $state in
-              COMPLETED|SUCCEEDED) echo "✅ Done"; exit 0 ;;
-              FAILED|CANCELLED)    echo "❌ $state"; exit 1 ;;
-              AWAITING_USER_INPUT) echo "⏸️ Needs input"; exit 0 ;;
-            esac
-
-            sleep $POLL_INTERVAL
-          done
-          echo "⏰ Timeout"; exit 1
 
       - name: Summary
-        if: always()
         run: |
-          echo "### Jules Session" >> $GITHUB_STEP_SUMMARY
-          echo "- **Repo**: ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Session**: ${{ steps.jules.outputs.session }}" >> $GITHUB_STEP_SUMMARY
+          echo "### Jules Session Started" >> $GITHUB_STEP_SUMMARY
+          echo "- **Session**: \`${{ steps.jules.outputs.session }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Dashboard**: https://jules.google" >> $GITHUB_STEP_SUMMARY
