@@ -1,6 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+const INTERACTIVE_SELECTOR = 'a, button, [role="button"]'
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null)
@@ -9,6 +11,22 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const animationIdRef = useRef<number | undefined>(undefined)
+
+  // Event delegation handlers - work with dynamically added elements
+  const handleMouseOver = useCallback((e: MouseEvent) => {
+    const target = e.target as Element
+    if (target.closest(INTERACTIVE_SELECTOR)) {
+      setIsHovering(true)
+    }
+  }, [])
+
+  const handleMouseOut = useCallback((e: MouseEvent) => {
+    const relatedTarget = e.relatedTarget as Element | null
+    // Only reset if not moving to another interactive element
+    if (!relatedTarget?.closest(INTERACTIVE_SELECTOR)) {
+      setIsHovering(false)
+    }
+  }, [])
 
   useEffect(() => {
     // Check if device is mobile/tablet
@@ -28,18 +46,12 @@ export default function CustomCursor() {
       mousePosition.current = { x: e.clientX, y: e.clientY }
     }
 
-    const handleMouseEnter = () => setIsHovering(true)
-    const handleMouseLeave = () => setIsHovering(false)
-
     // Track mouse movement
     window.addEventListener('mousemove', updateMousePosition)
 
-    // Track hover states for interactive elements
-    const interactiveElements = document.querySelectorAll('a, button, [role="button"]')
-    interactiveElements.forEach((el) => {
-      el.addEventListener('mouseenter', handleMouseEnter)
-      el.addEventListener('mouseleave', handleMouseLeave)
-    })
+    // Event delegation: listen at document level for dynamic elements
+    document.addEventListener('mouseover', handleMouseOver)
+    document.addEventListener('mouseout', handleMouseOut)
 
     // Animation loop for smooth cursor movement
     const updateCursorPosition = () => {
@@ -59,15 +71,13 @@ export default function CustomCursor() {
     return () => {
       window.removeEventListener('resize', checkMobile)
       window.removeEventListener('mousemove', updateMousePosition)
+      document.removeEventListener('mouseover', handleMouseOver)
+      document.removeEventListener('mouseout', handleMouseOut)
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current)
       }
-      interactiveElements.forEach((el) => {
-        el.removeEventListener('mouseenter', handleMouseEnter)
-        el.removeEventListener('mouseleave', handleMouseLeave)
-      })
     }
-  }, [])
+  }, [handleMouseOver, handleMouseOut])
 
   // Don't render cursor on mobile devices
   if (isMobile) {

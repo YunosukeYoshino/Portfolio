@@ -115,6 +115,14 @@
     border-color: transparent;
   }
 
+  /* CSS :has() for automatic hover detection - works across SPA navigation */
+  body:has(a:hover, button:hover, [role="button"]:hover) .custom-cursor {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-color: transparent;
+  }
+
   /* Hide custom cursor on mobile devices */
   @media (max-width: 768px) {
     .custom-cursor {
