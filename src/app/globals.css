@@ -126,14 +126,14 @@
   /* Hide custom cursor on mobile devices */
   @media (max-width: 768px) {
     .custom-cursor {
-      display: none !important;
+      display: none;
     }
   }
 
   /* Also hide on touch devices */
   @media (hover: none) and (pointer: coarse) {
     .custom-cursor {
-      display: none !important;
+      display: none;
     }
   }
 
@@ -169,7 +169,7 @@
   /* Highlight.js Code Highlighting */
   .prose pre {
     @apply rounded-lg overflow-x-auto my-6 p-4;
-    background-color: #0d1117 !important;
+    background-color: #0d1117;
     border: 1px solid #374151;
     font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
     font-size: 0.875rem;
@@ -179,9 +179,9 @@
 
   .prose pre code {
     @apply text-sm leading-relaxed block;
-    background: transparent !important;
-    padding: 0 !important;
-    border: none !important;
+    background: transparent;
+    padding: 0;
+    border: none;
     font-family: inherit;
   }
 
