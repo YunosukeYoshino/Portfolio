@@ -69,8 +69,5 @@
     "*.{json,css,scss}": [
       "biome format --write"
     ]
-  },
-  "volta": {
-    "node": "22.12.0"
   }
 }

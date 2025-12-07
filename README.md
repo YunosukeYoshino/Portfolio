@@ -1,182 +1,146 @@
-# Portfolio Site with Next.js & microCMS
+<div align="center">
+  <img src="public/assets/icons/icon-192x192.png" alt="Portfolio Logo" width="120" />
+  <h1>Yunosuke Yoshino Portfolio</h1>
+  <p>
+    <strong>A modern, high-performance portfolio website built with Next.js 15, React 19, and Tailwind CSS v4.</strong>
+  </p>
+  <p>
+    <a href="https://yunosukeyoshino.com">View Live Site</a>
+  </p>
+</div>
 
-A modern portfolio website built with Next.js 15, featuring a blog powered by microCMS headless CMS. Originally migrated from Astro to leverage Next.js App Router and Server Components for optimal performance.
+---
 
-## Tech Stack
+## 📖 Overview
 
-### Core
-- **Next.js 15** - React framework with App Router and static export
-- **React 19** - Latest React with Server Components
-- **TypeScript** - Type-safe development with strict mode and typedRoutes
-- **microCMS** - Headless CMS for blog content management
-- **Bun** - Fast package manager and JavaScript runtime
+This project is a personal portfolio and blog site designed to showcase projects and share technical articles. It leverages the latest web technologies to ensure top-tier performance, accessibility, and SEO. The site is statically generated using Next.js App Router and deployed to Cloudflare Pages for global edge delivery.
 
-### Styling & Animation
-- **Tailwind CSS** - Utility-first CSS framework with custom utilities
-- **GSAP** - Professional-grade animation library for interactions
-- **Custom Cursor** - Interactive cursor with blend mode effects
+Content is managed via **microCMS**, allowing for easy updates without code changes. The UI features smooth animations powered by **Lenis** and **Three.js**, providing an immersive user experience.
 
-### Code Quality & Performance
-- **Biome** - Fast linter and formatter (replaces ESLint/Prettier)
-- **Shiki** - Server-side syntax highlighting with dual themes
-- **Lighthouse** - Performance auditing and optimization
-- **Husky** - Git hooks for code quality enforcement
+## ✨ Features
 
-### Deployment
-- **Cloudflare Pages** - Static site hosting with global CDN
+- **🚀 Next.js 15 App Router:** Utilizing React Server Components for optimal performance.
+- **🎨 Tailwind CSS v4:** The latest utility-first CSS framework for rapid UI development.
+- **📝 microCMS Integration:** Headless CMS for managing blog posts and dynamic content.
+- **⚡ Static Export:** Fully static site generation (`output: 'export'`) for Cloudflare Pages.
+- **✨ Rich Animations:** Smooth scrolling with Lenis and WebGL background effects with Three.js.
+- **🔍 SEO Optimized:** Automatic sitemap, robots.txt, and JSON-LD generation.
+- **🛡️ Type Safe:** Built with TypeScript and Zod for robust data validation.
+- **💌 Contact Form:** Integrated with Resend for reliable email delivery.
 
-## Features
+## 🛠️ Tech Stack
 
-- ⚡ **Server Components** - Reduced client bundle size with server-side rendering
-- 📝 **Blog System** - Dynamic blog with microCMS integration
-- 🎨 **Syntax Highlighting** - Server-side code highlighting with Shiki (GitHub themes)
-- 🖱️ **Custom Cursor** - Interactive cursor with blend mode effects
-- 📱 **Responsive Design** - Mobile-first approach with adaptive layouts
-- 🚀 **Performance Optimized** - Static export, image optimization, and code splitting
-- 🔍 **SEO Ready** - Metadata API, structured data, and Google Analytics integration
-- 🌐 **Three.js Integration** - 3D graphics with React Three Fiber
+- **Framework:** [Next.js 15](https://nextjs.org/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **CMS:** [microCMS](https://microcms.io/)
+- **Animation:** [Lenis](https://github.com/studio-freight/lenis), [Three.js](https://threejs.org/)
+- **Forms:** [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/), [Resend](https://resend.com/)
+- **Linting & Formatting:** [Biome](https://biomejs.dev/)
+- **Package Manager:** [Bun](https://bun.sh/)
 
-## Project Structure
-
-```
-src/
-├── app/                 # Next.js App Router pages and layouts
-│   ├── blog/           # Blog routes with static generation
-│   ├── contact/        # Contact page
-│   └── layout.tsx      # Root layout with providers
-├── components/         # React components
-│   ├── Header/         # Navigation header
-│   ├── Footer/         # Site footer
-│   ├── Blog/           # Blog-related components
-│   └── CustomCursor/   # Interactive cursor
-├── lib/                # Utilities and API clients
-│   └── microcms.ts     # microCMS client with type safety
-├── types/              # TypeScript type definitions
-└── styles/             # Global styles
-    └── globals.css     # Base styles and Tailwind directives
-```
-
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 22.12 or later (configured with Volta)
-- Bun package manager
-- microCMS account and API keys
-
-### Environment Variables
-
-Create a `.env.local` file in the root directory:
-
-```bash
-MICROCMS_SERVICE_DOMAIN=your-service-domain
-MICROCMS_API_KEY=your-api-key
-SITE_URL=https://your-domain.com
-```
+- **Bun** (v1.0.0 or later)
+- **Node.js** (v18.0.0 or later)
 
 ### Installation
 
-```bash
-# Install dependencies
-bun install
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/YunosukeYoshino/portfolio.git
+   cd portfolio
+   ```
 
-# Start development server
-bun run dev
+2. Install dependencies:
+   ```bash
+   bun install
+   ```
 
-# Build for production
-bun run build
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add the following keys:
 
-# Start production server
-bun run start
+   ```env
+   MICROCMS_SERVICE_DOMAIN=your-service-domain
+   MICROCMS_API_KEY=your-api-key
+   RESEND_API_KEY=your-resend-api-key
+   SITE_URL=http://localhost:3000
+   ```
+
+   > [!NOTE]
+   > In development mode, the application uses mock data if credentials are not provided, allowing you to run it locally without external services.
+
+4. Start the development server:
+   ```bash
+   bun run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## 📜 Scripts
+
+| Command | Description |
+| :--- | :--- |
+| `bun run dev` | Starts the development server. |
+| `bun run build` | Builds the application for production. |
+| `bun run start` | Starts the production server locally. |
+| `bun run lint` | Runs Biome and TypeScript checks. |
+| `bun run fix` | Automatically fixes linting and formatting issues. |
+| `bun run deploy` | Deploys the `out` directory to Cloudflare Pages (main branch). |
+
+> [!NOTE]
+> This project uses **Bun** as the package manager. Please use `bun` instead of `npm` or `yarn` for all scripts.
+
+## 📂 Project Structure
+
+```
+.
+├── docs/               # Documentation files
+├── public/             # Static assets (images, icons)
+├── src/
+│   ├── app/            # Next.js App Router pages and layouts
+│   ├── components/     # React components (Server & Client)
+│   ├── lib/            # Utility functions and API clients
+│   ├── styles/         # Global styles
+│   └── types/          # TypeScript type definitions
+├── biome.json          # Biome configuration
+├── next.config.ts      # Next.js configuration
+└── tailwind.config.ts  # Tailwind CSS configuration
 ```
 
-### Development Commands
+## ☁️ Deployment
 
-```bash
-bun run dev          # Start development server
-bun run build        # Build for production
-bun run start        # Start production server
-bun run preview      # Build and preview production
-bun run lint         # Run all linters (Biome, TypeScript)
-bun run fix          # Auto-fix linting issues
-bun run format       # Format code with Biome
-bun run check        # Check code quality with Biome
-bun run ci           # Run Biome in CI mode
-bun run lih          # Run Lighthouse audit on localhost:3000
+This project is configured for **Cloudflare Pages**.
+
+1. **Build the project:**
+   ```bash
+   bun run build
+   ```
+   This will generate a static `out/` directory.
+
+2. **Deploy:**
+   The project includes a `wrangler.toml` configuration. You can deploy directly using Wrangler:
+   ```bash
+   bun run deploy
+   ```
+
+> [!IMPORTANT]
+> Ensure that the `NODE_VERSION` environment variable is set to `20` or higher in your Cloudflare Pages project settings.
+
+## 🧩 Key Patterns
+
+### Server vs Client Components
+- **Server Components** are the default and used for data fetching and SEO.
+- **Client Components** are marked with `'use client'` and used for interactivity (forms, animations).
+
+### Tailwind CSS v4
+This project uses the latest Tailwind CSS v4. Configuration is primarily handled via CSS variables in `src/app/globals.css` using the `@theme` directive.
+
+```css
+@theme {
+  --background: #f3f3f1;
+  /* ... */
+}
 ```
-
-## Architecture Details
-
-### Server Components & Data Fetching
-- Default components are Server Components for optimal performance
-- Client Components marked with `'use client'` for interactivity
-- microCMS data fetched server-side with ISR support
-
-### Styling Architecture
-- **Tailwind CSS**: Utility-first approach for all component styling
-- **Global Styles**: Base styles and CSS variables in globals.css
-- **Custom Utilities**: Project-specific utility classes (container-custom, text-display)
-- **Component-scoped**: All styling handled inline with Tailwind utilities
-
-### Performance Optimizations
-- Static export for CDN-friendly deployment
-- Custom image loader optimized for Cloudflare Pages
-- Font optimization with next/font (Inter with variable font loading)
-- Route-based code splitting with App Router
-- Server Components for reduced client-side JavaScript
-- Shiki server-side code highlighting (zero client-side JS)
-
-### Code Highlighting
-- Server-side syntax highlighting with Shiki
-- Dual theme support (GitHub Light/Dark)
-- Zero client-side JavaScript for highlighting
-- Automatic processing of microCMS code blocks
-
-## Deployment
-
-### Cloudflare Pages (Current)
-
-This project is configured for static export and deployed on Cloudflare Pages:
-
-1. Push your code to GitHub
-2. Connect repository to Cloudflare Pages
-3. Configure build settings:
-   - Build command: `bun run build`
-   - Build output directory: `out`
-4. Set environment variables in Cloudflare dashboard
-5. Deploy automatically on push to main
-
-### Build Configuration
-
-The project uses static export (`output: 'export'`) in `next.config.ts` for Cloudflare Pages compatibility:
-- Custom image loader for optimization
-- Static HTML generation for all pages
-- Automatic build ID generation from Git commit SHA
-
-## Design Philosophy
-
-The site follows a minimalist design approach inspired by modern portfolio sites:
-- Clean white background with black text
-- Bold uppercase typography with tight tracking
-- Modern border-style interactive elements
-- Consistent spacing and grid systems
-- Smooth animations and micro-interactions
-
-## Contributing
-
-Contributions are welcome! Please ensure:
-1. Use Bun as the package manager (`bun install`, `bun run lint`)
-2. Code passes all lint checks (`bun run lint` - Biome + TypeScript)
-3. Follow existing code style and patterns
-4. Test thoroughly in development with mock data support
-5. Update types when modifying data structures
-
-## License
-
-This project is private and proprietary. All rights reserved.
-
-## Acknowledgments
-
-- Originally migrated from Astro to Next.js 15
-- Design inspired by modern portfolio aesthetics
-- Powered by microCMS for content management
