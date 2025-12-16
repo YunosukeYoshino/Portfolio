@@ -2,6 +2,10 @@
 .next/
 out/
 
+# TanStack Start / Vinxi build output
+.output/
+.vinxi/
+
 # Astro build output (legacy)
 dist/
 
