@@ -1,16 +1,8 @@
 {
   "mcpServers": {
-    "chrome-devtools": {
-      "command": "bunx",
-      "args": ["chrome-devtools-mcp@latest"]
-    },
     "context7": {
       "command": "bunx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
-    },
-    "sequential-thinking": {
-      "command": "bunx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
     }
   }
 }
