@@ -1,7 +1,16 @@
 # Portfolio Project - Copilot Instructions
 
+## プロジェクト概要
+個人ポートフォリオサイト。microCMSからブログ記事を取得し、スキル・プロジェクト紹介を提供。
+
+## 技術スタック
+- **フレームワーク**: Next.js 15 App Router + React 19
+- **CMS**: microCMS
+- **スタイル**: Tailwind CSS v4（CSS-first設定）
+- **デプロイ**: Cloudflare Pages（静的エクスポート）
+
 ## Package Manager
-**必須**: このプロジェクトは **Bun** を使用します。`npm` ではなく `bun` コマンドを使用してください。
+**必須**: `npm` ではなく **Bun** を使用。
 ```bash
 bun install    # 依存関係インストール
 bun run dev    # 開発サーバー起動
@@ -10,97 +19,48 @@ bun run lint   # Biome + TypeScript チェック
 bun run fix    # 自動修正
 ```
 
-## アーキテクチャ概要
-Next.js 15 App Router + React 19 のポートフォリオサイト。microCMS からブログコンテンツを取得し、Cloudflare Pages にスタティック出力(`output: 'export'`)でデプロイ。
-
-### データフロー
+## ディレクトリ構造
 ```
-microCMS API → src/lib/microcms.ts → Server Components → Static HTML (out/)
+src/
+├── app/           # App Router ページ・レイアウト
+├── components/    # React コンポーネント（Server/Client混在）
+├── lib/
+│   ├── microcms.ts  # microCMS クライアント
+│   └── utils.ts     # cn(), formatDate(), generateMetadata()
+└── types/         # 共有型定義
 ```
-
-### ディレクトリ構造
-- `src/app/` - App Router ページ・レイアウト
-- `src/components/` - React コンポーネント（Server/Client混在）
-- `src/lib/microcms.ts` - microCMS クライアント（型安全なAPI関数）
-- `src/types/index.ts` - 共有型定義（`Blog`, `BlogResponse` など）
 
 ## 重要なパターン
 
 ### Server vs Client Components
 - **デフォルトはServer Component** - データフェッチ・SEOに使用
 - **`'use client'`必須** - useState/useEffect/イベントハンドラ使用時
-- 例: `ContactForm.tsx`(Client), `CodeHighlight.tsx`(Server, async)
+- 参照: `src/components/ContactForm.tsx`（Client例）
 
 ### Tailwind CSS v4
-**v3との破壊的変更に注意**:
-```css
-/* globals.css */
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
-
-@theme {
-  --background: #f3f3f1;
-  /* CSS変数でテーマ定義 */
-}
-```
+v3との破壊的変更あり。`src/app/globals.css` 参照。
 - `@theme` ディレクティブでCSS変数を定義
-- JSコンフィグではなくCSS-first設定
-- Typography は `@plugin` で読み込み
+- `@plugin` でプラグイン読み込み
 
 ### microCMS統合
-`src/lib/microcms.ts` の関数を使用:
-```typescript
-import { getBlogs, getBlogDetail, getAllBlogIds } from '@/lib/microcms'
-```
-- 開発時はプレースホルダー認証情報でモックデータを返却
-- `generateStaticParams` で静的生成のIDリスト取得
+`src/lib/microcms.ts` の関数を使用。開発時はモックデータを返却。
 
 ### 静的生成パターン
-```typescript
-// src/app/article/[slug]/page.tsx
-export async function generateStaticParams() {
-  const blogIds = await getAllBlogIds()
-  return blogIds.map((id) => ({ slug: id }))
-}
-```
+`src/app/article/[slug]/page.tsx:generateStaticParams` を参照。
 
 ### フォームバリデーション
-Zod + react-hook-form パターン（`ContactForm.tsx`参照）:
-```typescript
-const schema = z.object({ ... })
-const { register, handleSubmit } = useForm({ resolver: zodResolver(schema) })
-```
+Zod + react-hook-form パターン。`src/components/ContactForm.tsx` 参照。
 
 ## コード品質
-
-### Biome設定
-- インデント: スペース2つ、行幅100
-- `noConsole: "warn"` - 開発ログは `biome-ignore` コメントで許可
-- 自動修正: `bun run fix`
-
-### TypeScript
-- Strict mode有効
-- `typedRoutes: true` で型安全なナビゲーション
-- パスエイリアス: `@/*` → `./src/*`
+Biome + TypeScript strict mode使用。設定は `biome.json` 参照。
+自動修正: `bun run fix`
 
 ## 環境変数
-```bash
-MICROCMS_SERVICE_DOMAIN=xxx  # microCMS サービスドメイン
-MICROCMS_API_KEY=xxx         # microCMS APIキー
-RESEND_API_KEY=xxx           # Resend メール送信
-SITE_URL=https://...         # 本番URL（メタデータ生成用）
-```
+`.env.example` 参照。
 
 ## デプロイ
-Cloudflare Pages へのスタティックエクスポート:
 ```bash
 bun run deploy          # main ブランチにデプロイ
 bun run deploy:preview  # preview ブランチにデプロイ
 ```
 ビルド出力は `out/` ディレクトリ。GitHub Actions で自動デプロイ。
-
-## ユーティリティ
-`src/lib/utils.ts`:
-- `cn()` - clsx + tailwind-merge でクラス結合
-- `formatDate()` - 日本語日付フォーマット
-- `generateMetadata()` - SEOメタデータ生成ヘルパー
