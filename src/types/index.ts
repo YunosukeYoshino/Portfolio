@@ -37,14 +37,6 @@ export interface BlogListProps {
   page?: number
 }
 
-export interface SEOProps {
-  title: string
-  description: string
-  url?: string
-  image?: string
-  type?: 'website' | 'article'
-}
-
 // Page props types
 export interface BlogPageProps {
   params: Promise<{ slug: string }>

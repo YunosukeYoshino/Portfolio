@@ -58,7 +58,7 @@ const apiRequest = async <T>(
 
 // Helper function to check if we should use mock data
 const shouldUseMockData = (): boolean => {
-  return isDevelopment && hasPlaceholderCredentials
+  return hasPlaceholderCredentials
 }
 
 // API functions with proper error handling and development fallbacks
@@ -70,8 +70,28 @@ export const getBlogs = async (
     // biome-ignore lint/suspicious/noConsole: Development warning for mock data usage
     console.warn('Using mock blog data for development (placeholder credentials detected)')
     return {
-      contents: [],
-      totalCount: 0,
+      contents: [
+        {
+          id: 'sample-blog-1',
+          title: 'Development Blog Post 1',
+          content: '<p>Mock content 1</p>',
+          eyecatch: {
+            url: '/assets/images/noise.png',
+            width: 1200,
+            height: 630,
+            alt: 'Mock image',
+          },
+          category: {
+            id: 'development',
+            name: 'Development',
+          },
+          publishedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          revisedAt: new Date().toISOString(),
+        },
+      ],
+      totalCount: 1,
       offset: Number(queries?.offset) || 0,
       limit: Number(queries?.limit) || 10,
     }
