@@ -177,19 +177,6 @@ export const getBlogDetail = async (
   }
 }
 
-// Helper function for pagination
-export const getPaginatedBlogs = async (
-  page: number = 1,
-  limit: number = 6
-): Promise<BlogResponse> => {
-  const offset = (page - 1) * limit
-  return getBlogs({
-    offset,
-    limit,
-    orders: '-publishedAt',
-  })
-}
-
 // Helper function to get all blog IDs for static generation
 export const getAllBlogIds = async (): Promise<string[]> => {
   // Return mock data immediately if using placeholder credentials
