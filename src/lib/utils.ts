@@ -14,7 +14,7 @@ export function formatDate(dateString: string): string {
   })
 }
 
-export function generatePageTitle(title: string): string {
+function generatePageTitle(title: string): string {
   return `${title} | Yunosuke Yoshino Portfolio`
 }
 
