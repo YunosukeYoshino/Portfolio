@@ -16,20 +16,18 @@ export const Route = createFileRoute('/article/$slug')({
   // Prevent re-fetching on client-side navigation for static sites
   staleTime: Number.POSITIVE_INFINITY,
   head: ({ loaderData }) => {
-    if (!loaderData) {
+    if (!loaderData?.blog) {
       return { meta: [{ title: 'Loading... | Yunosuke Yoshino' }] }
     }
     const { blog } = loaderData
+    const description = blog.content?.replace(/<[^>]*>/g, '').slice(0, 160) ?? ''
     return {
       meta: [
         { title: `${blog.title} | Yunosuke Yoshino` },
-        {
-          name: 'description',
-          content: blog.content.replace(/<[^>]*>/g, '').slice(0, 160),
-        },
+        { name: 'description', content: description },
         { property: 'og:title', content: blog.title },
         { property: 'og:type', content: 'article' },
-        { property: 'og:image', content: blog.eyecatch.url },
+        { property: 'og:image', content: blog.eyecatch?.url ?? '' },
       ],
     }
   },
