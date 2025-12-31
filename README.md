@@ -107,11 +107,22 @@ Specs are stored in `.kiro/specs/` with the following structure:
 
 ```
 src/
-├── routes/        # TanStack Router pages and layouts
-├── components/    # React components
-├── lib/           # Utilities and API clients
-└── types/         # TypeScript type definitions
+├── domain/            # Domain layer (entities, repository ports)
+│   ├── entities/      # Blog, BlogResponse etc.
+│   └── repositories/  # BlogRepository interface
+├── usecases/          # Application business logic
+│   └── blog/          # GetBlogsUseCase, GetBlogDetailUseCase
+├── infrastructure/    # External implementations
+│   ├── microcms/      # microCMS adapter
+│   └── di/            # Dependency injection container
+├── routes/            # TanStack Router pages and layouts
+├── components/        # React components
+├── lib/               # Utilities and legacy facades
+└── types/             # TypeScript type definitions (re-exports)
 ```
+
+> [!NOTE]
+> This project follows Clean Architecture principles. Domain layer has no external dependencies.
 
 ## Deployment
 
