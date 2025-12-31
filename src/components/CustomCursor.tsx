@@ -85,5 +85,11 @@ export default function CustomCursor() {
     return null
   }
 
-  return <div ref={cursorRef} className={`custom-cursor ${isHovering ? 'hover' : ''}`} />
+  return (
+    <div
+      ref={cursorRef}
+      className={`custom-cursor ${isHovering ? 'hover' : ''}`}
+      suppressHydrationWarning
+    />
+  )
 }

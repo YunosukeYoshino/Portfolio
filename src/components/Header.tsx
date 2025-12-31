@@ -53,7 +53,9 @@ export default function Header() {
           </a>
         </div>
         <span className="opacity-40">Tokyo, Japan</span>
-        <span className="opacity-40">{currentTime}</span>
+        <span className="opacity-40" suppressHydrationWarning>
+          {currentTime}
+        </span>
       </div>
 
       <button
@@ -107,7 +109,7 @@ export default function Header() {
 
           <div className="mt-12 font-mono text-xs uppercase tracking-wide text-gray-400">
             <div>Tokyo, Japan</div>
-            <div>{currentTime}</div>
+            <div suppressHydrationWarning>{currentTime}</div>
           </div>
         </div>
       </div>

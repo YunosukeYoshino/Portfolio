@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRootRoute, HeadContent, Link, Outlet, Scripts } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import ClientLoader from '@/components/ClientLoader'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -88,18 +89,6 @@ export const Route = createRootRoute({
         href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap',
       },
     ],
-    scripts: [
-      {
-        src: 'https://www.googletagmanager.com/gtag/js?id=G-7C1W0FTJR6',
-        async: true,
-      },
-      {
-        children: `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-7C1W0FTJR6');`,
-      },
-    ],
   }),
   component: RootComponent,
 })
@@ -121,6 +110,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body className="antialiased" suppressHydrationWarning>
+        <GoogleAnalytics />
         <QueryClientProvider client={queryClient}>
           <LenisProvider>
             <ClientLoader />

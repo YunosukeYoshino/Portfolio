@@ -3,9 +3,15 @@
 import { useEffect, useState } from 'react'
 
 export default function ClientLoader() {
-  const [isLoading, setIsLoading] = useState(true)
+  // Start with false to match server-side render (no loader in SSG)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    // Show loader only after mount (client-side only)
+    setIsMounted(true)
+    setIsLoading(true)
+
     // Hide loader after a short delay to ensure content is ready
     const timer = setTimeout(() => {
       setIsLoading(false)
@@ -14,11 +20,12 @@ export default function ClientLoader() {
     return () => clearTimeout(timer)
   }, [])
 
-  if (!isLoading) return null
+  // Don't render anything on server or before mount
+  if (!isMounted || !isLoading) return null
 
   return (
-    <div className={`loader ${!isLoading ? 'is-hidden' : ''}`}>
-      <div className="loader-circle"></div>
+    <div className="loader" suppressHydrationWarning>
+      <div className="loader-circle" />
     </div>
   )
 }
