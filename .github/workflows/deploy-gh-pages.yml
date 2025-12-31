@@ -2,16 +2,16 @@ name: Deploy to Cloudflare Pages via API
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
   repository_dispatch:
-    types: [ repository_dispatch ]
+    types: [repository_dispatch]
 permissions:
   contents: read
 
 env:
-  NODE_VERSION: '18'
-  BUN_VERSION: 'latest'
+  NODE_VERSION: "18"
+  BUN_VERSION: "latest"
 
 jobs:
   build-and-deploy:
@@ -43,7 +43,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy out --project-name=yunosuke-portfolio --branch=main
+          command: pages deploy dist/client --project-name=yunosuke-portfolio --branch=main
 
       - name: Create deployment status
         if: success()
@@ -73,7 +73,7 @@ jobs:
                 "production_branch": "main",
                 "build_config": {
                   "build_command": "bun run build",
-                  "destination_dir": "out",
+                  "destination_dir": "dist/client",
                   "root_dir": ""
                 }
               }')
@@ -90,4 +90,4 @@ jobs:
           fi
 
           echo "ℹ️ Manual file upload required via Cloudflare Dashboard"
-          echo "📁 Build files are ready in ./out directory"
+          echo "📁 Build files are ready in ./dist/client directory"
