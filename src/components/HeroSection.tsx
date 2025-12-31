@@ -51,7 +51,7 @@ export default function HeroSection() {
       <WebGLBackground />
 
       <div className="hero-text-layer relative w-full px-6 pt-20 md:px-12">
-        <div className="mb-4 flex max-w-[200px] items-end justify-between border-b border-black/10 pb-4 md:mb-8 md:max-w-xs">
+        <div className="max-w-50 mb-4 flex items-end justify-between border-b border-black/10 pb-4 md:mb-8 md:max-w-xs">
           <span className="font-mono text-xs text-gray-400">PORTFOLIO 2026</span>
           <span className="font-mono text-xs text-gray-400">V.2.0</span>
         </div>

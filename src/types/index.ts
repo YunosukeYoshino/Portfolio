@@ -1,34 +1,17 @@
-// Blog types for microCMS
-export interface BlogCategory {
-  id: string
-  name: string
-}
+/**
+ * Type Definitions
+ *
+ * 後方互換性のため、Domain層のエンティティを再エクスポート
+ * 新規コードでは @/domain/entities から直接インポートを推奨
+ */
 
-export interface BlogEyecatch {
-  url: string
-  width: number
-  height: number
-  alt: string
-}
-
-export interface Blog {
-  id: string
-  createdAt: string
-  updatedAt: string
-  publishedAt: string
-  revisedAt: string
-  title: string
-  content: string
-  category: BlogCategory
-  eyecatch: BlogEyecatch
-}
-
-export interface BlogResponse {
-  totalCount: number
-  offset: number
-  limit: number
-  contents: Blog[]
-}
+// Re-export from domain layer for backward compatibility
+export type {
+  Blog,
+  BlogCategory,
+  BlogEyecatch,
+  BlogResponse,
+} from '@/domain/entities/blog'
 
 // Component props types
 export interface BlogListProps {
