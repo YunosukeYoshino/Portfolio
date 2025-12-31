@@ -26,6 +26,8 @@ export const Route = createFileRoute('/')({
     })
     return { articles }
   },
+  // Prevent re-fetching on client-side navigation for static sites
+  staleTime: Number.POSITIVE_INFINITY,
   head: () => ({
     meta: [
       { title: 'Yunosuke Yoshino｜Portfolio' },

@@ -17,6 +17,11 @@ export default function CodeHighlight({ content }: CodeHighlightProps) {
 
 // Export the highlight function to be used in loaders
 export async function highlightCodeBlocks(html: string): Promise<string> {
+  // Guard against undefined/null input
+  if (!html) {
+    return ''
+  }
+
   // Match all <pre><code> blocks
   const codeBlockRegex = /<pre><code(?:\s+class="language-(\w+)")?>([\s\S]*?)<\/code><\/pre>/g
 

@@ -13,6 +13,8 @@ export const Route = createFileRoute('/article/$slug')({
     const highlightedContent = await highlightCodeBlocks(blog.content)
     return { blog, highlightedContent }
   },
+  // Prevent re-fetching on client-side navigation for static sites
+  staleTime: Number.POSITIVE_INFINITY,
   head: ({ loaderData }) => {
     if (!loaderData) {
       return { meta: [{ title: 'Loading... | Yunosuke Yoshino' }] }

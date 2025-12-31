@@ -38,6 +38,8 @@ export const Route = createFileRoute('/article/page/$page')({
 
     return { blogs, currentPage, totalPages, totalCount }
   },
+  // Prevent re-fetching on client-side navigation for static sites
+  staleTime: Number.POSITIVE_INFINITY,
   head: ({ loaderData }) => {
     if (!loaderData) {
       return { meta: [{ title: 'Articles | Yunosuke Yoshino' }] }
