@@ -56,10 +56,11 @@ export default function Blog({
               <Link to="/article/$slug" params={{ slug: blog.id }} className="block">
                 <div className="relative aspect-video overflow-hidden">
                   <img
-                    src={blog.eyecatch.url}
+                    src={`${blog.eyecatch.url}?w=800&fm=webp`}
                     alt={blog.eyecatch.alt || blog.title}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div className="p-6">

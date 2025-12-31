@@ -1,5 +1,21 @@
 import { createServerFn } from '@tanstack/react-start'
+import { z } from 'zod'
 import type { Blog, BlogResponse } from '@/types'
+
+// Zod schemas for input validation
+const queriesSchema = z.record(z.string(), z.union([z.string(), z.number()])).optional()
+
+const getBlogsInputSchema = z.object({
+  queries: queriesSchema,
+})
+
+const getBlogDetailInputSchema = z.object({
+  contentId: z
+    .string()
+    .min(1, 'contentId is required')
+    .regex(/^[a-zA-Z0-9_-]+$/, 'contentId contains invalid characters'),
+  queries: queriesSchema,
+})
 
 // Lazy configuration getter for server-side environment variables
 const getApiConfig = () => {
@@ -86,7 +102,7 @@ const createMockBlog = (contentId: string): Blog => ({
 
 // Server function for fetching blogs list
 export const getBlogs = createServerFn({ method: 'GET' })
-  .inputValidator((data: { queries?: Record<string, string | number> }) => data)
+  .inputValidator((data: unknown) => getBlogsInputSchema.parse(data))
   .handler(async ({ data }): Promise<BlogResponse> => {
     const { queries } = data
 
@@ -131,7 +147,7 @@ export const getBlogs = createServerFn({ method: 'GET' })
 
 // Server function for fetching blog detail
 export const getBlogDetail = createServerFn({ method: 'GET' })
-  .inputValidator((data: { contentId: string; queries?: Record<string, string | number> }) => data)
+  .inputValidator((data: unknown) => getBlogDetailInputSchema.parse(data))
   .handler(async ({ data }): Promise<Blog> => {
     const { contentId, queries } = data
 

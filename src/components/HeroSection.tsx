@@ -1,3 +1,5 @@
+'use client'
+
 import { ArrowDown } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import WebGLBackground from './WebGLBackground'

@@ -25,8 +25,6 @@ export default defineConfig({
         // Retry failed prerenders
         retryCount: 2,
         retryDelay: 1000,
-        // Log successful renders
-        onSuccess: ({ page }) => {},
       },
     }),
     // react's vite plugin must come after start's vite plugin
