@@ -1,14 +1,14 @@
-import { getBlogs } from '@/lib/microcms'
+'use client'
+
+import type { Blog } from '@/types'
 import ArticleItem from './ArticleItem'
 import ArticlesHoverEffect from './ArticlesHoverEffect'
 
-export default async function ArticlesSection() {
-  // Fetch latest 3 articles from microCMS
-  const { contents: articles } = await getBlogs({
-    limit: 3,
-    orders: '-publishedAt',
-  })
+interface ArticlesSectionProps {
+  articles: Blog[]
+}
 
+export default function ArticlesSection({ articles }: ArticlesSectionProps) {
   // If no articles, show a message
   if (articles.length === 0) {
     return (

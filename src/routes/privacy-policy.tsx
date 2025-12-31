@@ -1,13 +1,21 @@
-import type { Metadata } from 'next'
+import { createFileRoute } from '@tanstack/react-router'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 
-export const metadata: Metadata = {
-  title: 'プライバシーポリシー',
-  description: 'Yunosuke Yoshinoのポートフォリオサイトのプライバシーポリシー',
-}
+export const Route = createFileRoute('/privacy-policy')({
+  head: () => ({
+    meta: [
+      { title: 'プライバシーポリシー | Yunosuke Yoshino' },
+      {
+        name: 'description',
+        content: 'Yunosuke Yoshinoのポートフォリオサイトのプライバシーポリシー',
+      },
+    ],
+  }),
+  component: PrivacyPolicyPage,
+})
 
-export default function PrivacyPolicyPage() {
+function PrivacyPolicyPage() {
   return (
     <>
       <Header />

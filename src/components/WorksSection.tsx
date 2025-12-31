@@ -1,6 +1,4 @@
 import { ArrowUpRight } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
 
 const works = [
   {
@@ -25,46 +23,45 @@ const works = [
 
 export default function WorksSection() {
   return (
-    <section id="works" className="py-32 px-4 md:px-12 bg-white relative z-20">
-      <div className="flex flex-col md:flex-row justify-between items-end mb-24 px-2 border-b border-gray-100 pb-8">
+    <section id="works" className="relative z-20 bg-white px-4 py-32 md:px-12">
+      <div className="mb-24 flex flex-col items-end justify-between border-b border-gray-100 px-2 pb-8 md:flex-row">
         <div>
-          <span className="text-xs font-mono uppercase tracking-widest text-gray-500 block mb-2">
+          <span className="mb-2 block font-mono text-xs uppercase tracking-widest text-gray-500">
             02 / Selected Works
           </span>
-          <h2 className="text-6xl md:text-8xl font-display font-medium tracking-tighter">
+          <h2 className="font-display text-6xl font-medium tracking-tighter md:text-8xl">
             Projects
           </h2>
         </div>
-        <span className="font-mono text-xs text-gray-400 mb-2">(2023 — 2025)</span>
+        <span className="mb-2 font-mono text-xs text-gray-400">(2023 — 2025)</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24 max-w-screen-xl mx-auto">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-x-12 gap-y-24 md:grid-cols-2">
         {works.map((work) => (
           <article
             key={work.id}
             className={`work-item group cursor-pointer hover-trigger ${work.offsetClass}`}
           >
-            <Link href={work.link as '/'}>
-              <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 mb-6">
-                <Image
+            <a href={work.link}>
+              <div className="relative mb-6 aspect-video overflow-hidden bg-gray-100">
+                <img
                   src={work.image}
                   alt={work.title}
-                  fill
                   loading="lazy"
-                  className="work-img object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  className="work-img h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                 />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors" />
+                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/5" />
               </div>
-              <div className="flex justify-between items-start">
+              <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="text-2xl font-display font-medium mb-1">{work.title}</h3>
+                  <h3 className="font-display mb-1 text-2xl font-medium">{work.title}</h3>
                   <p className="font-mono text-xs text-gray-400">{work.category}</p>
                 </div>
-                <div className="w-8 h-8 border border-gray-200 rounded-full flex items-center justify-center group-hover:bg-black group-hover:border-black group-hover:text-white transition-all">
-                  <ArrowUpRight className="w-4 h-4" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 transition-all group-hover:border-black group-hover:bg-black group-hover:text-white">
+                  <ArrowUpRight className="h-4 w-4" />
                 </div>
               </div>
-            </Link>
+            </a>
           </article>
         ))}
       </div>

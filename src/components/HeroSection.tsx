@@ -1,38 +1,52 @@
-'use client'
-
-import gsap from 'gsap'
 import { ArrowDown } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import WebGLBackground from './WebGLBackground'
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null)
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Track mount state to ensure client-side only animations
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline()
+    // Skip on server-side or before mount
+    if (typeof window === 'undefined' || !isMounted) return
 
-      // Simplified and faster animations
-      tl.to('.reveal-anim', {
-        y: 0,
-        opacity: 1,
-        duration: 0.8, // Reduced from 1.4
-        stagger: 0.08, // Reduced from 0.1
-        ease: 'power3.out', // Changed from power4 to power3 for less computation
-        delay: 0.1, // Reduced from 0.2
-      }).to(
-        '.fade-in-anim',
-        {
+    let ctx: { revert: () => void } | undefined
+
+    const initAnimation = async () => {
+      const gsap = (await import('gsap')).default
+
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline()
+
+        // Simplified and faster animations
+        tl.to('.reveal-anim', {
+          y: 0,
           opacity: 1,
-          duration: 0.6, // Reduced from 1
+          duration: 0.8, // Reduced from 1.4
           stagger: 0.08, // Reduced from 0.1
-        },
-        '-=0.3' // Overlap more for faster overall animation
-      )
-    }, heroRef)
+          ease: 'power3.out', // Changed from power4 to power3 for less computation
+          delay: 0.1, // Reduced from 0.2
+        }).to(
+          '.fade-in-anim',
+          {
+            opacity: 1,
+            duration: 0.6, // Reduced from 1
+            stagger: 0.08, // Reduced from 0.1
+          },
+          '-=0.3' // Overlap more for faster overall animation
+        )
+      }, heroRef)
+    }
 
-    return () => ctx.revert()
-  }, [])
+    initAnimation()
+
+    return () => ctx?.revert()
+  }, [isMounted])
 
   return (
     <section

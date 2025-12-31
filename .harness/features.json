@@ -3,54 +3,63 @@
     {
       "id": "phase1-setup",
       "name": "Phase 1: 環境構築",
-      "status": "pending",
+      "status": "completed",
+      "completed_at": "2025-12-31T00:00:00Z",
       "tasks": [
-        { "id": "1-1", "name": "依存関係のインストール", "status": "pending" },
-        { "id": "1-2", "name": "app.config.ts の作成", "status": "pending" },
-        { "id": "1-3", "name": "tsconfig.json の調整", "status": "pending" },
-        { "id": "1-4", "name": "app/client.tsx の作成", "status": "pending" },
-        { "id": "1-5", "name": "app/ssr.tsx の作成", "status": "pending" },
-        { "id": "1-6", "name": "app/router.tsx の作成", "status": "pending" },
-        { "id": "1-7", "name": "app/routes/__root.tsx の作成", "status": "pending" }
-      ]
+        { "id": "1-1", "name": "依存関係のインストール", "status": "completed" },
+        { "id": "1-2", "name": "vite.config.ts の作成", "status": "completed" },
+        { "id": "1-3", "name": "tsconfig.json の調整", "status": "completed" },
+        { "id": "1-4", "name": "src/router.tsx の作成", "status": "completed" },
+        { "id": "1-5", "name": "src/routes/__root.tsx の作成", "status": "completed" },
+        { "id": "1-6", "name": "package.json スクリプト更新", "status": "completed" },
+        { "id": "1-7", "name": "ビルド動作確認", "status": "completed" }
+      ],
+      "notes": "TanStack Start 1.145.3 + Vite 7.3.0 でセットアップ完了"
     },
     {
       "id": "phase2-routing",
       "name": "Phase 2: ルーティングとページの移行",
-      "status": "pending",
+      "status": "completed",
+      "completed_at": "2025-12-31T00:00:00Z",
       "tasks": [
-        { "id": "2-1", "name": "index.tsx (ホームページ) の移行", "status": "pending" },
-        { "id": "2-2", "name": "about ページの移行", "status": "pending" },
-        { "id": "2-3", "name": "article/[slug] ページの移行", "status": "pending" },
-        { "id": "2-4", "name": "contact ページの移行", "status": "pending" },
-        { "id": "2-5", "name": "レイアウト (Header/Footer) の移行", "status": "pending" },
-        { "id": "2-6", "name": "Link コンポーネントの置き換え", "status": "pending" }
-      ]
+        { "id": "2-1", "name": "index.tsx (ホームページ) の移行", "status": "completed" },
+        { "id": "2-2", "name": "article 一覧ページの移行", "status": "completed" },
+        { "id": "2-3", "name": "article/[slug] 詳細ページの移行", "status": "completed" },
+        { "id": "2-4", "name": "contact ページの移行", "status": "completed" },
+        { "id": "2-5", "name": "privacy-policy ページの移行", "status": "completed" },
+        { "id": "2-6", "name": "レイアウト (Header/Footer) の移行", "status": "completed" },
+        { "id": "2-7", "name": "Link コンポーネントの置き換え", "status": "completed" }
+      ],
+      "notes": "next/link → @tanstack/react-router Link, next/image → img タグ"
     },
     {
       "id": "phase3-data",
       "name": "Phase 3: データフェッチとサーバー機能",
-      "status": "pending",
+      "status": "completed",
+      "completed_at": "2025-12-31T00:00:00Z",
       "tasks": [
-        { "id": "3-1", "name": "microCMS Loader の実装", "status": "pending" },
-        { "id": "3-2", "name": "Server Functions の導入", "status": "pending" },
-        { "id": "3-3", "name": "Meta/SEO の対応", "status": "pending" }
-      ]
+        { "id": "3-1", "name": "microCMS Loader の実装", "status": "completed" },
+        { "id": "3-2", "name": "Server Functions の導入", "status": "completed" },
+        { "id": "3-3", "name": "Meta/SEO の対応", "status": "completed" }
+      ],
+      "notes": "TanStack Router loader でデータフェッチ、head() でメタ設定"
     },
     {
       "id": "phase4-cleanup",
       "name": "Phase 4: クリーンアップ",
-      "status": "pending",
+      "status": "completed",
+      "completed_at": "2025-12-31T00:00:00Z",
       "tasks": [
-        { "id": "4-1", "name": "Next.js 依存関係の削除", "status": "pending" },
-        { "id": "4-2", "name": "next.config.ts の削除", "status": "pending" },
-        { "id": "4-3", "name": "src/app ディレクトリの削除", "status": "pending" },
-        { "id": "4-4", "name": "ビルド・起動の動作確認", "status": "pending" },
-        { "id": "4-5", "name": "型チェックの通過確認", "status": "pending" }
-      ]
+        { "id": "4-1", "name": "Next.js 依存関係の削除", "status": "completed" },
+        { "id": "4-2", "name": "next.config.ts の削除", "status": "completed" },
+        { "id": "4-3", "name": "src/app ディレクトリの削除", "status": "completed" },
+        { "id": "4-4", "name": "ビルド・起動の動作確認", "status": "completed" },
+        { "id": "4-5", "name": "型チェックの通過確認", "status": "completed" }
+      ],
+      "notes": "globals.css を src/ に移動、残存 Next.js インポートを修正、next-env.d.ts 削除"
     }
   ],
-  "completed": 0,
+  "completed": 22,
   "failed": 0,
-  "pending": 21
+  "pending": 0
 }

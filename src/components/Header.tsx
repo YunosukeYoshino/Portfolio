@@ -1,7 +1,7 @@
 'use client'
 
+import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function Header() {
@@ -28,7 +28,7 @@ export default function Header() {
   return (
     <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-8 flex justify-between items-start z-50 text-[#111]">
       <Link
-        href="/"
+        to="/"
         className="font-display font-bold text-lg tracking-tight hover-trigger z-50 leading-tight"
         data-cursor="hover"
       >
@@ -39,18 +39,18 @@ export default function Header() {
 
       <div className="hidden md:flex flex-col items-end gap-1 text-xs font-mono uppercase tracking-wide z-50">
         <div className="flex gap-8 mb-2">
-          <Link href="#about" className="hover:opacity-50 transition-opacity hover-trigger">
+          <a href="#about" className="hover:opacity-50 transition-opacity hover-trigger">
             About
-          </Link>
-          <Link href="#works" className="hover:opacity-50 transition-opacity hover-trigger">
+          </a>
+          <a href="#works" className="hover:opacity-50 transition-opacity hover-trigger">
             Works
-          </Link>
-          <Link href="#articles" className="hover:opacity-50 transition-opacity hover-trigger">
+          </a>
+          <a href="#articles" className="hover:opacity-50 transition-opacity hover-trigger">
             Articles
-          </Link>
-          <Link href="#contact" className="hover:opacity-50 transition-opacity hover-trigger">
+          </a>
+          <a href="#contact" className="hover:opacity-50 transition-opacity hover-trigger">
             Contact
-          </Link>
+          </a>
         </div>
         <span className="opacity-40">Tokyo, Japan</span>
         <span className="opacity-40">{currentTime}</span>
@@ -90,34 +90,19 @@ export default function Header() {
           </button>
 
           <nav className="mt-16 flex flex-col gap-6 text-lg font-mono uppercase">
-            <Link
-              href="#about"
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:opacity-50 transition-opacity"
-            >
-              About
-            </Link>
-            <Link
-              href="#works"
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:opacity-50 transition-opacity"
-            >
-              Works
-            </Link>
-            <Link
-              href="#articles"
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:opacity-50 transition-opacity"
-            >
-              Articles
-            </Link>
-            <Link
-              href="#contact"
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:opacity-50 transition-opacity"
-            >
-              Contact
-            </Link>
+            {(['about', 'works', 'articles', 'contact'] as const).map((section) => (
+              <button
+                key={section}
+                type="button"
+                onClick={() => {
+                  document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' })
+                  setIsMenuOpen(false)
+                }}
+                className="hover:opacity-50 transition-opacity text-left capitalize"
+              >
+                {section}
+              </button>
+            ))}
           </nav>
 
           <div className="mt-12 text-xs font-mono uppercase tracking-wide text-gray-400">

@@ -6,10 +6,10 @@ const INTERACTIVE_SELECTOR = 'a, button, [role="button"]'
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null)
-  const mousePosition = useRef({ x: 0, y: 0 })
-  const cursorPosition = useRef({ x: 0, y: 0 })
+  const mousePosition = useRef({ x: -100, y: -100 })
+  const cursorPosition = useRef({ x: -100, y: -100 })
   const [isHovering, setIsHovering] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const animationIdRef = useRef<number | undefined>(undefined)
 
   // Event delegation handlers - work with dynamically added elements
@@ -29,18 +29,18 @@ export default function CustomCursor() {
   }, [])
 
   useEffect(() => {
-    // Check if device is mobile/tablet
-    const checkMobile = () => {
-      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-      const isSmallScreen = window.innerWidth <= 768
-      setIsMobile(hasTouch || isSmallScreen)
+    // Check if device is mobile/tablet - if so, don't show cursor
+    // Note: macOS trackpads report maxTouchPoints > 0, so we need a more reliable check
+    const isTouchPrimary = window.matchMedia('(pointer: coarse)').matches
+    const isSmallScreen = window.innerWidth <= 768
+
+    // Only hide on actual touch-primary devices (phones/tablets)
+    if (isTouchPrimary && isSmallScreen) {
+      return
     }
 
-    // Initial check
-    checkMobile()
-
-    // Update on resize
-    window.addEventListener('resize', checkMobile)
+    // Show cursor on desktop (including laptops with trackpads)
+    setIsVisible(true)
 
     const updateMousePosition = (e: MouseEvent) => {
       mousePosition.current = { x: e.clientX, y: e.clientY }
@@ -55,6 +55,10 @@ export default function CustomCursor() {
 
     // Animation loop for smooth cursor movement
     const updateCursorPosition = () => {
+      // Always request next frame to keep loop running
+      animationIdRef.current = requestAnimationFrame(updateCursorPosition)
+
+      // Skip update if ref not yet available (component still mounting)
       if (!cursorRef.current) return
 
       // Smooth lerp
@@ -62,14 +66,11 @@ export default function CustomCursor() {
       cursorPosition.current.y += (mousePosition.current.y - cursorPosition.current.y) * 0.15
 
       cursorRef.current.style.transform = `translate(${cursorPosition.current.x}px, ${cursorPosition.current.y}px)`
-
-      animationIdRef.current = requestAnimationFrame(updateCursorPosition)
     }
 
     updateCursorPosition()
 
     return () => {
-      window.removeEventListener('resize', checkMobile)
       window.removeEventListener('mousemove', updateMousePosition)
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseout', handleMouseOut)
@@ -79,8 +80,8 @@ export default function CustomCursor() {
     }
   }, [handleMouseOver, handleMouseOut])
 
-  // Don't render cursor on mobile devices
-  if (isMobile) {
+  // Don't render cursor until we know we're on desktop
+  if (!isVisible) {
     return null
   }
 

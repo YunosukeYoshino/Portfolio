@@ -1,7 +1,4 @@
-'use client'
-
-import { useEffect, useRef } from 'react'
-import * as THREE from 'three'
+import { useEffect, useRef, useState } from 'react'
 
 const vertexShader = `
   varying vec2 vUv;
@@ -186,114 +183,137 @@ export default function WebGLBackground() {
   const containerRef = useRef<HTMLDivElement>(null)
   const targetScrollRef = useRef(0)
   const currentScrollRef = useRef(0)
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Track mount state to ensure client-side only rendering
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   useEffect(() => {
-    if (!containerRef.current) return
+    // Skip on server-side or before mount
+    if (typeof window === 'undefined' || !isMounted || !containerRef.current) return
 
-    const scene = new THREE.Scene()
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
-    const renderer = new THREE.WebGLRenderer({
-      alpha: false,
-      antialias: false,
-      powerPreference: 'high-performance',
-    })
+    // Dynamic import of Three.js to avoid SSR issues
+    let cleanup: (() => void) | undefined
 
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    renderer.setPixelRatio(1) // Fixed at 1 for better performance
-    containerRef.current.appendChild(renderer.domElement)
+    const initThree = async () => {
+      const THREE = await import('three')
 
-    // Calculate initial sphere size based on aspect ratio
-    const initialAspect = window.innerWidth / window.innerHeight
-    const initialSphereSize = initialAspect < 1.0 ? 1.8 * (0.5 + initialAspect * 0.3) : 1.8
+      if (!containerRef.current) return
 
-    const geometry = new THREE.PlaneGeometry(2, 2)
-    const material = new THREE.ShaderMaterial({
-      vertexShader,
-      fragmentShader,
-      uniforms: {
-        iTime: { value: 0 },
-        iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-        uScroll: { value: 0 },
-        uSphereSize: { value: initialSphereSize },
-      },
-      depthWrite: false,
-      depthTest: false,
-    })
+      const scene = new THREE.Scene()
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
+      const renderer = new THREE.WebGLRenderer({
+        alpha: false,
+        antialias: false,
+        powerPreference: 'high-performance',
+      })
 
-    const mesh = new THREE.Mesh(geometry, material)
-    scene.add(mesh)
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      renderer.setPixelRatio(1) // Fixed at 1 for better performance
+      containerRef.current.appendChild(renderer.domElement)
 
-    // Handle window resize
-    const handleResize = () => {
-      const width = window.innerWidth
-      const height = window.innerHeight
-      renderer.setSize(width, height)
-      material.uniforms.iResolution.value.set(width, height)
+      // Calculate initial sphere size based on aspect ratio
+      const initialAspect = window.innerWidth / window.innerHeight
+      const initialSphereSize = initialAspect < 1.0 ? 1.8 * (0.5 + initialAspect * 0.3) : 1.8
 
-      // Calculate sphere size based on aspect ratio
-      const aspect = width / height
-      material.uniforms.uSphereSize.value = aspect < 1.0 ? 1.8 * (0.5 + aspect * 0.3) : 1.8
-    }
+      const geometry = new THREE.PlaneGeometry(2, 2)
+      const material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms: {
+          iTime: { value: 0 },
+          iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uScroll: { value: 0 },
+          uSphereSize: { value: initialSphereSize },
+        },
+        depthWrite: false,
+        depthTest: false,
+      })
 
-    window.addEventListener('resize', handleResize)
+      const mesh = new THREE.Mesh(geometry, material)
+      scene.add(mesh)
 
-    // Scroll velocity tracking
-    let lastScrollY = window.scrollY
-    let lastScrollTime = Date.now()
+      // Handle window resize
+      const handleResize = () => {
+        const width = window.innerWidth
+        const height = window.innerHeight
+        renderer.setSize(width, height)
+        material.uniforms.iResolution.value.set(width, height)
 
-    const updateScrollVelocity = () => {
-      const currentScrollY = window.scrollY
-      const currentTime = Date.now()
-      const timeDiff = (currentTime - lastScrollTime) / 1000
-      const scrollDiff = currentScrollY - lastScrollY
-
-      if (timeDiff > 0) {
-        targetScrollRef.current = scrollDiff / timeDiff / 1000
+        // Calculate sphere size based on aspect ratio
+        const aspect = width / height
+        material.uniforms.uSphereSize.value = aspect < 1.0 ? 1.8 * (0.5 + aspect * 0.3) : 1.8
       }
 
-      lastScrollY = currentScrollY
-      lastScrollTime = currentTime
+      window.addEventListener('resize', handleResize)
+
+      // Scroll velocity tracking
+      let lastScrollY = window.scrollY
+      let lastScrollTime = Date.now()
+
+      const updateScrollVelocity = () => {
+        const currentScrollY = window.scrollY
+        const currentTime = Date.now()
+        const timeDiff = (currentTime - lastScrollTime) / 1000
+        const scrollDiff = currentScrollY - lastScrollY
+
+        if (timeDiff > 0) {
+          targetScrollRef.current = scrollDiff / timeDiff / 1000
+        }
+
+        lastScrollY = currentScrollY
+        lastScrollTime = currentTime
+      }
+
+      const scrollInterval = setInterval(updateScrollVelocity, 50)
+
+      // Animation loop with visibility check
+      const clock = new THREE.Clock()
+      let animationId: number
+
+      const animate = () => {
+        const elapsedTime = clock.getElapsedTime()
+
+        // Smooth interpolation for shader
+        currentScrollRef.current += (targetScrollRef.current - currentScrollRef.current) * 0.1
+
+        material.uniforms.iTime.value = elapsedTime
+        material.uniforms.uScroll.value = currentScrollRef.current
+
+        renderer.render(scene, camera)
+        animationId = requestAnimationFrame(animate)
+      }
+
+      animate()
+
+      // Store cleanup function
+      cleanup = () => {
+        window.removeEventListener('resize', handleResize)
+        clearInterval(scrollInterval)
+        cancelAnimationFrame(animationId)
+        renderer.dispose()
+        geometry.dispose()
+        material.dispose()
+        if (containerRef.current?.contains(renderer.domElement)) {
+          containerRef.current.removeChild(renderer.domElement)
+        }
+      }
     }
 
-    const scrollInterval = setInterval(updateScrollVelocity, 50)
-
-    // Animation loop with visibility check
-    const clock = new THREE.Clock()
-    let animationId: number
-
-    const animate = () => {
-      const elapsedTime = clock.getElapsedTime()
-
-      // Smooth interpolation for shader
-      currentScrollRef.current += (targetScrollRef.current - currentScrollRef.current) * 0.1
-
-      material.uniforms.iTime.value = elapsedTime
-      material.uniforms.uScroll.value = currentScrollRef.current
-
-      renderer.render(scene, camera)
-      animationId = requestAnimationFrame(animate)
-    }
-
-    animate()
+    initThree()
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize)
-      clearInterval(scrollInterval)
-      cancelAnimationFrame(animationId)
-      renderer.dispose()
-      geometry.dispose()
-      material.dispose()
-      if (containerRef.current?.contains(renderer.domElement)) {
-        containerRef.current.removeChild(renderer.domElement)
-      }
+      cleanup?.()
     }
-  }, [])
+  }, [isMounted])
 
   return (
     <div
       ref={containerRef}
-      className="absolute top-0 left-0 w-full h-screen z-[1] pointer-events-none"
+      className="z-0 pointer-events-none absolute left-0 top-0 h-screen w-full"
     />
   )
 }

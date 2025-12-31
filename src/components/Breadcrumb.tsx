@@ -1,5 +1,6 @@
-import type { Route } from 'next'
-import Link from 'next/link'
+'use client'
+
+import { Link } from '@tanstack/react-router'
 
 interface BreadcrumbItem {
   name: string
@@ -35,10 +36,7 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
               {item.name}
             </span>
           ) : (
-            <Link
-              href={item.url as Route}
-              className="transition-colors duration-200 hover:text-gray-900"
-            >
+            <Link to={item.url} className="transition-colors duration-200 hover:text-gray-900">
               {item.name}
             </Link>
           )}

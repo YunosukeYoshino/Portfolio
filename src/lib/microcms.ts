@@ -1,39 +1,39 @@
+import { createServerFn } from '@tanstack/react-start'
 import type { Blog, BlogResponse } from '@/types'
 
-// Check if we're in development with placeholder credentials
-const isDevelopment = process.env.NODE_ENV === 'development'
-const hasPlaceholderCredentials =
-  process.env.MICROCMS_SERVICE_DOMAIN === 'placeholder-domain' ||
-  process.env.MICROCMS_API_KEY === 'placeholder-api-key'
+// Lazy configuration getter for server-side environment variables
+const getApiConfig = () => {
+  const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
+  const apiKey = process.env.MICROCMS_API_KEY
 
-if (!process.env.MICROCMS_SERVICE_DOMAIN) {
-  throw new Error('MICROCMS_SERVICE_DOMAIN is required')
+  const isDevelopment = import.meta.env.DEV
+  const hasPlaceholderCredentials =
+    serviceDomain === 'placeholder-domain' || apiKey === 'placeholder-api-key'
+
+  if (!serviceDomain && !isDevelopment) {
+    throw new Error('MICROCMS_SERVICE_DOMAIN is required')
+  }
+
+  if (!apiKey && !isDevelopment) {
+    throw new Error('MICROCMS_API_KEY is required')
+  }
+
+  return {
+    serviceDomain: serviceDomain || 'placeholder-domain',
+    apiKey: apiKey || 'placeholder-api-key',
+    baseUrl: serviceDomain ? `https://${serviceDomain}/api/v1` : '',
+    isDevelopment,
+    hasPlaceholderCredentials: !serviceDomain || !apiKey || hasPlaceholderCredentials,
+  }
 }
-
-if (!process.env.MICROCMS_API_KEY) {
-  throw new Error('MICROCMS_API_KEY is required')
-}
-
-// Direct API configuration
-const API_CONFIG = {
-  serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN,
-  apiKey: process.env.MICROCMS_API_KEY,
-  baseUrl: `https://${process.env.MICROCMS_SERVICE_DOMAIN}/api/v1`,
-}
-
-// biome-ignore lint/suspicious/noConsole: Development logging for microCMS configuration
-console.log('microCMS config:', {
-  serviceDomain: API_CONFIG.serviceDomain,
-  apiKeyLength: API_CONFIG.apiKey?.length || 0,
-  baseUrl: API_CONFIG.baseUrl,
-})
 
 // Helper function to make API requests
 const apiRequest = async <T>(
   endpoint: string,
   params?: Record<string, string | number>
 ): Promise<T> => {
-  const url = new URL(`${API_CONFIG.baseUrl}/${endpoint}`)
+  const config = getApiConfig()
+  const url = new URL(`${config.baseUrl}/${endpoint}`)
 
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
@@ -45,7 +45,7 @@ const apiRequest = async <T>(
 
   const response = await fetch(url.toString(), {
     headers: {
-      'X-MICROCMS-API-KEY': API_CONFIG.apiKey,
+      'X-MICROCMS-API-KEY': config.apiKey,
     },
   })
 
@@ -58,46 +58,42 @@ const apiRequest = async <T>(
 
 // Helper function to check if we should use mock data
 const shouldUseMockData = (): boolean => {
-  return isDevelopment && hasPlaceholderCredentials
+  const config = getApiConfig()
+  return config.isDevelopment && config.hasPlaceholderCredentials
 }
 
-// API functions with proper error handling and development fallbacks
-export const getBlogs = async (
-  queries?: Record<string, string | number>
-): Promise<BlogResponse> => {
-  // Return mock data immediately if using placeholder credentials
-  if (shouldUseMockData()) {
-    // biome-ignore lint/suspicious/noConsole: Development warning for mock data usage
-    console.warn('Using mock blog data for development (placeholder credentials detected)')
-    return {
-      contents: [],
-      totalCount: 0,
-      offset: Number(queries?.offset) || 0,
-      limit: Number(queries?.limit) || 10,
-    }
-  }
+// Mock data for development
+const createMockBlog = (contentId: string): Blog => ({
+  id: contentId,
+  title: 'Development Blog Post',
+  content:
+    '<p>This is a mock blog post for development purposes. Configure your microCMS credentials in .env.local to see real content.</p>',
+  eyecatch: {
+    url: '/assets/images/noise.png',
+    width: 1200,
+    height: 630,
+    alt: 'Mock blog image',
+  },
+  category: {
+    id: 'development',
+    name: 'Development',
+  },
+  publishedAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  createdAt: new Date().toISOString(),
+  revisedAt: new Date().toISOString(),
+})
 
-  try {
-    // biome-ignore lint/suspicious/noConsole: Development logging for API requests
-    console.log('Attempting to fetch blogs with queries:', queries)
-    const response = await apiRequest<BlogResponse>('blogs', queries)
-    // biome-ignore lint/suspicious/noConsole: Development logging for successful API responses
-    console.log('Blog fetch successful:', response.totalCount, 'items')
-    return response
-  } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: Development error logging for debugging
-    console.error('Error fetching blogs:', error)
-    // biome-ignore lint/suspicious/noConsole: Development error details for debugging
-    console.error('Error details:', {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      name: error instanceof Error ? error.name : 'Error',
-      stack: error instanceof Error ? error.stack : undefined,
-    })
+// Server function for fetching blogs list
+export const getBlogs = createServerFn({ method: 'GET' })
+  .inputValidator((data: { queries?: Record<string, string | number> }) => data)
+  .handler(async ({ data }): Promise<BlogResponse> => {
+    const { queries } = data
 
-    // Return mock data in development mode when API fails
-    if (isDevelopment) {
-      // biome-ignore lint/suspicious/noConsole: Development warning for fallback mock data
-      console.warn('Returning mock blog data for development (API error)')
+    // Return mock data immediately if using placeholder credentials
+    if (shouldUseMockData()) {
+      // biome-ignore lint/suspicious/noConsole: Development warning for mock data usage
+      console.warn('Using mock blog data for development (placeholder credentials detected)')
       return {
         contents: [],
         totalCount: 0,
@@ -106,76 +102,63 @@ export const getBlogs = async (
       }
     }
 
-    throw new Error('Failed to fetch blogs')
-  }
-}
+    try {
+      // biome-ignore lint/suspicious/noConsole: Development logging for API requests
+      console.log('Attempting to fetch blogs with queries:', queries)
+      const response = await apiRequest<BlogResponse>('blogs', queries)
+      // biome-ignore lint/suspicious/noConsole: Development logging for successful API responses
+      console.log('Blog fetch successful:', response.totalCount, 'items')
+      return response
+    } catch (error) {
+      // biome-ignore lint/suspicious/noConsole: Development error logging for debugging
+      console.error('Error fetching blogs:', error)
 
-export const getBlogDetail = async (
-  contentId: string,
-  queries?: Record<string, string | number>
-): Promise<Blog> => {
-  // Return mock data immediately if using placeholder credentials
-  if (shouldUseMockData()) {
-    // biome-ignore lint/suspicious/noConsole: Development warning for mock blog data
-    console.warn(`Using mock blog data for development: ${contentId}`)
-    return {
-      id: contentId,
-      title: 'Development Blog Post',
-      content:
-        '<p>This is a mock blog post for development purposes. Configure your microCMS credentials in .env.local to see real content.</p>',
-      eyecatch: {
-        url: '/assets/images/noise.png',
-        width: 1200,
-        height: 630,
-        alt: 'Mock blog image',
-      },
-      category: {
-        id: 'development',
-        name: 'Development',
-      },
-      publishedAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      revisedAt: new Date().toISOString(),
-    }
-  }
-
-  try {
-    const response = await apiRequest<Blog>(`blogs/${contentId}`, queries)
-    return response
-  } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: Development error logging for blog detail fetch
-    console.error('Error fetching blog detail:', error)
-
-    // Return mock blog data in development mode when API fails
-    if (isDevelopment) {
-      // biome-ignore lint/suspicious/noConsole: Development warning for fallback mock blog data
-      console.warn(`Returning mock blog data for development: ${contentId}`)
-      return {
-        id: contentId,
-        title: 'Development Blog Post',
-        content:
-          '<p>This is a mock blog post for development purposes. Configure your microCMS credentials in .env.local to see real content.</p>',
-        eyecatch: {
-          url: '/assets/images/noise.png',
-          width: 1200,
-          height: 630,
-          alt: 'Mock blog image',
-        },
-        category: {
-          id: 'development',
-          name: 'Development',
-        },
-        publishedAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-        revisedAt: new Date().toISOString(),
+      // Return mock data in development mode when API fails
+      if (import.meta.env.DEV) {
+        // biome-ignore lint/suspicious/noConsole: Development warning for fallback mock data
+        console.warn('Returning mock blog data for development (API error)')
+        return {
+          contents: [],
+          totalCount: 0,
+          offset: Number(queries?.offset) || 0,
+          limit: Number(queries?.limit) || 10,
+        }
       }
+
+      throw new Error('Failed to fetch blogs')
+    }
+  })
+
+// Server function for fetching blog detail
+export const getBlogDetail = createServerFn({ method: 'GET' })
+  .inputValidator((data: { contentId: string; queries?: Record<string, string | number> }) => data)
+  .handler(async ({ data }): Promise<Blog> => {
+    const { contentId, queries } = data
+
+    // Return mock data immediately if using placeholder credentials
+    if (shouldUseMockData()) {
+      // biome-ignore lint/suspicious/noConsole: Development warning for mock blog data
+      console.warn(`Using mock blog data for development: ${contentId}`)
+      return createMockBlog(contentId)
     }
 
-    throw new Error(`Failed to fetch blog: ${contentId}`)
-  }
-}
+    try {
+      const response = await apiRequest<Blog>(`blogs/${contentId}`, queries)
+      return response
+    } catch (error) {
+      // biome-ignore lint/suspicious/noConsole: Development error logging for blog detail fetch
+      console.error('Error fetching blog detail:', error)
+
+      // Return mock blog data in development mode when API fails
+      if (getApiConfig().isDevelopment) {
+        // biome-ignore lint/suspicious/noConsole: Development warning for fallback mock blog data
+        console.warn(`Returning mock blog data for development: ${contentId}`)
+        return createMockBlog(contentId)
+      }
+
+      throw new Error(`Failed to fetch blog: ${contentId}`)
+    }
+  })
 
 // Helper function for pagination
 export const getPaginatedBlogs = async (
@@ -184,38 +167,48 @@ export const getPaginatedBlogs = async (
 ): Promise<BlogResponse> => {
   const offset = (page - 1) * limit
   return getBlogs({
-    offset,
-    limit,
-    orders: '-publishedAt',
+    data: {
+      queries: {
+        offset,
+        limit,
+        orders: '-publishedAt',
+      },
+    },
   })
 }
 
-// Helper function to get all blog IDs for static generation
-export const getAllBlogIds = async (): Promise<string[]> => {
-  // Return mock data immediately if using placeholder credentials
-  if (shouldUseMockData()) {
-    // biome-ignore lint/suspicious/noConsole: Development warning for mock blog IDs
-    console.warn('Using mock blog IDs for development (placeholder credentials detected)')
-    return ['sample-blog-1', 'sample-blog-2', 'sample-blog-3']
-  }
-
-  try {
-    const response = await getBlogs({
-      fields: 'id',
-      limit: 1000, // Adjust based on your needs
-    })
-    return response.contents.map((blog) => blog.id)
-  } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: Development error logging for blog IDs fetch
-    console.error('Error fetching blog IDs:', error)
-
-    // Return mock blog IDs in development mode
-    if (isDevelopment) {
-      // biome-ignore lint/suspicious/noConsole: Development warning for fallback mock blog IDs
-      console.warn('Returning mock blog IDs for development (API error)')
+// Server function to get all blog IDs for static generation
+export const getAllBlogIds = createServerFn({ method: 'GET' }).handler(
+  async (): Promise<string[]> => {
+    // Return mock data immediately if using placeholder credentials
+    if (shouldUseMockData()) {
+      // biome-ignore lint/suspicious/noConsole: Development warning for mock blog IDs
+      console.warn('Using mock blog IDs for development (placeholder credentials detected)')
       return ['sample-blog-1', 'sample-blog-2', 'sample-blog-3']
     }
 
-    return []
+    try {
+      const response = await getBlogs({
+        data: {
+          queries: {
+            fields: 'id',
+            limit: 1000,
+          },
+        },
+      })
+      return response.contents.map((blog: Blog) => blog.id)
+    } catch (error) {
+      // biome-ignore lint/suspicious/noConsole: Development error logging for blog IDs fetch
+      console.error('Error fetching blog IDs:', error)
+
+      // Return mock blog IDs in development mode
+      if (import.meta.env.DEV) {
+        // biome-ignore lint/suspicious/noConsole: Development warning for fallback mock blog IDs
+        console.warn('Returning mock blog IDs for development (API error)')
+        return ['sample-blog-1', 'sample-blog-2', 'sample-blog-3']
+      }
+
+      return []
+    }
   }
-}
+)

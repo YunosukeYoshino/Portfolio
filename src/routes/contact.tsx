@@ -1,14 +1,22 @@
-import type { Metadata } from 'next'
+import { createFileRoute } from '@tanstack/react-router'
 import ContactForm from '@/components/ContactForm'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 
-export const metadata: Metadata = {
-  title: 'Contact | Yunosuke Yoshino',
-  description: 'Get in touch with Yunosuke Yoshino for collaborations, projects, or inquiries.',
-}
+export const Route = createFileRoute('/contact')({
+  head: () => ({
+    meta: [
+      { title: 'Contact | Yunosuke Yoshino' },
+      {
+        name: 'description',
+        content: 'Get in touch with Yunosuke Yoshino for collaborations, projects, or inquiries.',
+      },
+    ],
+  }),
+  component: ContactPage,
+})
 
-export default function ContactPage() {
+function ContactPage() {
   return (
     <>
       <Header />
