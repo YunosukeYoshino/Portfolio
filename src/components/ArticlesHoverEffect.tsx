@@ -1,15 +1,37 @@
 'use client'
 
-import gsap from 'gsap'
 import { useCallback, useEffect, useRef, useState } from 'react'
+
+type GSAPType = typeof import('gsap').default
 
 export default function ArticlesHoverEffect() {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [gsapLoaded, setGsapLoaded] = useState(false)
   const hoverRevealRef = useRef<HTMLDivElement>(null)
   const mousePosition = useRef({ x: 0, y: 0 })
   const revealPosition = useRef({ x: 0, y: 0 })
   const animationIdRef = useRef<number | undefined>(undefined)
+  const gsapRef = useRef<GSAPType | null>(null)
+
+  // Load GSAP dynamically
+  useEffect(() => {
+    let mounted = true
+
+    const loadGsap = async () => {
+      const gsapModule = await import('gsap')
+      if (mounted) {
+        gsapRef.current = gsapModule.default
+        setGsapLoaded(true)
+      }
+    }
+
+    loadGsap()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   // Mouse move tracking
   useEffect(() => {
@@ -24,9 +46,11 @@ export default function ArticlesHoverEffect() {
     }
   }, [])
 
-  // Animation loop (only runs when isAnimating is true)
+  // Animation loop (only runs when isAnimating is true and GSAP is loaded)
   useEffect(() => {
-    if (!isAnimating) return
+    if (!isAnimating || !gsapLoaded || !gsapRef.current) return
+
+    const gsap = gsapRef.current
 
     const updateHoverReveal = () => {
       if (!hoverRevealRef.current || !isAnimating) return
@@ -52,13 +76,13 @@ export default function ArticlesHoverEffect() {
         cancelAnimationFrame(animationIdRef.current)
       }
     }
-  }, [isAnimating])
+  }, [isAnimating, gsapLoaded])
 
   const handleMouseEnter = useCallback((image: string) => {
     setHoveredImage(image)
     setIsAnimating(true)
-    if (hoverRevealRef.current) {
-      gsap.to(hoverRevealRef.current, {
+    if (hoverRevealRef.current && gsapRef.current) {
+      gsapRef.current.to(hoverRevealRef.current, {
         opacity: 1,
         scale: 1,
         duration: 0.4,
@@ -69,8 +93,8 @@ export default function ArticlesHoverEffect() {
 
   const handleMouseLeave = useCallback(() => {
     setIsAnimating(false)
-    if (hoverRevealRef.current) {
-      gsap.to(hoverRevealRef.current, {
+    if (hoverRevealRef.current && gsapRef.current) {
+      gsapRef.current.to(hoverRevealRef.current, {
         opacity: 0,
         scale: 0.8,
         duration: 0.3,
@@ -126,6 +150,11 @@ export default function ArticlesHoverEffect() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [handleMouseEnter, handleMouseLeave])
+
+  // Don't render until GSAP is loaded
+  if (!gsapLoaded) {
+    return null
+  }
 
   return (
     <div
