@@ -53,43 +53,25 @@ export default function HeroSection() {
   return (
     <section
       ref={heroRef}
-      className="relative h-screen w-full flex flex-col justify-center overflow-hidden"
+      className="relative flex h-screen w-full flex-col justify-center overflow-hidden"
     >
       <WebGLBackground />
 
-      <div className="hero-text-layer w-full px-6 md:px-12 pt-20 relative">
-        <div className="flex justify-between items-end mb-4 md:mb-8 border-b border-black/10 pb-4 max-w-[200px] md:max-w-xs">
-          <span className="font-mono text-xs text-gray-400">PORTFOLIO 2025</span>
+      <div className="hero-text-layer relative w-full px-6 pt-20 md:px-12">
+        <div className="mb-4 flex max-w-[200px] items-end justify-between border-b border-black/10 pb-4 md:mb-8 md:max-w-xs">
+          <span className="font-mono text-xs text-gray-400">PORTFOLIO 2026</span>
           <span className="font-mono text-xs text-gray-400">V.2.0</span>
         </div>
 
-        <div className="relative">
-          <div className="overflow-hidden">
-            <h1 className="text-[15vw] md:text-[13vw] leading-[0.8] font-display font-semibold tracking-tighter reveal-anim opacity-0 text-[#111]">
-              Frontend
-            </h1>
-          </div>
-          <div className="overflow-hidden pl-[5vw] md:pl-[10vw]">
-            <h1 className="text-[15vw] md:text-[13vw] leading-[0.8] font-display font-semibold tracking-tighter reveal-anim opacity-0 text-[#111] italic">
-              Developer
-            </h1>
-          </div>
-          <div className="overflow-hidden text-right pr-4">
-            <h1 className="text-[6vw] leading-[1.1] font-display font-normal tracking-tight reveal-anim opacity-0 text-gray-400 mt-4">
-              & Visual Designer
-            </h1>
-          </div>
-        </div>
-
-        <div className="absolute bottom-[-15vh] md:bottom-[-20vh] left-6 md:left-12 right-6 md:right-12 flex justify-between items-end mix-blend-multiply">
+        <div className="absolute bottom-[-15vh] left-6 right-6 flex items-end justify-between mix-blend-multiply md:bottom-[-20vh] md:left-12 md:right-12">
           <div className="max-w-sm">
-            <p className="font-mono text-xs md:text-sm leading-relaxed text-gray-600 fade-in-anim opacity-0">
+            <p className="fade-in-anim font-mono text-xs leading-relaxed text-gray-600 opacity-0 md:text-sm">
               Crafting immersive digital experiences with a focus on motion, interactivity, and
               minimal aesthetics.
             </p>
           </div>
-          <div className="fade-in-anim opacity-0 animate-pulse">
-            <ArrowDown className="w-5 h-5 text-black/50" />
+          <div className="fade-in-anim animate-pulse opacity-0">
+            <ArrowDown className="h-5 w-5 text-black/50" />
           </div>
         </div>
       </div>
