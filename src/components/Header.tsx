@@ -5,7 +5,9 @@ import { Menu } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function Header() {
-  const [currentTime, setCurrentTime] = useState('')
+  // Start with null to indicate "not yet mounted"
+  // This ensures server and client both render nothing initially
+  const [currentTime, setCurrentTime] = useState<string | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -30,6 +32,7 @@ export default function Header() {
       <Link
         to="/"
         className="font-display hover-trigger z-50 text-lg font-bold leading-tight tracking-tight"
+        reloadDocument
         data-cursor="hover"
       >
         YUNOSUKE
@@ -53,9 +56,11 @@ export default function Header() {
           </a>
         </div>
         <span className="opacity-40">Tokyo, Japan</span>
-        <span className="opacity-40" suppressHydrationWarning>
-          {currentTime}
-        </span>
+        {currentTime && (
+          <span className="opacity-40" suppressHydrationWarning>
+            {currentTime}
+          </span>
+        )}
       </div>
 
       <button
@@ -109,7 +114,7 @@ export default function Header() {
 
           <div className="mt-12 font-mono text-xs uppercase tracking-wide text-gray-400">
             <div>Tokyo, Japan</div>
-            <div suppressHydrationWarning>{currentTime}</div>
+            {currentTime && <div suppressHydrationWarning>{currentTime}</div>}
           </div>
         </div>
       </div>
