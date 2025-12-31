@@ -2,7 +2,7 @@
   <img src="public/assets/icons/icon-192x192.png" alt="Portfolio Logo" width="120" />
   <h1>Yunosuke Yoshino Portfolio</h1>
   <p>
-    A modern portfolio site built with Next.js 16, React 19, and Tailwind CSS v4
+    A modern portfolio site built with TanStack Start, React 19, and Tailwind CSS v4
   </p>
   <p>
     <a href="https://yunosukeyoshino.com">Live Site</a> •
@@ -26,8 +26,9 @@ A personal portfolio and blog site for showcasing projects and sharing technical
 
 | Category | Technology |
 |----------|------------|
-| Framework | [Next.js 16](https://nextjs.org/) (App Router) |
+| Framework | [TanStack Start](https://tanstack.com/start) |
 | UI | [React 19](https://react.dev/), [Tailwind CSS v4](https://tailwindcss.com/) |
+| Data Fetching | [TanStack Query](https://tanstack.com/query) |
 | CMS | [microCMS](https://microcms.io/) |
 | Animation | [Lenis](https://github.com/studio-freight/lenis), [Three.js](https://threejs.org/), [GSAP](https://greensock.com/gsap/) |
 | Forms | [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/), [Resend](https://resend.com/) |
@@ -106,7 +107,7 @@ Specs are stored in `.kiro/specs/` with the following structure:
 
 ```
 src/
-├── app/           # App Router pages and layouts
+├── routes/        # TanStack Router pages and layouts
 ├── components/    # React components
 ├── lib/           # Utilities and API clients
 └── types/         # TypeScript type definitions

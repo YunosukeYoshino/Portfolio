@@ -1,7 +1,7 @@
 'use client'
 
+import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function Header() {
@@ -26,10 +26,10 @@ export default function Header() {
   }, [])
 
   return (
-    <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-8 flex justify-between items-start z-50 text-[#111]">
+    <nav className="fixed left-0 top-0 z-50 flex w-full items-start justify-between px-6 py-6 text-[#111] md:px-12 md:py-8">
       <Link
-        href="/"
-        className="font-display font-bold text-lg tracking-tight hover-trigger z-50 leading-tight"
+        to="/"
+        className="font-display hover-trigger z-50 text-lg font-bold leading-tight tracking-tight"
         data-cursor="hover"
       >
         YUNOSUKE
@@ -37,20 +37,20 @@ export default function Header() {
         YOSHINO
       </Link>
 
-      <div className="hidden md:flex flex-col items-end gap-1 text-xs font-mono uppercase tracking-wide z-50">
-        <div className="flex gap-8 mb-2">
-          <Link href="#about" className="hover:opacity-50 transition-opacity hover-trigger">
+      <div className="z-50 hidden flex-col items-end gap-1 font-mono text-xs uppercase tracking-wide md:flex">
+        <div className="mb-2 flex gap-8">
+          <a href="/#about" className="hover-trigger transition-opacity hover:opacity-50">
             About
-          </Link>
-          <Link href="#works" className="hover:opacity-50 transition-opacity hover-trigger">
+          </a>
+          <a href="/#works" className="hover-trigger transition-opacity hover:opacity-50">
             Works
-          </Link>
-          <Link href="#articles" className="hover:opacity-50 transition-opacity hover-trigger">
+          </a>
+          <a href="/#articles" className="hover-trigger transition-opacity hover:opacity-50">
             Articles
-          </Link>
-          <Link href="#contact" className="hover:opacity-50 transition-opacity hover-trigger">
+          </a>
+          <a href="/#contact" className="hover-trigger transition-opacity hover:opacity-50">
             Contact
-          </Link>
+          </a>
         </div>
         <span className="opacity-40">Tokyo, Japan</span>
         <span className="opacity-40">{currentTime}</span>
@@ -58,17 +58,17 @@ export default function Header() {
 
       <button
         type="button"
-        className="md:hidden hover-trigger z-50"
+        className="hover-trigger z-50 md:hidden"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         aria-label="Toggle menu"
       >
-        <Menu className="w-6 h-6" />
+        <Menu className="h-6 w-6" />
       </button>
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
           onClick={() => setIsMenuOpen(false)}
         />
       )}
@@ -83,44 +83,29 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setIsMenuOpen(false)}
-            className="absolute top-6 right-6 text-2xl"
+            className="absolute right-6 top-6 text-2xl"
             aria-label="Close menu"
           >
             ×
           </button>
 
-          <nav className="mt-16 flex flex-col gap-6 text-lg font-mono uppercase">
-            <Link
-              href="#about"
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:opacity-50 transition-opacity"
-            >
-              About
-            </Link>
-            <Link
-              href="#works"
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:opacity-50 transition-opacity"
-            >
-              Works
-            </Link>
-            <Link
-              href="#articles"
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:opacity-50 transition-opacity"
-            >
-              Articles
-            </Link>
-            <Link
-              href="#contact"
-              onClick={() => setIsMenuOpen(false)}
-              className="hover:opacity-50 transition-opacity"
-            >
-              Contact
-            </Link>
+          <nav className="mt-16 flex flex-col gap-6 font-mono text-lg uppercase">
+            {(['about', 'works', 'articles', 'contact'] as const).map((section) => (
+              <button
+                key={section}
+                type="button"
+                onClick={() => {
+                  document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' })
+                  setIsMenuOpen(false)
+                }}
+                className="text-left capitalize transition-opacity hover:opacity-50"
+              >
+                {section}
+              </button>
+            ))}
           </nav>
 
-          <div className="mt-12 text-xs font-mono uppercase tracking-wide text-gray-400">
+          <div className="mt-12 font-mono text-xs uppercase tracking-wide text-gray-400">
             <div>Tokyo, Japan</div>
             <div>{currentTime}</div>
           </div>

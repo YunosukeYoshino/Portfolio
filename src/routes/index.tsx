@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import AboutSection from '@/components/AboutSection'
 import ArticlesSection from '@/components/ArticlesSection'
 import Footer from '@/components/Footer'
@@ -11,8 +12,35 @@ import JsonLd, {
 import NoiseOverlay from '@/components/NoiseOverlay'
 import SkillsMarquee from '@/components/SkillsMarquee'
 import WorksSection from '@/components/WorksSection'
+import { getBlogs } from '@/lib/microcms'
 
-export default function HomePage() {
+export const Route = createFileRoute('/')({
+  loader: async () => {
+    const { contents: articles } = await getBlogs({
+      data: {
+        queries: {
+          limit: 3,
+          orders: '-publishedAt',
+        },
+      },
+    })
+    return { articles }
+  },
+  head: () => ({
+    meta: [
+      { title: 'Yunosuke Yoshino｜Portfolio' },
+      {
+        property: 'og:title',
+        content: 'Yunosuke Yoshino｜Portfolio',
+      },
+    ],
+  }),
+  component: HomePage,
+})
+
+function HomePage() {
+  const { articles } = Route.useLoaderData()
+
   const personSchema = createPersonSchema()
   const websiteSchema = createWebsiteSchema()
   const breadcrumbSchema = createBreadcrumbSchema([
@@ -31,7 +59,7 @@ export default function HomePage() {
         <SkillsMarquee />
         <AboutSection />
         <WorksSection />
-        <ArticlesSection />
+        <ArticlesSection articles={articles} />
       </main>
       <Footer />
     </>
