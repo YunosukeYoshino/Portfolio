@@ -15,6 +15,7 @@ export default function ArticleItem({ id, title, date, category, image }: Articl
     <Link
       to="/article/$slug"
       params={{ slug: id }}
+      reloadDocument
       className="article-link group block bg-[#111] hover:bg-[#161616] transition-colors py-8 px-4 hover-trigger"
       data-image={image}
     >

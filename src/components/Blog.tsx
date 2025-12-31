@@ -53,7 +53,7 @@ export default function Blog({
               key={blog.id}
               className="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-lg"
             >
-              <Link to="/article/$slug" params={{ slug: blog.id }} className="block">
+              <Link to="/article/$slug" params={{ slug: blog.id }} reloadDocument className="block">
                 <div className="relative aspect-video overflow-hidden">
                   <img
                     src={`${blog.eyecatch.url}?w=800&fm=webp`}
@@ -85,6 +85,7 @@ export default function Blog({
           <div className="mt-20 flex justify-center">
             <Link
               to="/article"
+              reloadDocument
               className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
             >
               <span className="uppercase tracking-wide">VIEW ALL ARTICLES</span>

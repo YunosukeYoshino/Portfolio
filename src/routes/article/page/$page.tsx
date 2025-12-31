@@ -85,6 +85,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
         <Link
           to="/article/page/$page"
           params={{ page: String(currentPage - 1) }}
+          reloadDocument
           className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300"
           aria-label="前のページ"
         >
@@ -105,6 +106,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
           <Link
             to="/article/page/$page"
             params={{ page: '1' }}
+            reloadDocument
             className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 font-medium"
           >
             1
@@ -119,6 +121,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
           key={page}
           to="/article/page/$page"
           params={{ page: String(page) }}
+          reloadDocument
           className={`px-4 py-2 border font-medium transition-all duration-300 ${
             page === currentPage
               ? 'bg-black text-white border-black'
@@ -137,6 +140,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
           <Link
             to="/article/page/$page"
             params={{ page: String(totalPages) }}
+            reloadDocument
             className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 font-medium"
           >
             {totalPages}
@@ -149,6 +153,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
         <Link
           to="/article/page/$page"
           params={{ page: String(currentPage + 1) }}
+          reloadDocument
           className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300"
           aria-label="次のページ"
         >
