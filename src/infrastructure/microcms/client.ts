@@ -56,7 +56,8 @@ export class MicroCMSClient {
    */
   shouldUseMock(): boolean {
     const config = this.getConfig()
-    return config.isDevelopment && config.hasPlaceholderCredentials
+    const isBuildWithPlaceholders = import.meta.env.PROD && config.hasPlaceholderCredentials
+    return (config.isDevelopment && config.hasPlaceholderCredentials) || isBuildWithPlaceholders
   }
 
   /**
