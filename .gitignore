@@ -51,3 +51,4 @@ settings.local.json
 .kiro
 
 .harness
+dev_server.log

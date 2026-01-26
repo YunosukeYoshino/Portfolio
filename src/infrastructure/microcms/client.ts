@@ -28,7 +28,7 @@ export class MicroCMSClient {
 
     const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
     const apiKey = process.env.MICROCMS_API_KEY
-    const isDevelopment = import.meta.env.DEV
+    const isDevelopment = import.meta.env.DEV || process.env.NODE_ENV === 'development'
     const hasPlaceholderCredentials =
       serviceDomain === 'placeholder-domain' || apiKey === 'placeholder-api-key'
 
@@ -56,7 +56,7 @@ export class MicroCMSClient {
    */
   shouldUseMock(): boolean {
     const config = this.getConfig()
-    return config.isDevelopment && config.hasPlaceholderCredentials
+    return config.hasPlaceholderCredentials
   }
 
   /**
