@@ -2,13 +2,15 @@
 
 import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Header() {
   // Start with null to indicate "not yet mounted"
   // This ensures server and client both render nothing initially
   const [currentTime, setCurrentTime] = useState<string | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const lastScrollY = useRef(0)
 
   useEffect(() => {
     const updateTime = () => {
@@ -27,8 +29,25 @@ export default function Header() {
     return () => clearInterval(interval)
   }, [])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      if (currentScrollY < lastScrollY.current || currentScrollY < 50) {
+        setIsVisible(true)
+      } else {
+        setIsVisible(false)
+      }
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <nav className="fixed left-0 top-0 z-50 flex w-full items-start justify-between px-6 py-6 text-[#111] md:px-12 md:py-8">
+    <nav
+      className={`fixed left-0 top-0 z-50 flex w-full items-start justify-between px-6 py-6 text-[#111] md:px-12 md:py-8 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
+    >
       <Link
         to="/"
         className="font-display hover-trigger z-50 text-lg font-bold leading-tight tracking-tight"
