@@ -183,7 +183,7 @@ function BlogListPage() {
     { name: 'ホーム', url: '/' },
     {
       name: currentPage === 1 ? '記事一覧' : `記事一覧 - ${currentPage}ページ目`,
-      url: currentPage === 1 ? '/article' : `/article/page/${currentPage}`,
+      url: `/article/page/${currentPage}`,
     },
   ]
 

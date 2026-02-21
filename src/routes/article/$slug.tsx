@@ -42,7 +42,7 @@ function BlogDetailPage() {
 
   const breadcrumbItems = [
     { name: 'ホーム', url: '/' },
-    { name: '記事一覧', url: '/article/' },
+    { name: '記事一覧', url: '/article/page/1' },
     { name: blog.title, url: `/article/${blog.id}` },
   ]
 
@@ -105,8 +105,7 @@ function BlogDetailPage() {
             <footer className="mt-20 border-t border-gray-200 pt-8">
               <div className="flex justify-center">
                 <Link
-                  to="/article"
-                  reloadDocument
+                  to="/article/"
                   className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
                 >
                   <svg
