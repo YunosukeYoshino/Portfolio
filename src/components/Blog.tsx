@@ -86,7 +86,9 @@ export default function Blog({
         {showViewAllButton && (
           <div className="mt-20 flex justify-center">
             <Link
-              to="/article/"
+              to="/article/page/$page"
+              params={{ page: '1' }}
+              reloadDocument
               className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
             >
               <span className="uppercase tracking-wide">VIEW ALL ARTICLES</span>
