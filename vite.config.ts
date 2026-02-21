@@ -25,7 +25,15 @@ export default defineConfig({
         // Retry failed prerenders
         retryCount: 2,
         retryDelay: 1000,
+        // Filter out paths with hashes
+        filter: ({ path }) => !path.includes('#'),
       },
+      pages: [
+        {
+          path: '/sitemap.xml',
+          prerender: { enabled: true, outputPath: 'sitemap.xml' },
+        },
+      ],
     }),
     // react's vite plugin must come after start's vite plugin
     viteReact(),

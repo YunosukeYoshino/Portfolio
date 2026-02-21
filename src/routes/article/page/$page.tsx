@@ -46,28 +46,42 @@ export const Route = createFileRoute('/article/page/$page')({
     }
     const { currentPage } = loaderData
     const url = `https://yunosukeyoshino.com/article/page/${currentPage}/`
+    const pageTitle =
+      currentPage === 1
+        ? 'Articles | Yunosuke Yoshino'
+        : `Articles - Page ${currentPage} | Yunosuke Yoshino`
+    const paginationLinks: Array<{ rel: string; href: string }> = [{ rel: 'canonical', href: url }]
+    if (currentPage > 1) {
+      paginationLinks.push({
+        rel: 'prev',
+        href: `https://yunosukeyoshino.com/article/page/${currentPage - 1}/`,
+      })
+    }
     return {
       meta: [
-        {
-          title:
-            currentPage === 1
-              ? 'Articles | Yunosuke Yoshino'
-              : `Articles - Page ${currentPage} | Yunosuke Yoshino`,
-        },
+        { title: pageTitle },
         {
           name: 'description',
           content: 'フロントエンド開発、UI/UXデザイン、Web技術に関する記事一覧',
         },
-        {
-          property: 'og:title',
-          content:
-            currentPage === 1
-              ? 'Articles | Yunosuke Yoshino'
-              : `Articles - Page ${currentPage} | Yunosuke Yoshino`,
-        },
+        ...(currentPage > 1 ? [{ name: 'robots', content: 'noindex, follow' }] : []),
+        { property: 'og:title', content: pageTitle },
         { property: 'og:url', content: url },
+        {
+          property: 'og:image',
+          content: 'https://yunosukeyoshino.com/assets/og-image.png',
+        },
+        { name: 'twitter:title', content: pageTitle },
+        {
+          name: 'twitter:description',
+          content: 'フロントエンド開発、UI/UXデザイン、Web技術に関する記事一覧',
+        },
+        {
+          name: 'twitter:image',
+          content: 'https://yunosukeyoshino.com/assets/og-image.png',
+        },
       ],
-      links: [{ rel: 'canonical', href: url }],
+      links: paginationLinks,
     }
   },
   component: BlogListPage,

@@ -1,17 +1,29 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useCases } from '@/infrastructure/di'
 
+const SITE_URL = 'https://yunosukeyoshino.com'
+
 export const Route = createFileRoute('/sitemap.xml')({
-  loader: () => null, // No client-side data needed
   server: {
     handlers: {
       GET: async () => {
         const ids = await useCases.getAllBlogIds.execute()
-        const siteUrl = process.env.VITE_SITE_URL || 'https://yunosukeyoshino.com'
+        const buildDate = new Date().toISOString().split('T')[0]
 
-        const staticRoutes = ['/', '/contact', '/privacy-policy', '/article']
+        const staticRoutes = [
+          { path: '/', lastmod: buildDate, changefreq: 'daily', priority: '1.0' },
+          { path: '/article/page/1/', lastmod: buildDate, changefreq: 'weekly', priority: '0.8' },
+          { path: '/contact/', lastmod: buildDate, changefreq: 'monthly', priority: '0.5' },
+          { path: '/privacy-policy/', lastmod: buildDate, changefreq: 'monthly', priority: '0.3' },
+        ]
 
-        const dynamicRoutes = ids.map((id) => `/article/${id}`)
+        const dynamicRoutes = ids.map((id) => ({
+          path: `/article/${id}/`,
+          lastmod: buildDate,
+          changefreq: 'weekly',
+          priority: '0.8',
+        }))
+
         const allRoutes = [...staticRoutes, ...dynamicRoutes]
 
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -19,9 +31,10 @@ export const Route = createFileRoute('/sitemap.xml')({
 ${allRoutes
   .map((route) => {
     return `  <url>
-    <loc>${siteUrl}${route}</loc>
-    <changefreq>${route === '/' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${route === '/' ? '1.0' : '0.8'}</priority>
+    <loc>${SITE_URL}${route.path}</loc>
+    <lastmod>${route.lastmod}</lastmod>
+    <changefreq>${route.changefreq}</changefreq>
+    <priority>${route.priority}</priority>
   </url>`
   })
   .join('\n')}

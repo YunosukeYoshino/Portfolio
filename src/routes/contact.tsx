@@ -13,6 +13,19 @@ export const Route = createFileRoute('/contact')({
       },
       { property: 'og:title', content: 'Contact | Yunosuke Yoshino' },
       { property: 'og:url', content: 'https://yunosukeyoshino.com/contact/' },
+      {
+        property: 'og:image',
+        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+      },
+      { name: 'twitter:title', content: 'Contact | Yunosuke Yoshino' },
+      {
+        name: 'twitter:description',
+        content: 'Get in touch with Yunosuke Yoshino for collaborations, projects, or inquiries.',
+      },
+      {
+        name: 'twitter:image',
+        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+      },
     ],
     links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/contact/' }],
   }),

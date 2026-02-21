@@ -31,10 +31,6 @@ export const Route = createRootRoute({
         name: 'description',
         content: 'Frontend Engineer specializing in React, Next.js, TypeScript',
       },
-      {
-        name: 'keywords',
-        content: 'portfolio, web development, frontend, Yunosuke Yoshino',
-      },
       { name: 'author', content: 'Yunosuke Yoshino' },
       { name: 'robots', content: 'index, follow' },
       {
@@ -48,7 +44,20 @@ export const Route = createRootRoute({
         property: 'og:description',
         content: 'Frontend Engineer specializing in React, Next.js, TypeScript',
       },
+      {
+        property: 'og:image',
+        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+      },
       { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: 'Yunosuke Yoshino｜Portfolio' },
+      {
+        name: 'twitter:description',
+        content: 'Frontend Engineer specializing in React, Next.js, TypeScript',
+      },
+      {
+        name: 'twitter:image',
+        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+      },
     ],
     links: [
       { rel: 'stylesheet', href: appCss },

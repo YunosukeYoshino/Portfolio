@@ -28,8 +28,17 @@ export const Route = createFileRoute('/article/$slug')({
         { name: 'description', content: description },
         { property: 'og:title', content: blog.title },
         { property: 'og:type', content: 'article' },
-        { property: 'og:image', content: blog.eyecatch?.url ?? '' },
+        {
+          property: 'og:image',
+          content: blog.eyecatch?.url ?? 'https://yunosukeyoshino.com/assets/og-image.png',
+        },
         { property: 'og:url', content: url },
+        { name: 'twitter:title', content: blog.title },
+        { name: 'twitter:description', content: description },
+        {
+          name: 'twitter:image',
+          content: blog.eyecatch?.url ?? 'https://yunosukeyoshino.com/assets/og-image.png',
+        },
       ],
       links: [{ rel: 'canonical', href: url }],
     }

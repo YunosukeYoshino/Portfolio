@@ -12,6 +12,20 @@ export const Route = createFileRoute('/privacy-policy')({
       },
       { property: 'og:title', content: 'プライバシーポリシー | Yunosuke Yoshino' },
       { property: 'og:url', content: 'https://yunosukeyoshino.com/privacy-policy/' },
+      {
+        property: 'og:image',
+        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+      },
+      { name: 'robots', content: 'noindex, follow' },
+      { name: 'twitter:title', content: 'プライバシーポリシー | Yunosuke Yoshino' },
+      {
+        name: 'twitter:description',
+        content: 'Yunosuke Yoshinoのポートフォリオサイトのプライバシーポリシー',
+      },
+      {
+        name: 'twitter:image',
+        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+      },
     ],
     links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/privacy-policy/' }],
   }),

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
@@ -16,6 +17,11 @@ import { Route as ArticleIndexRouteImport } from './routes/article/index'
 import { Route as ArticleSlugRouteImport } from './routes/article/$slug'
 import { Route as ArticlePagePageRouteImport } from './routes/article/page/$page'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/article/$slug': typeof ArticleSlugRoute
   '/article/': typeof ArticleIndexRoute
   '/article/page/$page': typeof ArticlePagePageRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/article/$slug': typeof ArticleSlugRoute
   '/article': typeof ArticleIndexRoute
   '/article/page/$page': typeof ArticlePagePageRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/article/$slug': typeof ArticleSlugRoute
   '/article/': typeof ArticleIndexRoute
   '/article/page/$page': typeof ArticlePagePageRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/privacy-policy'
+    | '/sitemap.xml'
     | '/article/$slug'
     | '/article/'
     | '/article/page/$page'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/privacy-policy'
+    | '/sitemap.xml'
     | '/article/$slug'
     | '/article'
     | '/article/page/$page'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/privacy-policy'
+    | '/sitemap.xml'
     | '/article/$slug'
     | '/article/'
     | '/article/page/$page'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ArticleSlugRoute: typeof ArticleSlugRoute
   ArticleIndexRoute: typeof ArticleIndexRoute
   ArticlePagePageRoute: typeof ArticlePagePageRoute
@@ -110,6 +123,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy-policy': {
       id: '/privacy-policy'
       path: '/privacy-policy'
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ArticleSlugRoute: ArticleSlugRoute,
   ArticleIndexRoute: ArticleIndexRoute,
   ArticlePagePageRoute: ArticlePagePageRoute,

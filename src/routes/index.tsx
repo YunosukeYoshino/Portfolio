@@ -35,9 +35,22 @@ export const Route = createFileRoute('/')({
         property: 'og:title',
         content: 'Yunosuke Yoshino｜Portfolio',
       },
-      { property: 'og:url', content: 'https://yunosukeyoshino.com' },
+      { property: 'og:url', content: 'https://yunosukeyoshino.com/' },
+      {
+        property: 'og:image',
+        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+      },
+      { name: 'twitter:title', content: 'Yunosuke Yoshino｜Portfolio' },
+      {
+        name: 'twitter:description',
+        content: 'Frontend Engineer specializing in React, Next.js, TypeScript',
+      },
+      {
+        name: 'twitter:image',
+        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+      },
     ],
-    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com' }],
+    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/' }],
   }),
   component: HomePage,
 })

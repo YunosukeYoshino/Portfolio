@@ -41,10 +41,6 @@ export const createPersonSchema = () => ({
     'UI/UX デザイン',
     'レスポンシブ Web デザイン',
   ],
-  alumniOf: {
-    '@type': 'EducationalOrganization',
-    name: '日本の大学',
-  },
 })
 
 export const createWebsiteSchema = () => ({
@@ -58,14 +54,6 @@ export const createWebsiteSchema = () => ({
   inLanguage: 'ja-JP',
   author: createPersonSchema(),
   publisher: createPersonSchema(),
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: 'https://yunosukeyoshino.com/article?search={search_term_string}',
-    },
-    'query-input': 'required name=search_term_string',
-  },
 })
 
 export const createBlogSchema = () => ({
@@ -109,7 +97,7 @@ export const createArticleSchema = (article: {
   '@type': 'BlogPosting',
   headline: article.title,
   description: article.content.replace(/<[^>]*>/g, '').substring(0, 160),
-  url: `https://yunosukeyoshino.com/article/${article.id}`,
+  url: `https://yunosukeyoshino.com/article/${article.id}/`,
   datePublished: article.publishedAt,
   dateModified: article.updatedAt,
   inLanguage: 'ja-JP',
@@ -117,7 +105,7 @@ export const createArticleSchema = (article: {
   publisher: createPersonSchema(),
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': `https://yunosukeyoshino.com/article/${article.id}`,
+    '@id': `https://yunosukeyoshino.com/article/${article.id}/`,
   },
   ...(article.eyecatch && {
     image: {

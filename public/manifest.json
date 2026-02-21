@@ -1,12 +1,12 @@
 {
-  "name": "",
-  "short_name": "",
-  "description": "",
+  "name": "芳野悠之助 ポートフォリオ",
+  "short_name": "Yunosuke Portfolio",
+  "description": "芳野悠之助のポートフォリオサイト。フロントエンド開発、UI/UXデザイン、モダンなWeb技術に関する技術記事とプロジェクトを紹介しています。",
   "start_url": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#fff",
-  "theme_color": "#fff",
+  "background_color": "#F3F3F1",
+  "theme_color": "#F3F3F1",
   "icons": [
     {
       "src": "assets/icons/android-chrome-36x36.png",

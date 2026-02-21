@@ -16,7 +16,7 @@
 bun install    # 依存関係インストール
 bun run dev    # 開発サーバー起動
 bun run build  # 本番ビルド
-bun run lint   # Biome + TypeScript チェック
+bun run lint   # Biome + TypeScript + Markuplint チェック
 bun run fix    # 自動修正
 ```
 
@@ -44,8 +44,7 @@ src/
 ### データフェッチパターン
 - **loader**: TanStack Routerのloaderでサーバーサイドfetch
 - **createServerFn**: APIキーを安全に扱うサーバー関数（`src/lib/microcms.ts`）
-- **useSuspenseQuery**: クライアントサイドでのSuspense対応fetch
-- 参照: `src/routes/article/$slug.tsx`（Suspense例）
+- 参照: `src/routes/article/$slug.tsx`（loader + createServerFn 例）
 
 ### Tailwind CSS v4
 v3との破壊的変更あり。`src/globals.css` 参照。

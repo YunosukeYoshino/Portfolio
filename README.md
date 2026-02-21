@@ -39,7 +39,7 @@ A personal portfolio and blog site for showcasing projects and sharing technical
 ### Prerequisites
 
 - [Bun](https://bun.sh/) v1.0.0+
-- [Node.js](https://nodejs.org/) v18.0.0+
+- [Node.js](https://nodejs.org/) v20.0.0+
 
 ### Installation
 
@@ -70,7 +70,7 @@ bun run dev
 |---------|-------------|
 | `bun run dev` | Start development server |
 | `bun run build` | Build for production |
-| `bun run lint` | Run Biome + TypeScript checks |
+| `bun run lint` | Run Biome + TypeScript + Markuplint checks |
 | `bun run fix` | Auto-fix linting issues |
 | `bun run deploy` | Deploy to Cloudflare Pages |
 
@@ -82,6 +82,9 @@ This project uses [cc-sdd](https://github.com/gotalab/cc-sdd) for spec-driven de
 # Set up Spec-Driven Development workflow
 bunx cc-sdd@latest --claude-agent
 ```
+
+> [!NOTE]
+> Running this command creates the `.kiro/` directory structure in your project.
 
 **Workflow:**
 

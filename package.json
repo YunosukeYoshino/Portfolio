@@ -69,7 +69,7 @@
       "biome check --write --unsafe",
       "markuplint"
     ],
-    "*.{json,css,scss}": [
+    "src/**/*.{json,css,scss}": [
       "biome format --write"
     ]
   }
