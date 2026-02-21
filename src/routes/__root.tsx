@@ -43,7 +43,6 @@ export const Route = createRootRoute({
       },
       { property: 'og:type', content: 'website' },
       { property: 'og:locale', content: 'ja_JP' },
-      { property: 'og:url', content: 'https://yunosukeyoshino.com' },
       { property: 'og:site_name', content: 'Yunosuke Yoshino Portfolio' },
       {
         property: 'og:description',
@@ -53,7 +52,6 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
-      { rel: 'canonical', href: 'https://yunosukeyoshino.com' },
       { rel: 'manifest', href: '/manifest.json' },
       { rel: 'icon', href: '/favicon.ico' },
       {

@@ -39,14 +39,14 @@ function BlogDetailPage() {
 
   const breadcrumbItems = [
     { name: 'ホーム', url: '/' },
-    { name: '記事一覧', url: '/article' },
+    { name: '記事一覧', url: '/article/' },
     { name: blog.title, url: `/article/${blog.id}` },
   ]
 
   const articleSchema = createArticleSchema(blog)
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: 'ホーム', url: 'https://yunosukeyoshino.com' },
-    { name: '記事一覧', url: 'https://yunosukeyoshino.com/article' },
+    { name: '記事一覧', url: 'https://yunosukeyoshino.com/article/' },
     {
       name: blog.title,
       url: `https://yunosukeyoshino.com/article/${blog.id}`,
@@ -102,7 +102,7 @@ function BlogDetailPage() {
             <footer className="mt-20 border-t border-gray-200 pt-8">
               <div className="flex justify-center">
                 <Link
-                  to="/article"
+                  to="/article/"
                   reloadDocument
                   className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
                 >
