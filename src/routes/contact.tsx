@@ -12,9 +12,9 @@ export const Route = createFileRoute('/contact')({
         content: 'Get in touch with Yunosuke Yoshino for collaborations, projects, or inquiries.',
       },
       { property: 'og:title', content: 'Contact | Yunosuke Yoshino' },
-      { property: 'og:url', content: 'https://yunosukeyoshino.com/contact' },
+      { property: 'og:url', content: 'https://yunosukeyoshino.com/contact/' },
     ],
-    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/contact' }],
+    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/contact/' }],
   }),
   component: ContactPage,
 })

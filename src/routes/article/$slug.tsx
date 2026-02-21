@@ -21,7 +21,7 @@ export const Route = createFileRoute('/article/$slug')({
     }
     const { blog } = loaderData
     const description = blog.content?.replace(/<[^>]*>/g, '').slice(0, 160) ?? ''
-    const url = `https://yunosukeyoshino.com/article/${blog.id}`
+    const url = `https://yunosukeyoshino.com/article/${blog.id}/`
     return {
       meta: [
         { title: `${blog.title} | Yunosuke Yoshino` },
@@ -105,7 +105,7 @@ function BlogDetailPage() {
             <footer className="mt-20 border-t border-gray-200 pt-8">
               <div className="flex justify-center">
                 <Link
-                  to="/article/"
+                  to="/article"
                   reloadDocument
                   className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
                 >

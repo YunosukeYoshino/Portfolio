@@ -45,7 +45,7 @@ export const Route = createFileRoute('/article/page/$page')({
       return { meta: [{ title: 'Articles | Yunosuke Yoshino' }] }
     }
     const { currentPage } = loaderData
-    const url = `https://yunosukeyoshino.com/article/page/${currentPage}`
+    const url = `https://yunosukeyoshino.com/article/page/${currentPage}/`
     return {
       meta: [
         {

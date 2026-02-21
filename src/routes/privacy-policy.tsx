@@ -11,9 +11,9 @@ export const Route = createFileRoute('/privacy-policy')({
         content: 'Yunosuke Yoshinoのポートフォリオサイトのプライバシーポリシー',
       },
       { property: 'og:title', content: 'プライバシーポリシー | Yunosuke Yoshino' },
-      { property: 'og:url', content: 'https://yunosukeyoshino.com/privacy-policy' },
+      { property: 'og:url', content: 'https://yunosukeyoshino.com/privacy-policy/' },
     ],
-    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/privacy-policy' }],
+    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/privacy-policy/' }],
   }),
   component: PrivacyPolicyPage,
 })
