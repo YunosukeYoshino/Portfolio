@@ -42,8 +42,32 @@ export default function CustomCursor() {
     // Show cursor on desktop (including laptops with trackpads)
     setIsVisible(true)
 
+    // Animation loop for smooth cursor movement - only runs when needed
+    const updateCursorPosition = () => {
+      animationIdRef.current = undefined
+
+      if (!cursorRef.current) return
+
+      const dx = mousePosition.current.x - cursorPosition.current.x
+      const dy = mousePosition.current.y - cursorPosition.current.y
+
+      cursorPosition.current.x += dx * 0.15
+      cursorPosition.current.y += dy * 0.15
+
+      cursorRef.current.style.transform = `translate(${cursorPosition.current.x}px, ${cursorPosition.current.y}px)`
+
+      // Continue loop only while cursor is still catching up to mouse
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        animationIdRef.current = requestAnimationFrame(updateCursorPosition)
+      }
+    }
+
     const updateMousePosition = (e: MouseEvent) => {
       mousePosition.current = { x: e.clientX, y: e.clientY }
+      // Start rAF loop only if not already running
+      if (!animationIdRef.current) {
+        animationIdRef.current = requestAnimationFrame(updateCursorPosition)
+      }
     }
 
     // Track mouse movement
@@ -52,23 +76,6 @@ export default function CustomCursor() {
     // Event delegation: listen at document level for dynamic elements
     document.addEventListener('mouseover', handleMouseOver)
     document.addEventListener('mouseout', handleMouseOut)
-
-    // Animation loop for smooth cursor movement
-    const updateCursorPosition = () => {
-      // Always request next frame to keep loop running
-      animationIdRef.current = requestAnimationFrame(updateCursorPosition)
-
-      // Skip update if ref not yet available (component still mounting)
-      if (!cursorRef.current) return
-
-      // Smooth lerp
-      cursorPosition.current.x += (mousePosition.current.x - cursorPosition.current.x) * 0.15
-      cursorPosition.current.y += (mousePosition.current.y - cursorPosition.current.y) * 0.15
-
-      cursorRef.current.style.transform = `translate(${cursorPosition.current.x}px, ${cursorPosition.current.y}px)`
-    }
-
-    updateCursorPosition()
 
     return () => {
       window.removeEventListener('mousemove', updateMousePosition)

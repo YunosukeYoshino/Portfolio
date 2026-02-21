@@ -251,11 +251,11 @@ export default function WebGLBackground() {
 
       window.addEventListener('resize', handleResize)
 
-      // Scroll velocity tracking
+      // Scroll velocity tracking via scroll event (not setInterval)
       let lastScrollY = window.scrollY
       let lastScrollTime = Date.now()
 
-      const updateScrollVelocity = () => {
+      const handleScroll = () => {
         const currentScrollY = window.scrollY
         const currentTime = Date.now()
         const timeDiff = (currentTime - lastScrollTime) / 1000
@@ -269,13 +269,16 @@ export default function WebGLBackground() {
         lastScrollTime = currentTime
       }
 
-      const scrollInterval = setInterval(updateScrollVelocity, 50)
+      window.addEventListener('scroll', handleScroll, { passive: true })
 
-      // Animation loop with visibility check
+      // Animation loop with Intersection Observer pause
       const clock = new THREE.Clock()
       let animationId: number
+      let isInViewport = true
 
       const animate = () => {
+        if (!isInViewport) return
+
         const elapsedTime = clock.getElapsedTime()
 
         // Smooth interpolation for shader
@@ -288,12 +291,28 @@ export default function WebGLBackground() {
         animationId = requestAnimationFrame(animate)
       }
 
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const wasInViewport = isInViewport
+          isInViewport = entries[0].isIntersecting
+          if (isInViewport && !wasInViewport) {
+            animationId = requestAnimationFrame(animate)
+          }
+        },
+        { threshold: 0 }
+      )
+
+      if (containerRef.current) {
+        observer.observe(containerRef.current)
+      }
+
       animate()
 
       // Store cleanup function
       cleanup = () => {
         window.removeEventListener('resize', handleResize)
-        clearInterval(scrollInterval)
+        window.removeEventListener('scroll', handleScroll)
+        observer.disconnect()
         cancelAnimationFrame(animationId)
         renderer.dispose()
         geometry.dispose()

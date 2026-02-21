@@ -24,20 +24,37 @@ export default function Header() {
     }
 
     updateTime()
-    const interval = setInterval(updateTime, 1000)
 
-    return () => clearInterval(interval)
+    // Sync updates to minute boundary to avoid 60x unnecessary re-renders
+    const msUntilNextMinute = (60 - new Date().getSeconds()) * 1000
+    let intervalId: ReturnType<typeof setInterval> | null = null
+    const timeoutId = setTimeout(() => {
+      updateTime()
+      intervalId = setInterval(updateTime, 60_000)
+    }, msUntilNextMinute)
+
+    return () => {
+      clearTimeout(timeoutId)
+      if (intervalId) clearInterval(intervalId)
+    }
   }, [])
 
   useEffect(() => {
+    let ticking = false
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      if (currentScrollY < lastScrollY.current || currentScrollY < 50) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
-      }
-      lastScrollY.current = currentScrollY
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY
+        if (currentScrollY < lastScrollY.current || currentScrollY < 50) {
+          setIsVisible(true)
+        } else {
+          setIsVisible(false)
+        }
+        lastScrollY.current = currentScrollY
+        ticking = false
+      })
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })

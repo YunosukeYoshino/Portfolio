@@ -1,10 +1,8 @@
-import { type BundledLanguage, codeToHtml } from 'shiki'
-
 interface CodeHighlightProps {
   content: string
 }
 
-// Synchronous component - content should be pre-processed by highlightCodeBlocks in the loader
+// Synchronous component - content is pre-processed by highlightContent server function in the loader
 export default function CodeHighlight({ content }: CodeHighlightProps) {
   return (
     <div
@@ -13,109 +11,4 @@ export default function CodeHighlight({ content }: CodeHighlightProps) {
       dangerouslySetInnerHTML={{ __html: content }}
     />
   )
-}
-
-// Export the highlight function to be used in loaders
-export async function highlightCodeBlocks(html: string): Promise<string> {
-  // Guard against undefined/null input
-  if (!html) {
-    return ''
-  }
-
-  // Match all <pre><code> blocks
-  const codeBlockRegex = /<pre><code(?:\s+class="language-(\w+)")?>([\s\S]*?)<\/code><\/pre>/g
-
-  let result = html
-  const matches = Array.from(html.matchAll(codeBlockRegex))
-
-  for (const match of matches) {
-    const [fullMatch, language = '', code] = match
-
-    // Decode HTML entities
-    const decodedCode = decodeHtmlEntities(code)
-
-    // Auto-detect language if not specified (default to shell for plain text)
-    let detectedLang: BundledLanguage = 'shell'
-    if (language) {
-      detectedLang = language as BundledLanguage
-    } else {
-      // Robust language detection using regex
-      if (/import|export|const|let|var|class|function|=>|React\.|\(props\)/.test(decodedCode)) {
-        detectedLang = 'javascript'
-      } else if (
-        /\b(npm|npx|yarn|bun|pnpm|cd|ls|git|docker)\b/.test(decodedCode) ||
-        decodedCode.startsWith('$ ')
-      ) {
-        detectedLang = 'bash'
-      } else if (
-        /\btype\s+\w+\s*=/.test(decodedCode) ||
-        /\binterface\s+\w+\s*\{/.test(decodedCode) ||
-        /\bclass\s+\w+\s+(extends|implements)\b/.test(decodedCode) ||
-        /\benum\s+\w+\s*\{/.test(decodedCode)
-      ) {
-        // TypeScript-specific detection (avoid Python "class Foo:" false positives)
-        detectedLang = 'typescript'
-      }
-    }
-
-    try {
-      // Use Shiki to highlight with inline styles
-      const highlighted = await codeToHtml(decodedCode, {
-        lang: detectedLang,
-        theme: 'github-dark',
-      })
-
-      result = result.replace(fullMatch, highlighted)
-      // biome-ignore lint/suspicious/noExplicitAny: Error object type is dynamic
-    } catch (_error: any) {
-      // Fallback to original content if highlighting fails
-      result = result.replace(fullMatch, fullMatch)
-    }
-  }
-
-  return result
-}
-
-function decodeHtmlEntities(text: string): string {
-  // Common named HTML entities
-  const entities: Record<string, string> = {
-    '&lt;': '<',
-    '&gt;': '>',
-    '&amp;': '&',
-    '&quot;': '"',
-    '&#39;': "'",
-    '&apos;': "'",
-    '&nbsp;': ' ',
-    '&copy;': '©',
-    '&reg;': '®',
-    '&trade;': '™',
-    '&euro;': '€',
-    '&pound;': '£',
-    '&yen;': '¥',
-    '&hellip;': '…',
-    '&mdash;': '—',
-    '&ndash;': '–',
-    '&laquo;': '«',
-    '&raquo;': '»',
-    '&ldquo;': '"',
-    '&rdquo;': '"',
-    '&lsquo;': '\u2018',
-    '&rsquo;': '\u2019',
-  }
-
-  return text.replace(/&(?:#x([0-9a-fA-F]+)|#(\d+)|(\w+));/g, (entity, hex, dec, named) => {
-    // Numeric entity (hex): &#x27; -> '
-    if (hex) {
-      return String.fromCharCode(Number.parseInt(hex, 16))
-    }
-    // Numeric entity (decimal): &#39; -> '
-    if (dec) {
-      return String.fromCharCode(Number.parseInt(dec, 10))
-    }
-    // Named entity: &apos; -> '
-    if (named) {
-      return entities[`&${named};`] || entity
-    }
-    return entity
-  })
 }

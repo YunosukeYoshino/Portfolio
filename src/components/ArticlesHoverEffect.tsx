@@ -52,18 +52,20 @@ export default function ArticlesHoverEffect() {
 
     const gsap = gsapRef.current
 
+    // Cache dimensions once to avoid layout thrashing in rAF loop
+    // The element has fixed CSS dimensions (w-[300px] h-[200px])
+    const REVEAL_HALF_WIDTH = 150
+    const REVEAL_HALF_HEIGHT = 100
+
     const updateHoverReveal = () => {
       if (!hoverRevealRef.current || !isAnimating) return
 
       revealPosition.current.x += (mousePosition.current.x - revealPosition.current.x) * 0.1
       revealPosition.current.y += (mousePosition.current.y - revealPosition.current.y) * 0.1
 
-      const width = hoverRevealRef.current.offsetWidth
-      const height = hoverRevealRef.current.offsetHeight
-
       gsap.set(hoverRevealRef.current, {
-        x: revealPosition.current.x - width / 2,
-        y: revealPosition.current.y - height / 2,
+        x: revealPosition.current.x - REVEAL_HALF_WIDTH,
+        y: revealPosition.current.y - REVEAL_HALF_HEIGHT,
       })
 
       animationIdRef.current = requestAnimationFrame(updateHoverReveal)

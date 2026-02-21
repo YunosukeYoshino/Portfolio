@@ -1,16 +1,17 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import Breadcrumb from '@/components/Breadcrumb'
-import CodeHighlight, { highlightCodeBlocks } from '@/components/CodeHighlight'
+import CodeHighlight from '@/components/CodeHighlight'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import JsonLd, { createArticleSchema, createBreadcrumbSchema } from '@/components/JsonLd'
+import { highlightContent } from '@/lib/highlight'
 import { getBlogDetail } from '@/lib/microcms'
 import { formatDate } from '@/lib/utils'
 
 export const Route = createFileRoute('/article/$slug')({
   loader: async ({ params }) => {
     const blog = await getBlogDetail({ data: { contentId: params.slug } })
-    const highlightedContent = await highlightCodeBlocks(blog.content)
+    const highlightedContent = await highlightContent({ data: { html: blog.content } })
     return { blog, highlightedContent }
   },
   // Prevent re-fetching on client-side navigation for static sites
