@@ -48,6 +48,7 @@ export default function HeroSection() {
       ref={heroRef}
       className="relative flex h-screen w-full flex-col justify-center overflow-hidden"
     >
+      <h1 className="sr-only">Yunosuke Yoshino Portfolio</h1>
       <WebGLBackground />
 
       <div className="hero-text-layer relative w-full px-6 pt-20 md:px-12">

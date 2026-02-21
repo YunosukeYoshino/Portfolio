@@ -1,8 +1,30 @@
 {
+  "$schema": "https://raw.githubusercontent.com/markuplint/markuplint/v4.14.1/packages/%40markuplint/config/schema.json",
+  "parser": {
+    "\\.[jt]sx?$": "@markuplint/jsx-parser"
+  },
+  "specs": {
+    "\\.[jt]sx?$": "@markuplint/react-spec"
+  },
   "extends": [
     "markuplint:recommended"
   ],
-  "parser": {
-    ".astro$": "@markuplint/astro-parser"
+  "excludeFiles": [
+    "node_modules/**",
+    "dist/**",
+    ".git/**",
+    "**/*.gen.ts"
+  ],
+  "overrides": {
+    "src/routes/__root.tsx": {
+      "rules": {
+        "required-element": false
+      }
+    },
+    "src/components/ArticleItem.tsx": {
+      "rules": {
+        "heading-levels": false
+      }
+    }
   }
 }

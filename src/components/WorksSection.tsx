@@ -47,6 +47,8 @@ export default function WorksSection() {
                 <img
                   src={work.image}
                   alt={work.title}
+                  width={1200}
+                  height={675}
                   loading="lazy"
                   className="work-img h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
                 />

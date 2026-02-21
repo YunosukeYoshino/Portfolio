@@ -1,4 +1,5 @@
-このリポジトリで作業する際は、以下のファイルを参照してください：
+Please reason in English and respond in Japanese.
+When working on this repository, please refer to the following files:
 
 ## プロジェクト設定
 @.github/copilot-instructions.md

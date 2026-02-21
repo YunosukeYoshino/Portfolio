@@ -58,6 +58,8 @@ export default function Blog({
                   <img
                     src={`${blog.eyecatch.url}?w=800&fm=webp`}
                     alt={blog.eyecatch.alt || blog.title}
+                    width={800}
+                    height={450}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                     decoding="async"
@@ -72,9 +74,9 @@ export default function Blog({
                       {formatDate(blog.publishedAt)}
                     </time>
                   </div>
-                  <h3 className="line-clamp-2 font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
+                  <h2 className="line-clamp-2 font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
                     {blog.title}
-                  </h3>
+                  </h2>
                 </div>
               </Link>
             </article>

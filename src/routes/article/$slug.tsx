@@ -86,6 +86,8 @@ function BlogDetailPage() {
                 <img
                   src={`${blog.eyecatch.url}?w=1200&fm=webp`}
                   alt={blog.eyecatch.alt || blog.title}
+                  width={1200}
+                  height={675}
                   className="h-full w-full object-cover"
                 />
               </div>

@@ -52,7 +52,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/article/$slug': typeof ArticleSlugRoute
-  '/article': typeof ArticleIndexRoute
+  '/article/': typeof ArticleIndexRoute
   '/article/page/$page': typeof ArticlePagePageRoute
 }
 export interface FileRoutesByTo {
@@ -79,7 +79,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/privacy-policy'
     | '/article/$slug'
-    | '/article'
+    | '/article/'
     | '/article/page/$page'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -134,7 +134,7 @@ declare module '@tanstack/react-router' {
     '/article/': {
       id: '/article/'
       path: '/article'
-      fullPath: '/article'
+      fullPath: '/article/'
       preLoaderRoute: typeof ArticleIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
