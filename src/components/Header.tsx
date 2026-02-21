@@ -68,6 +68,8 @@ export default function Header() {
         className="hover-trigger z-50 md:hidden"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         aria-label="Toggle menu"
+        aria-expanded={isMenuOpen}
+        aria-controls="mobile-menu"
       >
         <Menu className="h-6 w-6" />
       </button>
@@ -77,11 +79,16 @@ export default function Header() {
         <div
           className="fixed inset-0 z-40 bg-black/50 md:hidden"
           onClick={() => setIsMenuOpen(false)}
+          aria-hidden="true"
         />
       )}
 
       {/* Mobile Menu */}
       <div
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile Menu"
         className={`fixed top-0 right-0 h-screen w-80 bg-white shadow-2xl transform transition-transform duration-300 z-50 md:hidden ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}

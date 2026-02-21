@@ -46,7 +46,7 @@ export default function WorksSection() {
               <div className="relative mb-6 aspect-video overflow-hidden bg-gray-100">
                 <img
                   src={work.image}
-                  alt={work.title}
+                  alt=""
                   width={1200}
                   height={675}
                   loading="lazy"
@@ -60,7 +60,7 @@ export default function WorksSection() {
                   <p className="font-mono text-xs text-gray-400">{work.category}</p>
                 </div>
                 <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 transition-all group-hover:border-black group-hover:bg-black group-hover:text-white">
-                  <ArrowUpRight className="h-4 w-4" />
+                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                 </div>
               </div>
             </a>

@@ -82,7 +82,7 @@ export default function ContactForm() {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <div>
           <label htmlFor="name" className="block text-sm font-bold uppercase tracking-wider mb-2">
             NAME *
@@ -91,10 +91,17 @@ export default function ContactForm() {
             {...register('name')}
             type="text"
             id="name"
+            required
+            aria-invalid={!!errors.name}
+            aria-describedby={errors.name ? 'name-error' : undefined}
             className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
             placeholder="山田 太郎"
           />
-          {errors.name && <p className="mt-2 text-sm text-red-600">{errors.name.message}</p>}
+          {errors.name && (
+            <p id="name-error" className="mt-2 text-sm text-red-600">
+              {errors.name.message}
+            </p>
+          )}
         </div>
 
         <div>
@@ -105,10 +112,17 @@ export default function ContactForm() {
             {...register('email')}
             type="email"
             id="email"
+            required
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? 'email-error' : undefined}
             className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
             placeholder="example@yunosukeyoshino.com"
           />
-          {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>}
+          {errors.email && (
+            <p id="email-error" className="mt-2 text-sm text-red-600">
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         <div>
@@ -138,10 +152,17 @@ export default function ContactForm() {
             {...register('subject')}
             type="text"
             id="subject"
+            required
+            aria-invalid={!!errors.subject}
+            aria-describedby={errors.subject ? 'subject-error' : undefined}
             className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
             placeholder="お問い合わせの件名"
           />
-          {errors.subject && <p className="mt-2 text-sm text-red-600">{errors.subject.message}</p>}
+          {errors.subject && (
+            <p id="subject-error" className="mt-2 text-sm text-red-600">
+              {errors.subject.message}
+            </p>
+          )}
         </div>
 
         <div>
@@ -155,14 +176,22 @@ export default function ContactForm() {
             {...register('message')}
             id="message"
             rows={6}
+            required
+            aria-invalid={!!errors.message}
+            aria-describedby={errors.message ? 'message-error' : undefined}
             className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors resize-none"
             placeholder="お問い合わせ内容をご記入ください"
           />
-          {errors.message && <p className="mt-2 text-sm text-red-600">{errors.message.message}</p>}
+          {errors.message && (
+            <p id="message-error" className="mt-2 text-sm text-red-600">
+              {errors.message.message}
+            </p>
+          )}
         </div>
 
         {submitStatus.type && (
           <div
+            role="alert"
             className={`p-4 border-2 ${
               submitStatus.type === 'success'
                 ? 'border-green-600 bg-green-50 text-green-800'

@@ -40,6 +40,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-600 transition-colors hover-trigger"
+              aria-label="GitHub (opens in a new tab)"
             >
               GitHub
             </a>
