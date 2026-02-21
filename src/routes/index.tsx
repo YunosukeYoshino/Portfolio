@@ -35,7 +35,9 @@ export const Route = createFileRoute('/')({
         property: 'og:title',
         content: 'Yunosuke Yoshino｜Portfolio',
       },
+      { property: 'og:url', content: 'https://yunosukeyoshino.com' },
     ],
+    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com' }],
   }),
   component: HomePage,
 })

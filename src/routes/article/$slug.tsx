@@ -21,6 +21,7 @@ export const Route = createFileRoute('/article/$slug')({
     }
     const { blog } = loaderData
     const description = blog.content?.replace(/<[^>]*>/g, '').slice(0, 160) ?? ''
+    const url = `https://yunosukeyoshino.com/article/${blog.id}`
     return {
       meta: [
         { title: `${blog.title} | Yunosuke Yoshino` },
@@ -28,7 +29,9 @@ export const Route = createFileRoute('/article/$slug')({
         { property: 'og:title', content: blog.title },
         { property: 'og:type', content: 'article' },
         { property: 'og:image', content: blog.eyecatch?.url ?? '' },
+        { property: 'og:url', content: url },
       ],
+      links: [{ rel: 'canonical', href: url }],
     }
   },
   component: BlogDetailPage,

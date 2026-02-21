@@ -45,6 +45,7 @@ export const Route = createFileRoute('/article/page/$page')({
       return { meta: [{ title: 'Articles | Yunosuke Yoshino' }] }
     }
     const { currentPage } = loaderData
+    const url = `https://yunosukeyoshino.com/article/page/${currentPage}`
     return {
       meta: [
         {
@@ -57,7 +58,16 @@ export const Route = createFileRoute('/article/page/$page')({
           name: 'description',
           content: 'フロントエンド開発、UI/UXデザイン、Web技術に関する記事一覧',
         },
+        {
+          property: 'og:title',
+          content:
+            currentPage === 1
+              ? 'Articles | Yunosuke Yoshino'
+              : `Articles - Page ${currentPage} | Yunosuke Yoshino`,
+        },
+        { property: 'og:url', content: url },
       ],
+      links: [{ rel: 'canonical', href: url }],
     }
   },
   component: BlogListPage,
