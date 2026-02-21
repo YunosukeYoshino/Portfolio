@@ -2,6 +2,3 @@
 
 ## プロジェクト設定
 @.github/copilot-instructions.md
-
-## Spec駆動開発（任意）
-@.github/instructions/spec.instructions.md
