@@ -36,7 +36,11 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
               {item.name}
             </span>
           ) : (
-            <Link to={item.url} className="transition-colors duration-200 hover:text-gray-900">
+            <Link
+              to={item.url}
+              reloadDocument
+              className="transition-colors duration-200 hover:text-gray-900"
+            >
               {item.name}
             </Link>
           )}
