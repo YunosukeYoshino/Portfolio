@@ -109,19 +109,48 @@ export const Route = createRootRoute({
 
 function TransitionLayer() {
   const layerRef = useRef<HTMLDivElement>(null)
+  const columnsRef = useRef<HTMLDivElement[]>([])
   const _pathname = useRouterState({ select: (s) => s.location.pathname })
 
   useEffect(() => {
     if (!layerRef.current || typeof window === 'undefined') return
+
+    let gsapContext: { revert: () => void } | undefined
+
     import('gsap').then(({ default: gsap }) => {
-      const ctx = gsap.context(() => {
-        gsap.fromTo(layerRef.current, { y: '0%' }, { y: '-100%', duration: 1, ease: 'expo.inOut' })
+      gsapContext = gsap.context(() => {
+        // Run staggered wipe whenever route changes
+        gsap.fromTo(
+          columnsRef.current,
+          { y: '0%' },
+          {
+            y: '-100%',
+            duration: 0.8,
+            ease: 'expo.inOut',
+            stagger: 0.1,
+          }
+        )
       })
-      return () => ctx.revert()
     })
+
+    return () => {
+      if (gsapContext) gsapContext.revert()
+    }
   }, [])
 
-  return <div ref={layerRef} className="fixed inset-0 z-[9999] bg-[#111] pointer-events-none" />
+  return (
+    <div ref={layerRef} className="fixed inset-0 z-[9999] pointer-events-none flex">
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          ref={(el) => {
+            if (el) columnsRef.current[i] = el
+          }}
+          className="h-full flex-1 bg-[#111]"
+        />
+      ))}
+    </div>
+  )
 }
 
 function RootComponent() {

@@ -1,4 +1,5 @@
 import { ArrowUpRight } from 'lucide-react'
+import { useEffect } from 'react'
 
 const works = [
   {
@@ -22,6 +23,52 @@ const works = [
 ]
 
 export default function WorksSection() {
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    let gsapContext: { revert: () => void } | undefined
+
+    Promise.all([
+      import('gsap').then((m) => m.default),
+      import('gsap/ScrollTrigger').then((m) => m.default),
+    ]).then(([gsap, ScrollTrigger]) => {
+      gsap.registerPlugin(ScrollTrigger)
+
+      gsapContext = gsap.context(() => {
+        const images = gsap.utils.toArray('.parallax-image') as HTMLElement[]
+
+        // Use matchMedia to only run parallax on screens larger than mobile
+        // because mobile scrolling can be jerky with heavy parallax
+        const mm = gsap.matchMedia()
+
+        mm.add('(min-width: 768px)', () => {
+          images.forEach((img) => {
+            // Start the image shifted UP (-10%) so we can scroll it DOWN to (+10%)
+            gsap.fromTo(
+              img,
+              { yPercent: -10 },
+              {
+                yPercent: 10,
+                ease: 'none',
+                force3D: true, // Force GPU layer creation so it repaints while scrolling
+                scrollTrigger: {
+                  trigger: img.parentElement, // Trigger off the image wrapper
+                  start: 'top bottom', // Start when wrapper hits bottom of screen
+                  end: 'bottom top', // End when wrapper hits top of screen
+                  scrub: true, // Smooth scrubbing
+                },
+              }
+            )
+          })
+        })
+      })
+    })
+
+    return () => {
+      if (gsapContext) gsapContext.revert()
+    }
+  }, [])
+
   return (
     <section id="works" className="relative z-20 bg-white px-4 py-32 md:px-12">
       <div className="mb-24 flex flex-col items-end justify-between border-b border-gray-100 px-2 pb-8 md:flex-row">
@@ -44,15 +91,17 @@ export default function WorksSection() {
           >
             <a href={work.link}>
               <div className="relative mb-6 aspect-video overflow-hidden bg-gray-100 shadow-sm transition-shadow duration-500 group-hover:shadow-lg rounded-sm">
-                <img
-                  src={work.image}
-                  alt=""
-                  width={1200}
-                  height={675}
-                  loading="lazy"
-                  className="work-img h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
-                />
-                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/5" />
+                <div className="w-full h-full transform transition-transform duration-700 group-hover:scale-[1.03]">
+                  <img
+                    src={work.image}
+                    alt=""
+                    width={1200}
+                    height={675}
+                    loading="lazy"
+                    className="parallax-image h-[120%] w-full object-cover grayscale transition-[filter] duration-700 group-hover:grayscale-0 block absolute top-[-10%] left-0"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/5 pointer-events-none" />
               </div>
               <div className="flex items-start justify-between">
                 <div>

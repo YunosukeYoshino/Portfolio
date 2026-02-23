@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import TextScramble from './TextScramble'
 
 const contactSchema = z.object({
   name: z
@@ -205,9 +206,9 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full px-8 py-4 bg-black text-white font-bold uppercase tracking-wider border-2 border-black hover:bg-white hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-8 py-4 bg-black text-white font-bold uppercase tracking-wider border-2 border-black hover:bg-white hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
         >
-          {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}
+          {isSubmitting ? 'SENDING...' : <TextScramble text="SEND MESSAGE" />}
         </button>
       </form>
     </div>

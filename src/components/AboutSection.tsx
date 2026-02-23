@@ -1,4 +1,6 @@
 import { ArrowRight } from 'lucide-react'
+import MagneticButton from './MagneticButton'
+import SplitText from './SplitText'
 
 export default function AboutSection() {
   return (
@@ -11,11 +13,13 @@ export default function AboutSection() {
         </div>
 
         <div className="md:col-span-9">
-          <h2 className="text-3xl md:text-5xl font-display font-medium leading-[1.2] mb-16 split-text">
-            I am Yunosuke Yoshino, a multidisciplinary creator. <br />I build digital products that
-            blend <span className="text-gray-400">technical precision</span> with{' '}
-            <span className="text-gray-400">visual elegance</span>.
-          </h2>
+          <SplitText
+            as="h2"
+            className="text-3xl md:text-5xl font-display font-medium leading-[1.2] mb-16"
+          >
+            I am Yunosuke Yoshino, a multidisciplinary creator. I build digital products that blend
+            technical precision with visual elegance.
+          </SplitText>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-base leading-[1.8] text-gray-600 font-mono">
             <div className="space-y-6">
@@ -33,15 +37,17 @@ export default function AboutSection() {
           </div>
 
           <div className="mt-16">
-            <button
-              type="button"
-              className="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wide hover-trigger"
-            >
-              <span className="border-b border-black pb-1 group-hover:border-blue-600 group-hover:text-blue-600 transition-colors">
-                Read Full Story
-              </span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform group-hover:text-blue-600" />
-            </button>
+            <MagneticButton>
+              <button
+                type="button"
+                className="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wide hover-trigger"
+              >
+                <span className="border-b border-black pb-1 group-hover:border-blue-600 group-hover:text-blue-600 transition-colors">
+                  Read Full Story
+                </span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform group-hover:text-blue-600" />
+              </button>
+            </MagneticButton>
           </div>
         </div>
       </div>

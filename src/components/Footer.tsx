@@ -1,4 +1,6 @@
 import { Link } from '@tanstack/react-router'
+import MagneticButton from './MagneticButton'
+import TextScramble from './TextScramble'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -23,34 +25,38 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row justify-between items-end border-t border-black/10 pt-8 mt-12">
           <div className="mb-8 md:mb-0">
-            <Link
-              to="/contact"
-              className="text-2xl md:text-3xl font-bold hover:text-blue-600 transition-colors hover-trigger"
-            >
-              hello@yunosukeyoshino.com
-            </Link>
+            <MagneticButton intensity={0.2}>
+              <Link
+                to="/contact/"
+                className="text-2xl md:text-3xl font-bold hover:text-blue-600 transition-colors hover-trigger block"
+              >
+                <TextScramble text="hello@yunosukeyoshino.com" />
+              </Link>
+            </MagneticButton>
             <p className="font-mono text-xs text-gray-500 mt-2">
               Based in Tokyo, Available Worldwide.
             </p>
           </div>
 
           <div className="flex gap-8 font-mono text-xs uppercase tracking-wide">
-            <a
-              href="https://github.com/YunosukeYoshino"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-blue-600 transition-colors hover-trigger"
-              aria-label="GitHub (opens in a new tab)"
-            >
-              GitHub
-            </a>
+            <MagneticButton intensity={0.3}>
+              <a
+                href="https://github.com/YunosukeYoshino"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-blue-600 transition-colors hover-trigger inline-block p-2 -m-2"
+                aria-label="GitHub (opens in a new tab)"
+              >
+                GitHub
+              </a>
+            </MagneticButton>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-center mt-8 pt-8 border-t border-black/10">
           <p className="text-xs text-gray-500 font-mono">© {currentYear} Yunosuke Yoshino</p>
           <Link
-            to="/privacy-policy"
+            to="/privacy-policy/"
             className="text-xs text-gray-500 hover:text-gray-700 transition-colors mt-4 md:mt-0"
           >
             Privacy Policy

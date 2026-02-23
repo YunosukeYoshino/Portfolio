@@ -55,15 +55,15 @@ export default function LenisProvider({ children }: LenisProviderProps) {
 
       animationId = requestAnimationFrame(raf)
 
-      // Throttled ScrollTrigger update for better performance
-      let scrollTriggerTimeout: number | undefined
-      lenis.on('scroll', () => {
-        if (scrollTriggerTimeout) return
-        scrollTriggerTimeout = window.setTimeout(() => {
-          ScrollTrigger.update()
-          scrollTriggerTimeout = undefined
-        }, 16) // ~60fps throttle
-      })
+      // Synchronous ScrollTrigger update for smooth parallax
+      lenis.on('scroll', ScrollTrigger.update)
+
+      // GSAP Ticker integration
+      const updateLenis = (time: number) => {
+        lenis.raf(time * 1000)
+      }
+      gsap.ticker.add(updateLenis)
+      gsap.ticker.lagSmoothing(0)
 
       // Handle anchor links
       const handleAnchorClick = (e: MouseEvent) => {
@@ -91,9 +91,10 @@ export default function LenisProvider({ children }: LenisProviderProps) {
       cleanup = () => {
         document.removeEventListener('click', handleAnchorClick)
         cancelAnimationFrame(animationId)
-        if (scrollTriggerTimeout) {
-          clearTimeout(scrollTriggerTimeout)
-        }
+
+        // Remove gsap ticker
+        gsap.ticker.remove(updateLenis)
+
         lenis.destroy()
         for (const trigger of ScrollTrigger.getAll()) {
           trigger.kill()
