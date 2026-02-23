@@ -57,7 +57,7 @@ export default function HeroSection() {
           <span className="font-mono text-xs text-gray-400">V.2.0</span>
         </div>
 
-        <div className="absolute bottom-[-15vh] left-6 right-6 flex items-end justify-between mix-blend-multiply md:bottom-[-20vh] md:left-12 md:right-12">
+        <div className="absolute bottom-8 left-6 right-6 flex items-end justify-between mix-blend-multiply md:bottom-12 md:left-12 md:right-12">
           <div className="max-w-sm">
             <p className="fade-in-anim font-mono text-xs leading-relaxed text-gray-600 opacity-0 md:text-sm">
               Crafting immersive digital experiences with a focus on motion, interactivity, and

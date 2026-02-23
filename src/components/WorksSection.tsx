@@ -43,7 +43,7 @@ export default function WorksSection() {
             className={`work-item group cursor-pointer hover-trigger ${work.offsetClass}`}
           >
             <a href={work.link}>
-              <div className="relative mb-6 aspect-video overflow-hidden bg-gray-100">
+              <div className="relative mb-6 aspect-video overflow-hidden bg-gray-100 shadow-sm transition-shadow duration-500 group-hover:shadow-lg rounded-sm">
                 <img
                   src={work.image}
                   alt=""
@@ -57,7 +57,7 @@ export default function WorksSection() {
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-display mb-1 text-2xl font-medium">{work.title}</h3>
-                  <p className="font-mono text-xs text-gray-400">{work.category}</p>
+                  <p className="font-mono text-xs font-semibold text-gray-500">{work.category}</p>
                 </div>
                 <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 transition-all group-hover:border-black group-hover:bg-black group-hover:text-white">
                   <ArrowUpRight className="h-4 w-4" aria-hidden="true" />

@@ -17,7 +17,7 @@ export default function AboutSection() {
             <span className="text-gray-400">visual elegance</span>.
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm leading-relaxed text-gray-600 font-mono">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-base leading-[1.8] text-gray-600 font-mono">
             <div className="space-y-6">
               <p>
                 1995年生まれ、広島出身。アパレル販売の現場からウェブ開発の世界へと転身し、現在は東京を拠点に活動しています。

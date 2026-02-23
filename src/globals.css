@@ -8,8 +8,8 @@
   --background-dark: #111111;
   --foreground: #111111;
   --foreground-secondary: #1a1a1a;
-  --foreground-muted: #666666;
-  --foreground-light: #999999;
+  --foreground-muted: #595959;
+  --foreground-light: #737373;
   --accent: #111111;
   --accent-hover: #333333;
   --border: #e5e5e5;
@@ -279,6 +279,11 @@
 
   .work-item:hover .work-img {
     transform: scale(1.03);
+  }
+
+  /* TL;DR Callout */
+  .tldr-callout {
+    @apply border-l-4 border-black bg-gray-50 p-6 rounded-r-lg my-8 text-lg text-gray-800;
   }
 }
 

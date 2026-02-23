@@ -13,10 +13,10 @@ interface ArticleItemProps {
 export default function ArticleItem({ id, title, date, category, image }: ArticleItemProps) {
   return (
     <Link
-      to="/article/$slug"
+      to="/article/$slug/"
       params={{ slug: id }}
       reloadDocument
-      className="article-link group block bg-[#111] hover:bg-[#161616] transition-colors py-8 px-4 hover-trigger"
+      className="article-link group block bg-[#111] hover:bg-[#161616] transition-colors py-10 px-6 md:py-12 md:px-8 hover-trigger"
       data-image={image}
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">

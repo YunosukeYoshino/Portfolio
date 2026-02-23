@@ -1,6 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createRootRoute, HeadContent, Link, Outlet, Scripts } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import {
+  createRootRoute,
+  HeadContent,
+  Link,
+  Outlet,
+  Scripts,
+  useRouterState,
+} from '@tanstack/react-router'
+import { type ReactNode, useEffect, useRef } from 'react'
 import ClientLoader from '@/components/ClientLoader'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 
@@ -100,9 +107,27 @@ export const Route = createRootRoute({
   component: RootComponent,
 })
 
+function TransitionLayer() {
+  const layerRef = useRef<HTMLDivElement>(null)
+  const _pathname = useRouterState({ select: (s) => s.location.pathname })
+
+  useEffect(() => {
+    if (!layerRef.current || typeof window === 'undefined') return
+    import('gsap').then(({ default: gsap }) => {
+      const ctx = gsap.context(() => {
+        gsap.fromTo(layerRef.current, { y: '0%' }, { y: '-100%', duration: 1, ease: 'expo.inOut' })
+      })
+      return () => ctx.revert()
+    })
+  }, [])
+
+  return <div ref={layerRef} className="fixed inset-0 z-[9999] bg-[#111] pointer-events-none" />
+}
+
 function RootComponent() {
   return (
     <RootDocument>
+      <TransitionLayer />
       <Outlet />
     </RootDocument>
   )
