@@ -12,6 +12,7 @@ export const Route = createFileRoute('/sitemap.xml')({
 
         const staticRoutes = [
           { path: '/', lastmod: buildDate, changefreq: 'daily', priority: '1.0' },
+          { path: '/about/', lastmod: buildDate, changefreq: 'monthly', priority: '0.8' },
           { path: '/article/page/1/', lastmod: buildDate, changefreq: 'weekly', priority: '0.8' },
           { path: '/contact/', lastmod: buildDate, changefreq: 'monthly', priority: '0.5' },
           { path: '/privacy-policy/', lastmod: buildDate, changefreq: 'monthly', priority: '0.3' },
