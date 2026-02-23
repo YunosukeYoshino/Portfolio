@@ -81,9 +81,22 @@ export default function ArticlesHoverEffect() {
   }, [isAnimating, gsapLoaded])
 
   const handleMouseEnter = useCallback((image: string) => {
+    // Snap the initial position to the current mouse position
+    revealPosition.current = { ...mousePosition.current }
+
     setHoveredImage(image)
     setIsAnimating(true)
     if (hoverRevealRef.current && gsapRef.current) {
+      // Kill any running animations to avoid conflicts
+      gsapRef.current.killTweensOf(hoverRevealRef.current)
+
+      // Instantly position it at the cursor before fading in
+      gsapRef.current.set(hoverRevealRef.current, {
+        x: mousePosition.current.x - 150,
+        y: mousePosition.current.y - 100,
+        scale: 0.8,
+      })
+
       gsapRef.current.to(hoverRevealRef.current, {
         opacity: 1,
         scale: 1,
@@ -96,6 +109,7 @@ export default function ArticlesHoverEffect() {
   const handleMouseLeave = useCallback(() => {
     setIsAnimating(false)
     if (hoverRevealRef.current && gsapRef.current) {
+      gsapRef.current.killTweensOf(hoverRevealRef.current)
       gsapRef.current.to(hoverRevealRef.current, {
         opacity: 0,
         scale: 0.8,
@@ -127,6 +141,15 @@ export default function ArticlesHoverEffect() {
 
     const articleLinks = document.querySelectorAll('.article-link')
     const articlesContainer = document.querySelector('.articles-container')
+
+    // Preload images to ensure they show up immediately on first hover
+    articleLinks.forEach((link) => {
+      const image = link.getAttribute('data-image')
+      if (image) {
+        const img = new Image()
+        img.src = image
+      }
+    })
 
     articleLinks.forEach((link) => {
       link.addEventListener('mouseenter', handleArticleHover)
@@ -164,12 +187,10 @@ export default function ArticlesHoverEffect() {
       className="fixed top-0 left-0 w-[300px] h-[200px] pointer-events-none z-30 opacity-0 hidden md:block overflow-hidden rounded-lg"
       style={{ willChange: 'transform' }}
     >
-      {hoveredImage && (
-        <div
-          className="w-full h-full bg-cover bg-center transform scale-110 transition-transform duration-700"
-          style={{ backgroundImage: `url(${hoveredImage})` }}
-        />
-      )}
+      <div
+        className="w-full h-full bg-cover bg-center transform scale-110 transition-transform duration-700"
+        style={{ backgroundImage: hoveredImage ? `url(${hoveredImage})` : 'none' }}
+      />
     </div>
   )
 }
