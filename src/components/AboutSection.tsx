@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 import MagneticButton from './MagneticButton'
 import SplitText from './SplitText'
@@ -38,15 +39,15 @@ export default function AboutSection() {
 
           <div className="mt-16">
             <MagneticButton>
-              <button
-                type="button"
+              <Link
+                to="/about/"
                 className="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wide hover-trigger"
               >
                 <span className="border-b border-black pb-1 group-hover:border-blue-600 group-hover:text-blue-600 transition-colors">
                   Read Full Story
                 </span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform group-hover:text-blue-600" />
-              </button>
+              </Link>
             </MagneticButton>
           </div>
         </div>
