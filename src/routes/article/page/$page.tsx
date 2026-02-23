@@ -107,7 +107,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
       {/* Previous */}
       {currentPage > 1 && (
         <Link
-          to="/article/page/$page"
+          to="/article/page/$page/"
           params={{ page: String(currentPage - 1) }}
           reloadDocument
           className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300"
@@ -128,7 +128,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
       {start > 1 && (
         <>
           <Link
-            to="/article/page/$page"
+            to="/article/page/$page/"
             params={{ page: '1' }}
             reloadDocument
             className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 font-medium"
@@ -143,7 +143,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
       {pages.map((page) => (
         <Link
           key={page}
-          to="/article/page/$page"
+          to="/article/page/$page/"
           params={{ page: String(page) }}
           reloadDocument
           className={`px-4 py-2 border font-medium transition-all duration-300 ${
@@ -162,7 +162,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
         <>
           {end < totalPages - 1 && <span className="px-2 text-gray-400">…</span>}
           <Link
-            to="/article/page/$page"
+            to="/article/page/$page/"
             params={{ page: String(totalPages) }}
             reloadDocument
             className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 font-medium"
@@ -175,7 +175,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
       {/* Next */}
       {currentPage < totalPages && (
         <Link
-          to="/article/page/$page"
+          to="/article/page/$page/"
           params={{ page: String(currentPage + 1) }}
           reloadDocument
           className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300"

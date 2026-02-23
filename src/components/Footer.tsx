@@ -24,7 +24,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-end border-t border-black/10 pt-8 mt-12">
           <div className="mb-8 md:mb-0">
             <Link
-              to="/contact"
+              to="/contact/"
               className="text-2xl md:text-3xl font-bold hover:text-blue-600 transition-colors hover-trigger"
             >
               hello@yunosukeyoshino.com
@@ -50,7 +50,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center mt-8 pt-8 border-t border-black/10">
           <p className="text-xs text-gray-500 font-mono">© {currentYear} Yunosuke Yoshino</p>
           <Link
-            to="/privacy-policy"
+            to="/privacy-policy/"
             className="text-xs text-gray-500 hover:text-gray-700 transition-colors mt-4 md:mt-0"
           >
             Privacy Policy

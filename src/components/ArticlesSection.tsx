@@ -52,7 +52,7 @@ export default function ArticlesSection({ articles }: ArticlesSectionProps) {
 
             <div className="mt-16 text-center">
               <Link
-                to="/article/page/$page"
+                to="/article/page/$page/"
                 params={{ page: '1' }}
                 reloadDocument
                 className="inline-block border-b border-gray-700 pb-1 text-sm font-mono uppercase tracking-widest text-gray-500 hover:text-white hover:border-white transition-colors"
