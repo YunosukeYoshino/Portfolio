@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
+import NoiseOverlay from '@/components/effects/NoiseOverlay'
+import Footer from '@/components/layout/Footer'
+import Header from '@/components/layout/Header'
 import AboutSection from '@/components/sections/AboutSection'
 import ArticlesSection from '@/components/sections/ArticlesSection'
 import HeroSection from '@/components/sections/HeroSection'
 import SkillsMarquee from '@/components/sections/SkillsMarquee'
 import WorksSection from '@/components/sections/WorksSection'
-import Footer from '@/components/layout/Footer'
-import Header from '@/components/layout/Header'
-import NoiseOverlay from '@/components/effects/NoiseOverlay'
 import JsonLd, {
   createBreadcrumbSchema,
   createPersonSchema,

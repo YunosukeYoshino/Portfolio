@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import Breadcrumb from '@/components/layout/Breadcrumb'
 import CodeHighlight from '@/components/article/CodeHighlight'
+import Breadcrumb from '@/components/layout/Breadcrumb'
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import JsonLd, { createArticleSchema, createBreadcrumbSchema } from '@/components/seo/JsonLd'

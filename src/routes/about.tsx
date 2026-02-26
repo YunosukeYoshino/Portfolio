@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import NoiseOverlay from '@/components/effects/NoiseOverlay'
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import JsonLd, { createBreadcrumbSchema, createPersonSchema } from '@/components/seo/JsonLd'
-import NoiseOverlay from '@/components/effects/NoiseOverlay'
 
 export const Route = createFileRoute('/about')({
   head: () => ({

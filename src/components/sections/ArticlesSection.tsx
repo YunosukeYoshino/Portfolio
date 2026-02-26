@@ -1,9 +1,9 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
-import type { Blog } from '@/types'
 import ArticleItem from '@/components/article/ArticleItem'
 import ArticlesHoverEffect from '@/components/article/ArticlesHoverEffect'
+import type { Blog } from '@/types'
 
 interface ArticlesSectionProps {
   articles: Blog[]

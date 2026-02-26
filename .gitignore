@@ -5,6 +5,9 @@ out/
 # Astro build output (legacy)
 dist/
 
+# TanStack Start build output
+build/
+
 # dependencies
 node_modules/
 

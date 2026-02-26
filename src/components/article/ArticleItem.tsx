@@ -21,9 +21,9 @@ export default function ArticleItem({ id, title, date, category, image }: Articl
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
         <div className="flex-1">
-          <h3 className="text-xl font-display font-medium mb-2 group-hover:text-gray-300 transition-colors">
+          <h2 className="text-xl font-display font-medium mb-2 group-hover:text-gray-300 transition-colors">
             {title}
-          </h3>
+          </h2>
           <div className="flex gap-3 text-xs font-mono text-gray-500">
             <span>{date}</span>
             <span>•</span>
