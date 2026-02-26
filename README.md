@@ -99,7 +99,6 @@ Specs are stored in `.kiro/specs/` with the following structure:
 ├── settings/
 │   ├── rules/        # Design and analysis rules
 │   └── templates/    # Spec templates
-├── steering/         # Project-wide policies
 └── specs/            # Feature specifications
 ```
 

@@ -20,6 +20,24 @@ export interface BlogListProps {
   page?: number
 }
 
+export interface ArticleFeedItem {
+  id: string
+  title: string
+  publishedAt: string
+  category: {
+    id: string
+    name: string
+  }
+  eyecatch: {
+    url: string
+    width: number
+    height: number
+    alt: string
+  }
+  source: 'microcms' | 'zenn'
+  externalUrl?: string
+}
+
 export interface SEOProps {
   title: string
   description: string

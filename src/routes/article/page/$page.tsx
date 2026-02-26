@@ -9,8 +9,66 @@ import JsonLd, {
   createWebsiteSchema,
 } from '@/components/JsonLd'
 import { getBlogs } from '@/lib/microcms'
+import { getZennFeedItems, type ZennFeedItem } from '@/lib/zennRss'
+import type { ArticleFeedItem, Blog as MicroCMSBlog } from '@/types'
 
 const BLOGS_PER_PAGE = 12
+const MICROCMS_FETCH_LIMIT = 1000
+const ZENN_FETCH_LIMIT = 100
+const ZENN_DEFAULT_EYECATCH = 'https://yunosukeyoshino.com/assets/og-image.png'
+
+const mapMicroCMSBlog = (blog: MicroCMSBlog): ArticleFeedItem => {
+  return {
+    id: blog.id,
+    title: blog.title,
+    publishedAt: blog.publishedAt,
+    category: {
+      id: blog.category.id,
+      name: blog.category.name,
+    },
+    eyecatch: {
+      url: blog.eyecatch.url,
+      width: blog.eyecatch.width,
+      height: blog.eyecatch.height,
+      alt: blog.eyecatch.alt || blog.title,
+    },
+    source: 'microcms',
+  }
+}
+
+const mapZennArticle = (article: ZennFeedItem): ArticleFeedItem => {
+  return {
+    id: article.id,
+    title: article.title,
+    publishedAt: article.publishedAt,
+    category: {
+      id: 'zenn',
+      name: 'Zenn',
+    },
+    eyecatch: {
+      url: article.thumbnailUrl || ZENN_DEFAULT_EYECATCH,
+      width: 1200,
+      height: 630,
+      alt: article.title,
+    },
+    source: 'zenn',
+    externalUrl: article.url,
+  }
+}
+
+const getZennArticlesSafely = async (): Promise<ZennFeedItem[]> => {
+  try {
+    return await getZennFeedItems({
+      data: {
+        limit: ZENN_FETCH_LIMIT,
+      },
+    })
+  } catch (error) {
+    // biome-ignore lint/suspicious/noConsole: Fallback to microCMS-only feed when Zenn is unavailable
+    console.warn('Failed to fetch Zenn RSS feed:', error)
+    return []
+  }
+}
 
 export const Route = createFileRoute('/article/page/$page')({
   loader: async ({ params }) => {
@@ -20,21 +78,33 @@ export const Route = createFileRoute('/article/page/$page')({
       throw notFound()
     }
 
-    const { totalCount, contents: blogs } = await getBlogs({
-      data: {
-        queries: {
-          limit: BLOGS_PER_PAGE,
-          offset: (currentPage - 1) * BLOGS_PER_PAGE,
-          orders: '-publishedAt',
+    const [{ contents: microCMSBlogs }, zennArticles] = await Promise.all([
+      getBlogs({
+        data: {
+          queries: {
+            limit: MICROCMS_FETCH_LIMIT,
+            orders: '-publishedAt',
+          },
         },
-      },
-    })
+      }),
+      getZennArticlesSafely(),
+    ])
+
+    const allArticles = [
+      ...microCMSBlogs.map(mapMicroCMSBlog),
+      ...zennArticles.map(mapZennArticle),
+    ].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+
+    const totalCount = allArticles.length
 
     const totalPages = Math.ceil(totalCount / BLOGS_PER_PAGE)
 
     if (currentPage > totalPages && totalPages > 0) {
       throw notFound()
     }
+
+    const offset = (currentPage - 1) * BLOGS_PER_PAGE
+    const blogs = allArticles.slice(offset, offset + BLOGS_PER_PAGE)
 
     return { blogs, currentPage, totalPages, totalCount }
   },

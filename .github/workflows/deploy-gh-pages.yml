@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: "18"
+  NODE_VERSION: "20"
   BUN_VERSION: "latest"
 
 jobs:

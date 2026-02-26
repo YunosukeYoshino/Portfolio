@@ -2,10 +2,10 @@
 
 import { Link } from '@tanstack/react-router'
 import { formatDate } from '@/lib/utils'
-import type { Blog as BlogType } from '@/types'
+import type { ArticleFeedItem } from '@/types'
 
 interface BlogProps {
-  blogs: BlogType[]
+  blogs: ArticleFeedItem[]
   column?: number
   className?: string
   showViewAllButton?: boolean
@@ -48,20 +48,14 @@ export default function Blog({
     <div className={className}>
       <div className="container-custom">
         <div className={`grid ${gridCols} gap-6 lg:gap-8`}>
-          {blogs.map((blog) => (
-            <article
-              key={blog.id}
-              className="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-lg"
-            >
-              <Link
-                to="/article/$slug/"
-                params={{ slug: blog.id }}
-                reloadDocument
-                className="block"
-              >
+          {blogs.map((blog) => {
+            const imageUrl = `${blog.eyecatch.url}${blog.eyecatch.url.includes('?') ? '&' : '?'}w=800&fm=webp`
+
+            const cardBody = (
+              <>
                 <div className="relative aspect-video overflow-hidden">
                   <img
-                    src={`${blog.eyecatch.url}?w=800&fm=webp`}
+                    src={imageUrl}
                     alt={blog.eyecatch.alt || blog.title}
                     width={800}
                     height={450}
@@ -83,9 +77,36 @@ export default function Blog({
                     {blog.title}
                   </h2>
                 </div>
-              </Link>
-            </article>
-          ))}
+              </>
+            )
+
+            return (
+              <article
+                key={`${blog.source}-${blog.id}`}
+                className="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-lg"
+              >
+                {blog.source === 'zenn' && blog.externalUrl ? (
+                  <a
+                    href={blog.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    {cardBody}
+                  </a>
+                ) : (
+                  <Link
+                    to="/article/$slug/"
+                    params={{ slug: blog.id }}
+                    reloadDocument
+                    className="block"
+                  >
+                    {cardBody}
+                  </Link>
+                )}
+              </article>
+            )
+          })}
         </div>
 
         {showViewAllButton && (

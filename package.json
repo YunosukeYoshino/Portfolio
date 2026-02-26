@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "portless portfolio vite",
     "build": "vite build",
     "start": "vite preview",
     "preview": "vite build && vite preview",
@@ -42,7 +42,7 @@
     "tailwind-merge": "^3.5.0",
     "three": "^0.182.0",
     "vite-tsconfig-paths": "^6.1.1",
-    "zod": "^4.3.6"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",

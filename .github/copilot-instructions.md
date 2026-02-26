@@ -35,7 +35,9 @@ src/
 ├── components/        # React コンポーネント
 ├── lib/
 │   ├── microcms.ts    # 後方互換ファサード（@deprecated）
-│   └── utils.ts       # cn(), formatDate()
+│   ├── utils.ts       # cn(), formatDate()
+│   ├── highlight.ts   # Shikiによるコードハイライト（createServerFn）
+│   └── zennRss.ts     # Zenn RSSフィード取得（createServerFn）
 └── types/             # 共有型定義（domain再エクスポート）
 ```
 
@@ -69,6 +71,11 @@ const paged = await useCases.getBlogs.paginated(1, 6)
 import { createUseCases } from '@/infrastructure/di'
 const testUseCases = createUseCases(fakeBlogRepository)
 ```
+
+### Zenn RSS統合
+Zenn記事をRSSフィードから取得し、microCMS記事と統合表示。
+- `src/lib/zennRss.ts` - Zenn RSSフィード取得 (createServerFn)
+- `src/types/index.ts` の `ArticleFeedItem` で `source: 'microcms' | 'zenn'` を区別
 
 ### プリレンダリング
 `vite.config.ts` の prerender 設定を参照。
