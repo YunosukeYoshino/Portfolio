@@ -126,6 +126,10 @@ src/
 > [!NOTE]
 > This project follows Clean Architecture principles. Domain layer has no external dependencies.
 
+### Architecture
+
+![Portfolio Architecture](docs/diagrams/architecture.svg)
+
 ## Deployment
 
 Deployed as a static site to Cloudflare Pages.

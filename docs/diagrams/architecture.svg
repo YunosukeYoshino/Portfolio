@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1153.8453333333332 1223" width="1153.8453333333332" height="1223" style="--bg:#ffffff;--fg:#1f2328;--line:#d1d9e0;--accent:#0969da;--muted:#59636e;background:var(--bg)">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<g class="subgraph" data-id="presentation" data-label="Presentation Layer">
+  <rect x="578.0357499999999" y="40" width="311.59458333333333" height="266.70000000000005" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="578.0357499999999" y="40" width="311.59458333333333" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="590.0357499999999" y="54" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Presentation Layer</text>
+</g>
+<g class="subgraph" data-id="usecase" data-label="UseCase Layer">
+  <rect x="40" y="820.3000000000001" width="588.7959999999999" height="120.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="820.3000000000001" width="588.7959999999999" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="52" y="834.3000000000001" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">UseCase Layer</text>
+</g>
+<g class="subgraph" data-id="domain" data-label="Domain Layer">
+  <rect x="286.82449999999994" y="1001.2" width="196.21499999999997" height="181.8" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="286.82449999999994" y="1001.2" width="196.21499999999997" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="298.82449999999994" y="1015.2" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Domain Layer</text>
+</g>
+<g class="subgraph" data-id="infra" data-label="Infrastructure Layer">
+  <rect x="377.3751583333333" y="366.70000000000005" width="557.8514666666666" height="266.70000000000005" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="377.3751583333333" y="366.70000000000005" width="557.8514666666666" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="389.3751583333333" y="380.70000000000005" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Infrastructure Layer</text>
+</g>
+<g class="subgraph" data-id="external" data-label="External Services">
+  <rect x="649.7959999999999" y="693.4000000000001" width="321.74" height="96.9" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="649.7959999999999" y="693.4000000000001" width="321.74" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="661.7959999999999" y="707.4000000000001" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">External Services</text>
+</g>
+<g class="subgraph" data-id="deploy" data-label="Build and Deploy">
+  <rect x="917.6303333333333" y="46" width="196.21499999999997" height="266.70000000000005" rx="0" ry="0" fill="var(--_group-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="917.6303333333333" y="46" width="196.21499999999997" height="28" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="929.6303333333333" y="60" font-size="12" font-weight="600" fill="var(--_text-sec)" dy="4.199999999999999">Build and Deploy</text>
+</g>
+<polyline class="edge" data-from="loader" data-to="getBlogs" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="777.4438333333333,208.8 777.4438333333333,232.8 131.06799999999998,232.8 131.06799999999998,888.3000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="loader" data-to="getBlogDetail" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="777.4438333333333,208.8 777.4438333333333,232.8 525.131,232.8 525.131,888.3000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="loader" data-to="zennRss" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="777.4438333333333,208.8 777.4438333333333,232.8 677.8786249999998,232.8 677.8786249999998,410.70000000000005" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="loader" data-to="highlight" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="777.4438333333333,208.8 777.4438333333333,232.8 850.4571249999999,232.8 850.4571249999999,410.70000000000005" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="getBlogs" data-to="blogRepo" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="131.06799999999998,925.2 131.06799999999998,985.2 384.9319999999999,985.2 384.9319999999999,1045.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="getBlogDetail" data-to="blogRepo" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="525.131,925.2 525.131,985.2 384.9319999999999,985.2 384.9319999999999,1045.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="getAllBlogIds" data-to="blogRepo" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="321.80099999999993,925.2 321.80099999999993,985.2 384.9319999999999,985.2 384.9319999999999,1045.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="diContainer" data-to="getBlogs" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="450.2886583333333,447.6 450.2886583333333,471.6 131.06799999999998,471.6 131.06799999999998,888.3000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="diContainer" data-to="getBlogDetail" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="450.2886583333333,447.6 450.2886583333333,471.6 525.131,471.6 525.131,888.3000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="diContainer" data-to="getAllBlogIds" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="450.2886583333333,447.6 450.2886583333333,471.6 321.80099999999993,471.6 321.80099999999993,888.3000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="microRepo" data-to="blogRepo" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="557.0013749999998,532.5 557.0013749999998,556.5 384.9319999999999,556.5 384.9319999999999,1045.2" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="microClient" data-to="microCMS" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="597.6271249999999,617.4000000000001 597.627125,675.4000000000001 729.0079999999999,675.4000000000001 729.0079999999998,737.4000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="zennRss" data-to="zennFeed" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="677.8786249999998,447.6 677.8786249999998,663.4000000000001 887.8779999999999,663.4000000000001 887.8779999999999,737.4000000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="routes" data-to="loader" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="715.6514999999999,123.9 715.6514999999999,147.9 777.4438333333333,147.9 777.4438333333333,171.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="routes" data-to="components" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="715.6514999999999,123.9 715.6514999999999,147.9 669.4742499999999,147.9 669.4742499999999,256.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="loader" data-to="components" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="777.4438333333333,208.8 777.4438333333333,232.8 669.4742499999999,232.8 669.4742499999999,256.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="blogRepo" data-to="entities" data-style="dotted" data-arrow-start="false" data-arrow-end="true" points="384.9319999999999,1082.1000000000001 384.9319999999999,1130.1000000000001" fill="none" stroke="var(--_line)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="diContainer" data-to="microRepo" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="450.2886583333333,447.6 450.2886583333333,471.6 557.0013749999998,471.6 557.0013749999998,495.6" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="microRepo" data-to="microClient" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="557.0013749999998,532.5 557.0013749999998,556.5 597.6271249999999,556.5 597.6271249999999,580.5" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="vite" data-to="prerender" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1015.7378333333332,123.9 1015.7378333333332,171.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="prerender" data-to="cf" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1015.7378333333332,208.8 1015.7378333333332,256.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="node" data-id="routes" data-label="TanStack Router" data-shape="rectangle">
+  <rect x="644.6589999999999" y="87" width="141.985" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="715.6514999999999" y="105.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">TanStack Router</text>
+</g>
+<g class="node" data-id="loader" data-label="loader (Server-side fetch)" data-shape="rectangle">
+  <rect x="681.2573333333332" y="171.9" width="192.37299999999996" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="777.4438333333333" y="190.35000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">loader (Server-side fetch)</text>
+</g>
+<g class="node" data-id="components" data-label="React Components" data-shape="rectangle">
+  <rect x="594.0357499999999" y="256.8" width="150.877" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="669.4742499999999" y="275.25" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">React Components</text>
+</g>
+<g class="node" data-id="getBlogs" data-label="GetBlogsUseCase" data-shape="rectangle">
+  <rect x="56" y="888.3000000000001" width="150.13599999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="131.06799999999998" y="906.7500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">GetBlogsUseCase</text>
+</g>
+<g class="node" data-id="getBlogDetail" data-label="GetBlogDetailUseCase" data-shape="rectangle">
+  <rect x="437.46599999999995" y="888.3000000000001" width="175.32999999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="525.131" y="906.7500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">GetBlogDetailUseCase</text>
+</g>
+<g class="node" data-id="getAllBlogIds" data-label="GetAllBlogIdsUseCase" data-shape="rectangle">
+  <rect x="234.13599999999997" y="888.3000000000001" width="175.32999999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="321.80099999999993" y="906.7500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">GetAllBlogIdsUseCase</text>
+</g>
+<g class="node" data-id="blogRepo" data-label="BlogRepository Port" data-shape="rectangle">
+  <rect x="304.3064999999999" y="1045.2" width="161.251" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="384.9319999999999" y="1063.65" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">BlogRepository Port</text>
+</g>
+<g class="node" data-id="entities" data-label="Blog / BlogResponse" data-shape="rectangle">
+  <rect x="302.82449999999994" y="1130.1000000000001" width="164.21499999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="384.9319999999999" y="1148.5500000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Blog / BlogResponse</text>
+</g>
+<g class="node" data-id="diContainer" data-label="DI Container" data-shape="rectangle">
+  <rect x="393.3751583333333" y="410.70000000000005" width="113.827" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="450.2886583333333" y="429.15000000000003" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">DI Container</text>
+</g>
+<g class="node" data-id="microRepo" data-label="MicroCMSBlogRepository" data-shape="rectangle">
+  <rect x="458.2213749999999" y="495.6" width="197.55999999999995" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="557.0013749999998" y="514.0500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">MicroCMSBlogRepository</text>
+</g>
+<g class="node" data-id="microClient" data-label="MicroCMS Client" data-shape="rectangle">
+  <rect x="527.3756249999999" y="580.5" width="140.503" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="597.6271249999999" y="598.95" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">MicroCMS Client</text>
+</g>
+<g class="node" data-id="zennRss" data-label="Zenn RSS Fetcher" data-shape="rectangle">
+  <rect x="602.0696249999999" y="410.70000000000005" width="151.618" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="677.8786249999998" y="429.15000000000003" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Zenn RSS Fetcher</text>
+</g>
+<g class="node" data-id="highlight" data-label="Shiki Highlighter" data-shape="rectangle">
+  <rect x="781.6876249999999" y="410.70000000000005" width="137.539" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="850.4571249999999" y="429.15000000000003" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Shiki Highlighter</text>
+</g>
+<g class="node" data-id="microCMS" data-label="microCMS API" data-shape="rectangle">
+  <rect x="665.7959999999999" y="737.4000000000001" width="126.424" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="729.0079999999999" y="755.8500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">microCMS API</text>
+</g>
+<g class="node" data-id="zennFeed" data-label="Zenn RSS Feed" data-shape="rectangle">
+  <rect x="820.22" y="737.4000000000001" width="135.31599999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="887.878" y="755.8500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Zenn RSS Feed</text>
+</g>
+<g class="node" data-id="vite" data-label="Vite + TanStack Start" data-shape="rectangle">
+  <rect x="933.6303333333333" y="87" width="164.21499999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1015.7378333333332" y="105.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Vite + TanStack Start</text>
+</g>
+<g class="node" data-id="prerender" data-label="SSG Prerendering" data-shape="rectangle">
+  <rect x="939.5583333333333" y="171.9" width="152.359" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1015.7378333333332" y="190.35000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">SSG Prerendering</text>
+</g>
+<g class="node" data-id="cf" data-label="Cloudflare Pages" data-shape="rectangle">
+  <rect x="944.0043333333333" y="256.8" width="143.46699999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1015.7378333333334" y="275.25" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Cloudflare Pages</text>
+</g>
+</svg>
