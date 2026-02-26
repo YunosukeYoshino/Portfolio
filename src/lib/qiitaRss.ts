@@ -53,24 +53,33 @@ const extractAtomLinkHref = (entryXml: string): string => {
   return hrefFirstMatch?.[1] || ''
 }
 
+const decodeHtmlEntities = (value: string): string =>
+  value
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+
 const fetchOgImage = async (url: string): Promise<string | null> => {
   try {
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; portfolio-bot/1.0; +https://yunosukeyoshino.com)',
       },
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(10000),
     })
     if (!response.ok) {
       return null
     }
     const html = await response.text()
 
+    // Allow arbitrary attributes between property and content
     const match =
-      html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i) ||
-      html.match(/<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i)
+      html.match(/<meta\b[^>]*\bproperty=["']og:image["'][^>]*\bcontent=["']([^"']+)["'][^>]*>/i) ||
+      html.match(/<meta\b[^>]*\bcontent=["']([^"']+)["'][^>]*\bproperty=["']og:image["'][^>]*>/i)
 
-    return match?.[1] ?? null
+    const rawUrl = match?.[1] ?? null
+    return rawUrl ? decodeHtmlEntities(rawUrl) : null
   } catch {
     return null
   }
