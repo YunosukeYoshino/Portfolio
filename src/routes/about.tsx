@@ -8,9 +8,29 @@ export const Route = createFileRoute('/about')({
   head: () => ({
     meta: [
       { title: 'About｜Yunosuke Yoshino' },
+      {
+        name: 'description',
+        content:
+          'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
+      },
       { property: 'og:title', content: 'About｜Yunosuke Yoshino' },
-      { property: 'og:description', content: 'Career and background of Yunosuke Yoshino.' },
+      {
+        property: 'og:description',
+        content:
+          'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
+      },
+      { property: 'og:url', content: 'https://yunosukeyoshino.com/about/' },
+      {
+        name: 'twitter:title',
+        content: 'About｜Yunosuke Yoshino',
+      },
+      {
+        name: 'twitter:description',
+        content:
+          'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
+      },
     ],
+    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/about/' }],
   }),
   component: AboutPage,
 })
@@ -44,8 +64,8 @@ const timelineData = [
 function AboutPage() {
   const personSchema = createPersonSchema()
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: 'ホーム', url: 'https://yunosukeyoshino.com' },
-    { name: 'About', url: 'https://yunosukeyoshino.com/about' },
+    { name: 'ホーム', url: 'https://yunosukeyoshino.com/' },
+    { name: 'About', url: 'https://yunosukeyoshino.com/about/' },
   ])
 
   return (

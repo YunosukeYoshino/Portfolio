@@ -36,7 +36,8 @@ export const Route = createRootRoute({
       { name: 'theme-color', content: '#F3F3F1' },
       {
         name: 'description',
-        content: 'Frontend Engineer specializing in React, Next.js, TypeScript',
+        content:
+          'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。',
       },
       { name: 'author', content: 'Yunosuke Yoshino' },
       { name: 'robots', content: 'index, follow' },
@@ -49,17 +50,20 @@ export const Route = createRootRoute({
       { property: 'og:site_name', content: 'Yunosuke Yoshino Portfolio' },
       {
         property: 'og:description',
-        content: 'Frontend Engineer specializing in React, Next.js, TypeScript',
+        content:
+          'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。',
       },
       {
         property: 'og:image',
         content: 'https://yunosukeyoshino.com/assets/og-image.png',
       },
       { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:site', content: '@YunosukeYoshino' },
       { name: 'twitter:title', content: 'Yunosuke Yoshino｜Portfolio' },
       {
         name: 'twitter:description',
-        content: 'Frontend Engineer specializing in React, Next.js, TypeScript',
+        content:
+          'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。',
       },
       {
         name: 'twitter:image',
@@ -100,7 +104,7 @@ export const Route = createRootRoute({
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&family=Manrope:wght@400;600&display=optional',
+        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&family=Manrope:wght@400;600&display=swap',
       },
     ],
   }),

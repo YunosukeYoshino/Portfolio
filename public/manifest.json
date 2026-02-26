@@ -1,7 +1,7 @@
 {
-  "name": "芳野悠之助 ポートフォリオ",
+  "name": "Yunosuke Yoshino ポートフォリオ",
   "short_name": "Yunosuke Portfolio",
-  "description": "芳野悠之助のポートフォリオサイト。フロントエンド開発、UI/UXデザイン、モダンなWeb技術に関する技術記事とプロジェクトを紹介しています。",
+  "description": "Yunosuke Yoshinoのポートフォリオサイト。フロントエンド開発、UI/UXデザイン、モダンなWeb技術に関する技術記事とプロジェクトを紹介しています。",
   "start_url": "/",
   "display": "standalone",
   "orientation": "any",

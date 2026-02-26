@@ -43,7 +43,8 @@ export const Route = createFileRoute('/')({
       { name: 'twitter:title', content: 'Yunosuke Yoshino｜Portfolio' },
       {
         name: 'twitter:description',
-        content: 'Frontend Engineer specializing in React, Next.js, TypeScript',
+        content:
+          'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。',
       },
       {
         name: 'twitter:image',
@@ -61,7 +62,7 @@ function HomePage() {
   const personSchema = createPersonSchema()
   const websiteSchema = createWebsiteSchema()
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: 'ホーム', url: 'https://yunosukeyoshino.com' },
+    { name: 'ホーム', url: 'https://yunosukeyoshino.com/' },
   ])
 
   return (

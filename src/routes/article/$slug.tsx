@@ -21,13 +21,20 @@ export const Route = createFileRoute('/article/$slug')({
       return { meta: [{ title: 'Loading... | Yunosuke Yoshino' }] }
     }
     const { blog } = loaderData
-    const description = blog.content?.replace(/<[^>]*>/g, '').slice(0, 160) ?? ''
+    const description =
+      blog.content
+        ?.replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 160) ?? ''
     const url = `https://yunosukeyoshino.com/article/${blog.id}/`
     return {
       meta: [
         { title: `${blog.title} | Yunosuke Yoshino` },
         { name: 'description', content: description },
         { property: 'og:title', content: blog.title },
+        { property: 'og:description', content: description },
         { property: 'og:type', content: 'article' },
         {
           property: 'og:image',
@@ -58,11 +65,11 @@ function BlogDetailPage() {
 
   const articleSchema = createArticleSchema(blog)
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: 'ホーム', url: 'https://yunosukeyoshino.com' },
-    { name: '記事一覧', url: 'https://yunosukeyoshino.com/article/' },
+    { name: 'ホーム', url: 'https://yunosukeyoshino.com/' },
+    { name: '記事一覧', url: 'https://yunosukeyoshino.com/article/page/1/' },
     {
       name: blog.title,
-      url: `https://yunosukeyoshino.com/article/${blog.id}`,
+      url: `https://yunosukeyoshino.com/article/${blog.id}/`,
     },
   ])
 

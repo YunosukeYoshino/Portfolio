@@ -3,11 +3,7 @@ import Blog from '@/components/article/Blog'
 import Breadcrumb from '@/components/layout/Breadcrumb'
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
-import JsonLd, {
-  createBlogSchema,
-  createBreadcrumbSchema,
-  createWebsiteSchema,
-} from '@/components/seo/JsonLd'
+import JsonLd, { createBlogSchema, createBreadcrumbSchema } from '@/components/seo/JsonLd'
 import { getBlogs } from '@/lib/microcms'
 import { getQiitaFeedItems, type QiitaFeedItem } from '@/lib/qiitaRss'
 import { getZennFeedItems, type ZennFeedItem } from '@/lib/zennRss'
@@ -311,19 +307,17 @@ function BlogListPage() {
   ]
 
   const blogSchema = createBlogSchema()
-  const websiteSchema = createWebsiteSchema()
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: 'ホーム', url: 'https://yunosukeyoshino.com' },
+    { name: 'ホーム', url: 'https://yunosukeyoshino.com/' },
     {
       name: currentPage === 1 ? '記事一覧' : `記事一覧 - ${currentPage}ページ目`,
-      url: `https://yunosukeyoshino.com/article/page/${currentPage}`,
+      url: `https://yunosukeyoshino.com/article/page/${currentPage}/`,
     },
   ])
 
   return (
     <>
       <JsonLd data={blogSchema} />
-      <JsonLd data={websiteSchema} />
       <JsonLd data={breadcrumbSchema} />
       <Header />
       <main className="bg-white">

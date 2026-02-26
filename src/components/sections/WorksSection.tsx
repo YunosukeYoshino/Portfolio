@@ -8,6 +8,7 @@ const works = [
     category: 'Design / WebGL',
     image:
       'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2555&auto=format&fit=crop',
+    alt: 'YUNOSUKE Portfolio - WebGLとモーションデザインを活用したポートフォリオサイト',
     link: '#',
     offsetClass: 'md:pt-32',
   },
@@ -17,6 +18,7 @@ const works = [
     category: 'Frontend / Jamstack',
     image:
       'https://images.unsplash.com/photo-1621600411688-4be93cd68504?q=80&w=2680&auto=format&fit=crop',
+    alt: 'Corporate Renewal - Jamstackによるコーポレートサイトリニューアル',
     link: '#',
     offsetClass: 'md:pt-32',
   },
@@ -94,7 +96,7 @@ export default function WorksSection() {
                 <div className="w-full h-full transform transition-transform duration-700 group-hover:scale-[1.03]">
                   <img
                     src={work.image}
-                    alt=""
+                    alt={work.alt}
                     width={1200}
                     height={675}
                     loading="lazy"
