@@ -15,8 +15,7 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "~/*": ["./src/*"]
+      "@/*": ["./src/*"]
     },
     "target": "ES2022",
     "forceConsistentCasingInFileNames": true

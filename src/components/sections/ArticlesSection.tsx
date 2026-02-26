@@ -2,8 +2,8 @@
 
 import { Link } from '@tanstack/react-router'
 import type { Blog } from '@/types'
-import ArticleItem from './ArticleItem'
-import ArticlesHoverEffect from './ArticlesHoverEffect'
+import ArticleItem from '@/components/article/ArticleItem'
+import ArticlesHoverEffect from '@/components/article/ArticlesHoverEffect'
 
 interface ArticlesSectionProps {
   articles: Blog[]

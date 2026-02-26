@@ -2,7 +2,7 @@
 
 import { ArrowDown } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import WebGLBackground from './WebGLBackground'
+import WebGLBackground from '@/components/effects/WebGLBackground'
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null)

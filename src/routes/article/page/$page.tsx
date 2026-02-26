@@ -1,13 +1,13 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
-import Blog from '@/components/Blog'
-import Breadcrumb from '@/components/Breadcrumb'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
+import Blog from '@/components/article/Blog'
+import Breadcrumb from '@/components/layout/Breadcrumb'
+import Footer from '@/components/layout/Footer'
+import Header from '@/components/layout/Header'
 import JsonLd, {
   createBlogSchema,
   createBreadcrumbSchema,
   createWebsiteSchema,
-} from '@/components/JsonLd'
+} from '@/components/seo/JsonLd'
 import { getBlogs } from '@/lib/microcms'
 import { getZennFeedItems, type ZennFeedItem } from '@/lib/zennRss'
 import type { ArticleFeedItem, Blog as MicroCMSBlog } from '@/types'
