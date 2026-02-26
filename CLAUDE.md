@@ -2,45 +2,45 @@ Please reason in English and respond in Japanese.
 
 # Portfolio Project
 
-## プロジェクト概要
-個人ポートフォリオサイト。microCMSからブログ記事を取得し、スキル・プロジェクト紹介を提供。
+## Project Overview
+Personal portfolio site that fetches blog articles from microCMS and showcases skills and projects.
 
-## 技術スタック
-- **フレームワーク**: TanStack Start + React 19
+## Tech Stack
+- **Framework**: TanStack Start + React 19
 - **CMS**: microCMS
-- **スタイル**: Tailwind CSS v4（CSS-first設定）
-- **データフェッチ**: TanStack Query（React Query）
-- **デプロイ**: Cloudflare Pages（静的エクスポート）
+- **Styling**: Tailwind CSS v4 (CSS-first configuration)
+- **Data Fetching**: TanStack Query (React Query)
+- **Deploy**: Cloudflare Pages (static export)
 
 ## Package Manager
-**必須**: `npm` ではなく **Bun** を使用。
+**Required**: Use **Bun**, not `npm`.
 
 ## Key Commands
 ```
-bun run dev    # 開発サーバー → http://portfolio.localhost (portless)
-bun run build  # 本番ビルド
-bun run lint   # Biome + TypeScript + Markuplint
-bun run fix    # 自動修正
-bun run deploy          # main ブランチにデプロイ
-bun run deploy:preview  # preview ブランチにデプロイ
+bun run dev             # Dev server -> http://portfolio.localhost (portless)
+bun run build           # Production build
+bun run lint            # Biome + TypeScript + Markuplint
+bun run fix             # Auto-fix
+bun run deploy          # Deploy to main branch
+bun run deploy:preview  # Deploy to preview branch
 ```
 
 ## Known Constraints
-- **Zod v3**: @tanstack/router-generator との互換性のため v3 (^3.24.2) を使用。v4 不可。
+- **Zod v3**: Must use v3 (^3.24.2) for compatibility with @tanstack/router-generator. v4 is not allowed.
 
-## ディレクトリ構造
+## Directory Structure
 ```
 src/
-├── domain/            # Domain層（外部依存なし）
-│   ├── entities/      # Blog, BlogResponse エンティティ
-│   └── repositories/  # BlogRepository Port（インターフェース）
-├── usecases/          # UseCase層（ビジネスロジック）
+├── domain/            # Domain layer (no external dependencies)
+│   ├── entities/      # Blog, BlogResponse entities
+│   └── repositories/  # BlogRepository port (interface)
+├── usecases/          # Use case layer (business logic)
 │   └── blog/          # GetBlogsUseCase, GetBlogDetailUseCase
-├── infrastructure/    # Infrastructure層（具体実装）
-│   ├── microcms/      # microCMS Adapter
-│   └── di/            # 依存性注入コンテナ
-├── routes/            # TanStack Router ページ・レイアウト
-├── components/        # React コンポーネント
+├── infrastructure/    # Infrastructure layer (concrete implementations)
+│   ├── microcms/      # microCMS adapter
+│   └── di/            # Dependency injection container
+├── routes/            # TanStack Router pages and layouts
+├── components/        # React components
 │   ├── layout/        # Header, Footer, Breadcrumb
 │   ├── sections/      # HeroSection, AboutSection, WorksSection, ArticlesSection, SkillsMarquee
 │   ├── article/       # ArticleItem, ArticlesHoverEffect, Blog, CodeHighlight
@@ -49,36 +49,36 @@ src/
 │   ├── seo/           # GoogleAnalytics, JsonLd
 │   └── forms/         # ContactForm
 ├── lib/
-│   ├── microcms.ts    # 後方互換ファサード（@deprecated）
+│   ├── microcms.ts    # Backward-compatible facade (@deprecated)
 │   ├── utils.ts       # cn(), formatDate()
-│   ├── highlight.ts   # Shikiによるコードハイライト（createServerFn）
-│   ├── zennRss.ts     # Zenn RSSフィード取得（createServerFn）
-│   └── qiitaRss.ts    # Qiita Atom RSSフィード取得（createServerFn）
-└── types/             # 共有型定義（domain再エクスポート）
+│   ├── highlight.ts   # Code highlighting via Shiki (createServerFn)
+│   ├── zennRss.ts     # Zenn RSS feed fetcher (createServerFn)
+│   └── qiitaRss.ts    # Qiita Atom feed fetcher with OGP image fetch (createServerFn)
+└── types/             # Shared type definitions (domain re-exports)
 ```
 
 ## Key Locations
-- `src/infrastructure/di/` - 依存性注入コンテナ (useCases)
-- `src/domain/` - Domain層 (外部依存なし)
-- `src/lib/microcms.ts` - 後方互換ファサード (@deprecated)
-- `src/lib/zennRss.ts` - Zenn RSSフィード取得
-- `src/lib/qiitaRss.ts` - Qiita Atom RSSフィード取得
-- `vite.config.ts` - prerender/SSG設定
+- `src/infrastructure/di/` - DI container (useCases)
+- `src/domain/` - Domain layer (no external dependencies)
+- `src/lib/microcms.ts` - Backward-compatible facade (@deprecated)
+- `src/lib/zennRss.ts` - Zenn RSS feed fetcher
+- `src/lib/qiitaRss.ts` - Qiita Atom feed fetcher (fetches OGP image per article)
+- `vite.config.ts` - Prerender/SSG configuration
 
-## 重要なパターン
+## Important Patterns
 
-### データフェッチパターン
-- **loader**: TanStack Routerのloaderでサーバーサイドfetch
-- **createServerFn**: APIキーを安全に扱うサーバー関数（例: `src/lib/highlight.ts`, `src/lib/zennRss.ts`）
-- 参照: `src/routes/article/$slug.tsx`（loader + createServerFn 例）
+### Data Fetching
+- **loader**: Server-side fetch via TanStack Router loader
+- **createServerFn**: Server functions for secure API key handling (e.g., `src/lib/highlight.ts`, `src/lib/zennRss.ts`)
+- Reference: `src/routes/article/$slug.tsx` (loader + createServerFn example)
 
 ### Tailwind CSS v4
-v3との破壊的変更あり。`src/globals.css` 参照。
-- `@theme` ディレクティブでCSS変数を定義
-- `@plugin` でプラグイン読み込み
+Breaking changes from v3. See `src/globals.css`.
+- Define CSS variables with `@theme` directive
+- Load plugins with `@plugin`
 
-### microCMS統合（Clean Architecture）
-**推奨**: `useCases` を直接使用
+### microCMS Integration (Clean Architecture)
+**Recommended**: Use `useCases` directly
 ```typescript
 import { useCases } from '@/infrastructure/di'
 
@@ -87,31 +87,32 @@ const blog = await useCases.getBlogDetail.execute('slug')
 const paged = await useCases.getBlogs.paginated(1, 6)
 ```
 
-**後方互換**: `src/lib/microcms.ts` のファサード関数も引き続き使用可能（@deprecated）
-開発時はモックデータを返却。
+**Backward compatible**: Facade functions in `src/lib/microcms.ts` still work (@deprecated).
+Returns mock data in development when credentials are not set.
 
-**テスト時**: Fakeリポジトリを注入
+**For testing**: Inject a fake repository
 ```typescript
 import { createUseCases } from '@/infrastructure/di'
 const testUseCases = createUseCases(fakeBlogRepository)
 ```
 
-### Zenn / Qiita RSS統合
-Zenn・Qiita記事をRSSフィードから取得し、microCMS記事と統合表示。
-- `src/lib/zennRss.ts` - Zenn RSS（RSS形式: `<item>`）
-- `src/lib/qiitaRss.ts` - Qiita Atom（Atom形式: `<entry>`, `<link rel="alternate">`）
-- `src/types/index.ts` の `ArticleFeedItem` で `source: 'microcms' | 'zenn' | 'qiita'` を区別
-- 外部リンク判定は `externalUrl` の有無で判断（`Blog.tsx`）
+### Zenn / Qiita RSS Integration
+Fetches articles from RSS/Atom feeds and displays them alongside microCMS articles.
+- `src/lib/zennRss.ts` - Zenn RSS (RSS format: `<item>`, thumbnail from enclosure tag)
+- `src/lib/qiitaRss.ts` - Qiita Atom (Atom format: `<entry>`; fetches og:image from each article HTML)
+- `ArticleFeedItem` in `src/types/index.ts` distinguishes sources via `source: 'microcms' | 'zenn' | 'qiita'`
+- External link detection uses `externalUrl` presence, not source name (`Blog.tsx`)
+- imgix transform params (`?w=800&fm=webp`) are only applied to microCMS-hosted images
 
-### プリレンダリング
-`vite.config.ts` の prerender 設定を参照。
+### Prerendering
+See prerender configuration in `vite.config.ts`.
 
-### フォームバリデーション
-Zod + react-hook-form パターン。`src/components/ContactForm.tsx` 参照。
+### Form Validation
+Zod + react-hook-form pattern. See `src/components/ContactForm.tsx`.
 
-## コード品質
-Biome + TypeScript strict mode使用。設定は `biome.json` 参照。
-自動修正: `bun run fix`
+## Code Quality
+Biome + TypeScript strict mode. See `biome.json` for configuration.
+Auto-fix: `bun run fix`
 
-## 環境変数
-`.env.example` 参照。
+## Environment Variables
+See `.env.example`.

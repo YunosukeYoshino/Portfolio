@@ -6,6 +6,7 @@ export interface QiitaFeedItem {
   readonly title: string
   readonly url: string
   readonly publishedAt: string
+  readonly thumbnailUrl: string | null
 }
 
 const QIITA_FEED_URL = 'https://qiita.com/pomufgd/feed'
@@ -52,7 +53,30 @@ const extractAtomLinkHref = (entryXml: string): string => {
   return hrefFirstMatch?.[1] || ''
 }
 
-const parseQiitaFeed = (xml: string): QiitaFeedItem[] => {
+const fetchOgImage = async (url: string): Promise<string | null> => {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; portfolio-bot/1.0; +https://yunosukeyoshino.com)',
+      },
+      signal: AbortSignal.timeout(5000),
+    })
+    if (!response.ok) {
+      return null
+    }
+    const html = await response.text()
+
+    const match =
+      html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i) ||
+      html.match(/<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i)
+
+    return match?.[1] ?? null
+  } catch {
+    return null
+  }
+}
+
+const parseQiitaFeed = (xml: string): Omit<QiitaFeedItem, 'thumbnailUrl'>[] => {
   if (!xml.includes('<feed')) {
     throw new Error('Invalid Qiita Atom feed response')
   }
@@ -60,7 +84,7 @@ const parseQiitaFeed = (xml: string): QiitaFeedItem[] => {
   const entries = xml.match(/<entry>([\s\S]*?)<\/entry>/gi) || []
 
   return entries
-    .map((entryXml): QiitaFeedItem | null => {
+    .map((entryXml): Omit<QiitaFeedItem, 'thumbnailUrl'> | null => {
       const title = extractTagText(entryXml, 'title')
       const url = extractAtomLinkHref(entryXml)
       const id = extractTagText(entryXml, 'id') || url
@@ -78,7 +102,7 @@ const parseQiitaFeed = (xml: string): QiitaFeedItem[] => {
         publishedAt: new Date(timestamp).toISOString(),
       }
     })
-    .filter((item): item is QiitaFeedItem => item !== null)
+    .filter((item): item is Omit<QiitaFeedItem, 'thumbnailUrl'> => item !== null)
 }
 
 export const getQiitaFeedItems = createServerFn({ method: 'GET' })
@@ -95,11 +119,15 @@ export const getQiitaFeedItems = createServerFn({ method: 'GET' })
     }
 
     const xml = await response.text()
-    const items = parseQiitaFeed(xml)
+    const rawItems = parseQiitaFeed(xml)
+    const limited = data.limit ? rawItems.slice(0, data.limit) : rawItems
 
-    if (!data.limit) {
-      return items
-    }
+    const items = await Promise.all(
+      limited.map(async (item): Promise<QiitaFeedItem> => {
+        const thumbnailUrl = await fetchOgImage(item.url)
+        return { ...item, thumbnailUrl }
+      })
+    )
 
-    return items.slice(0, data.limit)
+    return items
   })

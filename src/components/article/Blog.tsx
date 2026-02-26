@@ -49,7 +49,10 @@ export default function Blog({
       <div className="container-custom">
         <div className={`grid ${gridCols} gap-6 lg:gap-8`}>
           {blogs.map((blog) => {
-            const imageUrl = `${blog.eyecatch.url}${blog.eyecatch.url.includes('?') ? '&' : '?'}w=800&fm=webp`
+            const imageUrl =
+              blog.source === 'microcms'
+                ? `${blog.eyecatch.url}${blog.eyecatch.url.includes('?') ? '&' : '?'}w=800&fm=webp`
+                : blog.eyecatch.url
 
             const cardBody = (
               <>

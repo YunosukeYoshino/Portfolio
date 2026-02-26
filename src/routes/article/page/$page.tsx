@@ -16,9 +16,9 @@ import type { ArticleFeedItem, Blog as MicroCMSBlog } from '@/types'
 const BLOGS_PER_PAGE = 12
 const MICROCMS_FETCH_LIMIT = 1000
 const ZENN_FETCH_LIMIT = 100
-const ZENN_DEFAULT_EYECATCH = 'https://yunosukeyoshino.com/assets/og-image.png'
+const ZENN_DEFAULT_EYECATCH = '/assets/images/my-image.jpg'
 const QIITA_FETCH_LIMIT = 100
-const QIITA_DEFAULT_EYECATCH = 'https://yunosukeyoshino.com/assets/og-image.png'
+const QIITA_FALLBACK_EYECATCH = '/assets/images/my-image.jpg'
 
 const mapMicroCMSBlog = (blog: MicroCMSBlog): ArticleFeedItem => {
   return {
@@ -69,7 +69,7 @@ const mapQiitaArticle = (article: QiitaFeedItem): ArticleFeedItem => {
       name: 'Qiita',
     },
     eyecatch: {
-      url: QIITA_DEFAULT_EYECATCH,
+      url: article.thumbnailUrl || QIITA_FALLBACK_EYECATCH,
       width: 1200,
       height: 630,
       alt: article.title,
