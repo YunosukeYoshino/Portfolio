@@ -19,6 +19,7 @@ A personal portfolio and blog site for showcasing projects and sharing technical
 
 **Key Features:**
 - **microCMS** integration for headless content management
+- **Zenn / Qiita RSS** feed integration for cross-platform article display
 - **Lenis** + **Three.js** for smooth scrolling and WebGL animations
 - **Cloudflare Pages** deployment with static export for global edge delivery
 
@@ -72,38 +73,9 @@ bun run dev
 | `bun run build` | Build for production |
 | `bun run lint` | Run Biome + TypeScript + Markuplint checks |
 | `bun run fix` | Auto-fix linting issues |
+| `bun run typecheck` | TypeScript type-checking only |
 | `bun run deploy` | Deploy to Cloudflare Pages |
-
-### Spec-Driven Development
-
-This project uses [cc-sdd](https://github.com/gotalab/cc-sdd) for spec-driven development workflow.
-
-```bash
-# Set up Spec-Driven Development workflow
-bunx cc-sdd@latest --claude-agent
-```
-
-> [!NOTE]
-> Running this command creates the `.kiro/` directory structure in your project.
-
-**Workflow:**
-
-```
-Requirements → Design → Tasks → Implementation
-```
-
-Specs are stored in `.kiro/specs/` with the following structure:
-
-```
-.kiro/
-├── settings/
-│   ├── rules/        # Design and analysis rules
-│   └── templates/    # Spec templates
-└── specs/            # Feature specifications
-```
-
-> [!TIP]
-> When adding new features, start with `spec-init` to define requirements before implementation.
+| `bun run deploy:preview` | Deploy to preview branch |
 
 ### Project Structure
 

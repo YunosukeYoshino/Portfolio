@@ -9,6 +9,7 @@ import JsonLd, {
   createWebsiteSchema,
 } from '@/components/seo/JsonLd'
 import { getBlogs } from '@/lib/microcms'
+import { getQiitaFeedItems, type QiitaFeedItem } from '@/lib/qiitaRss'
 import { getZennFeedItems, type ZennFeedItem } from '@/lib/zennRss'
 import type { ArticleFeedItem, Blog as MicroCMSBlog } from '@/types'
 
@@ -16,6 +17,8 @@ const BLOGS_PER_PAGE = 12
 const MICROCMS_FETCH_LIMIT = 1000
 const ZENN_FETCH_LIMIT = 100
 const ZENN_DEFAULT_EYECATCH = 'https://yunosukeyoshino.com/assets/og-image.png'
+const QIITA_FETCH_LIMIT = 100
+const QIITA_DEFAULT_EYECATCH = 'https://yunosukeyoshino.com/assets/og-image.png'
 
 const mapMicroCMSBlog = (blog: MicroCMSBlog): ArticleFeedItem => {
   return {
@@ -56,6 +59,26 @@ const mapZennArticle = (article: ZennFeedItem): ArticleFeedItem => {
   }
 }
 
+const mapQiitaArticle = (article: QiitaFeedItem): ArticleFeedItem => {
+  return {
+    id: article.id,
+    title: article.title,
+    publishedAt: article.publishedAt,
+    category: {
+      id: 'qiita',
+      name: 'Qiita',
+    },
+    eyecatch: {
+      url: QIITA_DEFAULT_EYECATCH,
+      width: 1200,
+      height: 630,
+      alt: article.title,
+    },
+    source: 'qiita',
+    externalUrl: article.url,
+  }
+}
+
 const getZennArticlesSafely = async (): Promise<ZennFeedItem[]> => {
   try {
     return await getZennFeedItems({
@@ -70,6 +93,20 @@ const getZennArticlesSafely = async (): Promise<ZennFeedItem[]> => {
   }
 }
 
+const getQiitaArticlesSafely = async (): Promise<QiitaFeedItem[]> => {
+  try {
+    return await getQiitaFeedItems({
+      data: {
+        limit: QIITA_FETCH_LIMIT,
+      },
+    })
+  } catch (error) {
+    // biome-ignore lint/suspicious/noConsole: Fallback to microCMS-only feed when Qiita is unavailable
+    console.warn('Failed to fetch Qiita RSS feed:', error)
+    return []
+  }
+}
+
 export const Route = createFileRoute('/article/page/$page')({
   loader: async ({ params }) => {
     const currentPage = parseInt(params.page, 10)
@@ -78,7 +115,7 @@ export const Route = createFileRoute('/article/page/$page')({
       throw notFound()
     }
 
-    const [{ contents: microCMSBlogs }, zennArticles] = await Promise.all([
+    const [{ contents: microCMSBlogs }, zennArticles, qiitaArticles] = await Promise.all([
       getBlogs({
         data: {
           queries: {
@@ -88,11 +125,13 @@ export const Route = createFileRoute('/article/page/$page')({
         },
       }),
       getZennArticlesSafely(),
+      getQiitaArticlesSafely(),
     ])
 
     const allArticles = [
       ...microCMSBlogs.map(mapMicroCMSBlog),
       ...zennArticles.map(mapZennArticle),
+      ...qiitaArticles.map(mapQiitaArticle),
     ].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 
     const totalCount = allArticles.length

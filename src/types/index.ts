@@ -34,7 +34,7 @@ export interface ArticleFeedItem {
     height: number
     alt: string
   }
-  source: 'microcms' | 'zenn'
+  source: 'microcms' | 'zenn' | 'qiita'
   externalUrl?: string
 }
 

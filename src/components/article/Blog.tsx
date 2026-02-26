@@ -85,7 +85,7 @@ export default function Blog({
                 key={`${blog.source}-${blog.id}`}
                 className="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-lg"
               >
-                {blog.source === 'zenn' && blog.externalUrl ? (
+                {blog.externalUrl ? (
                   <a
                     href={blog.externalUrl}
                     target="_blank"
