@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import TextScramble from './TextScramble'
+import TextScramble from '@/components/effects/TextScramble'
 
 const contactSchema = z.object({
   name: z

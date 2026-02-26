@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import MagneticButton from './MagneticButton'
-import TextScramble from './TextScramble'
+import MagneticButton from '@/components/effects/MagneticButton'
+import TextScramble from '@/components/effects/TextScramble'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()

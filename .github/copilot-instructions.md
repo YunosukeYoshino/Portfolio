@@ -33,6 +33,13 @@ src/
 │   └── di/            # 依存性注入コンテナ
 ├── routes/            # TanStack Router ページ・レイアウト
 ├── components/        # React コンポーネント
+│   ├── layout/        # Header, Footer, Breadcrumb
+│   ├── sections/      # HeroSection, AboutSection, WorksSection, ArticlesSection, SkillsMarquee
+│   ├── article/       # ArticleItem, ArticlesHoverEffect, Blog, CodeHighlight
+│   ├── effects/       # CustomCursor, NoiseOverlay, WebGLBackground, SplitText, TextScramble, MagneticButton
+│   ├── providers/     # LenisProvider, ClientLoader
+│   ├── seo/           # GoogleAnalytics, JsonLd
+│   └── forms/         # ContactForm
 ├── lib/
 │   ├── microcms.ts    # 後方互換ファサード（@deprecated）
 │   ├── utils.ts       # cn(), formatDate()

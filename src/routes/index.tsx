@@ -1,17 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
-import AboutSection from '@/components/AboutSection'
-import ArticlesSection from '@/components/ArticlesSection'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
-import HeroSection from '@/components/HeroSection'
+import AboutSection from '@/components/sections/AboutSection'
+import ArticlesSection from '@/components/sections/ArticlesSection'
+import HeroSection from '@/components/sections/HeroSection'
+import SkillsMarquee from '@/components/sections/SkillsMarquee'
+import WorksSection from '@/components/sections/WorksSection'
+import Footer from '@/components/layout/Footer'
+import Header from '@/components/layout/Header'
+import NoiseOverlay from '@/components/effects/NoiseOverlay'
 import JsonLd, {
   createBreadcrumbSchema,
   createPersonSchema,
   createWebsiteSchema,
-} from '@/components/JsonLd'
-import NoiseOverlay from '@/components/NoiseOverlay'
-import SkillsMarquee from '@/components/SkillsMarquee'
-import WorksSection from '@/components/WorksSection'
+} from '@/components/seo/JsonLd'
 import { getBlogs } from '@/lib/microcms'
 
 export const Route = createFileRoute('/')({

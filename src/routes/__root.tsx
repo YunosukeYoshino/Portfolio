@@ -8,8 +8,8 @@ import {
   useRouterState,
 } from '@tanstack/react-router'
 import { type ReactNode, useEffect, useRef } from 'react'
-import ClientLoader from '@/components/ClientLoader'
-import GoogleAnalytics from '@/components/GoogleAnalytics'
+import ClientLoader from '@/components/providers/ClientLoader'
+import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,10 +20,10 @@ const queryClient = new QueryClient({
   },
 })
 
-import CustomCursor from '@/components/CustomCursor'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
-import LenisProvider from '@/components/LenisProvider'
+import CustomCursor from '@/components/effects/CustomCursor'
+import Footer from '@/components/layout/Footer'
+import Header from '@/components/layout/Header'
+import LenisProvider from '@/components/providers/LenisProvider'
 import appCss from '@/globals.css?url'
 
 export const Route = createRootRoute({

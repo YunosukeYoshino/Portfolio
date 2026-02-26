@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import ContactForm from '@/components/ContactForm'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header'
+import ContactForm from '@/components/forms/ContactForm'
+import Footer from '@/components/layout/Footer'
+import Header from '@/components/layout/Header'
 
 export const Route = createFileRoute('/contact')({
   head: () => ({

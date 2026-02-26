@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
-import MagneticButton from './MagneticButton'
-import SplitText from './SplitText'
+import MagneticButton from '@/components/effects/MagneticButton'
+import SplitText from '@/components/effects/SplitText'
 
 export default function AboutSection() {
   return (
