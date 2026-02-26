@@ -64,10 +64,18 @@ export default function SplitText({
   // Helper to safely split only text
   const splitContent = React.Children.map(children, (child) => {
     if (typeof child === 'string') {
-      return child.split(/(\s+)/).map((word, i) => {
+      const parts = child.split(/(\s+)/)
+      // Pre-compute stable keys using occurrence count per word to handle duplicates
+      const occurrences: Record<string, number> = {}
+      const keyedParts = parts.map((word) => {
+        const count = occurrences[word] ?? 0
+        occurrences[word] = count + 1
+        return { word, key: `${word}-${count}` }
+      })
+      return keyedParts.map(({ word, key }) => {
         if (word.trim() === '') return word // keep spaces as is
         return (
-          <span key={i} className="inline-block overflow-hidden align-bottom">
+          <span key={key} className="inline-block overflow-hidden align-bottom">
             <span className="word inline-block transform origin-bottom-left will-change-transform">
               {word}
             </span>

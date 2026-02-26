@@ -50,7 +50,8 @@
       "complexity": {
         "noBannedTypes": "error",
         "noUselessConstructor": "error",
-        "noUselessEmptyExport": "error"
+        "noUselessEmptyExport": "error",
+        "noImportantStyles": "off"
       },
       "style": {
         "noNonNullAssertion": "warn",
