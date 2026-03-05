@@ -1,0 +1,20 @@
+{
+  "name": "beautiful-mermaid",
+  "version": "1.0.0",
+  "description": "Render Mermaid diagrams as beautifully themed SVG files. 3 modes: render (existing code to SVG), generate (codebase analysis to diagrams), create (natural language to diagrams). Powered by the beautiful-mermaid npm package.",
+  "author": {
+    "name": "Yunosuke Yoshino"
+  },
+  "repository": "https://github.com/yunosukeyoshino/Portfolio",
+  "license": "MIT",
+  "keywords": [
+    "mermaid",
+    "diagram",
+    "svg",
+    "flowchart",
+    "sequence-diagram",
+    "er-diagram",
+    "architecture",
+    "visualization"
+  ]
+}
