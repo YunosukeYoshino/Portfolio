@@ -188,7 +188,7 @@ export default function ArticlesHoverEffect() {
       style={{ willChange: 'transform' }}
     >
       <div
-        className="w-full h-full bg-cover bg-center transform scale-110 transition-transform duration-700"
+        className="w-full h-full bg-contain bg-center bg-no-repeat transform scale-110 transition-transform duration-700"
         style={{ backgroundImage: hoveredImage ? `url(${hoveredImage})` : 'none' }}
       />
     </div>
