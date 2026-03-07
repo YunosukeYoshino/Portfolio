@@ -5,13 +5,17 @@ import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import JsonLd, { createArticleSchema, createBreadcrumbSchema } from '@/components/seo/JsonLd'
 import { highlightContent } from '@/lib/highlight'
+import { parseContentMarkdown } from '@/lib/markdown'
 import { getBlogDetail } from '@/lib/microcms'
 import { formatDate } from '@/lib/utils'
 
 export const Route = createFileRoute('/article/$slug')({
   loader: async ({ params }) => {
     const blog = await getBlogDetail({ data: { contentId: params.slug } })
-    const highlightedContent = await highlightContent({ data: { html: blog.content } })
+    const { html: parsedContent } = await parseContentMarkdown({
+      data: { content: blog.content },
+    })
+    const highlightedContent = await highlightContent({ data: { html: parsedContent } })
     return { blog, highlightedContent }
   },
   // Prevent re-fetching on client-side navigation for static sites
@@ -98,19 +102,21 @@ function BlogDetailPage() {
                 </time>
               </div>
 
-              <h1 className="text-section-title text-display mb-12 uppercase leading-tight tracking-tight text-black">
+              <h1 className="text-section-title text-display mb-12 leading-tight tracking-tight text-black">
                 {blog.title}
               </h1>
 
-              <div className="relative aspect-video overflow-hidden rounded-lg border border-gray-200">
-                <img
-                  src={`${blog.eyecatch.url}?w=1200&fm=webp`}
-                  alt={blog.eyecatch.alt || blog.title}
-                  width={1200}
-                  height={675}
-                  className="h-full w-full object-cover"
-                />
-              </div>
+              {blog.eyecatch && (
+                <div className="relative aspect-video overflow-hidden rounded-lg border border-gray-200">
+                  <img
+                    src={`${blog.eyecatch.url}?w=1200&fm=webp`}
+                    alt={blog.eyecatch.alt || blog.title}
+                    width={1200}
+                    height={675}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              )}
             </header>
 
             {/* Article Content */}

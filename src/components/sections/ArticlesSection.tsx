@@ -44,7 +44,7 @@ export default function ArticlesSection({ articles }: ArticlesSectionProps) {
                     title={article.title}
                     date={date}
                     category={article.category.name}
-                    image={article.eyecatch.url}
+                    image={article.eyecatch?.url}
                   />
                 )
               })}
