@@ -55,7 +55,7 @@ export default function ArticlesHoverEffect() {
     // Cache dimensions once to avoid layout thrashing in rAF loop
     // The element has fixed CSS dimensions (w-[300px] h-[200px])
     const REVEAL_HALF_WIDTH = 150
-    const REVEAL_HALF_HEIGHT = 100
+    const REVEAL_HALF_HEIGHT = 84
 
     const updateHoverReveal = () => {
       if (!hoverRevealRef.current || !isAnimating) return
@@ -93,7 +93,7 @@ export default function ArticlesHoverEffect() {
       // Instantly position it at the cursor before fading in
       gsapRef.current.set(hoverRevealRef.current, {
         x: mousePosition.current.x - 150,
-        y: mousePosition.current.y - 100,
+        y: mousePosition.current.y - 84,
         scale: 0.8,
       })
 
@@ -184,7 +184,7 @@ export default function ArticlesHoverEffect() {
   return (
     <div
       ref={hoverRevealRef}
-      className="fixed top-0 left-0 w-[300px] h-[200px] pointer-events-none z-30 opacity-0 hidden md:block overflow-hidden rounded-lg"
+      className="fixed top-0 left-0 w-[300px] aspect-video pointer-events-none z-30 opacity-0 hidden md:block overflow-hidden rounded-lg"
       style={{ willChange: 'transform' }}
     >
       <div
