@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
+import { ArticleLink } from '@/components/article/ArticleLink'
 import { formatDate } from '@/lib/utils'
 import type { ArticleFeedItem } from '@/types'
 
@@ -88,25 +89,9 @@ export default function Blog({
                 key={`${blog.source}-${blog.id}`}
                 className="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-gray-300 hover:shadow-lg"
               >
-                {blog.externalUrl ? (
-                  <a
-                    href={blog.externalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    {cardBody}
-                  </a>
-                ) : (
-                  <Link
-                    to="/article/$slug/"
-                    params={{ slug: blog.id }}
-                    reloadDocument
-                    className="block"
-                  >
-                    {cardBody}
-                  </Link>
-                )}
+                <ArticleLink externalUrl={blog.externalUrl} slug={blog.id} className="block">
+                  {cardBody}
+                </ArticleLink>
               </article>
             )
           })}

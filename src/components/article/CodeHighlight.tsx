@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useCallback } from 'react'
+import { isExternalUrl } from '@/lib/link'
 
 interface CodeHighlightProps {
   content: string
@@ -6,14 +7,22 @@ interface CodeHighlightProps {
 
 // Synchronous component - content is pre-processed by highlightContent server function in the loader
 export default function CodeHighlight({ content }: CodeHighlightProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return
 
-  useEffect(() => {
-    if (!containerRef.current) return
-    const paragraphs = containerRef.current.querySelectorAll('p')
+    const paragraphs = node.querySelectorAll('p')
     paragraphs.forEach((p) => {
       if (p.textContent?.trim().toUpperCase().startsWith('TL;DR')) {
         p.classList.add('tldr-callout')
+      }
+    })
+
+    const anchors = node.querySelectorAll('a[href]')
+    anchors.forEach((a) => {
+      const href = a.getAttribute('href')
+      if (href && isExternalUrl(href)) {
+        a.setAttribute('target', '_blank')
+        a.setAttribute('rel', 'noopener noreferrer')
       }
     })
   }, [])
