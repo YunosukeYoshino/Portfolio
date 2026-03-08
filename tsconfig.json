@@ -21,5 +21,13 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "astro-backup/**/*", "scripts-backup/**/*", "src/lib/imageLoader.js"]
+  "exclude": [
+    "node_modules",
+    "astro-backup/**/*",
+    "scripts-backup/**/*",
+    "src/lib/imageLoader.js",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }

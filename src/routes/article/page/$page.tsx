@@ -1,9 +1,11 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
+import ArticleSearchBar from '@/components/article/ArticleSearchBar'
 import Blog from '@/components/article/Blog'
 import Breadcrumb from '@/components/layout/Breadcrumb'
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import JsonLd, { createBlogSchema, createBreadcrumbSchema } from '@/components/seo/JsonLd'
+import { useArticleFilter } from '@/hooks/useArticleFilter'
 import { getBlogs } from '@/lib/microcms'
 import type { ArticleFeedItem, Blog as MicroCMSBlog } from '@/types'
 
@@ -61,7 +63,7 @@ export const Route = createFileRoute('/article/page/$page')({
     const offset = (currentPage - 1) * BLOGS_PER_PAGE
     const blogs = allArticles.slice(offset, offset + BLOGS_PER_PAGE)
 
-    return { blogs, currentPage, totalPages, totalCount }
+    return { blogs, allArticles, currentPage, totalPages, totalCount }
   },
   // Prevent re-fetching on client-side navigation for static sites
   staleTime: Number.POSITIVE_INFINITY,
@@ -112,111 +114,203 @@ export const Route = createFileRoute('/article/page/$page')({
   component: BlogListPage,
 })
 
-function Pagination({ currentPage, totalPages }: { currentPage: number; totalPages: number }) {
-  const pages = []
+function buildPageNumbers(currentPage: number, totalPages: number): number[] {
   const maxVisible = 5
-
   let start = Math.max(1, currentPage - Math.floor(maxVisible / 2))
   const end = Math.min(totalPages, start + maxVisible - 1)
-
   if (end - start + 1 < maxVisible) {
     start = Math.max(1, end - maxVisible + 1)
   }
-
+  const pages: number[] = []
   for (let i = start; i <= end; i++) {
     pages.push(i)
   }
+  return pages
+}
+
+const prevArrow = (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+)
+
+const nextArrow = (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  </svg>
+)
+
+const activeClass = 'bg-black text-white border-black'
+const inactiveClass =
+  'border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black'
+const baseClass = 'px-4 py-2 border font-medium transition-all duration-300'
+const navClass =
+  'px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300'
+
+function Pagination({ currentPage, totalPages }: { currentPage: number; totalPages: number }) {
+  const pages = buildPageNumbers(currentPage, totalPages)
+  const start = pages[0] ?? 1
+  const end = pages[pages.length - 1] ?? 1
 
   return (
     <nav className="flex justify-center items-center space-x-2" aria-label="ページネーション">
-      {/* Previous */}
       {currentPage > 1 && (
         <Link
           to="/article/page/$page/"
           params={{ page: String(currentPage - 1) }}
           reloadDocument
-          className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+          className={navClass}
           aria-label="前のページ"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          {prevArrow}
         </Link>
       )}
-
-      {/* First page */}
       {start > 1 && (
         <>
           <Link
             to="/article/page/$page/"
             params={{ page: '1' }}
             reloadDocument
-            className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 font-medium"
+            className={`${baseClass} ${inactiveClass}`}
           >
             1
           </Link>
-          {start > 2 && <span className="px-2 text-gray-400">…</span>}
+          {start > 2 && <span className="px-2 text-gray-400">...</span>}
         </>
       )}
-
-      {/* Page numbers */}
       {pages.map((page) => (
         <Link
           key={page}
           to="/article/page/$page/"
           params={{ page: String(page) }}
           reloadDocument
-          className={`px-4 py-2 border font-medium transition-all duration-300 ${
-            page === currentPage
-              ? 'bg-black text-white border-black'
-              : 'border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black'
-          }`}
+          className={`${baseClass} ${page === currentPage ? activeClass : inactiveClass}`}
           aria-current={page === currentPage ? 'page' : undefined}
         >
           {page}
         </Link>
       ))}
-
-      {/* Last page */}
       {end < totalPages && (
         <>
-          {end < totalPages - 1 && <span className="px-2 text-gray-400">…</span>}
+          {end < totalPages - 1 && <span className="px-2 text-gray-400">...</span>}
           <Link
             to="/article/page/$page/"
             params={{ page: String(totalPages) }}
             reloadDocument
-            className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 font-medium"
+            className={`${baseClass} ${inactiveClass}`}
           >
             {totalPages}
           </Link>
         </>
       )}
-
-      {/* Next */}
       {currentPage < totalPages && (
         <Link
           to="/article/page/$page/"
           params={{ page: String(currentPage + 1) }}
           reloadDocument
-          className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+          className={navClass}
           aria-label="次のページ"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+          {nextArrow}
         </Link>
       )}
     </nav>
   )
 }
 
+function FilterPagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: {
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
+}) {
+  const pages = buildPageNumbers(currentPage, totalPages)
+  const start = pages[0] ?? 1
+  const end = pages[pages.length - 1] ?? 1
+
+  return (
+    <nav
+      className="flex justify-center items-center space-x-2"
+      aria-label="フィルター結果のページネーション"
+    >
+      {currentPage > 1 && (
+        <button
+          type="button"
+          onClick={() => onPageChange(currentPage - 1)}
+          className={navClass}
+          aria-label="前のページ"
+        >
+          {prevArrow}
+        </button>
+      )}
+      {start > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={() => onPageChange(1)}
+            className={`${baseClass} ${inactiveClass}`}
+          >
+            1
+          </button>
+          {start > 2 && <span className="px-2 text-gray-400">...</span>}
+        </>
+      )}
+      {pages.map((page) => (
+        <button
+          key={page}
+          type="button"
+          onClick={() => onPageChange(page)}
+          className={`${baseClass} ${page === currentPage ? activeClass : inactiveClass}`}
+          aria-current={page === currentPage ? 'page' : undefined}
+        >
+          {page}
+        </button>
+      ))}
+      {end < totalPages && (
+        <>
+          {end < totalPages - 1 && <span className="px-2 text-gray-400">...</span>}
+          <button
+            type="button"
+            onClick={() => onPageChange(totalPages)}
+            className={`${baseClass} ${inactiveClass}`}
+          >
+            {totalPages}
+          </button>
+        </>
+      )}
+      {currentPage < totalPages && (
+        <button
+          type="button"
+          onClick={() => onPageChange(currentPage + 1)}
+          className={navClass}
+          aria-label="次のページ"
+        >
+          {nextArrow}
+        </button>
+      )}
+    </nav>
+  )
+}
+
 function BlogListPage() {
-  const { blogs, currentPage, totalPages } = Route.useLoaderData()
+  const { blogs, allArticles, currentPage, totalPages } = Route.useLoaderData()
+
+  const {
+    searchQuery,
+    onSearchChange,
+    activeCategory,
+    onCategorySelect,
+    categories,
+    paginatedArticles,
+    filteredPage,
+    filteredTotalPages,
+    onFilteredPageChange,
+    isFiltering,
+    resultCount,
+  } = useArticleFilter(allArticles, BLOGS_PER_PAGE)
 
   const breadcrumbItems = [
     { name: 'ホーム', url: '/' },
@@ -234,6 +328,8 @@ function BlogListPage() {
       url: `https://yunosukeyoshino.com/article/page/${currentPage}/`,
     },
   ])
+
+  const displayedBlogs = isFiltering ? [...paginatedArticles] : blogs
 
   return (
     <>
@@ -257,11 +353,45 @@ function BlogListPage() {
               </p>
             </header>
 
+            {/* Search & Filter */}
+            <ArticleSearchBar
+              searchQuery={searchQuery}
+              onSearchChange={onSearchChange}
+              categories={categories}
+              activeCategory={activeCategory}
+              onCategorySelect={onCategorySelect}
+              resultCount={resultCount}
+            />
+
             {/* Blog List */}
-            <Blog blogs={blogs} column={3} className="mb-16" showViewAllButton={false} />
+            {isFiltering && resultCount === 0 ? (
+              <div className="mb-16 py-16 text-center">
+                <p className="text-gray-500 text-lg">条件に一致する記事が見つかりませんでした</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSearchChange('')
+                    onCategorySelect(null)
+                  }}
+                  className="mt-4 border border-black px-6 py-2 text-sm font-medium text-black transition-all duration-300 hover:bg-black hover:text-white"
+                >
+                  フィルターをリセット
+                </button>
+              </div>
+            ) : (
+              <Blog blogs={displayedBlogs} column={3} className="mb-16" showViewAllButton={false} />
+            )}
 
             {/* Pagination */}
-            {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} />}
+            {isFiltering
+              ? filteredTotalPages > 1 && (
+                  <FilterPagination
+                    currentPage={filteredPage}
+                    totalPages={filteredTotalPages}
+                    onPageChange={onFilteredPageChange}
+                  />
+                )
+              : totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} />}
           </div>
         </div>
       </main>
