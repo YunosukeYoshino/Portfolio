@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import ArticleCta from '@/components/article/ArticleCta'
 import CodeHighlight from '@/components/article/CodeHighlight'
 import Breadcrumb from '@/components/layout/Breadcrumb'
 import Footer from '@/components/layout/Footer'
@@ -153,6 +154,9 @@ function BlogDetailPage() {
             </footer>
           </div>
         </article>
+
+        {/* CTA - full width, outside container-custom */}
+        <ArticleCta />
       </main>
       <Footer />
     </>
