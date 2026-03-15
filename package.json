@@ -21,6 +21,9 @@
     "deploy": "bun run build && npx wrangler pages deploy dist/client --project-name=yunosuke-portfolio --branch=main --commit-dirty=true",
     "deploy:preview": "bun run build && npx wrangler pages deploy dist/client --project-name=yunosuke-portfolio --branch=preview --commit-dirty=true",
     "wrangler": "wrangler",
+    "seo:optimize": "bun run scripts/seo-optimize.ts",
+    "seo:optimize:force": "bun run scripts/seo-optimize.ts --force",
+    "seo:optimize:dry": "bun run scripts/seo-optimize.ts --dry-run",
     "prepare": "husky"
   },
   "dependencies": {

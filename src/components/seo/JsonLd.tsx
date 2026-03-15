@@ -77,24 +77,31 @@ export const createBreadcrumbSchema = (items: Array<{ name: string; url: string 
   })),
 })
 
-export const createArticleSchema = (article: {
-  id: string
-  title: string
-  content: string
-  publishedAt: string
-  updatedAt: string
-  eyecatch?: {
-    url: string
-    alt?: string
+export const createArticleSchema = (
+  article: {
+    id: string
+    title: string
+    content: string
+    publishedAt: string
+    updatedAt: string
+    eyecatch?: {
+      url: string
+      alt?: string
+    }
+    category?: {
+      name: string
+    }
+  },
+  seoOverrides?: {
+    readonly seoTitle?: string
+    readonly seoDescription?: string
   }
-  category?: {
-    name: string
-  }
-}) => ({
+) => ({
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
-  headline: article.title,
-  description: article.content.replace(/<[^>]*>/g, '').substring(0, 160),
+  headline: seoOverrides?.seoTitle ?? article.title,
+  description:
+    seoOverrides?.seoDescription ?? article.content.replace(/<[^>]*>/g, '').substring(0, 160),
   url: `https://yunosukeyoshino.com/article/${article.id}/`,
   datePublished: article.publishedAt,
   dateModified: article.updatedAt,

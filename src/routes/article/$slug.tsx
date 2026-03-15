@@ -8,6 +8,7 @@ import JsonLd, { createArticleSchema, createBreadcrumbSchema } from '@/component
 import { highlightContent } from '@/lib/highlight'
 import { parseContentMarkdown } from '@/lib/markdown'
 import { getBlogDetail } from '@/lib/microcms'
+import { getSeoDescription, getSeoMetadata, getSeoTitle } from '@/lib/seoMetadata'
 import { formatDate } from '@/lib/utils'
 
 export const Route = createFileRoute('/article/$slug')({
@@ -26,19 +27,14 @@ export const Route = createFileRoute('/article/$slug')({
       return { meta: [{ title: 'Loading... | Yunosuke Yoshino' }] }
     }
     const { blog } = loaderData
-    const description =
-      blog.content
-        ?.replace(/<[^>]*>/g, '')
-        .replace(/&nbsp;/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .slice(0, 160) ?? ''
+    const seoTitle = getSeoTitle(blog.id, blog.title)
+    const description = getSeoDescription(blog.id, blog.content ?? '')
     const url = `https://yunosukeyoshino.com/article/${blog.id}/`
     return {
       meta: [
-        { title: `${blog.title} | Yunosuke Yoshino` },
+        { title: `${seoTitle} | Yunosuke Yoshino` },
         { name: 'description', content: description },
-        { property: 'og:title', content: blog.title },
+        { property: 'og:title', content: seoTitle },
         { property: 'og:description', content: description },
         { property: 'og:type', content: 'article' },
         {
@@ -46,7 +42,7 @@ export const Route = createFileRoute('/article/$slug')({
           content: blog.eyecatch?.url ?? 'https://yunosukeyoshino.com/assets/og-image.png',
         },
         { property: 'og:url', content: url },
-        { name: 'twitter:title', content: blog.title },
+        { name: 'twitter:title', content: seoTitle },
         { name: 'twitter:description', content: description },
         {
           name: 'twitter:image',
@@ -68,7 +64,8 @@ function BlogDetailPage() {
     { name: blog.title, url: `/article/${blog.id}` },
   ]
 
-  const articleSchema = createArticleSchema(blog)
+  const seo = getSeoMetadata(blog.id)
+  const articleSchema = createArticleSchema(blog, seo ?? undefined)
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: 'ホーム', url: 'https://yunosukeyoshino.com/' },
     { name: '記事一覧', url: 'https://yunosukeyoshino.com/article/page/1/' },
