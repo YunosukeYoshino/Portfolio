@@ -85,6 +85,7 @@ export default function SkillsMarquee() {
           {/* Double up the array to make it seamless */}
           {[...skills, ...skills, ...skills, ...skills].map((skill, index) => (
             <span
+              // biome-ignore lint/suspicious/noArrayIndexKey: This is a static infinite loop marquee where item order never changes
               key={`skill-${skill.text}-${index}`}
               className={`inline-block ${skill.highlight ? 'text-black' : ''}`}
             >
