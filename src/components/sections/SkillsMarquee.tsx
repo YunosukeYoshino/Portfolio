@@ -6,11 +6,11 @@ export default function SkillsMarquee() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const skills = [
-    { text: 'UI/UX Design', highlight: false },
-    { text: 'Creative Development', highlight: true },
-    { text: 'WebGL', highlight: false },
-    { text: 'React / Next.js', highlight: true },
-    { text: 'Interaction Design', highlight: false },
+    { text: 'UI/UX Design', highlight: false, id: 'sk-1' },
+    { text: 'Creative Development', highlight: true, id: 'sk-2' },
+    { text: 'WebGL', highlight: false, id: 'sk-3' },
+    { text: 'React / Next.js', highlight: true, id: 'sk-4' },
+    { text: 'Interaction Design', highlight: false, id: 'sk-5' },
   ]
 
   useEffect(() => {
@@ -83,14 +83,17 @@ export default function SkillsMarquee() {
       <div className="font-display text-4xl md:text-6xl font-medium text-gray-300/50 whitespace-nowrap flex w-max">
         <div className="marquee-content flex gap-12 pl-12">
           {/* Double up the array to make it seamless */}
-          {[...skills, ...skills, ...skills, ...skills].map((skill, index) => (
-            <span
-              key={`skill-${skill.text}-${index}`}
-              className={`inline-block ${skill.highlight ? 'text-black' : ''}`}
-            >
-              {skill.text}
-            </span>
-          ))}
+          {skills
+            .concat(skills, skills, skills)
+            .map((skill, index) => ({ ...skill, uniqueId: `${skill.id}-${index}` }))
+            .map((skill) => (
+              <span
+                key={skill.uniqueId}
+                className={`inline-block ${skill.highlight ? 'text-black' : ''}`}
+              >
+                {skill.text}
+              </span>
+            ))}
         </div>
       </div>
     </div>
