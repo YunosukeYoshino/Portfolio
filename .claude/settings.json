@@ -2,9 +2,73 @@
   "permissions": {
     "defaultMode": "bypassPermissions"
   },
+  "enabledPlugins": {
+    "threejs-skills@threejs-skills": true
+  },
   "enableAllProjectMcpServers": true,
-  "model": "opus",
+  "model": "default",
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-dangerous.sh",
+            "if": "Bash(git push *--force*)",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/block-dangerous.sh",
+            "if": "Bash(rm -rf *)",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/format.sh",
+            "if": "Edit(src/**/*.ts)",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/format.sh",
+            "if": "Edit(src/**/*.tsx)",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/format.sh",
+            "if": "Write(src/**/*.ts)",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": ".claude/hooks/format.sh",
+            "if": "Write(src/**/*.tsx)",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/stop-check.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
     "SessionEnd": [
       {
         "matcher": "",
