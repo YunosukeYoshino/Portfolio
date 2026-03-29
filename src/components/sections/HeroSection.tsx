@@ -2,6 +2,7 @@
 
 import { ArrowDown } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import WebGLBackground from '@/components/effects/WebGLBackground'
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null)
@@ -62,23 +63,13 @@ export default function HeroSection() {
     >
       <h1 className="sr-only">Yunosuke Yoshino Portfolio</h1>
 
-      {/* Video background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
-      >
-        <source src="/images/hero-loop.mp4" type="video/mp4" />
-        <track kind="descriptions" src="" label="Hero background" />
-      </video>
+      <WebGLBackground />
 
       {/* Center text */}
       <div className="relative z-10 flex flex-col items-center px-6 text-center">
         <div className="overflow-hidden">
           <p
-            className="hero-name text-4xl leading-[1.1] tracking-tight text-white md:text-7xl lg:text-8xl"
+            className="hero-name text-4xl leading-[1.1] tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] md:text-7xl lg:text-8xl"
             style={{ fontFamily: 'var(--font-serif)' }}
           >
             Catcher in the <span className="italic">Internet</span>
@@ -92,7 +83,7 @@ export default function HeroSection() {
 
       {/* Bottom scroll indicator */}
       <div className="hero-bottom absolute bottom-8 left-1/2 z-10 -translate-x-1/2 flex flex-col items-center gap-2 md:bottom-12">
-        <span className="font-mono text-[9px] tracking-[0.3em] text-white/40 uppercase">
+        <span className="font-mono text-[9px] tracking-[0.3em] text-white/40 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] uppercase">
           Scroll
         </span>
         <ArrowDown className="h-3.5 w-3.5 animate-pulse text-white/40" />

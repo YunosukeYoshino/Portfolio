@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-// Shared vertex shader for all passes
 const vertexShader = `
   varying vec2 vUv;
   void main() {
@@ -11,7 +10,6 @@ const vertexShader = `
   }
 `
 
-// Simulation fragment shader -- 2D wave equation
 const simulationFragmentShader = `
   uniform sampler2D uTexture;
   uniform vec2 uResolution;
@@ -37,7 +35,6 @@ const simulationFragmentShader = `
   }
 `
 
-// Drop fragment shader -- injects ripple at mouse position
 const dropFragmentShader = `
   uniform sampler2D uTexture;
   uniform vec2 uCenter;
@@ -57,15 +54,11 @@ const dropFragmentShader = `
   }
 `
 
-// Render fragment shader -- distorts background texture using heightmap
 const renderFragmentShader = `
   uniform sampler2D uSimulation;
   uniform sampler2D uBackground;
-  uniform vec2 uResolution;
   uniform vec2 uSimResolution;
   uniform float uRefractionStrength;
-  uniform float uTime;
-  uniform float uBgLoaded;
   varying vec2 vUv;
 
   void main() {
@@ -76,32 +69,21 @@ const renderFragmentShader = `
     float dy = texture2D(uSimulation, vUv + vec2(0.0, texelSize.y)).r
              - texture2D(uSimulation, vUv - vec2(0.0, texelSize.y)).r;
 
-    // Chromatic aberration offset from ripple intensity
     float rippleIntensity = length(vec2(dx, dy));
     float aberration = rippleIntensity * 0.008;
 
-    // Distorted UV with chromatic aberration per channel
     vec2 baseOffset = vec2(dx, dy) * uRefractionStrength;
     float r = texture2D(uBackground, vUv + baseOffset * (1.0 + aberration)).r;
     float g = texture2D(uBackground, vUv + baseOffset).g;
     float b = texture2D(uBackground, vUv + baseOffset * (1.0 - aberration)).b;
     vec3 bgColor = vec3(r, g, b);
 
-    // Fallback gradient when texture not yet loaded
-    if (uBgLoaded < 0.5) {
-      vec2 distortedUv = vUv + baseOffset;
-      float vignette = length(distortedUv - 0.5) * 0.8;
-      bgColor = mix(vec3(0.953, 0.953, 0.945), vec3(0.90, 0.90, 0.92), vignette);
-    }
-
-    // Water surface specular highlight
     vec3 normal = normalize(vec3(dx * 4.0, dy * 4.0, 1.0));
     vec3 lightDir = normalize(vec3(0.5, 0.5, 1.0));
     float specular = pow(max(0.0, dot(normal, lightDir)), 32.0);
-    bgColor += vec3(1.0) * specular * 0.08;
+    bgColor += vec3(1.0) * specular * 0.06;
 
-    // Subtle caustic tint at ripple edges
-    bgColor += vec3(dx * 0.15, (dx + dy) * 0.08, dy * 0.15) * 0.2;
+    bgColor += vec3(dx * 0.12, (dx + dy) * 0.06, dy * 0.12) * 0.15;
 
     gl_FragColor = vec4(bgColor, 1.0);
   }
@@ -129,6 +111,22 @@ export default function WebGLBackground() {
 
       if (!containerRef.current) return
 
+      // Create hidden video element for texture source
+      const video = document.createElement('video')
+      video.src = '/images/hero-loop.mp4'
+      video.crossOrigin = 'anonymous'
+      video.loop = true
+      video.muted = true
+      video.playsInline = true
+      video.style.display = 'none'
+      document.body.appendChild(video)
+
+      try {
+        await video.play()
+      } catch {
+        // Autoplay may be blocked; video will start on user interaction
+      }
+
       const renderer = new THREE.WebGLRenderer({
         alpha: false,
         antialias: false,
@@ -140,23 +138,21 @@ export default function WebGLBackground() {
       renderer.autoClear = false
       containerRef.current.appendChild(renderer.domElement)
 
-      // Capability check for float textures (required for wave simulation)
       const isWebGL2 = renderer.capabilities.isWebGL2
       const hasHalfFloat = isWebGL2 || renderer.extensions.get('OES_texture_half_float')
 
       if (!hasHalfFloat) {
-        // HalfFloat textures not supported -- simulation requires negative values
-        // that UnsignedByteType cannot store. Fall back to static background.
         renderer.dispose()
         if (containerRef.current?.contains(renderer.domElement)) {
           containerRef.current.removeChild(renderer.domElement)
         }
+        video.pause()
+        video.remove()
         return
       }
 
       const targetType = THREE.HalfFloatType
 
-      // Create ping-pong render targets
       const createRenderTarget = () =>
         new THREE.WebGLRenderTarget(SIM_RESOLUTION, SIM_RESOLUTION, {
           type: targetType,
@@ -173,7 +169,6 @@ export default function WebGLBackground() {
       const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
       const geometry = new THREE.PlaneGeometry(2, 2)
 
-      // Simulation material
       const simulationMaterial = new THREE.ShaderMaterial({
         vertexShader,
         fragmentShader: simulationFragmentShader,
@@ -186,7 +181,6 @@ export default function WebGLBackground() {
         depthTest: false,
       })
 
-      // Drop material
       const dropMaterial = new THREE.ShaderMaterial({
         vertexShader,
         fragmentShader: dropFragmentShader,
@@ -200,49 +194,34 @@ export default function WebGLBackground() {
         depthTest: false,
       })
 
-      // Load background texture
-      const textureLoader = new THREE.TextureLoader()
-      let bgTexture: InstanceType<typeof THREE.Texture> | null = null
+      // Video texture -- updates every frame automatically
+      const videoTexture = new THREE.VideoTexture(video)
+      videoTexture.minFilter = THREE.LinearFilter
+      videoTexture.magFilter = THREE.LinearFilter
 
-      // Render material
       const renderMaterial = new THREE.ShaderMaterial({
         vertexShader,
         fragmentShader: renderFragmentShader,
         uniforms: {
           uSimulation: { value: null },
-          uBackground: { value: null },
-          uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uBackground: { value: videoTexture },
           uSimResolution: { value: new THREE.Vector2(SIM_RESOLUTION, SIM_RESOLUTION) },
           uRefractionStrength: { value: 0.04 },
-          uTime: { value: 0 },
-          uBgLoaded: { value: 0.0 },
         },
         depthWrite: false,
         depthTest: false,
       })
 
-      textureLoader.load('/images/hero-bg.png', (texture) => {
-        texture.minFilter = THREE.LinearFilter
-        texture.magFilter = THREE.LinearFilter
-        bgTexture = texture
-        renderMaterial.uniforms.uBackground.value = texture
-        renderMaterial.uniforms.uBgLoaded.value = 1.0
-      })
-
-      // Create scenes with meshes
       const simulationScene = new THREE.Scene()
-      const simulationMesh = new THREE.Mesh(geometry, simulationMaterial)
-      simulationScene.add(simulationMesh)
+      simulationScene.add(new THREE.Mesh(geometry, simulationMaterial))
 
       const dropScene = new THREE.Scene()
-      const dropMesh = new THREE.Mesh(geometry, dropMaterial)
-      dropScene.add(dropMesh)
+      dropScene.add(new THREE.Mesh(geometry, dropMaterial))
 
       const renderScene = new THREE.Scene()
-      const renderMesh = new THREE.Mesh(geometry, renderMaterial)
-      renderScene.add(renderMesh)
+      renderScene.add(new THREE.Mesh(geometry, renderMaterial))
 
-      // Initialize both render targets to zero (prevent noise on first frame)
+      // Initialize render targets to zero
       renderer.setClearColor(new THREE.Color(0x000000), 0)
       renderer.setRenderTarget(renderTargetA)
       renderer.clear()
@@ -262,9 +241,7 @@ export default function WebGLBackground() {
         mouseDirty = true
       }
 
-      const handleClick = (e: MouseEvent) => {
-        mousePos.x = e.clientX / window.innerWidth
-        mousePos.y = 1.0 - e.clientY / window.innerHeight
+      const handleClick = () => {
         pendingClick = true
       }
 
@@ -285,22 +262,17 @@ export default function WebGLBackground() {
       }
 
       // Window-level listeners: ripples respond to any interaction across the page.
-      // Container has pointer-events-none so hero text stays interactive.
       window.addEventListener('mousemove', handleMouseMove, { passive: true })
       window.addEventListener('click', handleClick, { passive: true })
       window.addEventListener('touchmove', handleTouchMove, { passive: true })
       window.addEventListener('touchstart', handleTouchStart, { passive: true })
 
       const handleResize = () => {
-        const width = window.innerWidth
-        const height = window.innerHeight
-        renderer.setSize(width, height)
-        renderMaterial.uniforms.uResolution.value.set(width, height)
+        renderer.setSize(window.innerWidth, window.innerHeight)
       }
 
       window.addEventListener('resize', handleResize)
 
-      // Helper to add a drop and swap targets
       const addDrop = (x: number, y: number, radius: number, strength: number) => {
         dropMaterial.uniforms.uTexture.value = renderTargetA.texture
         dropMaterial.uniforms.uCenter.value.set(x, y)
@@ -310,13 +282,11 @@ export default function WebGLBackground() {
         renderer.setRenderTarget(renderTargetB)
         renderer.render(dropScene, camera)
 
-        // Swap
         const temp = renderTargetA
         renderTargetA = renderTargetB
         renderTargetB = temp
       }
 
-      // Animation loop
       const clock = new THREE.Clock()
       let animationId: number
       let isInViewport = true
@@ -325,10 +295,9 @@ export default function WebGLBackground() {
       const animate = () => {
         if (!isInViewport) return
 
-        const elapsedTime = clock.getElapsedTime()
         frameCount++
 
-        // Step 1: Add drops from mouse interaction
+        // Step 1: Mouse/touch drops
         if (pendingClick) {
           addDrop(mousePos.x, mousePos.y, 0.03, 0.2)
           prevDropPos.x = mousePos.x
@@ -338,53 +307,47 @@ export default function WebGLBackground() {
         } else if (mouseDirty) {
           const dx = mousePos.x - prevDropPos.x
           const dy = mousePos.y - prevDropPos.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-
-          if (dist > MIN_DROP_DISTANCE) {
+          if (Math.sqrt(dx * dx + dy * dy) > MIN_DROP_DISTANCE) {
             addDrop(mousePos.x, mousePos.y, 0.015, 0.05)
             prevDropPos.x = mousePos.x
             prevDropPos.y = mousePos.y
           }
-
           mouseDirty = false
         }
 
         // Ambient ripples
         if (frameCount % AMBIENT_DROP_INTERVAL === 0) {
-          const rx = 0.2 + Math.random() * 0.6
-          const ry = 0.2 + Math.random() * 0.6
-          addDrop(rx, ry, 0.02, 0.03)
+          addDrop(0.2 + Math.random() * 0.6, 0.2 + Math.random() * 0.6, 0.02, 0.03)
         }
 
-        // Step 2: Simulate wave propagation
+        // Step 2: Wave simulation
         simulationMaterial.uniforms.uTexture.value = renderTargetA.texture
         renderer.setRenderTarget(renderTargetB)
         renderer.render(simulationScene, camera)
 
-        // Swap
         const temp = renderTargetA
         renderTargetA = renderTargetB
         renderTargetB = temp
 
-        // Step 3: Render to screen
+        // Step 3: Render video + ripple distortion to screen
         renderMaterial.uniforms.uSimulation.value = renderTargetA.texture
-        renderMaterial.uniforms.uTime.value = elapsedTime
         renderer.setRenderTarget(null)
         renderer.render(renderScene, camera)
 
         animationId = requestAnimationFrame(animate)
       }
 
-      // Intersection Observer for viewport pause
       const observer = new IntersectionObserver(
         (entries) => {
           const wasInViewport = isInViewport
           isInViewport = entries[0].isIntersecting
           if (isInViewport && !wasInViewport) {
             clock.start()
+            video.play().catch(() => {})
             animationId = requestAnimationFrame(animate)
           } else if (!isInViewport && wasInViewport) {
             clock.stop()
+            video.pause()
           }
         },
         { threshold: 0 }
@@ -404,13 +367,15 @@ export default function WebGLBackground() {
         window.removeEventListener('resize', handleResize)
         observer.disconnect()
         cancelAnimationFrame(animationId)
+        video.pause()
+        video.remove()
+        videoTexture.dispose()
         renderTargetA.dispose()
         renderTargetB.dispose()
         geometry.dispose()
         simulationMaterial.dispose()
         dropMaterial.dispose()
         renderMaterial.dispose()
-        bgTexture?.dispose()
         renderer.dispose()
         if (containerRef.current?.contains(renderer.domElement)) {
           containerRef.current.removeChild(renderer.domElement)
