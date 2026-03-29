@@ -154,7 +154,15 @@ export default function WebGLBackground() {
       renderer.setSize(window.innerWidth, window.innerHeight)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
       renderer.autoClear = false
-      containerRef.current.appendChild(renderer.domElement)
+
+      // Force canvas to fill container exactly -- prevents inline baseline gap
+      const canvas = renderer.domElement
+      canvas.style.display = 'block'
+      canvas.style.position = 'absolute'
+      canvas.style.inset = '0'
+      canvas.style.width = '100%'
+      canvas.style.height = '100%'
+      containerRef.current.appendChild(canvas)
 
       const isWebGL2 = renderer.capabilities.isWebGL2
       const hasHalfFloat = isWebGL2 || renderer.extensions.get('OES_texture_half_float')
