@@ -81,7 +81,7 @@ export default function HeroSection() {
             className="hero-name text-4xl leading-[1.1] tracking-tight text-white md:text-7xl lg:text-8xl"
             style={{ fontFamily: 'var(--font-serif)' }}
           >
-            <span className="italic">Servitude</span> is Freedom
+            Catcher in the <span className="italic">Internet</span>
           </p>
         </div>
 
