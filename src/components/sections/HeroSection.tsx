@@ -85,7 +85,7 @@ export default function HeroSection() {
           </p>
         </div>
 
-        <p className="hero-tagline mt-6 font-mono text-[11px] tracking-[0.2em] text-white/60 uppercase md:mt-8 md:text-xs">
+        <p className="hero-tagline mt-6 font-mono text-[11px] tracking-[0.2em] text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] uppercase md:mt-8 md:text-xs">
           Yunosuke Yoshino — Creative Developer
         </p>
       </div>
