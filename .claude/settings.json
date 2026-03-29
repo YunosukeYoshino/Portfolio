@@ -6,7 +6,7 @@
     "threejs-skills@threejs-skills": true
   },
   "enableAllProjectMcpServers": true,
-  "model": "default",
+  "model": "opus[1m]",
   "hooks": {
     "PreToolUse": [
       {

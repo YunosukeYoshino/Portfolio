@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+// Shared vertex shader for all passes
 const vertexShader = `
   varying vec2 vUv;
   void main() {
@@ -10,193 +11,120 @@ const vertexShader = `
   }
 `
 
-const fragmentShader = `
-  uniform vec2 iResolution;
-  uniform float iTime;
-  uniform float uScroll;
-  uniform float uSphereSize;
+// Simulation fragment shader -- 2D wave equation
+const simulationFragmentShader = `
+  uniform sampler2D uTexture;
+  uniform vec2 uResolution;
+  uniform float uDamping;
   varying vec2 vUv;
 
-  #define MAX_STEPS 50
-  #define MAX_DIST 100.0
-  #define SURF_DIST 0.01
-
-  vec3 hash( vec3 p ) {
-    p = vec3( dot(p,vec3(127.1,311.7, 74.7)),
-            dot(p,vec3(269.5,183.3,246.1)),
-            dot(p,vec3(113.5,271.9,124.6)));
-    return -1.0 + 2.0*fract(sin(p)*43758.5453123);
-  }
-
-  float noise( in vec3 p ) {
-    vec3 i = floor( p );
-    vec3 f = fract( p );
-    vec3 u = f*f*(3.0-2.0*f);
-    return mix( mix( mix( dot( hash( i + vec3(0.0,0.0,0.0) ), f - vec3(0.0,0.0,0.0) ),
-                        dot( hash( i + vec3(1.0,0.0,0.0) ), f - vec3(1.0,0.0,0.0) ), u.x),
-                    mix( dot( hash( i + vec3(0.0,1.0,0.0) ), f - vec3(0.0,1.0,0.0) ),
-                        dot( hash( i + vec3(1.0,1.0,0.0) ), f - vec3(1.0,1.0,0.0) ), u.x), u.y),
-                mix( mix( dot( hash( i + vec3(0.0,0.0,1.0) ), f - vec3(0.0,0.0,1.0) ),
-                        dot( hash( i + vec3(1.0,0.0,1.0) ), f - vec3(1.0,0.0,1.0) ), u.x),
-                    mix( dot( hash( i + vec3(0.0,1.0,1.0) ), f - vec3(0.0,1.0,1.0) ),
-                        dot( hash( i + vec3(1.0,1.0,1.0) ), f - vec3(1.0,1.0,1.0) ), u.x), u.y), u.z );
-  }
-
-  float fbm(vec3 p) {
-    float v = 0.0;
-    float a = 0.5;
-    vec3 shift = vec3(100.0);
-    mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
-    for (int i = 0; i < 3; ++i) {
-      v += a * noise(p);
-      p.xy *= rot;
-      p = p * 2.0 + shift;
-      a *= 0.5;
-    }
-    return v;
-  }
-
-  float sdSphere(vec3 p, float s) {
-    return length(p) - s;
-  }
-
-  float GetDist(vec3 p) {
-    vec3 q = p;
-    float t = iTime * 0.4;
-
-    float velocity = uScroll * 0.15;
-
-    q.y /= (1.0 + abs(velocity) * 1.5);
-    float squash = (1.0 + abs(velocity) * 0.4);
-    q.x *= squash;
-    q.z *= squash;
-
-    float c = cos(t * 0.1);
-    float s = sin(t * 0.1);
-    mat2 m = mat2(c, -s, s, c);
-    q.xz *= m;
-
-    q += vec3(sin(t*0.5), cos(t*0.3), sin(t*0.7)) * 0.3;
-
-    float sphere = sdSphere(q, uSphereSize);
-
-    float scrollNoise = abs(velocity) * 4.0;
-    float displacement = fbm(q * (1.2 + scrollNoise*0.2) + vec3(0.0, t * (0.8 + scrollNoise), 0.0));
-
-    displacement = (displacement * 2.0 - 1.0) * (0.7 + scrollNoise * 0.4);
-
-    return sphere + displacement * 0.6;
-  }
-
-  float RayMarch(vec3 ro, vec3 rd) {
-    float dO = 0.0;
-    for(int i=0; i<MAX_STEPS; i++) {
-      vec3 p = ro + rd * dO;
-      float dS = GetDist(p);
-      dO += dS;
-      if(dO > MAX_DIST || abs(dS) < SURF_DIST) break;
-    }
-    return dO;
-  }
-
-  vec3 GetNormal(vec3 p) {
-    float d = GetDist(p);
-    vec2 e = vec2(0.01, 0.0);
-    vec3 n = d - vec3(
-      GetDist(p-e.xyy),
-      GetDist(p-e.yxy),
-      GetDist(p-e.yyx)
-    );
-    return normalize(n);
-  }
-
-  vec3 GetEnvColor(vec3 rd) {
-    float y = rd.y * 0.5 + 0.5;
-    vec3 col = vec3(0.95, 0.95, 0.94);
-    float horizon = smoothstep(0.4, 0.6, y);
-    col = mix(vec3(0.88, 0.88, 0.9), col, horizon);
-    col += vec3(0.05) * y;
-    return col;
-  }
-
   void main() {
-    vec2 uv = (gl_FragCoord.xy - 0.5 * iResolution.xy) / iResolution.y;
+    vec2 texel = 1.0 / uResolution;
 
-    // Adjust camera distance based on aspect ratio for mobile devices
-    float aspect = iResolution.x / iResolution.y;
-    float cameraDistance = 5.0;
+    float n = texture2D(uTexture, vUv + vec2(0.0, texel.y)).r;
+    float s = texture2D(uTexture, vUv - vec2(0.0, texel.y)).r;
+    float e = texture2D(uTexture, vUv + vec2(texel.x, 0.0)).r;
+    float w = texture2D(uTexture, vUv - vec2(texel.x, 0.0)).r;
 
-    // If aspect ratio is less than 1.0 (portrait/mobile), move camera back
-    if (aspect < 1.0) {
-      // Smoothly scale camera distance to prevent sphere from being cut off
-      cameraDistance = 5.0 + (1.0 - aspect) * 3.0;
-    }
+    vec4 current = texture2D(uTexture, vUv);
+    float height = current.r;
+    float prevHeight = current.g;
 
-    vec3 ro = vec3(0.0, 0.0, cameraDistance);
-    vec3 rd = normalize(vec3(uv, -1.0));
+    float newHeight = ((n + s + e + w) * 0.5 - prevHeight) * uDamping;
+    newHeight = clamp(newHeight, -1.0, 1.0);
 
-    float d = RayMarch(ro, rd);
-
-    vec3 col = GetEnvColor(rd);
-
-    if(d < MAX_DIST) {
-      vec3 p = ro + rd * d;
-      vec3 n = GetNormal(p);
-      vec3 r = reflect(rd, n);
-
-      float aberration = 0.03 + abs(uScroll) * 0.02;
-
-      float ior = 1.25;
-      vec3 refractedRd = refract(rd, n, 1.0/ior);
-      if(length(refractedRd) == 0.0) refractedRd = r;
-
-      vec3 refractCol = GetEnvColor(refractedRd);
-      float beer = exp(-d * 0.15);
-      vec3 absorptionColor = vec3(0.96, 0.97, 0.99);
-      refractCol *= beer * absorptionColor;
-
-      float fresnel = pow(1.0 + dot(rd, n), 3.0);
-      fresnel = clamp(fresnel, 0.0, 1.0);
-
-      float spec = pow(max(0.0, dot(r, normalize(vec3(1.0, 1.0, 1.0)))), 8.0) * 0.6;
-      float rim = pow(max(0.0, dot(r, normalize(vec3(-1.0, 0.0, 0.5)))), 4.0) * 0.3;
-
-      vec3 reflectCol = GetEnvColor(r);
-
-      col = mix(refractCol, reflectCol, fresnel * 0.7 + 0.15);
-      col += vec3(1.0) * (spec + rim);
-
-      vec3 colR = GetEnvColor(refract(rd, n, 1.0/((ior - aberration))));
-      vec3 colB = GetEnvColor(refract(rd, n, 1.0/((ior + aberration))));
-
-      float splitIntensity = fresnel * 0.5 + abs(uScroll) * 0.03;
-      col = mix(col, vec3(colR.r, col.g, colB.b), splitIntensity);
-
-      float edge = 1.0 - dot(-rd, n);
-      col *= 1.0 - pow(edge, 4.0) * 0.1;
-    }
-
-    col = pow(col, vec3(0.4545));
-    gl_FragColor = vec4(col, 1.0);
+    gl_FragColor = vec4(newHeight, height, 0.0, 1.0);
   }
 `
 
+// Drop fragment shader -- injects ripple at mouse position
+const dropFragmentShader = `
+  uniform sampler2D uTexture;
+  uniform vec2 uCenter;
+  uniform float uRadius;
+  uniform float uStrength;
+  varying vec2 vUv;
+
+  void main() {
+    vec4 current = texture2D(uTexture, vUv);
+
+    float dist = distance(vUv, uCenter);
+    float drop = smoothstep(uRadius, 0.0, dist) * uStrength;
+
+    current.r += drop;
+
+    gl_FragColor = current;
+  }
+`
+
+// Render fragment shader -- distorts background using heightmap
+const renderFragmentShader = `
+  uniform sampler2D uSimulation;
+  uniform vec2 uResolution;
+  uniform vec2 uSimResolution;
+  uniform float uRefractionStrength;
+  uniform float uTime;
+  varying vec2 vUv;
+
+  void main() {
+    vec2 texelSize = 1.0 / uSimResolution;
+
+    float dx = texture2D(uSimulation, vUv + vec2(texelSize.x, 0.0)).r
+             - texture2D(uSimulation, vUv - vec2(texelSize.x, 0.0)).r;
+    float dy = texture2D(uSimulation, vUv + vec2(0.0, texelSize.y)).r
+             - texture2D(uSimulation, vUv - vec2(0.0, texelSize.y)).r;
+
+    vec2 distortedUv = vUv + vec2(dx, dy) * uRefractionStrength;
+
+    // Background gradient based on site palette #f3f3f1
+    float vignette = length(distortedUv - 0.5) * 0.8;
+    vec3 bgColor = mix(
+      vec3(0.953, 0.953, 0.945),
+      vec3(0.90, 0.90, 0.92),
+      vignette
+    );
+
+    // Water caustic tint from ripple normals
+    vec3 normal = normalize(vec3(dx * 4.0, dy * 4.0, 1.0));
+    bgColor += vec3(dx * 0.3, (dx + dy) * 0.15, dy * 0.3) * 0.4;
+
+    // Specular highlight (water surface light reflection)
+    vec3 lightDir = normalize(vec3(0.5, 0.5, 1.0));
+    float specular = pow(max(0.0, dot(normal, lightDir)), 24.0);
+    bgColor += vec3(1.0) * specular * 0.12;
+
+    // Chromatic aberration on ripple edges
+    float rippleIntensity = length(vec2(dx, dy));
+    float aberration = rippleIntensity * 0.015;
+    float rOffset = texture2D(uSimulation, vUv + vec2(dx, dy) * (uRefractionStrength + aberration)).r;
+    float bOffset = texture2D(uSimulation, vUv + vec2(dx, dy) * (uRefractionStrength - aberration)).r;
+    bgColor.r += rOffset * 0.025;
+    bgColor.b += bOffset * 0.025;
+
+    // Subtle ambient motion
+    bgColor += vec3(0.003) * sin(uTime * 0.5 + distortedUv.x * 6.28);
+
+    bgColor = pow(bgColor, vec3(0.4545));
+
+    gl_FragColor = vec4(bgColor, 1.0);
+  }
+`
+
+const SIM_RESOLUTION = 256
+const MIN_DROP_DISTANCE = 0.005
+const AMBIENT_DROP_INTERVAL = 90
+
 export default function WebGLBackground() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const targetScrollRef = useRef(0)
-  const currentScrollRef = useRef(0)
   const [isMounted, setIsMounted] = useState(false)
 
-  // Track mount state to ensure client-side only rendering
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
   useEffect(() => {
-    // Skip on server-side or before mount
     if (typeof window === 'undefined' || !isMounted || !containerRef.current) return
 
-    // Dynamic import of Three.js to avoid SSR issues
     let cleanup: (() => void) | undefined
 
     const initThree = async () => {
@@ -204,8 +132,6 @@ export default function WebGLBackground() {
 
       if (!containerRef.current) return
 
-      const scene = new THREE.Scene()
-      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
       const renderer = new THREE.WebGLRenderer({
         alpha: false,
         antialias: false,
@@ -213,90 +139,241 @@ export default function WebGLBackground() {
       })
 
       renderer.setSize(window.innerWidth, window.innerHeight)
-      renderer.setPixelRatio(1) // Fixed at 1 for better performance
+      renderer.setPixelRatio(1)
+      renderer.autoClear = false
       containerRef.current.appendChild(renderer.domElement)
 
-      // Calculate initial sphere size based on aspect ratio
-      const initialAspect = window.innerWidth / window.innerHeight
-      const initialSphereSize = initialAspect < 1.0 ? 1.8 * (0.5 + initialAspect * 0.3) : 1.8
+      // Capability check for float textures (required for wave simulation)
+      const isWebGL2 = renderer.capabilities.isWebGL2
+      const hasHalfFloat = isWebGL2 || renderer.extensions.get('OES_texture_half_float')
 
+      if (!hasHalfFloat) {
+        // HalfFloat textures not supported -- simulation requires negative values
+        // that UnsignedByteType cannot store. Fall back to static background.
+        renderer.dispose()
+        if (containerRef.current?.contains(renderer.domElement)) {
+          containerRef.current.removeChild(renderer.domElement)
+        }
+        return
+      }
+
+      const targetType = THREE.HalfFloatType
+
+      // Create ping-pong render targets
+      const createRenderTarget = () =>
+        new THREE.WebGLRenderTarget(SIM_RESOLUTION, SIM_RESOLUTION, {
+          type: targetType,
+          minFilter: THREE.NearestFilter,
+          magFilter: THREE.NearestFilter,
+          format: THREE.RGBAFormat,
+          depthBuffer: false,
+          stencilBuffer: false,
+        })
+
+      let renderTargetA = createRenderTarget()
+      let renderTargetB = createRenderTarget()
+
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
       const geometry = new THREE.PlaneGeometry(2, 2)
-      const material = new THREE.ShaderMaterial({
+
+      // Simulation material
+      const simulationMaterial = new THREE.ShaderMaterial({
         vertexShader,
-        fragmentShader,
+        fragmentShader: simulationFragmentShader,
         uniforms: {
-          iTime: { value: 0 },
-          iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-          uScroll: { value: 0 },
-          uSphereSize: { value: initialSphereSize },
+          uTexture: { value: null },
+          uResolution: { value: new THREE.Vector2(SIM_RESOLUTION, SIM_RESOLUTION) },
+          uDamping: { value: 0.99 },
         },
         depthWrite: false,
         depthTest: false,
       })
 
-      const mesh = new THREE.Mesh(geometry, material)
-      scene.add(mesh)
+      // Drop material
+      const dropMaterial = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader: dropFragmentShader,
+        uniforms: {
+          uTexture: { value: null },
+          uCenter: { value: new THREE.Vector2(0.5, 0.5) },
+          uRadius: { value: 0.015 },
+          uStrength: { value: 0.05 },
+        },
+        depthWrite: false,
+        depthTest: false,
+      })
 
-      // Handle window resize
+      // Render material
+      const renderMaterial = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader: renderFragmentShader,
+        uniforms: {
+          uSimulation: { value: null },
+          uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uSimResolution: { value: new THREE.Vector2(SIM_RESOLUTION, SIM_RESOLUTION) },
+          uRefractionStrength: { value: 0.04 },
+          uTime: { value: 0 },
+        },
+        depthWrite: false,
+        depthTest: false,
+      })
+
+      // Create scenes with meshes
+      const simulationScene = new THREE.Scene()
+      const simulationMesh = new THREE.Mesh(geometry, simulationMaterial)
+      simulationScene.add(simulationMesh)
+
+      const dropScene = new THREE.Scene()
+      const dropMesh = new THREE.Mesh(geometry, dropMaterial)
+      dropScene.add(dropMesh)
+
+      const renderScene = new THREE.Scene()
+      const renderMesh = new THREE.Mesh(geometry, renderMaterial)
+      renderScene.add(renderMesh)
+
+      // Initialize both render targets to zero (prevent noise on first frame)
+      renderer.setClearColor(new THREE.Color(0x000000), 0)
+      renderer.setRenderTarget(renderTargetA)
+      renderer.clear()
+      renderer.setRenderTarget(renderTargetB)
+      renderer.clear()
+      renderer.setRenderTarget(null)
+
+      // Mouse tracking
+      const mousePos = { x: 0.5, y: 0.5 }
+      const prevDropPos = { x: 0.5, y: 0.5 }
+      let mouseDirty = false
+      let pendingClick = false
+
+      const handleMouseMove = (e: MouseEvent) => {
+        mousePos.x = e.clientX / window.innerWidth
+        mousePos.y = 1.0 - e.clientY / window.innerHeight
+        mouseDirty = true
+      }
+
+      const handleClick = (e: MouseEvent) => {
+        mousePos.x = e.clientX / window.innerWidth
+        mousePos.y = 1.0 - e.clientY / window.innerHeight
+        pendingClick = true
+      }
+
+      const handleTouchMove = (e: TouchEvent) => {
+        const touch = e.touches[0]
+        if (!touch) return
+        mousePos.x = touch.clientX / window.innerWidth
+        mousePos.y = 1.0 - touch.clientY / window.innerHeight
+        mouseDirty = true
+      }
+
+      const handleTouchStart = (e: TouchEvent) => {
+        const touch = e.touches[0]
+        if (!touch) return
+        mousePos.x = touch.clientX / window.innerWidth
+        mousePos.y = 1.0 - touch.clientY / window.innerHeight
+        pendingClick = true
+      }
+
+      // Window-level listeners: ripples respond to any interaction across the page.
+      // Container has pointer-events-none so hero text stays interactive.
+      window.addEventListener('mousemove', handleMouseMove, { passive: true })
+      window.addEventListener('click', handleClick, { passive: true })
+      window.addEventListener('touchmove', handleTouchMove, { passive: true })
+      window.addEventListener('touchstart', handleTouchStart, { passive: true })
+
       const handleResize = () => {
         const width = window.innerWidth
         const height = window.innerHeight
         renderer.setSize(width, height)
-        material.uniforms.iResolution.value.set(width, height)
-
-        // Calculate sphere size based on aspect ratio
-        const aspect = width / height
-        material.uniforms.uSphereSize.value = aspect < 1.0 ? 1.8 * (0.5 + aspect * 0.3) : 1.8
+        renderMaterial.uniforms.uResolution.value.set(width, height)
       }
 
       window.addEventListener('resize', handleResize)
 
-      // Scroll velocity tracking via scroll event (not setInterval)
-      let lastScrollY = window.scrollY
-      let lastScrollTime = Date.now()
+      // Helper to add a drop and swap targets
+      const addDrop = (x: number, y: number, radius: number, strength: number) => {
+        dropMaterial.uniforms.uTexture.value = renderTargetA.texture
+        dropMaterial.uniforms.uCenter.value.set(x, y)
+        dropMaterial.uniforms.uRadius.value = radius
+        dropMaterial.uniforms.uStrength.value = strength
 
-      const handleScroll = () => {
-        const currentScrollY = window.scrollY
-        const currentTime = Date.now()
-        const timeDiff = (currentTime - lastScrollTime) / 1000
-        const scrollDiff = currentScrollY - lastScrollY
+        renderer.setRenderTarget(renderTargetB)
+        renderer.render(dropScene, camera)
 
-        if (timeDiff > 0) {
-          targetScrollRef.current = scrollDiff / timeDiff / 1000
-        }
-
-        lastScrollY = currentScrollY
-        lastScrollTime = currentTime
+        // Swap
+        const temp = renderTargetA
+        renderTargetA = renderTargetB
+        renderTargetB = temp
       }
 
-      window.addEventListener('scroll', handleScroll, { passive: true })
-
-      // Animation loop with Intersection Observer pause
+      // Animation loop
       const clock = new THREE.Clock()
       let animationId: number
       let isInViewport = true
+      let frameCount = 0
 
       const animate = () => {
         if (!isInViewport) return
 
         const elapsedTime = clock.getElapsedTime()
+        frameCount++
 
-        // Smooth interpolation for shader
-        currentScrollRef.current += (targetScrollRef.current - currentScrollRef.current) * 0.1
+        // Step 1: Add drops from mouse interaction
+        if (pendingClick) {
+          addDrop(mousePos.x, mousePos.y, 0.03, 0.2)
+          prevDropPos.x = mousePos.x
+          prevDropPos.y = mousePos.y
+          pendingClick = false
+          mouseDirty = false
+        } else if (mouseDirty) {
+          const dx = mousePos.x - prevDropPos.x
+          const dy = mousePos.y - prevDropPos.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
 
-        material.uniforms.iTime.value = elapsedTime
-        material.uniforms.uScroll.value = currentScrollRef.current
+          if (dist > MIN_DROP_DISTANCE) {
+            addDrop(mousePos.x, mousePos.y, 0.015, 0.05)
+            prevDropPos.x = mousePos.x
+            prevDropPos.y = mousePos.y
+          }
 
-        renderer.render(scene, camera)
+          mouseDirty = false
+        }
+
+        // Ambient ripples
+        if (frameCount % AMBIENT_DROP_INTERVAL === 0) {
+          const rx = 0.2 + Math.random() * 0.6
+          const ry = 0.2 + Math.random() * 0.6
+          addDrop(rx, ry, 0.02, 0.03)
+        }
+
+        // Step 2: Simulate wave propagation
+        simulationMaterial.uniforms.uTexture.value = renderTargetA.texture
+        renderer.setRenderTarget(renderTargetB)
+        renderer.render(simulationScene, camera)
+
+        // Swap
+        const temp = renderTargetA
+        renderTargetA = renderTargetB
+        renderTargetB = temp
+
+        // Step 3: Render to screen
+        renderMaterial.uniforms.uSimulation.value = renderTargetA.texture
+        renderMaterial.uniforms.uTime.value = elapsedTime
+        renderer.setRenderTarget(null)
+        renderer.render(renderScene, camera)
+
         animationId = requestAnimationFrame(animate)
       }
 
+      // Intersection Observer for viewport pause
       const observer = new IntersectionObserver(
         (entries) => {
           const wasInViewport = isInViewport
           isInViewport = entries[0].isIntersecting
           if (isInViewport && !wasInViewport) {
+            clock.start()
             animationId = requestAnimationFrame(animate)
+          } else if (!isInViewport && wasInViewport) {
+            clock.stop()
           }
         },
         { threshold: 0 }
@@ -308,15 +385,21 @@ export default function WebGLBackground() {
 
       animate()
 
-      // Store cleanup function
       cleanup = () => {
+        window.removeEventListener('mousemove', handleMouseMove)
+        window.removeEventListener('click', handleClick)
+        window.removeEventListener('touchmove', handleTouchMove)
+        window.removeEventListener('touchstart', handleTouchStart)
         window.removeEventListener('resize', handleResize)
-        window.removeEventListener('scroll', handleScroll)
         observer.disconnect()
         cancelAnimationFrame(animationId)
-        renderer.dispose()
+        renderTargetA.dispose()
+        renderTargetB.dispose()
         geometry.dispose()
-        material.dispose()
+        simulationMaterial.dispose()
+        dropMaterial.dispose()
+        renderMaterial.dispose()
+        renderer.dispose()
         if (containerRef.current?.contains(renderer.domElement)) {
           containerRef.current.removeChild(renderer.domElement)
         }
@@ -325,7 +408,6 @@ export default function WebGLBackground() {
 
     initThree()
 
-    // Cleanup
     return () => {
       cleanup?.()
     }
