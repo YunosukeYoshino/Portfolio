@@ -57,13 +57,15 @@ const dropFragmentShader = `
   }
 `
 
-// Render fragment shader -- distorts background using heightmap
+// Render fragment shader -- distorts background texture using heightmap
 const renderFragmentShader = `
   uniform sampler2D uSimulation;
+  uniform sampler2D uBackground;
   uniform vec2 uResolution;
   uniform vec2 uSimResolution;
   uniform float uRefractionStrength;
   uniform float uTime;
+  uniform float uBgLoaded;
   varying vec2 vUv;
 
   void main() {
@@ -74,37 +76,32 @@ const renderFragmentShader = `
     float dy = texture2D(uSimulation, vUv + vec2(0.0, texelSize.y)).r
              - texture2D(uSimulation, vUv - vec2(0.0, texelSize.y)).r;
 
-    vec2 distortedUv = vUv + vec2(dx, dy) * uRefractionStrength;
-
-    // Background gradient based on site palette #f3f3f1
-    float vignette = length(distortedUv - 0.5) * 0.8;
-    vec3 bgColor = mix(
-      vec3(0.953, 0.953, 0.945),
-      vec3(0.90, 0.90, 0.92),
-      vignette
-    );
-
-    // Water caustic tint from ripple normals
-    vec3 normal = normalize(vec3(dx * 4.0, dy * 4.0, 1.0));
-    bgColor += vec3(dx * 0.3, (dx + dy) * 0.15, dy * 0.3) * 0.4;
-
-    // Specular highlight (water surface light reflection)
-    vec3 lightDir = normalize(vec3(0.5, 0.5, 1.0));
-    float specular = pow(max(0.0, dot(normal, lightDir)), 24.0);
-    bgColor += vec3(1.0) * specular * 0.12;
-
-    // Chromatic aberration on ripple edges
+    // Chromatic aberration offset from ripple intensity
     float rippleIntensity = length(vec2(dx, dy));
-    float aberration = rippleIntensity * 0.015;
-    float rOffset = texture2D(uSimulation, vUv + vec2(dx, dy) * (uRefractionStrength + aberration)).r;
-    float bOffset = texture2D(uSimulation, vUv + vec2(dx, dy) * (uRefractionStrength - aberration)).r;
-    bgColor.r += rOffset * 0.025;
-    bgColor.b += bOffset * 0.025;
+    float aberration = rippleIntensity * 0.008;
 
-    // Subtle ambient motion
-    bgColor += vec3(0.003) * sin(uTime * 0.5 + distortedUv.x * 6.28);
+    // Distorted UV with chromatic aberration per channel
+    vec2 baseOffset = vec2(dx, dy) * uRefractionStrength;
+    float r = texture2D(uBackground, vUv + baseOffset * (1.0 + aberration)).r;
+    float g = texture2D(uBackground, vUv + baseOffset).g;
+    float b = texture2D(uBackground, vUv + baseOffset * (1.0 - aberration)).b;
+    vec3 bgColor = vec3(r, g, b);
 
-    bgColor = pow(bgColor, vec3(0.4545));
+    // Fallback gradient when texture not yet loaded
+    if (uBgLoaded < 0.5) {
+      vec2 distortedUv = vUv + baseOffset;
+      float vignette = length(distortedUv - 0.5) * 0.8;
+      bgColor = mix(vec3(0.953, 0.953, 0.945), vec3(0.90, 0.90, 0.92), vignette);
+    }
+
+    // Water surface specular highlight
+    vec3 normal = normalize(vec3(dx * 4.0, dy * 4.0, 1.0));
+    vec3 lightDir = normalize(vec3(0.5, 0.5, 1.0));
+    float specular = pow(max(0.0, dot(normal, lightDir)), 32.0);
+    bgColor += vec3(1.0) * specular * 0.08;
+
+    // Subtle caustic tint at ripple edges
+    bgColor += vec3(dx * 0.15, (dx + dy) * 0.08, dy * 0.15) * 0.2;
 
     gl_FragColor = vec4(bgColor, 1.0);
   }
@@ -203,19 +200,33 @@ export default function WebGLBackground() {
         depthTest: false,
       })
 
+      // Load background texture
+      const textureLoader = new THREE.TextureLoader()
+      let bgTexture: InstanceType<typeof THREE.Texture> | null = null
+
       // Render material
       const renderMaterial = new THREE.ShaderMaterial({
         vertexShader,
         fragmentShader: renderFragmentShader,
         uniforms: {
           uSimulation: { value: null },
+          uBackground: { value: null },
           uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
           uSimResolution: { value: new THREE.Vector2(SIM_RESOLUTION, SIM_RESOLUTION) },
           uRefractionStrength: { value: 0.04 },
           uTime: { value: 0 },
+          uBgLoaded: { value: 0.0 },
         },
         depthWrite: false,
         depthTest: false,
+      })
+
+      textureLoader.load('/images/hero-bg.png', (texture) => {
+        texture.minFilter = THREE.LinearFilter
+        texture.magFilter = THREE.LinearFilter
+        bgTexture = texture
+        renderMaterial.uniforms.uBackground.value = texture
+        renderMaterial.uniforms.uBgLoaded.value = 1.0
       })
 
       // Create scenes with meshes
@@ -399,6 +410,7 @@ export default function WebGLBackground() {
         simulationMaterial.dispose()
         dropMaterial.dispose()
         renderMaterial.dispose()
+        bgTexture?.dispose()
         renderer.dispose()
         if (containerRef.current?.contains(renderer.domElement)) {
           containerRef.current.removeChild(renderer.domElement)
