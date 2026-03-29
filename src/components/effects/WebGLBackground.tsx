@@ -70,7 +70,7 @@ const renderFragmentShader = `
              - texture2D(uSimulation, vUv - vec2(0.0, texelSize.y)).r;
 
     float rippleIntensity = length(vec2(dx, dy));
-    float aberration = rippleIntensity * 0.008;
+    float aberration = rippleIntensity * 0.01;
 
     vec2 baseOffset = vec2(dx, dy) * uRefractionStrength;
     float r = texture2D(uBackground, vUv + baseOffset * (1.0 + aberration)).r;
@@ -206,7 +206,7 @@ export default function WebGLBackground() {
           uSimulation: { value: null },
           uBackground: { value: videoTexture },
           uSimResolution: { value: new THREE.Vector2(SIM_RESOLUTION, SIM_RESOLUTION) },
-          uRefractionStrength: { value: 0.04 },
+          uRefractionStrength: { value: 0.055 },
         },
         depthWrite: false,
         depthTest: false,
@@ -299,7 +299,7 @@ export default function WebGLBackground() {
 
         // Step 1: Mouse/touch drops
         if (pendingClick) {
-          addDrop(mousePos.x, mousePos.y, 0.03, 0.2)
+          addDrop(mousePos.x, mousePos.y, 0.04, 0.25)
           prevDropPos.x = mousePos.x
           prevDropPos.y = mousePos.y
           pendingClick = false
@@ -308,7 +308,7 @@ export default function WebGLBackground() {
           const dx = mousePos.x - prevDropPos.x
           const dy = mousePos.y - prevDropPos.y
           if (Math.sqrt(dx * dx + dy * dy) > MIN_DROP_DISTANCE) {
-            addDrop(mousePos.x, mousePos.y, 0.015, 0.05)
+            addDrop(mousePos.x, mousePos.y, 0.02, 0.07)
             prevDropPos.x = mousePos.x
             prevDropPos.y = mousePos.y
           }
@@ -317,7 +317,7 @@ export default function WebGLBackground() {
 
         // Ambient ripples
         if (frameCount % AMBIENT_DROP_INTERVAL === 0) {
-          addDrop(0.2 + Math.random() * 0.6, 0.2 + Math.random() * 0.6, 0.02, 0.03)
+          addDrop(0.2 + Math.random() * 0.6, 0.2 + Math.random() * 0.6, 0.025, 0.04)
         }
 
         // Step 2: Wave simulation
