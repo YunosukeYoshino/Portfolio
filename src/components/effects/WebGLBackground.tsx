@@ -146,13 +146,13 @@ export default function WebGLBackground() {
       }
 
       const renderer = new THREE.WebGLRenderer({
-        alpha: false,
+        alpha: true,
         antialias: false,
         powerPreference: 'high-performance',
       })
 
       renderer.setSize(window.innerWidth, window.innerHeight)
-      renderer.setPixelRatio(1)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
       renderer.autoClear = false
       containerRef.current.appendChild(renderer.domElement)
 
@@ -421,7 +421,7 @@ export default function WebGLBackground() {
   return (
     <div
       ref={containerRef}
-      className="z-0 pointer-events-none absolute left-0 top-0 h-screen w-full"
+      className="z-0 pointer-events-none absolute inset-0 h-full w-full bg-[#c8d4b8]"
     />
   )
 }
