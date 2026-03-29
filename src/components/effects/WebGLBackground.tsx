@@ -58,8 +58,25 @@ const renderFragmentShader = `
   uniform sampler2D uSimulation;
   uniform sampler2D uBackground;
   uniform vec2 uSimResolution;
+  uniform vec2 uScreenSize;
+  uniform vec2 uVideoSize;
   uniform float uRefractionStrength;
   varying vec2 vUv;
+
+  // object-fit: cover equivalent
+  vec2 coverUv(vec2 uv) {
+    float screenAspect = uScreenSize.x / uScreenSize.y;
+    float videoAspect = uVideoSize.x / uVideoSize.y;
+    vec2 result = uv;
+    if (screenAspect > videoAspect) {
+      float scale = screenAspect / videoAspect;
+      result.y = (uv.y - 0.5) / scale + 0.5;
+    } else {
+      float scale = videoAspect / screenAspect;
+      result.x = (uv.x - 0.5) / scale + 0.5;
+    }
+    return result;
+  }
 
   void main() {
     vec2 texelSize = 1.0 / uSimResolution;
@@ -73,9 +90,10 @@ const renderFragmentShader = `
     float aberration = rippleIntensity * 0.01;
 
     vec2 baseOffset = vec2(dx, dy) * uRefractionStrength;
-    float r = texture2D(uBackground, vUv + baseOffset * (1.0 + aberration)).r;
-    float g = texture2D(uBackground, vUv + baseOffset).g;
-    float b = texture2D(uBackground, vUv + baseOffset * (1.0 - aberration)).b;
+    vec2 baseUv = coverUv(vUv);
+    float r = texture2D(uBackground, baseUv + baseOffset * (1.0 + aberration)).r;
+    float g = texture2D(uBackground, baseUv + baseOffset).g;
+    float b = texture2D(uBackground, baseUv + baseOffset * (1.0 - aberration)).b;
     vec3 bgColor = vec3(r, g, b);
 
     vec3 normal = normalize(vec3(dx * 4.0, dy * 4.0, 1.0));
@@ -206,6 +224,10 @@ export default function WebGLBackground() {
           uSimulation: { value: null },
           uBackground: { value: videoTexture },
           uSimResolution: { value: new THREE.Vector2(SIM_RESOLUTION, SIM_RESOLUTION) },
+          uScreenSize: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uVideoSize: {
+            value: new THREE.Vector2(video.videoWidth || 1280, video.videoHeight || 720),
+          },
           uRefractionStrength: { value: 0.055 },
         },
         depthWrite: false,
@@ -220,6 +242,11 @@ export default function WebGLBackground() {
 
       const renderScene = new THREE.Scene()
       renderScene.add(new THREE.Mesh(geometry, renderMaterial))
+
+      // Update video dimensions once metadata loads
+      video.addEventListener('loadedmetadata', () => {
+        renderMaterial.uniforms.uVideoSize.value.set(video.videoWidth, video.videoHeight)
+      })
 
       // Initialize render targets to zero
       renderer.setClearColor(new THREE.Color(0x000000), 0)
@@ -269,6 +296,7 @@ export default function WebGLBackground() {
 
       const handleResize = () => {
         renderer.setSize(window.innerWidth, window.innerHeight)
+        renderMaterial.uniforms.uScreenSize.value.set(window.innerWidth, window.innerHeight)
       }
 
       window.addEventListener('resize', handleResize)
