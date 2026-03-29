@@ -427,9 +427,6 @@ export default function WebGLBackground() {
   }, [isMounted])
 
   return (
-    <div
-      ref={containerRef}
-      className="z-0 pointer-events-none absolute inset-0 h-full w-full bg-[#c8d4b8]"
-    />
+    <div ref={containerRef} className="z-0 pointer-events-none absolute -inset-1 bg-[#c8d4b8]" />
   )
 }
