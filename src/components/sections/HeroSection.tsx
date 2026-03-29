@@ -93,7 +93,7 @@ export default function HeroSection() {
         playsInline
         className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
       >
-        <source src="/images/hero-bg.mp4" type="video/mp4" />
+        <source src="/images/hero-bg-loop.mp4" type="video/mp4" />
         <track kind="descriptions" src="" label="Hero background" />
       </video>
 
