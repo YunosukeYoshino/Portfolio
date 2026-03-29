@@ -20,6 +20,7 @@
   --font-display: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: var(--font-manrope), -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: var(--font-jetbrains-mono), "Monaco", "Menlo", monospace;
+  --font-serif: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
 }
 
 /* Base Styles */

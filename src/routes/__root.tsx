@@ -104,7 +104,7 @@ export const Route = createRootRoute({
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&family=Manrope:wght@400;600&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&family=Manrope:wght@400;600&display=swap',
       },
     ],
   }),
