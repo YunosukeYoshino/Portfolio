@@ -1,6 +1,8 @@
 import { ArrowUpRight } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
+import { getExternalLinkProps } from '@/lib/link'
+
 const works = [
   {
     id: 1,
@@ -31,12 +33,11 @@ const works = [
   },
   {
     id: 4,
-    title: 'Creative Studio',
-    category: 'Motion / 3D',
-    image:
-      'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?q=80&w=2532&auto=format&fit=crop',
-    alt: 'Creative Studio - Interactive 3D experience',
-    link: '#',
+    title: 'Nanatau',
+    category: 'Blog / Content',
+    image: '/images/projects/nanatau-home-card.png',
+    alt: 'Nanatau blog homepage',
+    link: 'https://blog.nanatau.com',
   },
 ]
 
@@ -67,13 +68,24 @@ export default function WorksSection() {
           const track = trackRef.current
           if (!track) return
 
-          // Calculate how far the track needs to move to reveal all cards.
-          // We scroll the track left by (trackWidth - viewportWidth).
-          const getScrollAmount = () => {
-            return -(track.scrollWidth - window.innerWidth)
+          const getDesktopEndGap = () => {
+            return Math.min(Math.max(window.innerWidth * 0.115, 116), 184)
           }
 
-          const scrollTween = gsap.to(track, {
+          // Stop with intentional breathing room after the last card instead of
+          // aligning the whole track flush to the viewport edge.
+          const getScrollAmount = () => {
+            const cards = track.querySelectorAll<HTMLElement>('.works-card')
+            const lastCard = cards[cards.length - 1]
+            if (!lastCard) return 0
+
+            const availableRightEdge = window.innerWidth - getDesktopEndGap()
+            const lastCardRightEdge = lastCard.offsetLeft + lastCard.offsetWidth
+
+            return Math.min(0, availableRightEdge - lastCardRightEdge)
+          }
+
+          gsap.to(track, {
             x: getScrollAmount,
             ease: 'none',
             scrollTrigger: {
@@ -85,27 +97,6 @@ export default function WorksSection() {
               invalidateOnRefresh: true,
             },
           })
-
-          // Parallax on each card image driven by horizontal scroll progress
-          const images = gsap.utils.toArray<HTMLElement>('.works-parallax-image')
-          for (const img of images) {
-            gsap.fromTo(
-              img,
-              { xPercent: -15 },
-              {
-                xPercent: 15,
-                ease: 'none',
-                force3D: true,
-                scrollTrigger: {
-                  containerAnimation: scrollTween,
-                  trigger: img.closest('.works-card'),
-                  start: 'left right',
-                  end: 'right left',
-                  scrub: true,
-                },
-              }
-            )
-          }
         })
 
         // Mobile: simple vertical reveal for each card
@@ -164,7 +155,7 @@ export default function WorksSection() {
       <div className="hidden md:block">
         <div
           ref={trackRef}
-          className="flex items-center gap-8 py-16 pl-12 pr-[calc(100vw-600px)]"
+          className="flex items-center gap-8 px-12 py-16"
           style={{ willChange: 'transform' }}
         >
           {works.map((work, index) => (
@@ -173,7 +164,7 @@ export default function WorksSection() {
               className={`works-card flex-shrink-0 ${index % 2 === 1 ? 'mt-24' : ''}`}
               style={{ width: 'clamp(500px, 40vw, 700px)' }}
             >
-              <WorkCard work={work} isHorizontal />
+              <WorkCard work={work} />
             </div>
           ))}
         </div>
@@ -193,16 +184,10 @@ interface Work {
   readonly link: string
 }
 
-function WorkCard({
-  work,
-  isHorizontal = false,
-}: {
-  readonly work: Work
-  readonly isHorizontal?: boolean
-}) {
+function WorkCard({ work }: { readonly work: Work }) {
   return (
     <article className="group cursor-pointer hover-trigger">
-      <a href={work.link}>
+      <a href={work.link} {...getExternalLinkProps(work.link)}>
         <div className="relative mb-6 aspect-video overflow-hidden rounded-sm bg-gray-100 shadow-sm transition-shadow duration-500 group-hover:shadow-lg">
           <div className="h-full w-full transform transition-transform duration-700 group-hover:scale-[1.03]">
             <img
@@ -211,9 +196,7 @@ function WorkCard({
               width={1200}
               height={675}
               loading="lazy"
-              className={`absolute top-[-10%] left-0 w-full object-cover grayscale transition-[filter] duration-700 group-hover:grayscale-0 block ${
-                isHorizontal ? 'works-parallax-image h-[120%] w-[130%] left-[-15%]' : 'h-[120%]'
-              }`}
+              className="absolute inset-0 block h-full w-full object-cover object-center grayscale transition-[filter] duration-700 group-hover:grayscale-0"
             />
           </div>
           <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/5" />

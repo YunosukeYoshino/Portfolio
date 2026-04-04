@@ -66,6 +66,30 @@
     margin: 0;
   }
 
+  a[href],
+  button,
+  [role="button"],
+  summary,
+  select,
+  label[for],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"] {
+    cursor: pointer;
+  }
+
+  input:not([type="submit"]):not([type="button"]):not([type="reset"]),
+  textarea {
+    cursor: text;
+  }
+
+  button:disabled,
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    cursor: not-allowed;
+  }
+
   /* GPU Acceleration for animated elements */
   img,
   video,
