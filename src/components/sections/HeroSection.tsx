@@ -1,60 +1,48 @@
 'use client'
 
+import gsap from 'gsap'
 import { ArrowDown } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import WebGLBackground from '@/components/effects/WebGLBackground'
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null)
-  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true)
+    if (typeof window === 'undefined' || !heroRef.current) return
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.2 })
+
+      tl.from('.hero-name', {
+        y: 60,
+        opacity: 0,
+        duration: 1.4,
+        ease: 'expo.out',
+      })
+        .from(
+          '.hero-tagline',
+          {
+            y: 40,
+            opacity: 0,
+            duration: 1.0,
+            ease: 'expo.out',
+          },
+          '-=0.8'
+        )
+        .from(
+          '.hero-bottom',
+          {
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+          },
+          '-=0.4'
+        )
+    }, heroRef)
+
+    return () => ctx.revert()
   }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || !isMounted) return
-
-    let ctx: { revert: () => void } | undefined
-
-    const initAnimation = async () => {
-      const gsap = (await import('gsap')).default
-
-      ctx = gsap.context(() => {
-        const tl = gsap.timeline({ delay: 0.5 })
-
-        tl.from('.hero-name', {
-          y: 60,
-          opacity: 0,
-          duration: 1.4,
-          ease: 'expo.out',
-        })
-          .from(
-            '.hero-tagline',
-            {
-              y: 40,
-              opacity: 0,
-              duration: 1.0,
-              ease: 'expo.out',
-            },
-            '-=0.8'
-          )
-          .from(
-            '.hero-bottom',
-            {
-              opacity: 0,
-              duration: 0.8,
-              ease: 'power2.out',
-            },
-            '-=0.4'
-          )
-      }, heroRef)
-    }
-
-    initAnimation()
-
-    return () => ctx?.revert()
-  }, [isMounted])
 
   return (
     <section
