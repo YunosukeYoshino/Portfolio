@@ -167,12 +167,67 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  const chunkRecoveryKey = `chunk-reload:${appCss}`
+
   return (
     // suppressHydrationWarning on html/head/body to prevent hydration errors
     // caused by browser extensions (e.g., immersive-translate) injecting elements
     <html lang="ja" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head suppressHydrationWarning>
         <HeadContent />
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `
+              (() => {
+                const key = ${JSON.stringify(chunkRecoveryKey)};
+
+                const hasReloaded = () => sessionStorage.getItem(key) === '1';
+                const reloadOnce = () => {
+                  if (hasReloaded()) return;
+                  sessionStorage.setItem(key, '1');
+                  window.location.reload();
+                };
+
+                const isChunkLoadError = (message) =>
+                  /Failed to fetch dynamically imported module|error loading dynamically imported module|Expected a JavaScript-or-Wasm module script/i.test(
+                    message ?? ''
+                  );
+
+                window.addEventListener(
+                  'error',
+                  (event) => {
+                    const target = event.target;
+                    const assetUrl =
+                      target instanceof HTMLScriptElement || target instanceof HTMLLinkElement
+                        ? target.src || target.href || ''
+                        : '';
+
+                    if (assetUrl.includes('/assets/')) {
+                      reloadOnce();
+                      return;
+                    }
+
+                    if (isChunkLoadError(event.message)) {
+                      reloadOnce();
+                    }
+                  },
+                  true
+                );
+
+                window.addEventListener('unhandledrejection', (event) => {
+                  const reason = event.reason;
+                  const message =
+                    typeof reason === 'string' ? reason : reason?.message || '';
+
+                  if (isChunkLoadError(message)) {
+                    reloadOnce();
+                  }
+                });
+              })();
+            `,
+          }}
+        />
       </head>
       <body className="antialiased" suppressHydrationWarning>
         <GoogleAnalytics />
