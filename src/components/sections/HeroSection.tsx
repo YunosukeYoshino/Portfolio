@@ -59,7 +59,7 @@ export default function HeroSection() {
   return (
     <section
       ref={heroRef}
-      className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
+      className="relative flex h-screen min-h-screen w-full flex-col items-center justify-center overflow-hidden supports-[height:100svh]:h-[100svh] supports-[min-height:100svh]:min-h-[100svh]"
     >
       <h1 className="sr-only">Yunosuke Yoshino Portfolio</h1>
 
@@ -82,7 +82,7 @@ export default function HeroSection() {
       </div>
 
       {/* Bottom scroll indicator */}
-      <div className="hero-bottom absolute bottom-8 left-1/2 z-10 -translate-x-1/2 flex flex-col items-center gap-2 md:bottom-12">
+      <div className="hero-bottom absolute bottom-[calc(env(safe-area-inset-bottom)+3rem)] left-1/2 z-10 -translate-x-1/2 flex flex-col items-center gap-2 md:bottom-12">
         <span className="font-mono text-[9px] tracking-[0.3em] text-white/40 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] uppercase">
           Scroll
         </span>

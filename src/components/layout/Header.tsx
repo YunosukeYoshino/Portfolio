@@ -11,6 +11,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
   const lastScrollY = useRef(0)
+  const lockedScrollY = useRef(0)
 
   useEffect(() => {
     const updateTime = () => {
@@ -61,71 +62,103 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const html = document.documentElement
+    const body = document.body
+
+    if (!isMenuOpen) {
+      return
+    }
+
+    lockedScrollY.current = window.scrollY
+
+    html.style.overflow = 'hidden'
+    body.style.overflow = 'hidden'
+    body.style.position = 'fixed'
+    body.style.top = `-${lockedScrollY.current}px`
+    body.style.left = '0'
+    body.style.right = '0'
+    body.style.width = '100%'
+
+    return () => {
+      html.style.overflow = ''
+      body.style.overflow = ''
+      body.style.position = ''
+      body.style.top = ''
+      body.style.left = ''
+      body.style.right = ''
+      body.style.width = ''
+      window.scrollTo(0, lockedScrollY.current)
+    }
+  }, [isMenuOpen])
+
   return (
-    <nav
-      className={`fixed left-0 top-0 z-50 flex w-full items-start justify-between px-6 py-6 text-[#111] md:px-12 md:py-8 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
-    >
-      <Link
-        to="/"
-        className="font-display hover-trigger z-50 text-lg font-bold leading-tight tracking-tight"
-        reloadDocument
-        data-cursor="hover"
+    <>
+      <nav
+        className={`fixed left-0 top-0 z-50 flex w-full items-start justify-between px-6 py-6 text-[#111] transition-transform duration-300 md:px-12 md:py-8 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
       >
-        YUNOSUKE
-        <br />
-        YOSHINO
-      </Link>
+        <Link
+          to="/"
+          className="font-display hover-trigger z-50 text-lg font-bold leading-tight tracking-tight"
+          reloadDocument
+          data-cursor="hover"
+        >
+          YUNOSUKE
+          <br />
+          YOSHINO
+        </Link>
 
-      <div className="z-50 hidden flex-col items-end gap-1 font-mono text-xs uppercase tracking-wide md:flex">
-        <div className="mb-2 flex gap-8">
-          <a href="/#about" className="hover-trigger transition-opacity hover:opacity-50">
-            About
-          </a>
-          <a href="/#works" className="hover-trigger transition-opacity hover:opacity-50">
-            Works
-          </a>
-          <a href="/#articles" className="hover-trigger transition-opacity hover:opacity-50">
-            Articles
-          </a>
-          <a href="/#contact" className="hover-trigger transition-opacity hover:opacity-50">
-            Contact
-          </a>
+        <div className="z-50 hidden flex-col items-end gap-1 font-mono text-xs uppercase tracking-wide md:flex">
+          <div className="mb-2 flex gap-8">
+            <a href="/#about" className="hover-trigger transition-opacity hover:opacity-50">
+              About
+            </a>
+            <a href="/#works" className="hover-trigger transition-opacity hover:opacity-50">
+              Works
+            </a>
+            <a href="/#articles" className="hover-trigger transition-opacity hover:opacity-50">
+              Articles
+            </a>
+            <a href="/#contact" className="hover-trigger transition-opacity hover:opacity-50">
+              Contact
+            </a>
+          </div>
+          <span className="opacity-40">Tokyo, Japan</span>
+          {currentTime && (
+            <span className="opacity-40" suppressHydrationWarning>
+              {currentTime}
+            </span>
+          )}
         </div>
-        <span className="opacity-40">Tokyo, Japan</span>
-        {currentTime && (
-          <span className="opacity-40" suppressHydrationWarning>
-            {currentTime}
-          </span>
-        )}
-      </div>
 
-      <button
-        type="button"
-        className="hover-trigger z-50 md:hidden"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        aria-label="Toggle menu"
-        aria-expanded={isMenuOpen}
-        aria-controls="mobile-menu"
-      >
-        <Menu className="h-6 w-6" />
-      </button>
+        <button
+          type="button"
+          className="hover-trigger z-50 md:hidden"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-menu"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+      </nav>
 
-      {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          className="fixed inset-0 z-[60] bg-black/50 md:hidden"
           onClick={() => setIsMenuOpen(false)}
           aria-hidden="true"
         />
       )}
 
-      {/* Mobile Menu */}
       <div
         id="mobile-menu"
         role="dialog"
         aria-modal="true"
         aria-label="Mobile Menu"
-        className={`fixed top-0 right-0 h-screen w-80 bg-white shadow-2xl transform transition-transform duration-300 z-50 md:hidden ${
+        className={`fixed top-0 right-0 z-[70] h-screen w-80 transform bg-white shadow-2xl transition-transform duration-300 supports-[height:100svh]:h-[100svh] md:hidden ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -161,6 +194,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </nav>
+    </>
   )
 }

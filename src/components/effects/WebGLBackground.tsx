@@ -129,6 +129,16 @@ export default function WebGLBackground() {
 
       if (!containerRef.current) return
 
+      const clamp01 = (value: number) => Math.min(1, Math.max(0, value))
+      const getContainerSize = () => {
+        const rect = containerRef.current?.getBoundingClientRect()
+
+        return {
+          width: Math.max(Math.round(rect?.width ?? window.innerWidth), 1),
+          height: Math.max(Math.round(rect?.height ?? window.innerHeight), 1),
+        }
+      }
+
       // Create hidden video element for texture source
       const video = document.createElement('video')
       video.src = '/images/hero-loop.mp4'
@@ -151,7 +161,9 @@ export default function WebGLBackground() {
         powerPreference: 'high-performance',
       })
 
-      renderer.setSize(window.innerWidth, window.innerHeight)
+      const initialSize = getContainerSize()
+
+      renderer.setSize(initialSize.width, initialSize.height, false)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
       renderer.autoClear = false
 
@@ -232,7 +244,7 @@ export default function WebGLBackground() {
           uSimulation: { value: null },
           uBackground: { value: videoTexture },
           uSimResolution: { value: new THREE.Vector2(SIM_RESOLUTION, SIM_RESOLUTION) },
-          uScreenSize: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+          uScreenSize: { value: new THREE.Vector2(initialSize.width, initialSize.height) },
           uVideoSize: {
             value: new THREE.Vector2(video.videoWidth || 1280, video.videoHeight || 720),
           },
@@ -269,10 +281,19 @@ export default function WebGLBackground() {
       const prevDropPos = { x: 0.5, y: 0.5 }
       let mouseDirty = false
       let pendingClick = false
+      let resizeFrame = 0
+
+      const setPointerPosition = (clientX: number, clientY: number) => {
+        const rect = containerRef.current?.getBoundingClientRect()
+
+        if (!rect || rect.width <= 0 || rect.height <= 0) return
+
+        mousePos.x = clamp01((clientX - rect.left) / rect.width)
+        mousePos.y = 1.0 - clamp01((clientY - rect.top) / rect.height)
+      }
 
       const handleMouseMove = (e: MouseEvent) => {
-        mousePos.x = e.clientX / window.innerWidth
-        mousePos.y = 1.0 - e.clientY / window.innerHeight
+        setPointerPosition(e.clientX, e.clientY)
         mouseDirty = true
       }
 
@@ -283,16 +304,14 @@ export default function WebGLBackground() {
       const handleTouchMove = (e: TouchEvent) => {
         const touch = e.touches[0]
         if (!touch) return
-        mousePos.x = touch.clientX / window.innerWidth
-        mousePos.y = 1.0 - touch.clientY / window.innerHeight
+        setPointerPosition(touch.clientX, touch.clientY)
         mouseDirty = true
       }
 
       const handleTouchStart = (e: TouchEvent) => {
         const touch = e.touches[0]
         if (!touch) return
-        mousePos.x = touch.clientX / window.innerWidth
-        mousePos.y = 1.0 - touch.clientY / window.innerHeight
+        setPointerPosition(touch.clientX, touch.clientY)
         pendingClick = true
       }
 
@@ -302,12 +321,20 @@ export default function WebGLBackground() {
       window.addEventListener('touchmove', handleTouchMove, { passive: true })
       window.addEventListener('touchstart', handleTouchStart, { passive: true })
 
+      const syncRendererSize = () => {
+        const { width, height } = getContainerSize()
+        renderer.setSize(width, height, false)
+        renderMaterial.uniforms.uScreenSize.value.set(width, height)
+      }
+
       const handleResize = () => {
-        renderer.setSize(window.innerWidth, window.innerHeight)
-        renderMaterial.uniforms.uScreenSize.value.set(window.innerWidth, window.innerHeight)
+        cancelAnimationFrame(resizeFrame)
+        resizeFrame = requestAnimationFrame(syncRendererSize)
       }
 
       window.addEventListener('resize', handleResize)
+      const resizeObserver = new ResizeObserver(handleResize)
+      resizeObserver.observe(containerRef.current)
 
       const addDrop = (x: number, y: number, radius: number, strength: number) => {
         dropMaterial.uniforms.uTexture.value = renderTargetA.texture
@@ -401,8 +428,10 @@ export default function WebGLBackground() {
         window.removeEventListener('touchmove', handleTouchMove)
         window.removeEventListener('touchstart', handleTouchStart)
         window.removeEventListener('resize', handleResize)
+        resizeObserver.disconnect()
         observer.disconnect()
         cancelAnimationFrame(animationId)
+        cancelAnimationFrame(resizeFrame)
         video.pause()
         video.remove()
         videoTexture.dispose()
