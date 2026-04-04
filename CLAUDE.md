@@ -118,6 +118,7 @@ Zod + react-hook-form pattern. See `src/components/ContactForm.tsx`.
 ## Code Quality
 Biome + TypeScript strict mode. See `biome.json` for configuration.
 Auto-fix: `bun run fix`
+- After any frontend/UI change, verify the affected screen in a real browser before handoff. Prefer agent-browser or Playwright, and check at least one desktop viewport plus one mobile viewport.
 
 ## Git Workflow
 - Main branch: `main`
