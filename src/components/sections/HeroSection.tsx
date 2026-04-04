@@ -72,12 +72,12 @@ export default function HeroSection() {
             className="hero-name text-4xl leading-[1.1] tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] md:text-7xl lg:text-8xl"
             style={{ fontFamily: 'var(--font-serif)' }}
           >
-            Catcher in the <span className="italic">Internet</span>
+            Stay <span className="italic">Evergreen</span>
           </p>
         </div>
 
         <p className="hero-tagline mt-6 font-mono text-[11px] tracking-[0.2em] text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] uppercase md:mt-8 md:text-xs">
-          Yunosuke Yoshino — Creative Developer
+          Yunosuke Yoshino — FrontEnd Developer
         </p>
       </div>
 

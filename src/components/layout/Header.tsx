@@ -12,6 +12,7 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(true)
   const lastScrollY = useRef(0)
   const lockedScrollY = useRef(0)
+  const pendingSectionRef = useRef<string | null>(null)
 
   useEffect(() => {
     const updateTime = () => {
@@ -90,9 +91,31 @@ export default function Header() {
       body.style.left = ''
       body.style.right = ''
       body.style.width = ''
-      window.scrollTo(0, lockedScrollY.current)
+
+      const targetId = pendingSectionRef.current
+      if (!targetId) {
+        window.scrollTo(0, lockedScrollY.current)
+        return
+      }
+
+      pendingSectionRef.current = null
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const target = document.getElementById(targetId)
+          if (!target) return
+
+          const top = target.getBoundingClientRect().top + window.scrollY - 100
+          window.scrollTo({ top, behavior: 'smooth' })
+        })
+      })
     }
   }, [isMenuOpen])
+
+  const handleMobileSectionClick = (section: 'about' | 'works' | 'articles' | 'contact') => {
+    pendingSectionRef.current = section
+    setIsMenuOpen(false)
+  }
 
   return (
     <>
@@ -177,10 +200,7 @@ export default function Header() {
               <button
                 key={section}
                 type="button"
-                onClick={() => {
-                  document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' })
-                  setIsMenuOpen(false)
-                }}
+                onClick={() => handleMobileSectionClick(section)}
                 className="text-left capitalize transition-opacity hover:opacity-50"
               >
                 {section}

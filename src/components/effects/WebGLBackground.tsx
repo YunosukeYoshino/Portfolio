@@ -162,6 +162,7 @@ export default function WebGLBackground() {
       })
 
       const initialSize = getContainerSize()
+      const rendererSize = { ...initialSize }
 
       renderer.setSize(initialSize.width, initialSize.height, false)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -323,6 +324,13 @@ export default function WebGLBackground() {
 
       const syncRendererSize = () => {
         const { width, height } = getContainerSize()
+
+        if (width === rendererSize.width && height === rendererSize.height) {
+          return
+        }
+
+        rendererSize.width = width
+        rendererSize.height = height
         renderer.setSize(width, height, false)
         renderMaterial.uniforms.uScreenSize.value.set(width, height)
       }
