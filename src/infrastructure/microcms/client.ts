@@ -10,6 +10,7 @@ export interface MicroCMSConfig {
   readonly apiKey: string
   readonly baseUrl: string
   readonly isDevelopment: boolean
+  readonly isProduction: boolean
   readonly hasPlaceholderCredentials: boolean
 }
 
@@ -29,22 +30,16 @@ export class MicroCMSClient {
     const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
     const apiKey = process.env.MICROCMS_API_KEY
     const isDevelopment = import.meta.env.DEV
+    const isProduction = import.meta.env.PROD
     const hasPlaceholderCredentials =
       serviceDomain === 'placeholder-domain' || apiKey === 'placeholder-api-key'
-
-    if (!serviceDomain && !isDevelopment) {
-      throw new Error('MICROCMS_SERVICE_DOMAIN is required')
-    }
-
-    if (!apiKey && !isDevelopment) {
-      throw new Error('MICROCMS_API_KEY is required')
-    }
 
     this.config = {
       serviceDomain: serviceDomain || 'placeholder-domain',
       apiKey: apiKey || 'placeholder-api-key',
       baseUrl: serviceDomain ? `https://${serviceDomain}/api/v1` : '',
       isDevelopment,
+      isProduction,
       hasPlaceholderCredentials: !serviceDomain || !apiKey || hasPlaceholderCredentials,
     }
 
@@ -56,7 +51,7 @@ export class MicroCMSClient {
    */
   shouldUseMock(): boolean {
     const config = this.getConfig()
-    return config.isDevelopment && config.hasPlaceholderCredentials
+    return config.hasPlaceholderCredentials
   }
 
   /**
@@ -74,6 +69,11 @@ export class MicroCMSClient {
     params?: Record<string, string | number | undefined>
   ): Promise<T> {
     const config = this.getConfig()
+
+    if (config.isProduction && config.hasPlaceholderCredentials) {
+      throw new Error('microCMS credentials are required in production')
+    }
+
     const url = new URL(`${config.baseUrl}/${endpoint}`)
 
     if (params) {
