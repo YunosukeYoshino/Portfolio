@@ -7,7 +7,7 @@ import {
   Scripts,
   useRouterState,
 } from '@tanstack/react-router'
-import { type ReactNode, useEffect, useRef } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import ClientLoader from '@/components/providers/ClientLoader'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 
@@ -114,36 +114,66 @@ export const Route = createRootRoute({
 function TransitionLayer() {
   const layerRef = useRef<HTMLDivElement>(null)
   const columnsRef = useRef<HTMLDivElement[]>([])
-  const _pathname = useRouterState({ select: (s) => s.location.pathname })
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
-    if (!layerRef.current || typeof window === 'undefined') return
+    if (!pathname || !layerRef.current || typeof window === 'undefined') return
 
+    setIsVisible(true)
+
+    let isDisposed = false
     let gsapContext: { revert: () => void } | undefined
+    const fallbackTimer = window.setTimeout(() => {
+      if (!isDisposed) {
+        setIsVisible(false)
+      }
+    }, 1500)
 
-    import('gsap').then(({ default: gsap }) => {
-      gsapContext = gsap.context(() => {
-        // Run staggered wipe whenever route changes
-        gsap.fromTo(
-          columnsRef.current,
-          { y: '0%' },
-          {
-            y: '-100%',
-            duration: 0.8,
-            ease: 'expo.inOut',
-            stagger: 0.1,
-          }
-        )
+    void import('gsap')
+      .then(({ default: gsap }) => {
+        if (isDisposed) return
+
+        gsapContext = gsap.context(() => {
+          // Hide the overlay even if a later route transition hits a stale chunk.
+          gsap.fromTo(
+            columnsRef.current,
+            { y: '0%' },
+            {
+              y: '-100%',
+              duration: 0.8,
+              ease: 'expo.inOut',
+              stagger: 0.1,
+              onComplete: () => {
+                if (!isDisposed) {
+                  setIsVisible(false)
+                }
+              },
+            }
+          )
+        }, layerRef)
       })
-    })
+      .catch(() => {
+        if (!isDisposed) {
+          setIsVisible(false)
+        }
+      })
 
     return () => {
+      isDisposed = true
+      window.clearTimeout(fallbackTimer)
       if (gsapContext) gsapContext.revert()
     }
-  }, [])
+  }, [pathname])
 
   return (
-    <div ref={layerRef} className="fixed inset-0 z-[9999] pointer-events-none flex">
+    <div
+      ref={layerRef}
+      aria-hidden="true"
+      className={`fixed inset-0 z-[9999] flex pointer-events-none transition-opacity duration-300 ${
+        isVisible ? 'visible opacity-100' : 'invisible opacity-0'
+      }`}
+    >
       {[0, 1, 2].map((i) => (
         <div
           key={i}
@@ -167,67 +197,64 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-  const chunkRecoveryKey = `chunk-reload:${appCss}`
-
   return (
     // suppressHydrationWarning on html/head/body to prevent hydration errors
     // caused by browser extensions (e.g., immersive-translate) injecting elements
     <html lang="ja" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head suppressHydrationWarning>
         <HeadContent />
-        <script
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: `
-              (() => {
-                const key = ${JSON.stringify(chunkRecoveryKey)};
+        <script suppressHydrationWarning>{`
+          (() => {
+            const buildAssets = Array.from(document.querySelectorAll('link[href^="/assets/"]'))
+              .map((node) => node.getAttribute('href') ?? '')
+              .filter(Boolean)
+              .sort()
+              .join('|');
+            const key = 'chunk-reload:' + buildAssets;
 
-                const hasReloaded = () => sessionStorage.getItem(key) === '1';
-                const reloadOnce = () => {
-                  if (hasReloaded()) return;
-                  sessionStorage.setItem(key, '1');
-                  window.location.reload();
-                };
+            const hasReloaded = () => sessionStorage.getItem(key) === '1';
+            const reloadOnce = () => {
+              if (hasReloaded()) return;
+              sessionStorage.setItem(key, '1');
+              window.location.reload();
+            };
 
-                const isChunkLoadError = (message) =>
-                  /Failed to fetch dynamically imported module|error loading dynamically imported module|Expected a JavaScript-or-Wasm module script/i.test(
-                    message ?? ''
-                  );
+            const isChunkLoadError = (message) =>
+              /Failed to fetch dynamically imported module|error loading dynamically imported module|Expected a JavaScript-or-Wasm module script/i.test(
+                message ?? ''
+              );
 
-                window.addEventListener(
-                  'error',
-                  (event) => {
-                    const target = event.target;
-                    const assetUrl =
-                      target instanceof HTMLScriptElement || target instanceof HTMLLinkElement
-                        ? target.src || target.href || ''
-                        : '';
+            window.addEventListener(
+              'error',
+              (event) => {
+                const target = event.target;
+                const assetUrl =
+                  target instanceof HTMLScriptElement || target instanceof HTMLLinkElement
+                    ? target.src || target.href || ''
+                    : '';
 
-                    if (assetUrl.includes('/assets/')) {
-                      reloadOnce();
-                      return;
-                    }
+                if (assetUrl.includes('/assets/')) {
+                  reloadOnce();
+                  return;
+                }
 
-                    if (isChunkLoadError(event.message)) {
-                      reloadOnce();
-                    }
-                  },
-                  true
-                );
+                if (isChunkLoadError(event.message)) {
+                  reloadOnce();
+                }
+              },
+              true
+            );
 
-                window.addEventListener('unhandledrejection', (event) => {
-                  const reason = event.reason;
-                  const message =
-                    typeof reason === 'string' ? reason : reason?.message || '';
+            window.addEventListener('unhandledrejection', (event) => {
+              const reason = event.reason;
+              const message = typeof reason === 'string' ? reason : reason?.message || '';
 
-                  if (isChunkLoadError(message)) {
-                    reloadOnce();
-                  }
-                });
-              })();
-            `,
-          }}
-        />
+              if (isChunkLoadError(message)) {
+                reloadOnce();
+              }
+            });
+          })();
+        `}</script>
       </head>
       <body className="antialiased" suppressHydrationWarning>
         <GoogleAnalytics />
