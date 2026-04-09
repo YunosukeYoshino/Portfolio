@@ -51,8 +51,8 @@ export default function ContactForm() {
     try {
       const apiUrl =
         process.env.NODE_ENV === 'production'
-          ? 'https://yunosukeyoshino.com/api/contact'
-          : '/api/contact'
+          ? 'https://yunosukeyoshino.com/api/contact/'
+          : '/api/contact/'
 
       const response = await fetch(apiUrl, {
         method: 'POST',
