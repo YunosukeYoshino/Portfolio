@@ -27,6 +27,8 @@ export function ArticleLink({ externalUrl, slug, className, children }: ArticleL
     <Link
       to="/article/$slug/"
       params={{ slug }}
+      // Static hosting cannot serve POST-based server functions during client-side transitions.
+      reloadDocument
       viewTransition={createDirectionalViewTransition('forward', ['article-open'])}
       className={className}
     >

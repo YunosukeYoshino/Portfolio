@@ -194,3 +194,23 @@ describe('PaginationNav rendering', () => {
     expect(paginationSource).toContain('type PaginationNavProps =')
   })
 })
+
+describe('Article detail navigation on static hosting', () => {
+  it('ArticleItem forces a document navigation for prerendered detail pages', () => {
+    const articleItemSource = readFileSync(
+      resolve(import.meta.dir, '../components/article/ArticleItem.tsx'),
+      'utf8'
+    )
+
+    expect(articleItemSource).toContain('reloadDocument')
+  })
+
+  it('ArticleLink forces a document navigation for prerendered detail pages', () => {
+    const articleLinkSource = readFileSync(
+      resolve(import.meta.dir, '../components/article/ArticleLink.tsx'),
+      'utf8'
+    )
+
+    expect(articleLinkSource).toContain('reloadDocument')
+  })
+})
