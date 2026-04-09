@@ -1,6 +1,8 @@
+import { Link } from '@tanstack/react-router'
 import { Fragment, type ReactNode } from 'react'
 import { buildPaginationModel } from '@/lib/pagination'
 import { cn } from '@/lib/utils'
+import { createDirectionalViewTransition } from '@/lib/viewTransitions'
 
 interface BasePaginationNavProps {
   readonly currentPage: number
@@ -119,14 +121,17 @@ export default function PaginationNav(props: PaginationNavProps) {
       ariaLabel,
     }: PaginationControlProps) {
       return (
-        <a
-          href={getHref(page)}
+        <Link
+          to={getHref(page)}
+          viewTransition={createDirectionalViewTransition(page > currentPage ? 'forward' : 'back', [
+            'article-pagination',
+          ])}
           className={className}
           aria-current={ariaCurrent}
           aria-label={ariaLabel}
         >
           {children}
-        </a>
+        </Link>
       )
     })
   }

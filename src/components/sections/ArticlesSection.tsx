@@ -5,6 +5,7 @@ import { useRef } from 'react'
 import ArticleItem from '@/components/article/ArticleItem'
 import ArticlesHoverEffect from '@/components/article/ArticlesHoverEffect'
 import { formatDateCompact } from '@/lib/utils'
+import { createDirectionalViewTransition } from '@/lib/viewTransitions'
 import type { Blog } from '@/types'
 import { useArticlesSectionAnimation } from './useArticlesSectionAnimation'
 
@@ -58,7 +59,7 @@ export default function ArticlesSection({ articles }: ArticlesSectionProps) {
               <Link
                 to="/article/page/$page/"
                 params={{ page: '1' }}
-                reloadDocument
+                viewTransition={createDirectionalViewTransition('forward', ['article-index'])}
                 className="inline-block border-b border-gray-700 pb-1 text-sm font-mono uppercase tracking-widest text-gray-500 hover:text-white hover:border-white transition-colors"
               >
                 View All Articles

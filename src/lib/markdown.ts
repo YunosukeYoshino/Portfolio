@@ -27,7 +27,8 @@ function extractMarkdownFromRichEditor(content: string): string {
     .replace(/&nbsp;/g, ' ')
 }
 
-export const parseContentMarkdown = createServerFn({ method: 'GET' })
+// Article bodies exceed URL limits when fetched during SPA navigations, so use POST here.
+export const parseContentMarkdown = createServerFn({ method: 'POST' })
   .inputValidator((data: unknown) => markdownInputSchema.parse(data))
   .handler(async ({ data: { content } }): Promise<{ html: string; isMarkdown: boolean }> => {
     if (!content) return { html: '', isMarkdown: false }

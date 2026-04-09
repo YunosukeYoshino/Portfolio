@@ -1,6 +1,7 @@
 import type { ReactNode, Ref } from 'react'
 import NoiseOverlay from '@/components/effects/NoiseOverlay'
 import { cn } from '@/lib/utils'
+import { PAGE_SHELL_TRANSITION_NAME } from '@/lib/viewTransitions'
 import Footer from './Footer'
 import Header from './Header'
 
@@ -25,10 +26,12 @@ export default function SitePage({
     <>
       {noiseOverlay ? <NoiseOverlay /> : null}
       <Header />
-      <main ref={mainRef} className={cn(mainClassName)}>
-        {children}
-      </main>
-      {afterMain}
+      <div style={{ viewTransitionName: PAGE_SHELL_TRANSITION_NAME }}>
+        <main ref={mainRef} className={cn(mainClassName)}>
+          {children}
+        </main>
+        {afterMain}
+      </div>
       {showFooter ? <Footer /> : null}
     </>
   )

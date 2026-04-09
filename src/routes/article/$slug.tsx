@@ -10,6 +10,11 @@ import { getBlogDetail } from '@/lib/microcms'
 import { getSeoDescription, getSeoMetadata, getSeoTitle } from '@/lib/seoMetadata'
 import { createStandardHead, DEFAULT_OG_IMAGE_URL, toCanonicalUrl } from '@/lib/siteMetadata'
 import { formatDate } from '@/lib/utils'
+import {
+  createDirectionalViewTransition,
+  getArticleImageTransitionStyle,
+  getArticleTitleTransitionStyle,
+} from '@/lib/viewTransitions'
 
 export const Route = createFileRoute('/article/$slug')({
   loader: async ({ params }) => {
@@ -83,7 +88,10 @@ function BlogDetailPage() {
                 </time>
               </div>
 
-              <h1 className="text-section-title text-display mb-12 leading-tight tracking-tight text-black">
+              <h1
+                style={getArticleTitleTransitionStyle(blog.id)}
+                className="text-section-title text-display mb-12 leading-tight tracking-tight text-black"
+              >
                 {blog.title}
               </h1>
 
@@ -94,6 +102,7 @@ function BlogDetailPage() {
                     alt={blog.eyecatch.alt || blog.title}
                     width={1200}
                     height={675}
+                    style={getArticleImageTransitionStyle(blog.id)}
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -109,7 +118,7 @@ function BlogDetailPage() {
                 <Link
                   to="/article/page/$page/"
                   params={{ page: '1' }}
-                  reloadDocument
+                  viewTransition={createDirectionalViewTransition('back', ['article-index'])}
                   className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
                 >
                   <svg

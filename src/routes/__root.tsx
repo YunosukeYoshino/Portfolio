@@ -1,21 +1,11 @@
-import {
-  createRootRoute,
-  HeadContent,
-  Link,
-  Outlet,
-  Scripts,
-  useRouterState,
-} from '@tanstack/react-router'
-import { type ReactNode, useEffect, useRef, useState } from 'react'
-import ClientLoader from '@/components/providers/ClientLoader'
-import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
-
-const CHUNK_RECOVERY_VERSION = 'v2'
-
+import { createRootRoute, HeadContent, Link, Outlet, Scripts } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import CustomCursor from '@/components/effects/CustomCursor'
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
+import ClientLoader from '@/components/providers/ClientLoader'
 import LenisProvider from '@/components/providers/LenisProvider'
+import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import appCss from '@/globals.css?url'
 import {
   DEFAULT_OG_IMAGE_URL,
@@ -23,6 +13,9 @@ import {
   DEFAULT_SITE_TITLE,
   SITE_NAME,
 } from '@/lib/siteMetadata'
+import { createDirectionalViewTransition } from '@/lib/viewTransitions'
+
+const CHUNK_RECOVERY_VERSION = 'v2'
 
 export const Route = createRootRoute({
   notFoundComponent: NotFoundPage,
@@ -106,86 +99,9 @@ export const Route = createRootRoute({
   component: RootComponent,
 })
 
-function TransitionLayer() {
-  const layerRef = useRef<HTMLDivElement>(null)
-  const columnsRef = useRef<HTMLDivElement[]>([])
-  const pathname = useRouterState({ select: (s) => s.location.pathname })
-  const [isVisible, setIsVisible] = useState(true)
-
-  useEffect(() => {
-    if (!pathname || !layerRef.current || typeof window === 'undefined') return
-
-    setIsVisible(true)
-
-    let isDisposed = false
-    let gsapContext: { revert: () => void } | undefined
-    const fallbackTimer = window.setTimeout(() => {
-      if (!isDisposed) {
-        setIsVisible(false)
-      }
-    }, 1500)
-
-    void import('gsap')
-      .then(({ default: gsap }) => {
-        if (isDisposed) return
-
-        gsapContext = gsap.context(() => {
-          // Hide the overlay even if a later route transition hits a stale chunk.
-          gsap.fromTo(
-            columnsRef.current,
-            { y: '0%' },
-            {
-              y: '-100%',
-              duration: 0.8,
-              ease: 'expo.inOut',
-              stagger: 0.1,
-              onComplete: () => {
-                if (!isDisposed) {
-                  setIsVisible(false)
-                }
-              },
-            }
-          )
-        }, layerRef)
-      })
-      .catch(() => {
-        if (!isDisposed) {
-          setIsVisible(false)
-        }
-      })
-
-    return () => {
-      isDisposed = true
-      window.clearTimeout(fallbackTimer)
-      if (gsapContext) gsapContext.revert()
-    }
-  }, [pathname])
-
-  return (
-    <div
-      ref={layerRef}
-      aria-hidden="true"
-      className={`fixed inset-0 z-[9999] flex pointer-events-none transition-opacity duration-300 ${
-        isVisible ? 'visible opacity-100' : 'invisible opacity-0'
-      }`}
-    >
-      {[0, 1, 2].map((i) => (
-        <div
-          key={i}
-          ref={(el) => {
-            if (el) columnsRef.current[i] = el
-          }}
-          className="h-full flex-1 bg-[#111]"
-        />
-      ))}
-    </div>
-  )
-}
-
 function RootComponent() {
   return (
     <RootDocument>
-      <TransitionLayer />
       <Outlet />
     </RootDocument>
   )
@@ -274,6 +190,7 @@ function NotFoundPage() {
           <p className="mb-8 text-xl text-gray-600">ページが見つかりませんでした</p>
           <Link
             to="/"
+            viewTransition={createDirectionalViewTransition('back')}
             className="inline-flex items-center gap-2 border border-black px-6 py-3 text-sm font-medium uppercase tracking-wide text-black transition-all duration-300 hover:bg-black hover:text-white"
           >
             <svg

@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
+import { fadeViewTransition } from '@/lib/viewTransitions'
 
 interface BreadcrumbItem {
   name: string
@@ -38,7 +39,7 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
           ) : (
             <Link
               to={item.url}
-              reloadDocument
+              viewTransition={fadeViewTransition}
               className="transition-colors duration-200 hover:text-gray-900"
             >
               {item.name}

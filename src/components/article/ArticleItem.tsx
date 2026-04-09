@@ -1,6 +1,10 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
+import {
+  createDirectionalViewTransition,
+  getArticleTitleTransitionStyle,
+} from '@/lib/viewTransitions'
 
 interface ArticleItemProps {
   id: string
@@ -15,13 +19,16 @@ export default function ArticleItem({ id, title, date, category, image }: Articl
     <Link
       to="/article/$slug/"
       params={{ slug: id }}
-      reloadDocument
+      viewTransition={createDirectionalViewTransition('forward', ['article-open'])}
       className="article-link group block bg-[#111] hover:bg-[#161616] transition-colors py-10 px-6 md:py-12 md:px-8 hover-trigger"
       data-image={image}
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
         <div className="flex-1">
-          <h2 className="text-xl font-display font-medium mb-2 group-hover:text-gray-300 transition-colors">
+          <h2
+            style={getArticleTitleTransitionStyle(id)}
+            className="text-xl font-display font-medium mb-2 group-hover:text-gray-300 transition-colors"
+          >
             {title}
           </h2>
           <div className="flex gap-3 text-xs font-mono text-gray-500">

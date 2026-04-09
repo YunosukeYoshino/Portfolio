@@ -4,6 +4,11 @@ import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
 import { useState } from 'react'
 import {
+  createDirectionalViewTransition,
+  createPersistentTransitionStyle,
+  SITE_HEADER_TRANSITION_NAME,
+} from '@/lib/viewTransitions'
+import {
   type HeaderSectionId,
   useCurrentTimeLabel,
   useHeaderVisibility,
@@ -24,12 +29,13 @@ export default function Header() {
   return (
     <>
       <nav
+        style={createPersistentTransitionStyle(SITE_HEADER_TRANSITION_NAME)}
         className={`fixed left-0 top-0 z-50 flex w-full items-start justify-between px-6 py-6 text-[#111] transition-transform duration-300 md:px-12 md:py-8 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
       >
         <Link
           to="/"
+          viewTransition={createDirectionalViewTransition('back')}
           className="font-display hover-trigger z-50 text-lg font-bold leading-tight tracking-tight"
-          reloadDocument
           data-cursor="hover"
         >
           YUNOSUKE

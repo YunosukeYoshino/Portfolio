@@ -2,12 +2,21 @@ import { Link } from '@tanstack/react-router'
 import MagneticButton from '@/components/effects/MagneticButton'
 import TextScramble from '@/components/effects/TextScramble'
 import { getCurrentYear } from '@/lib/utils'
+import {
+  createPersistentTransitionStyle,
+  fadeViewTransition,
+  SITE_FOOTER_TRANSITION_NAME,
+} from '@/lib/viewTransitions'
 
 export default function Footer() {
   const currentYear = getCurrentYear()
 
   return (
-    <footer id="contact" className="bg-[#F3F3F1] pt-32 pb-12 px-6 md:px-12 relative z-20">
+    <footer
+      id="contact"
+      style={createPersistentTransitionStyle(SITE_FOOTER_TRANSITION_NAME)}
+      className="bg-[#F3F3F1] pt-32 pb-12 px-6 md:px-12 relative z-20"
+    >
       <div className="flex flex-col min-h-[60vh] justify-between">
         <div>
           <h2 className="text-[12vw] font-display font-medium leading-[0.8] tracking-tighter mb-12">
@@ -29,6 +38,7 @@ export default function Footer() {
             <MagneticButton intensity={0.2}>
               <Link
                 to="/contact/"
+                viewTransition={fadeViewTransition}
                 className="text-2xl md:text-3xl font-bold hover:text-blue-600 transition-colors hover-trigger block"
               >
                 <TextScramble text="hello@yunosukeyoshino.com" />
@@ -58,6 +68,7 @@ export default function Footer() {
           <p className="text-xs text-gray-500 font-mono">© {currentYear} Yunosuke Yoshino</p>
           <Link
             to="/privacy-policy/"
+            viewTransition={fadeViewTransition}
             className="text-xs text-gray-500 hover:text-gray-700 transition-colors mt-4 md:mt-0"
           >
             Privacy Policy

@@ -3,6 +3,11 @@
 import { Link } from '@tanstack/react-router'
 import { ArticleLink } from '@/components/article/ArticleLink'
 import { formatDate } from '@/lib/utils'
+import {
+  createDirectionalViewTransition,
+  getArticleImageTransitionStyle,
+  getArticleTitleTransitionStyle,
+} from '@/lib/viewTransitions'
 import type { ArticleFeedItem } from '@/types'
 
 interface BlogProps {
@@ -50,6 +55,7 @@ export default function Blog({
       <div className="container-custom">
         <div className={`grid ${gridCols} gap-6 lg:gap-8`}>
           {blogs.map((blog) => {
+            const isInternalArticle = !blog.externalUrl
             const imageUrl =
               blog.source === 'microcms'
                 ? `${blog.eyecatch.url}${blog.eyecatch.url.includes('?') ? '&' : '?'}w=800&fm=webp`
@@ -63,6 +69,7 @@ export default function Blog({
                     alt={blog.eyecatch.alt || blog.title}
                     width={800}
                     height={450}
+                    style={isInternalArticle ? getArticleImageTransitionStyle(blog.id) : undefined}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy"
                     decoding="async"
@@ -77,7 +84,10 @@ export default function Blog({
                       {formatDate(blog.publishedAt)}
                     </time>
                   </div>
-                  <h2 className="line-clamp-2 font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
+                  <h2
+                    style={isInternalArticle ? getArticleTitleTransitionStyle(blog.id) : undefined}
+                    className="line-clamp-2 font-semibold text-gray-900 transition-colors group-hover:text-blue-600"
+                  >
                     {blog.title}
                   </h2>
                 </div>
@@ -102,7 +112,7 @@ export default function Blog({
             <Link
               to="/article/page/$page/"
               params={{ page: '1' }}
-              reloadDocument
+              viewTransition={createDirectionalViewTransition('forward', ['article-index'])}
               className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
             >
               <span className="uppercase tracking-wide">VIEW ALL ARTICLES</span>

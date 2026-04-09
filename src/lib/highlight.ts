@@ -26,7 +26,8 @@ type SupportedLang = (typeof SUPPORTED_LANGS)[number]
 // biome-ignore lint/suspicious/noExplicitAny: Shiki type only available server-side
 let cachedHighlighterPromise: Promise<any> | null = null
 
-export const highlightContent = createServerFn({ method: 'GET' })
+// Highlight payloads can be large on client-side navigations, so send them in the request body.
+export const highlightContent = createServerFn({ method: 'POST' })
   .inputValidator((data: unknown) => highlightInputSchema.parse(data))
   .handler(async ({ data: { html } }): Promise<string> => {
     if (!html) return ''

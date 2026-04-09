@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { getExternalLinkProps } from '@/lib/link'
+import { createDirectionalViewTransition } from '@/lib/viewTransitions'
 
 interface ArticleLinkProps {
   externalUrl?: string
@@ -23,7 +24,12 @@ export function ArticleLink({ externalUrl, slug, className, children }: ArticleL
   }
 
   return (
-    <Link to="/article/$slug/" params={{ slug }} reloadDocument className={className}>
+    <Link
+      to="/article/$slug/"
+      params={{ slug }}
+      viewTransition={createDirectionalViewTransition('forward', ['article-open'])}
+      className={className}
+    >
       {children}
     </Link>
   )

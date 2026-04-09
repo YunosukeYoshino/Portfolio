@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
+import { fadeViewTransition } from '@/lib/viewTransitions'
 
 export default function ArticleCta() {
   return (
@@ -35,7 +36,7 @@ export default function ArticleCta() {
           {/* CTA Button */}
           <Link
             to="/contact/"
-            reloadDocument
+            viewTransition={fadeViewTransition}
             className="group inline-flex items-center gap-3 border border-white px-6 py-3 text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 ease-out hover:bg-white hover:text-black"
           >
             <span>Talk to me</span>
