@@ -2,7 +2,7 @@
 name = "yunosuke-portfolio"
 main = "@tanstack/react-start/server-entry"
 compatibility_date = "2026-03-17"
-compatibility_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 workers_dev = true
 
 [assets]
