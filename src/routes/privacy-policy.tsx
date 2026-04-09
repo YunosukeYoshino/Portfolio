@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { HydratedEmailLink } from '@/components/common/HydratedEmail'
 import SitePage from '@/components/layout/SitePage'
 import { createStandardHead } from '@/lib/siteMetadata'
 
@@ -101,12 +102,12 @@ function PrivacyPolicyPage() {
               <h2 className="mb-6 text-2xl font-semibold">お問い合わせ</h2>
               <p className="mb-4 leading-relaxed text-gray-700">
                 このプライバシーポリシーやお客様のデータに関してご質問がございましたら、
-                <a
-                  href="mailto:info@yunosukeyoshino.com"
+                <HydratedEmailLink
+                  user="info"
+                  domain="yunosukeyoshino.com"
+                  placeholder="info [at] yunosukeyoshino dot com"
                   className="text-blue-600 transition-colors hover:text-blue-800"
-                >
-                  info@yunosukeyoshino.com
-                </a>
+                />
                 までお気軽にお問い合わせください。
               </p>
             </section>

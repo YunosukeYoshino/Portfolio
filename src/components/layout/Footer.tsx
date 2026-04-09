@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
+import { HydratedEmailText } from '@/components/common/HydratedEmail'
 import MagneticButton from '@/components/effects/MagneticButton'
-import TextScramble from '@/components/effects/TextScramble'
 import { getCurrentYear } from '@/lib/utils'
 import {
   createPersistentTransitionStyle,
@@ -41,7 +41,12 @@ export default function Footer() {
                 viewTransition={fadeViewTransition}
                 className="text-2xl md:text-3xl font-bold hover:text-blue-600 transition-colors hover-trigger block"
               >
-                <TextScramble text="hello@yunosukeyoshino.com" />
+                <HydratedEmailText
+                  user="hello"
+                  domain="yunosukeyoshino.com"
+                  placeholder="hello [at] yunosukeyoshino dot com"
+                  scramble
+                />
               </Link>
             </MagneticButton>
             <p className="font-mono text-xs text-gray-500 mt-2">
