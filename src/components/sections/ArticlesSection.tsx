@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import ArticleItem from '@/components/article/ArticleItem'
 import ArticlesHoverEffect from '@/components/article/ArticlesHoverEffect'
+import { formatDateCompact } from '@/lib/utils'
 import type { Blog } from '@/types'
 
 interface ArticlesSectionProps {
@@ -119,13 +120,7 @@ export default function ArticlesSection({ articles }: ArticlesSectionProps) {
 
             <div className="space-y-px bg-gray-800 articles-container">
               {articles.map((article) => {
-                const date = new Date(article.publishedAt)
-                  .toLocaleDateString('ja-JP', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                  })
-                  .replace(/\//g, '.')
+                const date = formatDateCompact(article.publishedAt)
 
                 return (
                   <div key={article.id} className="article-batch-item">

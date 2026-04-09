@@ -1,9 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import MagneticButton from '@/components/effects/MagneticButton'
 import TextScramble from '@/components/effects/TextScramble'
+import { getCurrentYear } from '@/lib/utils'
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = getCurrentYear()
 
   return (
     <footer id="contact" className="bg-[#F3F3F1] pt-32 pb-12 px-6 md:px-12 relative z-20">
