@@ -51,6 +51,7 @@ package.json.astro
 tsconfig.json.astro
 settings.local.json
 .playwright-mcp
+.wrangler/
 .kiro
 
 .harness
@@ -59,3 +60,4 @@ skills-lock.json
 
 ## plan
 docs/plan
+docs-report/
