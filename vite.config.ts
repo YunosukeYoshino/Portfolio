@@ -1,3 +1,4 @@
+import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
@@ -9,6 +10,7 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [
+    cloudflare({ viteEnvironment: { name: 'ssr' } }),
     tailwindcss(),
     tsconfigPaths(),
     tanstackStart({
@@ -35,7 +37,7 @@ export default defineConfig({
         },
       ],
     }),
-    // react's vite plugin must come after start's vite plugin
+    // React's Vite plugin must come after TanStack Start's plugin.
     viteReact(),
   ],
   build: {

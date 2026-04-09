@@ -21,8 +21,10 @@ const SUPPORTED_LANGS = [
 type SupportedLang = (typeof SUPPORTED_LANGS)[number]
 
 // Null ref at module level - harmless on the client.
-// The actual import('shiki') lives INSIDE the handler body which
+// The actual Shiki imports live inside the handler body which
 // TanStack Start strips from the client bundle entirely.
+// Workers cannot initialize the default WASM engine from binary data,
+// so use Shiki's JavaScript regex engine instead.
 // biome-ignore lint/suspicious/noExplicitAny: Shiki type only available server-side
 let cachedHighlighterPromise: Promise<any> | null = null
 
@@ -34,10 +36,14 @@ export const highlightContent = createServerFn({ method: 'POST' })
 
     // Singleton: reuse the highlighter across prerender calls in the same process
     if (!cachedHighlighterPromise) {
-      cachedHighlighterPromise = import('shiki').then(({ createHighlighter }) =>
+      cachedHighlighterPromise = Promise.all([
+        import('shiki'),
+        import('shiki/engine/javascript'),
+      ]).then(([{ createHighlighter }, { createJavaScriptRegexEngine }]) =>
         createHighlighter({
           themes: ['github-dark-default'],
           langs: [...SUPPORTED_LANGS],
+          engine: createJavaScriptRegexEngine({ forgiving: true }),
         })
       )
     }

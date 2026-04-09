@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Pages via API
+name: Deploy to Cloudflare Workers
 
 on:
   push:
@@ -16,7 +16,7 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    name: Build and Deploy to Cloudflare Pages
+    name: Build and Deploy to Cloudflare Workers
 
     steps:
       - name: Checkout
@@ -36,61 +36,20 @@ jobs:
           MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          SITE_URL: https://yunosuke-portfolio.pages.dev
+          SITE_URL: https://yunosukeyoshino.com
 
-      - name: Deploy to Cloudflare Pages via Wrangler
+      - name: Deploy to Cloudflare Workers via Wrangler
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist/client --project-name=yunosuke-portfolio --branch=main
+          command: deploy
 
       - name: Verify deployed assets
-        run: bun run verify:deployment https://yunosuke-portfolio.pages.dev/
+        run: bun run verify:deployment https://yunosukeyoshino.com/
 
       - name: Create deployment status
         if: success()
         run: |
           echo "🚀 Deployment successful!"
-          echo "📄 Site URL: https://yunosuke-portfolio.pages.dev"
-
-      - name: API Deployment Alternative (Fallback)
-        if: failure()
-        run: |
-          echo "⚠️ Wrangler deployment failed, trying API method..."
-
-          # プロジェクト存在確認
-          PROJECT_CHECK=$(curl -s -X GET \
-            "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects/yunosuke-portfolio" \
-            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-            -H "Content-Type: application/json")
-
-          if echo "$PROJECT_CHECK" | grep -q '"success":false'; then
-            echo "📝 Creating new project..."
-            CREATE_RESPONSE=$(curl -s -X POST \
-              "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT_ID }}/pages/projects" \
-              -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-              -H "Content-Type: application/json" \
-              --data '{
-                "name": "yunosuke-portfolio",
-                "production_branch": "main",
-                "build_config": {
-                  "build_command": "bun run build",
-                  "destination_dir": "dist/client",
-                  "root_dir": ""
-                }
-              }')
-
-            if echo "$CREATE_RESPONSE" | grep -q '"success":true'; then
-              echo "✅ Project created successfully"
-            else
-              echo "❌ Project creation failed"
-              echo "$CREATE_RESPONSE"
-              exit 1
-            fi
-          else
-            echo "✅ Project exists"
-          fi
-
-          echo "ℹ️ Manual file upload required via Cloudflare Dashboard"
-          echo "📁 Build files are ready in ./dist/client directory"
+          echo "📄 Site URL: https://yunosukeyoshino.com"

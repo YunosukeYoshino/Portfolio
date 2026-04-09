@@ -1,3 +1,20 @@
+"$schema" = "node_modules/wrangler/config-schema.json"
 name = "yunosuke-portfolio"
-compatibility_date = "2024-12-01"
-pages_build_output_dir = "./dist/client"
+main = "@tanstack/react-start/server-entry"
+compatibility_date = "2026-03-17"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[assets]
+directory = "./dist/client"
+
+[observability]
+enabled = true
+
+[[routes]]
+pattern = "yunosukeyoshino.com/*"
+zone_name = "yunosukeyoshino.com"
+
+[env.preview]
+name = "yunosuke-portfolio-preview"
+workers_dev = true
