@@ -2,118 +2,22 @@
 
 import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
+import {
+  type HeaderSectionId,
+  useCurrentTimeLabel,
+  useHeaderVisibility,
+  useLockedBodyScroll,
+} from './headerHooks'
 
 export default function Header() {
-  // Start with null to indicate "not yet mounted"
-  // This ensures server and client both render nothing initially
-  const [currentTime, setCurrentTime] = useState<string | null>(null)
+  const currentTime = useCurrentTimeLabel()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isVisible, setIsVisible] = useState(true)
-  const lastScrollY = useRef(0)
-  const lockedScrollY = useRef(0)
-  const pendingSectionRef = useRef<string | null>(null)
+  const isVisible = useHeaderVisibility()
+  const { scheduleSectionScroll } = useLockedBodyScroll(isMenuOpen)
 
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date()
-      const timeString = now.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-      setCurrentTime(timeString)
-    }
-
-    updateTime()
-
-    // Sync updates to minute boundary to avoid 60x unnecessary re-renders
-    const msUntilNextMinute = (60 - new Date().getSeconds()) * 1000
-    let intervalId: ReturnType<typeof setInterval> | null = null
-    const timeoutId = setTimeout(() => {
-      updateTime()
-      intervalId = setInterval(updateTime, 60_000)
-    }, msUntilNextMinute)
-
-    return () => {
-      clearTimeout(timeoutId)
-      if (intervalId) clearInterval(intervalId)
-    }
-  }, [])
-
-  useEffect(() => {
-    let ticking = false
-
-    const handleScroll = () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(() => {
-        const currentScrollY = window.scrollY
-        if (currentScrollY < lastScrollY.current || currentScrollY < 50) {
-          setIsVisible(true)
-        } else {
-          setIsVisible(false)
-        }
-        lastScrollY.current = currentScrollY
-        ticking = false
-      })
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    const html = document.documentElement
-    const body = document.body
-
-    if (!isMenuOpen) {
-      return
-    }
-
-    lockedScrollY.current = window.scrollY
-
-    html.style.overflow = 'hidden'
-    body.style.overflow = 'hidden'
-    body.style.position = 'fixed'
-    body.style.top = `-${lockedScrollY.current}px`
-    body.style.left = '0'
-    body.style.right = '0'
-    body.style.width = '100%'
-
-    return () => {
-      html.style.overflow = ''
-      body.style.overflow = ''
-      body.style.position = ''
-      body.style.top = ''
-      body.style.left = ''
-      body.style.right = ''
-      body.style.width = ''
-
-      const targetId = pendingSectionRef.current
-      if (!targetId) {
-        window.scrollTo(0, lockedScrollY.current)
-        return
-      }
-
-      pendingSectionRef.current = null
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const target = document.getElementById(targetId)
-          if (!target) return
-
-          const top = target.getBoundingClientRect().top + window.scrollY - 100
-          window.scrollTo({ top, behavior: 'smooth' })
-        })
-      })
-    }
-  }, [isMenuOpen])
-
-  const handleMobileSectionClick = (section: 'about' | 'works' | 'articles' | 'contact') => {
-    pendingSectionRef.current = section
+  const handleMobileSectionClick = (section: HeaderSectionId) => {
+    scheduleSectionScroll(section)
     setIsMenuOpen(false)
   }
 

@@ -1,11 +1,12 @@
 'use client'
 
 import { Link } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import ArticleItem from '@/components/article/ArticleItem'
 import ArticlesHoverEffect from '@/components/article/ArticlesHoverEffect'
 import { formatDateCompact } from '@/lib/utils'
 import type { Blog } from '@/types'
+import { useArticlesSectionAnimation } from './useArticlesSectionAnimation'
 
 interface ArticlesSectionProps {
   articles: Blog[]
@@ -13,90 +14,7 @@ interface ArticlesSectionProps {
 
 export default function ArticlesSection({ articles }: ArticlesSectionProps) {
   const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    let gsapContext: { revert: () => void } | undefined
-
-    Promise.all([
-      import('gsap').then((m) => m.default),
-      import('gsap/ScrollTrigger').then((m) => m.default),
-    ]).then(([gsap, ScrollTrigger]) => {
-      gsap.registerPlugin(ScrollTrigger)
-
-      const section = sectionRef.current
-      if (!section) return
-
-      gsapContext = gsap.context(() => {
-        // Animate the section heading with a fade-in from below
-        const heading = section.querySelector('.articles-heading')
-        if (heading) {
-          gsap.fromTo(
-            heading,
-            { opacity: 0, y: 30 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: heading,
-                start: 'top 85%',
-              },
-            }
-          )
-        }
-
-        // Animate article cards in batches as they enter the viewport
-        const articleItems = gsap.utils.toArray(
-          section.querySelectorAll('.article-batch-item')
-        ) as HTMLElement[]
-
-        if (articleItems.length > 0) {
-          // Set initial state for all article items
-          gsap.set(articleItems, { opacity: 0, y: 40 })
-
-          ScrollTrigger.batch(articleItems, {
-            start: 'top 85%',
-            onEnter: (batch) => {
-              gsap.to(batch, {
-                opacity: 1,
-                y: 0,
-                duration: 0.6,
-                ease: 'power2.out',
-                stagger: 0.1,
-                overwrite: true,
-              })
-            },
-          })
-        }
-
-        // Animate the "View All" link
-        const viewAllLink = section.querySelector('.articles-view-all')
-        if (viewAllLink) {
-          gsap.fromTo(
-            viewAllLink,
-            { opacity: 0, y: 20 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.6,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: viewAllLink,
-                start: 'top 85%',
-              },
-            }
-          )
-        }
-      }, section)
-    })
-
-    return () => {
-      if (gsapContext) gsapContext.revert()
-    }
-  }, [])
+  useArticlesSectionAnimation(sectionRef)
 
   return (
     <section

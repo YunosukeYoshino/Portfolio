@@ -13,13 +13,6 @@ export type {
   BlogResponse,
 } from '@/domain/entities/blog'
 
-// Component props types
-export interface BlogListProps {
-  limit?: number
-  column?: number
-  page?: number
-}
-
 export interface ArticleFeedItem {
   id: string
   title: string
@@ -37,25 +30,3 @@ export interface ArticleFeedItem {
   source: 'microcms' | 'zenn' | 'qiita'
   externalUrl?: string
 }
-
-export interface SEOProps {
-  title: string
-  description: string
-  url?: string
-  image?: string
-  type?: 'website' | 'article'
-}
-
-// Page props types
-export interface BlogPageProps {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
-
-export interface BlogListPageProps {
-  params: Promise<{ page: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
-
-// Utility types
-export type Route<T extends string = string> = T

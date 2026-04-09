@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import {
   createRootRoute,
   HeadContent,
@@ -11,15 +10,6 @@ import { type ReactNode, useEffect, useRef, useState } from 'react'
 import ClientLoader from '@/components/providers/ClientLoader'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 1,
-    },
-  },
-})
-
 const CHUNK_RECOVERY_VERSION = 'v2'
 
 import CustomCursor from '@/components/effects/CustomCursor'
@@ -27,6 +17,12 @@ import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import LenisProvider from '@/components/providers/LenisProvider'
 import appCss from '@/globals.css?url'
+import {
+  DEFAULT_OG_IMAGE_URL,
+  DEFAULT_SITE_DESCRIPTION,
+  DEFAULT_SITE_TITLE,
+  SITE_NAME,
+} from '@/lib/siteMetadata'
 
 export const Route = createRootRoute({
   notFoundComponent: NotFoundPage,
@@ -38,8 +34,7 @@ export const Route = createRootRoute({
       { name: 'theme-color', content: '#F3F3F1' },
       {
         name: 'description',
-        content:
-          'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。',
+        content: DEFAULT_SITE_DESCRIPTION,
       },
       { name: 'author', content: 'Yunosuke Yoshino' },
       { name: 'robots', content: 'index, follow' },
@@ -49,27 +44,25 @@ export const Route = createRootRoute({
       },
       { property: 'og:type', content: 'website' },
       { property: 'og:locale', content: 'ja_JP' },
-      { property: 'og:site_name', content: 'Yunosuke Yoshino Portfolio' },
+      { property: 'og:site_name', content: SITE_NAME },
       {
         property: 'og:description',
-        content:
-          'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。',
+        content: DEFAULT_SITE_DESCRIPTION,
       },
       {
         property: 'og:image',
-        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+        content: DEFAULT_OG_IMAGE_URL,
       },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:site', content: '@YunosukeYoshino' },
-      { name: 'twitter:title', content: 'Yunosuke Yoshino｜Portfolio' },
+      { name: 'twitter:title', content: DEFAULT_SITE_TITLE },
       {
         name: 'twitter:description',
-        content:
-          'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。',
+        content: DEFAULT_SITE_DESCRIPTION,
       },
       {
         name: 'twitter:image',
-        content: 'https://yunosukeyoshino.com/assets/og-image.png',
+        content: DEFAULT_OG_IMAGE_URL,
       },
     ],
     links: [
@@ -260,13 +253,11 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       </head>
       <body className="antialiased" suppressHydrationWarning>
         <GoogleAnalytics />
-        <QueryClientProvider client={queryClient}>
-          <LenisProvider>
-            <ClientLoader />
-            <CustomCursor />
-            {children}
-          </LenisProvider>
-        </QueryClientProvider>
+        <LenisProvider>
+          <ClientLoader />
+          <CustomCursor />
+          {children}
+        </LenisProvider>
         <Scripts />
       </body>
     </html>

@@ -1,3 +1,5 @@
+import { DEFAULT_SITE_DESCRIPTION, SITE_NAME, SITE_URL, toCanonicalUrl } from '@/lib/siteMetadata'
+
 interface JsonLdProps {
   data: Record<string, unknown>
 }
@@ -24,7 +26,7 @@ export const createPersonSchema = () => ({
   '@type': 'Person',
   name: 'Yunosuke Yoshino',
   description: 'フロントエンドエンジニア。React、Next.js、モダンなWeb技術を専門としています。',
-  url: 'https://yunosukeyoshino.com',
+  url: SITE_URL,
   sameAs: ['https://github.com/YunosukeYoshino', 'https://twitter.com/YunosukeYoshino'],
   jobTitle: 'フロントエンドエンジニア',
   worksFor: {
@@ -45,10 +47,9 @@ export const createPersonSchema = () => ({
 export const createWebsiteSchema = () => ({
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Yunosuke Yoshino Portfolio',
-  url: 'https://yunosukeyoshino.com',
-  description:
-    'Yunosuke Yoshinoのポートフォリオサイト。フロントエンド開発、UI/UXデザイン、モダンなWeb技術に関する技術記事とプロジェクトを紹介しています。',
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: DEFAULT_SITE_DESCRIPTION,
   inLanguage: 'ja-JP',
   author: createPersonSchema(),
   publisher: createPersonSchema(),
@@ -60,7 +61,7 @@ export const createBlogSchema = () => ({
   name: 'Yunosuke Yoshinoの技術ブログ',
   description:
     'フロントエンド開発、UI/UXデザイン、モダンなWeb技術について書いた技術記事をまとめています。',
-  url: 'https://yunosukeyoshino.com/article',
+  url: toCanonicalUrl('/article'),
   inLanguage: 'ja-JP',
   author: createPersonSchema(),
   publisher: createPersonSchema(),
@@ -102,7 +103,7 @@ export const createArticleSchema = (
   headline: seoOverrides?.seoTitle ?? article.title,
   description:
     seoOverrides?.seoDescription ?? article.content.replace(/<[^>]*>/g, '').substring(0, 160),
-  url: `https://yunosukeyoshino.com/article/${article.id}/`,
+  url: toCanonicalUrl(`/article/${article.id}`),
   datePublished: article.publishedAt,
   dateModified: article.updatedAt,
   inLanguage: 'ja-JP',
@@ -110,7 +111,7 @@ export const createArticleSchema = (
   publisher: createPersonSchema(),
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': `https://yunosukeyoshino.com/article/${article.id}/`,
+    '@id': toCanonicalUrl(`/article/${article.id}`),
   },
   ...(article.eyecatch && {
     image: {

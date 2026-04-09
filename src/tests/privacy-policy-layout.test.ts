@@ -12,7 +12,9 @@ describe('privacy-policy route layout', () => {
   })
 
   it('main要素とcontainerを分離して余白と背景を安定させる', () => {
-    expect(privacyPolicySource).toContain('<main className="min-h-screen')
+    expect(privacyPolicySource).toContain(
+      '<SitePage mainClassName="min-h-screen bg-white pt-40 pb-24 md:pt-48 md:pb-32">'
+    )
     expect(privacyPolicySource).toContain('<div className="container-custom">')
   })
 })

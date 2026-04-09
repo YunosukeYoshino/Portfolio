@@ -2,13 +2,13 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import ArticleCta from '@/components/article/ArticleCta'
 import CodeHighlight from '@/components/article/CodeHighlight'
 import Breadcrumb from '@/components/layout/Breadcrumb'
-import Footer from '@/components/layout/Footer'
-import Header from '@/components/layout/Header'
+import SitePage from '@/components/layout/SitePage'
 import JsonLd, { createArticleSchema, createBreadcrumbSchema } from '@/components/seo/JsonLd'
 import { highlightContent } from '@/lib/highlight'
 import { parseContentMarkdown } from '@/lib/markdown'
 import { getBlogDetail } from '@/lib/microcms'
 import { getSeoDescription, getSeoMetadata, getSeoTitle } from '@/lib/seoMetadata'
+import { createStandardHead, DEFAULT_OG_IMAGE_URL, toCanonicalUrl } from '@/lib/siteMetadata'
 import { formatDate } from '@/lib/utils'
 
 export const Route = createFileRoute('/article/$slug')({
@@ -20,37 +20,23 @@ export const Route = createFileRoute('/article/$slug')({
     const highlightedContent = await highlightContent({ data: { html: parsedContent } })
     return { blog, highlightedContent }
   },
-  // Prevent re-fetching on client-side navigation for static sites
   staleTime: Number.POSITIVE_INFINITY,
   head: ({ loaderData }) => {
     if (!loaderData?.blog) {
       return { meta: [{ title: 'Loading... | Yunosuke Yoshino' }] }
     }
+
     const { blog } = loaderData
     const seoTitle = getSeoTitle(blog.id, blog.title)
-    const description = getSeoDescription(blog.id, blog.content ?? '')
-    const url = `https://yunosukeyoshino.com/article/${blog.id}/`
-    return {
-      meta: [
-        { title: `${seoTitle} | Yunosuke Yoshino` },
-        { name: 'description', content: description },
-        { property: 'og:title', content: seoTitle },
-        { property: 'og:description', content: description },
-        { property: 'og:type', content: 'article' },
-        {
-          property: 'og:image',
-          content: blog.eyecatch?.url ?? 'https://yunosukeyoshino.com/assets/og-image.png',
-        },
-        { property: 'og:url', content: url },
-        { name: 'twitter:title', content: seoTitle },
-        { name: 'twitter:description', content: description },
-        {
-          name: 'twitter:image',
-          content: blog.eyecatch?.url ?? 'https://yunosukeyoshino.com/assets/og-image.png',
-        },
-      ],
-      links: [{ rel: 'canonical', href: url }],
-    }
+    const description = getSeoDescription(blog.id, blog.content)
+
+    return createStandardHead({
+      title: `${seoTitle} | Yunosuke Yoshino`,
+      path: `/article/${blog.id}`,
+      description,
+      image: blog.eyecatch?.url ?? DEFAULT_OG_IMAGE_URL,
+      ogType: 'article',
+    })
   },
   component: BlogDetailPage,
 })
@@ -67,26 +53,23 @@ function BlogDetailPage() {
   const seo = getSeoMetadata(blog.id)
   const articleSchema = createArticleSchema(blog, seo ?? undefined)
   const breadcrumbSchema = createBreadcrumbSchema([
-    { name: 'ホーム', url: 'https://yunosukeyoshino.com/' },
-    { name: '記事一覧', url: 'https://yunosukeyoshino.com/article/page/1/' },
+    { name: 'ホーム', url: toCanonicalUrl('/') },
+    { name: '記事一覧', url: toCanonicalUrl('/article/page/1') },
     {
       name: blog.title,
-      url: `https://yunosukeyoshino.com/article/${blog.id}/`,
+      url: toCanonicalUrl(`/article/${blog.id}`),
     },
   ])
 
   return (
     <>
-      <Header />
-      <main className="bg-white">
-        <JsonLd data={articleSchema} />
-        <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      <SitePage mainClassName="bg-white" afterMain={<ArticleCta />}>
         <article className="py-24 md:py-32">
           <div className="container-custom">
-            {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} className="mb-8" />
 
-            {/* Article Header */}
             <header className="mb-16">
               <div className="mb-8 flex items-center justify-between">
                 <span className="bg-gray-100 px-4 py-2 text-sm font-medium uppercase tracking-wide text-gray-700">
@@ -104,7 +87,7 @@ function BlogDetailPage() {
                 {blog.title}
               </h1>
 
-              {blog.eyecatch && (
+              {blog.eyecatch ? (
                 <div className="relative aspect-video overflow-hidden rounded-lg border border-gray-200">
                   <img
                     src={`${blog.eyecatch.url}?w=1200&fm=webp`}
@@ -114,15 +97,13 @@ function BlogDetailPage() {
                     className="h-full w-full object-cover"
                   />
                 </div>
-              )}
+              ) : null}
             </header>
 
-            {/* Article Content */}
             <div className="mx-auto max-w-4xl">
               <CodeHighlight content={highlightedContent} />
             </div>
 
-            {/* Article Footer */}
             <footer className="mt-20 border-t border-gray-200 pt-8">
               <div className="flex justify-center">
                 <Link
@@ -151,11 +132,7 @@ function BlogDetailPage() {
             </footer>
           </div>
         </article>
-
-        {/* CTA - full width, outside container-custom */}
-        <ArticleCta />
-      </main>
-      <Footer />
+      </SitePage>
     </>
   )
 }

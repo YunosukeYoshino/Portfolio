@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { GA_TRACKING_ID } from '@/lib/siteMetadata'
 
 declare global {
   interface Window {
@@ -8,8 +9,6 @@ declare global {
     gtag?: (...args: unknown[]) => void
   }
 }
-
-const GA_TRACKING_ID = 'G-7C1W0FTJR6'
 
 export default function GoogleAnalytics() {
   useEffect(() => {

@@ -1,8 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
-import NoiseOverlay from '@/components/effects/NoiseOverlay'
-import Footer from '@/components/layout/Footer'
-import Header from '@/components/layout/Header'
+import SitePage from '@/components/layout/SitePage'
 import AboutSection from '@/components/sections/AboutSection'
 import ArticlesSection from '@/components/sections/ArticlesSection'
 import HeroSection from '@/components/sections/HeroSection'
@@ -14,6 +12,7 @@ import JsonLd, {
   createWebsiteSchema,
 } from '@/components/seo/JsonLd'
 import { getBlogs } from '@/lib/microcms'
+import { createStandardHead, DEFAULT_SITE_TITLE } from '@/lib/siteMetadata'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
@@ -29,31 +28,11 @@ export const Route = createFileRoute('/')({
   },
   // Prevent re-fetching on client-side navigation for static sites
   staleTime: Number.POSITIVE_INFINITY,
-  head: () => ({
-    meta: [
-      { title: 'Yunosuke Yoshino｜Portfolio' },
-      {
-        property: 'og:title',
-        content: 'Yunosuke Yoshino｜Portfolio',
-      },
-      { property: 'og:url', content: 'https://yunosukeyoshino.com/' },
-      {
-        property: 'og:image',
-        content: 'https://yunosukeyoshino.com/assets/og-image.png',
-      },
-      { name: 'twitter:title', content: 'Yunosuke Yoshino｜Portfolio' },
-      {
-        name: 'twitter:description',
-        content:
-          'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。',
-      },
-      {
-        name: 'twitter:image',
-        content: 'https://yunosukeyoshino.com/assets/og-image.png',
-      },
-    ],
-    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/' }],
-  }),
+  head: () =>
+    createStandardHead({
+      title: DEFAULT_SITE_TITLE,
+      path: '/',
+    }),
   component: HomePage,
 })
 
@@ -130,9 +109,7 @@ function HomePage() {
       <JsonLd data={personSchema} />
       <JsonLd data={websiteSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <NoiseOverlay />
-      <Header />
-      <main ref={mainRef}>
+      <SitePage noiseOverlay mainRef={mainRef}>
         <div data-section="hero">
           <HeroSection />
         </div>
@@ -148,8 +125,7 @@ function HomePage() {
         <div data-section="articles">
           <ArticlesSection articles={articles} />
         </div>
-      </main>
-      <Footer />
+      </SitePage>
     </>
   )
 }

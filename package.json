@@ -9,11 +9,11 @@
     "start": "vite preview",
     "preview": "vite build && vite preview",
     "typecheck": "tsc --noEmit",
-    "lint": "run-p lint:*",
+    "lint": "bun run lint:biome && bun run lint:tsc && bun run lint:markup",
     "lint:biome": "biome check .",
     "lint:tsc": "tsc --noEmit",
     "lint:markup": "markuplint 'src/**/*.{jsx,tsx}'",
-    "fix": "run-p fix:*",
+    "fix": "bun run fix:biome && bun run format",
     "fix:biome": "biome check --fix .",
     "format": "biome format --write .",
     "check": "biome check .",
@@ -30,7 +30,6 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@tailwindcss/typography": "^0.5.19",
-    "@tanstack/react-query": "^5.91.3",
     "@tanstack/react-router": "^1.168.1",
     "@tanstack/react-start": "^1.167.2",
     "@vitejs/plugin-react": "^6.0.1",
@@ -46,7 +45,7 @@
     "shiki": "^4.0.2",
     "tailwind-merge": "^3.5.0",
     "three": "^0.183.2",
-    "zod": "^4.3.6"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.8",
@@ -65,7 +64,6 @@
     "jsdom": "^29.0.1",
     "lint-staged": "^16.4.0",
     "markuplint": "^4.14.1",
-    "npm-run-all": "^4.1.5",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",

@@ -1,37 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
-import NoiseOverlay from '@/components/effects/NoiseOverlay'
-import Footer from '@/components/layout/Footer'
-import Header from '@/components/layout/Header'
+import SitePage from '@/components/layout/SitePage'
 import JsonLd, { createBreadcrumbSchema, createPersonSchema } from '@/components/seo/JsonLd'
+import { createStandardHead } from '@/lib/siteMetadata'
 
 export const Route = createFileRoute('/about')({
-  head: () => ({
-    meta: [
-      { title: 'About｜Yunosuke Yoshino' },
-      {
-        name: 'description',
-        content:
-          'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
-      },
-      { property: 'og:title', content: 'About｜Yunosuke Yoshino' },
-      {
-        property: 'og:description',
-        content:
-          'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
-      },
-      { property: 'og:url', content: 'https://yunosukeyoshino.com/about/' },
-      {
-        name: 'twitter:title',
-        content: 'About｜Yunosuke Yoshino',
-      },
-      {
-        name: 'twitter:description',
-        content:
-          'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
-      },
-    ],
-    links: [{ rel: 'canonical', href: 'https://yunosukeyoshino.com/about/' }],
-  }),
+  head: () =>
+    createStandardHead({
+      title: 'About｜Yunosuke Yoshino',
+      path: '/about',
+      description:
+        'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
+    }),
   component: AboutPage,
 })
 
@@ -72,9 +51,7 @@ function AboutPage() {
     <>
       <JsonLd data={personSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <NoiseOverlay />
-      <Header />
-      <main className="pt-32 pb-24 bg-[#F3F3F1] min-h-screen">
+      <SitePage noiseOverlay mainClassName="min-h-screen bg-[#F3F3F1] pt-32 pb-24">
         <div className="max-w-4xl mx-auto px-6 md:px-12">
           {/* Header */}
           <div className="mb-20">
@@ -113,8 +90,7 @@ function AboutPage() {
             ))}
           </div>
         </div>
-      </main>
-      <Footer />
+      </SitePage>
     </>
   )
 }
