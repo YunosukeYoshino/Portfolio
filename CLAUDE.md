@@ -1,3 +1,7 @@
+---
+last-validated: 2026-04-10
+---
+
 Please reason in English and respond in Japanese.
 
 # Portfolio Project

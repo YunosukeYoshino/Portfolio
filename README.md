@@ -15,13 +15,7 @@
 
 ## Overview
 
-A personal portfolio and blog site for showcasing projects and sharing technical articles.
-
-**Key Features:**
-- **microCMS** integration for headless content management
-- **Zenn / Qiita RSS** feed integration for cross-platform article display
-- **Lenis** + **Three.js** for smooth scrolling and WebGL animations
-- **Cloudflare Pages** deployment with static export for global edge delivery
+A personal portfolio and blog built with TanStack Start. It combines microCMS-managed articles, external feed aggregation, and motion-heavy presentation for projects and writing.
 
 ## Tech Stack
 
@@ -37,26 +31,11 @@ A personal portfolio and blog site for showcasing projects and sharing technical
 
 ## Getting Started
 
-### Prerequisites
-
-- [Bun](https://bun.sh/) v1.0.0+
-- [Node.js](https://nodejs.org/) v20.0.0+
-
-### Installation
-
 ```bash
-# Clone the repository
 git clone https://github.com/YunosukeYoshino/portfolio.git
 cd portfolio
-
-# Install dependencies
 bun install
-
-# Set up environment variables
 cp .env.example .env.local
-# Edit .env.local with your credentials
-
-# Start development server
 bun run dev
 ```
 
@@ -77,26 +56,11 @@ bun run dev
 | `bun run deploy` | Deploy to Cloudflare Pages |
 | `bun run deploy:preview` | Deploy to preview branch |
 
-### Project Structure
+### Notes
 
-```
-src/
-├── domain/            # Domain layer (entities, repository ports)
-│   ├── entities/      # Blog, BlogResponse etc.
-│   └── repositories/  # BlogRepository interface
-├── usecases/          # Application business logic
-│   └── blog/          # GetBlogsUseCase, GetBlogDetailUseCase
-├── infrastructure/    # External implementations
-│   ├── microcms/      # microCMS adapter
-│   └── di/            # Dependency injection container
-├── routes/            # TanStack Router pages and layouts
-├── components/        # React components
-├── lib/               # Utilities and legacy facades
-└── types/             # TypeScript type definitions (re-exports)
-```
-
-> [!NOTE]
-> This project follows Clean Architecture principles. Domain layer has no external dependencies.
+- Internal implementation guidance for contributors and coding agents lives in `CLAUDE.md`.
+- In development, microCMS-backed routes fall back to mock data when credentials are missing.
+- The site is statically exported and deployed to Cloudflare Pages.
 
 ### Architecture
 
@@ -116,12 +80,3 @@ bun run deploy:preview
 
 > [!IMPORTANT]
 > Set `NODE_VERSION=20` or higher in your Cloudflare Pages project settings.
-
-## Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| `MICROCMS_SERVICE_DOMAIN` | microCMS service domain |
-| `MICROCMS_API_KEY` | microCMS API key |
-| `RESEND_API_KEY` | Resend API key for contact form |
-| `SITE_URL` | Site URL |
