@@ -195,22 +195,22 @@ describe('PaginationNav rendering', () => {
   })
 })
 
-describe('Article detail navigation on static hosting', () => {
-  it('ArticleItem forces a document navigation for prerendered detail pages', () => {
+describe('Article detail navigation on workers hosting', () => {
+  it('ArticleItem keeps SPA navigation enabled for view transitions', () => {
     const articleItemSource = readFileSync(
       resolve(import.meta.dir, '../components/article/ArticleItem.tsx'),
       'utf8'
     )
 
-    expect(articleItemSource).toContain('reloadDocument')
+    expect(articleItemSource).not.toContain('reloadDocument')
   })
 
-  it('ArticleLink forces a document navigation for prerendered detail pages', () => {
+  it('ArticleLink keeps SPA navigation enabled for view transitions', () => {
     const articleLinkSource = readFileSync(
       resolve(import.meta.dir, '../components/article/ArticleLink.tsx'),
       'utf8'
     )
 
-    expect(articleLinkSource).toContain('reloadDocument')
+    expect(articleLinkSource).not.toContain('reloadDocument')
   })
 })
