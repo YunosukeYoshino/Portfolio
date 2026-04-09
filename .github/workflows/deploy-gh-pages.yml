@@ -45,6 +45,9 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist/client --project-name=yunosuke-portfolio --branch=main
 
+      - name: Verify production assets
+        run: bun run verify:deployment https://yunosukeyoshino.com/
+
       - name: Create deployment status
         if: success()
         run: |

@@ -20,6 +20,8 @@ const queryClient = new QueryClient({
   },
 })
 
+const CHUNK_RECOVERY_VERSION = 'v2'
+
 import CustomCursor from '@/components/effects/CustomCursor'
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
@@ -210,7 +212,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
               .filter(Boolean)
               .sort()
               .join('|');
-            const key = 'chunk-reload:' + buildAssets;
+            const key = 'chunk-reload:${CHUNK_RECOVERY_VERSION}:' + buildAssets;
 
             const hasReloaded = () => sessionStorage.getItem(key) === '1';
             const reloadOnce = () => {

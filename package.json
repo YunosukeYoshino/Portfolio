@@ -24,6 +24,7 @@
     "seo:optimize": "bun run scripts/seo-optimize.ts",
     "seo:optimize:force": "bun run scripts/seo-optimize.ts --force",
     "seo:optimize:dry": "bun run scripts/seo-optimize.ts --dry-run",
+    "verify:deployment": "bun run scripts/verify-deployment-assets.ts",
     "prepare": "husky"
   },
   "dependencies": {
