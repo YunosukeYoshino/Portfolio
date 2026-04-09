@@ -41,6 +41,7 @@ export default function CustomCursor() {
 
     // Show cursor on desktop (including laptops with trackpads)
     setIsVisible(true)
+    document.body.dataset.customCursor = 'enabled'
 
     // Animation loop for smooth cursor movement - only runs when needed
     const updateCursorPosition = () => {
@@ -78,6 +79,7 @@ export default function CustomCursor() {
     document.addEventListener('mouseout', handleMouseOut)
 
     return () => {
+      delete document.body.dataset.customCursor
       window.removeEventListener('mousemove', updateMousePosition)
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseout', handleMouseOut)

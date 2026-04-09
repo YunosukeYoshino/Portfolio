@@ -72,20 +72,22 @@ export default function Header() {
         </button>
       </nav>
 
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 z-[60] bg-black/50 md:hidden"
-          onClick={() => setIsMenuOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+      <div
+        className={`fixed inset-0 z-60 bg-black/50 transition-opacity duration-300 md:hidden ${
+          isMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+        aria-hidden="true"
+      />
 
       <div
         id="mobile-menu"
         role="dialog"
-        aria-modal="true"
+        aria-modal={isMenuOpen}
+        aria-hidden={!isMenuOpen}
         aria-label="Mobile Menu"
-        className={`fixed top-0 right-0 z-[70] h-screen w-80 transform bg-white shadow-2xl transition-transform duration-300 supports-[height:100svh]:h-[100svh] md:hidden ${
+        inert={!isMenuOpen}
+        className={`fixed top-0 right-0 z-70 h-screen w-80 transform bg-white shadow-2xl transition-transform duration-300 supports-[height:100svh]:h-svh md:hidden ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

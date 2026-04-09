@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "types": ["vite/client"],
+    "types": ["vite/client", "bun"],
+    "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "es2022"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -26,9 +27,6 @@
     "scripts/**/*",
     "astro-backup/**/*",
     "scripts-backup/**/*",
-    "src/lib/imageLoader.js",
-    "**/__tests__/**",
-    "**/*.test.ts",
-    "**/*.test.tsx"
+    "src/lib/imageLoader.js"
   ]
 }

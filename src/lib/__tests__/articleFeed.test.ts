@@ -2,28 +2,32 @@ import { describe, expect, it } from 'bun:test'
 import type { Blog } from '@/domain/entities/blog'
 import { buildArticleFeed, getArticleFeedPage, microcmsArticleSourceAdapter } from '../articleFeed'
 
-const createBlog = (overrides: Partial<Blog> & Pick<Blog, 'id' | 'title'>): Blog => ({
-  id: overrides.id,
-  title: overrides.title,
-  content: '<p>content</p>',
-  category: {
-    id: 'frontend',
-    name: 'Frontend',
-    ...overrides.category,
-  },
-  eyecatch: {
-    url: 'https://example.com/eyecatch.png',
-    width: 1200,
-    height: 630,
-    alt: '',
-    ...overrides.eyecatch,
-  },
-  createdAt: '2025-01-01T00:00:00.000Z',
-  updatedAt: '2025-01-01T00:00:00.000Z',
-  publishedAt: '2025-01-01T00:00:00.000Z',
-  revisedAt: '2025-01-01T00:00:00.000Z',
-  ...overrides,
-})
+const createBlog = (overrides: Partial<Blog> & Pick<Blog, 'id' | 'title'>): Blog => {
+  const { id, title, category, eyecatch, ...rest } = overrides
+
+  return {
+    id,
+    title,
+    content: '<p>content</p>',
+    category: {
+      id: 'frontend',
+      name: 'Frontend',
+      ...category,
+    },
+    eyecatch: {
+      url: 'https://example.com/eyecatch.png',
+      width: 1200,
+      height: 630,
+      alt: '',
+      ...eyecatch,
+    },
+    createdAt: '2025-01-01T00:00:00.000Z',
+    updatedAt: '2025-01-01T00:00:00.000Z',
+    publishedAt: '2025-01-01T00:00:00.000Z',
+    revisedAt: '2025-01-01T00:00:00.000Z',
+    ...rest,
+  }
+}
 
 describe('microcmsArticleSourceAdapter', () => {
   it('microCMS記事をArticleFeedItemへ変換し、alt未設定時はタイトルを補完する', () => {

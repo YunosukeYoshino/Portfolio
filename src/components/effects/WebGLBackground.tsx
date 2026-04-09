@@ -19,13 +19,20 @@ export default function WebGLBackground() {
     let cleanup: (() => void) | undefined
     let isDisposed = false
 
-    void createWebGLBackgroundScene(containerRef.current).then((dispose) => {
-      if (isDisposed) {
-        dispose()
-        return
-      }
-      cleanup = dispose
-    })
+    void createWebGLBackgroundScene(containerRef.current)
+      .then((dispose) => {
+        if (isDisposed) {
+          dispose()
+          return
+        }
+        cleanup = dispose
+      })
+      .catch((error) => {
+        if (import.meta.env.DEV) {
+          // biome-ignore lint/suspicious/noConsole: Development-only fallback logging.
+          console.error('Failed to initialize WebGL background', error)
+        }
+      })
 
     return () => {
       isDisposed = true

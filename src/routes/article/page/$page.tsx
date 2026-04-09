@@ -173,6 +173,7 @@ function BlogListPage() {
             {isFiltering
               ? filteredTotalPages > 1 && (
                   <PaginationNav
+                    mode="button"
                     currentPage={filteredPage}
                     totalPages={filteredTotalPages}
                     ariaLabel="フィルター結果のページネーション"
@@ -181,6 +182,7 @@ function BlogListPage() {
                 )
               : totalPages > 1 && (
                   <PaginationNav
+                    mode="link"
                     currentPage={currentPage}
                     totalPages={totalPages}
                     ariaLabel="ページネーション"

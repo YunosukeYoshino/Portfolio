@@ -2,12 +2,32 @@ import { Fragment, type ReactNode } from 'react'
 import { buildPaginationModel } from '@/lib/pagination'
 import { cn } from '@/lib/utils'
 
-interface PaginationNavProps {
+interface BasePaginationNavProps {
   readonly currentPage: number
   readonly totalPages: number
   readonly ariaLabel: string
-  readonly getHref?: (page: number) => string
-  readonly onPageChange?: (page: number) => void
+}
+
+type LinkPaginationNavProps = BasePaginationNavProps & {
+  readonly mode: 'link'
+  readonly getHref: (page: number) => string
+  readonly onPageChange?: never
+}
+
+type ButtonPaginationNavProps = BasePaginationNavProps & {
+  readonly mode: 'button'
+  readonly onPageChange: (page: number) => void
+  readonly getHref?: never
+}
+
+type PaginationNavProps = LinkPaginationNavProps | ButtonPaginationNavProps
+
+interface PaginationControlProps {
+  readonly page: number
+  readonly className: string
+  readonly children: ReactNode
+  readonly ariaCurrent?: 'page'
+  readonly ariaLabel?: string
 }
 
 const activeClass = 'bg-black text-white border-black'
@@ -29,59 +49,11 @@ const nextArrow = (
   </svg>
 )
 
-export default function PaginationNav({
-  currentPage,
-  totalPages,
-  ariaLabel,
-  getHref,
-  onPageChange,
-}: PaginationNavProps) {
+export default function PaginationNav(props: PaginationNavProps) {
+  const { currentPage, totalPages, ariaLabel } = props
   const model = buildPaginationModel({ currentPage, totalPages })
 
-  if (!getHref && !onPageChange) {
-    throw new Error('PaginationNav requires getHref or onPageChange')
-  }
-
-  const renderControl = ({
-    page,
-    className,
-    children,
-    ariaCurrent,
-    ariaLabel: controlLabel,
-  }: {
-    readonly page: number
-    readonly className: string
-    readonly children: ReactNode
-    readonly ariaCurrent?: 'page'
-    readonly ariaLabel?: string
-  }) => {
-    if (getHref) {
-      return (
-        <a
-          href={getHref(page)}
-          className={className}
-          aria-current={ariaCurrent}
-          aria-label={controlLabel}
-        >
-          {children}
-        </a>
-      )
-    }
-
-    return (
-      <button
-        type="button"
-        onClick={() => onPageChange?.(page)}
-        className={className}
-        aria-current={ariaCurrent}
-        aria-label={controlLabel}
-      >
-        {children}
-      </button>
-    )
-  }
-
-  return (
+  const renderNav = (renderControl: (props: PaginationControlProps) => ReactNode) => (
     <nav className="flex items-center justify-center space-x-2" aria-label={ariaLabel}>
       {model.hasPrevious && model.previousPage !== null
         ? renderControl({
@@ -135,4 +107,49 @@ export default function PaginationNav({
         : null}
     </nav>
   )
+
+  if (props.mode === 'link') {
+    const getHref = props.getHref
+
+    return renderNav(function LinkControl({
+      page,
+      className,
+      children,
+      ariaCurrent,
+      ariaLabel,
+    }: PaginationControlProps) {
+      return (
+        <a
+          href={getHref(page)}
+          className={className}
+          aria-current={ariaCurrent}
+          aria-label={ariaLabel}
+        >
+          {children}
+        </a>
+      )
+    })
+  }
+
+  const onPageChange = props.onPageChange
+
+  return renderNav(function ButtonControl({
+    page,
+    className,
+    children,
+    ariaCurrent,
+    ariaLabel,
+  }: PaginationControlProps) {
+    return (
+      <button
+        type="button"
+        onClick={() => onPageChange(page)}
+        className={className}
+        aria-current={ariaCurrent}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </button>
+    )
+  })
 }
