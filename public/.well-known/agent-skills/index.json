@@ -1,4 +1,19 @@
 {
   "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
-  "skills": []
+  "skills": [
+    {
+      "name": "about-portfolio",
+      "type": "retrieval",
+      "description": "Retrieve information about Yunosuke Yoshino's portfolio: skills, works, background, and contact details.",
+      "url": "https://yunosukeyoshino.com/.well-known/agent-skills/about-portfolio/SKILL.md",
+      "sha256": "249ac5d5e2c00a37f10b654cec17da2edaaa9746de3ac34a333d37bed6bb3d0d"
+    },
+    {
+      "name": "contact",
+      "type": "action",
+      "description": "Send a contact message to Yunosuke Yoshino via the portfolio contact form API (POST /api/contact).",
+      "url": "https://yunosukeyoshino.com/.well-known/agent-skills/contact/SKILL.md",
+      "sha256": "b6dd5070790c5ee8e0de7fb1b980f7687b985ddcfb90314e95e253a72bef1c39"
+    }
+  ]
 }

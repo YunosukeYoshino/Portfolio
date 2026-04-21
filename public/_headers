@@ -19,3 +19,6 @@
 
 /.well-known/agent-skills/index.json
   Content-Type: application/json
+
+/.well-known/agent-skills/*/SKILL.md
+  Content-Type: text/markdown; charset=utf-8

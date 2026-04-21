@@ -1,6 +1,7 @@
 import { createRootRoute, HeadContent, Link, Outlet, Scripts } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import CustomCursor from '@/components/effects/CustomCursor'
+import { WebMCPProvider } from '@/components/effects/WebMCPProvider'
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import ClientLoader from '@/components/providers/ClientLoader'
@@ -169,6 +170,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       </head>
       <body className="antialiased" suppressHydrationWarning>
         <GoogleAnalytics />
+        <WebMCPProvider />
         <LenisProvider>
           <ClientLoader />
           <CustomCursor />
