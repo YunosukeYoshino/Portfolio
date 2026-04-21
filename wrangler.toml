@@ -12,9 +12,6 @@ run_worker_first = ["/", "/article/*"]
 [observability]
 enabled = true
 
-[[routes]]
-pattern = "yunosukeyoshino.com/*"
-zone_name = "yunosukeyoshino.com"
 
 [env.preview]
 name = "yunosuke-portfolio-preview"
