@@ -1,0 +1,13 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://yunosukeyoshino.com/api/contact",
+      "service-doc": [{ "href": "https://yunosukeyoshino.com/contact" }],
+      "describedby": [{ "href": "https://yunosukeyoshino.com/contact" }]
+    },
+    {
+      "anchor": "https://yunosukeyoshino.com/sitemap.xml",
+      "describedby": [{ "href": "https://www.sitemaps.org/protocol.html", "type": "text/html" }]
+    }
+  ]
+}
