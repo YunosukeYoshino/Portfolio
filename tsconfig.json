@@ -2,6 +2,7 @@
   "compilerOptions": {
     "types": ["vite/client", "bun"],
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "lib": ["dom", "dom.iterable", "es2022"],
     "allowJs": true,
     "skipLibCheck": true,
