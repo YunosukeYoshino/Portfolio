@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/markuplint/markuplint/v4.18.1/packages/%40markuplint/config/schema.json",
+  "$schema": "https://raw.githubusercontent.com/markuplint/markuplint/v4.14.1/packages/%40markuplint/config/schema.json",
   "parser": {
     "\\.[jt]sx?$": "@markuplint/jsx-parser"
   },
