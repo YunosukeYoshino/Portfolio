@@ -32,7 +32,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-router": "^1.169.1",
-    "@tanstack/react-start": "^1.167.62",
+    "@tanstack/react-start": "^1.167.63",
     "@vitejs/plugin-react": "^6.0.1",
     "clsx": "^2.1.1",
     "gsap": "^3.15.0",
@@ -68,7 +68,7 @@
     "jsdom": "^29.1.1",
     "lint-staged": "^16.4.0",
     "markuplint": "^4.18.1",
-    "postcss": "^8.5.13",
+    "postcss": "^8.5.14",
     "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3",
     "vite": "^8.0.10",
@@ -77,7 +77,11 @@
     "wrangler": "^4.87.0"
   },
   "overrides": {
-    "undici": ">=7.18.2",
+    "undici": ">=7.24.0",
+    "uuid": ">=14.0.0",
+    "yaml": ">=2.8.3",
+    "picomatch": ">=2.3.2",
+    "diff": ">=8.0.3",
     "mdast-util-to-hast": ">=13.2.1"
   },
   "lint-staged": {
