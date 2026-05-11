@@ -12,6 +12,9 @@ run_worker_first = ["/", "/article/*"]
 [observability]
 enabled = true
 
+[[routes]]
+pattern = "yunosukeyoshino.com/*"
+custom_domain = true
 
 [env.preview]
 name = "yunosuke-portfolio-preview"
