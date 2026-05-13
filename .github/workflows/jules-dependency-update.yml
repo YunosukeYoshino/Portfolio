@@ -7,7 +7,7 @@ on:
     inputs:
       prompt:
         description: 'タスク指示'
-        default: 'Update all dependencies with bun update --latest. Verify with bun run lint && bun run build.'
+        default: 'Update all dependencies with bun update --latest, respecting bunfig.toml supply-chain hardening. Verify with bun install --frozen-lockfile --ignore-scripts && bun run lint && bun run build.'
         type: string
 
 env:
@@ -28,7 +28,7 @@ jobs:
             -H "X-Goog-Api-Key: ${{ secrets.JULES_API_KEY }}" \
             -d @- <<EOF
           {
-            "prompt": "${{ inputs.prompt || 'Update all dependencies with bun update --latest. Verify with bun run lint && bun run build.' }}",
+            "prompt": "${{ inputs.prompt || 'Update all dependencies with bun update --latest, respecting bunfig.toml supply-chain hardening. Verify with bun install --frozen-lockfile --ignore-scripts && bun run lint && bun run build.' }}",
             "sourceContext": {
               "source": "sources/github/${{ github.repository }}",
               "githubRepoContext": { "startingBranch": "${{ github.ref_name }}" }

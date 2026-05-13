@@ -92,5 +92,6 @@
     "src/**/*.{json,css,scss}": [
       "biome format --write"
     ]
-  }
+  },
+  "trustedDependencies": []
 }
