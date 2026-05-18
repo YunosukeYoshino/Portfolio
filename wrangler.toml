@@ -16,3 +16,6 @@ enabled = true
 [env.preview]
 name = "yunosuke-portfolio-preview"
 workers_dev = true
+routes = [
+  { pattern = "yunosukeyoshino.com/*", zone_name = "yunosukeyoshino.com" }
+]
