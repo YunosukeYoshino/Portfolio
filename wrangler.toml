@@ -1,6 +1,7 @@
 "$schema" = "node_modules/wrangler/config-schema.json"
 name = "yunosuke-portfolio"
-main = "src/worker.ts"
+main = "@tanstack/react-start/server-entry"
+pattern = "yunosukeyoshino.com/*"
 compatibility_date = "2026-03-17"
 compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 workers_dev = true
