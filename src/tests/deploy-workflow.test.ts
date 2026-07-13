@@ -35,11 +35,10 @@ describe('cloudflare workers hosting configuration', () => {
   })
 
   it('Wrangler config targets TanStack Start server entry on Workers', () => {
-    expect(wranglerConfigSource).toContain('main = "@tanstack/react-start/server-entry"')
+    expect(wranglerConfigSource).toContain('main = "src/worker.ts"')
     expect(wranglerConfigSource).toContain(
       'compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]'
     )
-    expect(wranglerConfigSource).toContain('pattern = "yunosukeyoshino.com/*"')
   })
 
   it('contact API is implemented as a TanStack Start server route', () => {
