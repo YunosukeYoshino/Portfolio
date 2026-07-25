@@ -65,9 +65,7 @@ src/
 │   │   ├── markdown/  # home.ts / article.ts / index.ts (LLM-facing markdown delivery)
 │   │   ├── highlight.ts  # Shiki highlight core (content type -> html)
 │   │   └── contactMail.ts # Resend email sender (Astro API route only)
-│   ├── articleFeed.ts # Source adapters + pagination for the article feed
-│   ├── articleRender.ts # Article rendering helpers
-│   ├── articles.ts    # Article fetching façade for pages
+│   ├── article/       # feed.ts (source adapters + pagination), render.ts (rendering), fetch.ts (fetching façade)
 │   ├── contactSchema.ts # Zod schemas (ContactPayload)
 │   ├── pagination.ts  # Pagination math
 │   ├── seoMetadata.ts # Per-page SEO metadata builder
@@ -102,7 +100,7 @@ src/
 
 ### Data Fetching
 - **Content Layer**: microCMS content is loaded via `src/content.config.ts` and queried through the use cases.
-- **Astro loaders**: Pages fetch data via `useCases` through the `src/lib/articles.ts` façade.
+- **Astro loaders**: Pages fetch data via `useCases` through the `src/lib/article/fetch.ts` façade.
 - **Server endpoints**: `src/pages/api/*.ts` for form submissions (Resend).
 - **Server-only helpers**: `src/lib/server/` (highlight, markdown, contactMail) — never import these from client islands.
 - Reference: `src/pages/article/[slug].astro` (detail page)
@@ -146,7 +144,7 @@ const testUseCases = createUseCases(fakeBlogRepository)
 ```
 
 ### Article Feed
-microCMS is currently the only article source. `src/lib/articleFeed.ts` keeps an
+microCMS is currently the only article source. `src/lib/article/feed.ts` keeps an
 `ArticleSourceAdapter` seam so another source can be added without touching the pages.
 - `ArticleFeedItem` in `src/types/index.ts` tags each item via `source: 'microcms'`
 - External link detection uses `externalUrl` presence, not source name

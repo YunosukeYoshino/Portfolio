@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import type { Blog } from '@/domain/entities/blog'
-import { buildArticleFeed, getArticleFeedPage, microcmsArticleSourceAdapter } from '../articleFeed'
+import { buildArticleFeed, getArticleFeedPage, microcmsArticleSourceAdapter } from '../feed'
 
 const createBlog = (overrides: Partial<Blog> & Pick<Blog, 'id' | 'title'>): Blog => {
   const { id, title, category, eyecatch, ...rest } = overrides

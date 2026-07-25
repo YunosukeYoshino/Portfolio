@@ -1,7 +1,7 @@
 import { defineCollection, z } from 'astro:content'
 
 import { createMockBlog } from '@/infrastructure/microcms/mock'
-import { fetchAllArticles } from './lib/articles'
+import { fetchAllArticles } from './lib/article/fetch'
 
 /** ローカル開発用のサンプル記事 ID。プレースホルダー credentials のときだけ使う。 */
 const DEV_SAMPLE_IDS = Array.from({ length: 15 }, (_, i) => `sample-blog-${i + 1}`)
