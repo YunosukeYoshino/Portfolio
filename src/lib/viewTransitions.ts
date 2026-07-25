@@ -40,10 +40,6 @@ export function createPersistentTransitionStyle(name: string): CSSProperties {
   return { viewTransitionName: name } as CSSProperties
 }
 
-export function getArticleImageTransitionStyle(slug: string): CSSProperties {
-  return createSharedElementStyle(`article-image-${slug}`, 'article-image-morph')
-}
-
 export function getArticleTitleTransitionStyle(slug: string): CSSProperties {
   return createSharedElementStyle(`article-title-${slug}`)
 }

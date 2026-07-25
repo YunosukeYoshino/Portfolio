@@ -1,20 +1,19 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { RuleList, RuleRowBody } from '@/components/common/RuleList'
+import Blog from '@/components/article/Blog'
 import SitePage from '@/components/layout/SitePage'
 import JsonLd, {
   createBreadcrumbSchema,
   createPersonSchema,
   createWebsiteSchema,
 } from '@/components/seo/JsonLd'
-import { getExternalLinkProps } from '@/lib/link'
+import { buildArticleFeed, microcmsArticleSourceAdapter } from '@/lib/articleFeed'
 import { getBlogs } from '@/lib/microcms'
 import { createStandardHead, DEFAULT_SITE_TITLE } from '@/lib/siteMetadata'
-import { formatDateEditorial } from '@/lib/utils'
 import { fadeViewTransition } from '@/lib/viewTransitions'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const { contents: articles } = await getBlogs({
+    const { contents } = await getBlogs({
       data: {
         queries: {
           limit: 3,
@@ -22,6 +21,7 @@ export const Route = createFileRoute('/')({
         },
       },
     })
+    const articles = buildArticleFeed([{ adapter: microcmsArticleSourceAdapter, items: contents }])
     return { articles }
   },
   // Prevent re-fetching on client-side navigation for static sites
@@ -34,25 +34,14 @@ export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
+/**
+ * What I have worked on — a plain enumeration, not a portfolio of deliverables.
+ * Keep in sync with the "Selected Works" section of src/server/markdown/home.ts.
+ */
 const works = [
-  {
-    title: 'YUNOSUKE Portfolio',
-    description: 'WebGL & motion personal site',
-    year: '2025',
-    link: '#',
-  },
-  {
-    title: 'Corporate Renewal',
-    description: 'Jamstack corporate rebuild',
-    year: '2024',
-    link: '#',
-  },
-  {
-    title: 'E-Commerce Platform',
-    description: 'Headless commerce frontend',
-    year: '2024',
-    link: '#',
-  },
+  { description: 'WebGL & motion personal site', year: '2025' },
+  { description: 'Jamstack corporate rebuild', year: '2024' },
+  { description: 'Headless commerce frontend', year: '2024' },
 ] as const
 
 function HomePage() {
@@ -70,7 +59,7 @@ function HomePage() {
       <JsonLd data={websiteSchema} />
       <JsonLd data={breadcrumbSchema} />
       <SitePage siteRoot>
-        <section className="mb-[var(--sectiongap)] text-base text-ink-body">
+        <section className="mb-10 text-base text-ink-body">
           <p className="mb-4">
             React、Astro、JavaScript、TypeScript
             を軸にフロントエンドを設計・実装しています。もとはアパレル販売、いまは東京でコードを書いています。
@@ -81,48 +70,18 @@ function HomePage() {
           </p>
         </section>
 
-        <section className="mb-[var(--sectiongap)]">
-          <h2 className="label-mono mb-5">Selected Work</h2>
-          <RuleList>
-            {works.map((work) => (
-              <a
-                key={work.title}
-                href={work.link}
-                {...getExternalLinkProps(work.link)}
-                className="rule-row py-[var(--rowpad)] transition-opacity hover:opacity-60"
-              >
-                <RuleRowBody
-                  title={work.title}
-                  description={work.description}
-                  meta={`${work.year} ↗`}
-                />
-              </a>
-            ))}
-          </RuleList>
-        </section>
+        <ul className="mb-[var(--sectiongap)] space-y-1.5">
+          {works.map((work) => (
+            <li key={work.description} className="flex gap-4 text-[15px] text-ink-soft">
+              <span>{work.description}</span>
+              <span className="meta-mono ml-auto">{work.year}</span>
+            </li>
+          ))}
+        </ul>
 
         <section className="mb-[var(--sectiongap)]">
           <h2 className="label-mono mb-5">Writing</h2>
-          {articles.length === 0 ? (
-            <p className="border-t border-rule py-[var(--rowpad)] text-[15px] text-ink-soft">
-              記事は現在準備中です。
-            </p>
-          ) : (
-            <RuleList>
-              {articles.map((article) => (
-                <Link
-                  key={article.id}
-                  to="/article/$slug/"
-                  params={{ slug: article.id }}
-                  viewTransition={fadeViewTransition}
-                  className="rule-row py-[var(--rowpad-sm)] transition-opacity hover:opacity-60"
-                >
-                  <span className="text-base">{article.title}</span>
-                  <span className="meta-mono">{formatDateEditorial(article.publishedAt)}</span>
-                </Link>
-              ))}
-            </RuleList>
-          )}
+          <Blog blogs={articles} />
           <Link
             to="/article/page/$page/"
             params={{ page: '1' }}

@@ -14,19 +14,13 @@ I also drive AI agentic coding — combining Claude, Codex, Dify and n8n — to 
 - **Specialisation**: Front-end development (e-commerce focus), AI agentic coding
 - **Contact**: [Contact form](https://yunosukeyoshino.com/contact)
 
-## Selected Works (2024 — 2025)
+## Work
 
-### YUNOSUKE Portfolio
-Year: 2025
-My personal portfolio site.
+Things I have worked on, most recent first:
 
-### Corporate Renewal
-Year: 2024
-A full corporate site renewal using a Jamstack architecture for performance and maintainability.
-
-### E-Commerce Platform
-Year: 2024
-Headless commerce implementation with a modern React front-end, focused on conversion optimisation.
+- WebGL & motion personal site (2025)
+- Jamstack corporate rebuild (2024)
+- Headless commerce frontend (2024)
 
 ## Skills
 

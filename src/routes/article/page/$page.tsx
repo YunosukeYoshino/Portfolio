@@ -151,10 +151,8 @@ function BlogListPage() {
           />
 
           {isFiltering && resultCount === 0 ? (
-            <div className="mb-12 border-t border-rule py-[var(--rowpad)]">
-              <p className="mb-4 text-[15px] text-ink-soft">
-                条件に一致する記事が見つかりませんでした
-              </p>
+            <div className="note-row mb-12">
+              <p className="mb-4">条件に一致する記事が見つかりませんでした</p>
               <button
                 type="button"
                 onClick={() => {

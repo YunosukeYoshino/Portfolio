@@ -21,7 +21,7 @@ Personal portfolio site that fetches blog articles from microCMS and showcases s
 
 ## Key Commands
 ```
-bun run dev             # Dev server -> http://portfolio.localhost (portless)
+bun run dev             # Dev server -> https://portfolio.localhost (portless)
 bun run build           # Production build
 bun run lint            # Biome + TypeScript + Markuplint
 bun run fix             # Auto-fix
@@ -80,7 +80,7 @@ src/
 
 ### Data Fetching
 - **loader**: Server-side fetch via TanStack Router loader
-- **createServerFn**: Server functions for secure API key handling (e.g., `src/lib/highlight.ts`, `src/lib/markdown.ts`)
+- **createServerFn**: Server functions for secure API key handling (e.g., `src/lib/server/highlight.ts`, `src/lib/server/markdown.ts`)
 - Reference: `src/routes/article/$slug.tsx` (loader + createServerFn example)
 
 ### Tailwind CSS v4
@@ -132,7 +132,7 @@ microCMS is currently the only article source. `src/lib/articleFeed.ts` keeps a
 See prerender configuration in `vite.config.ts`.
 
 ### Form Validation
-Zod + react-hook-form pattern. See `src/components/ContactForm.tsx`.
+Zod + react-hook-form pattern. See `src/components/forms/ContactForm.tsx`.
 
 ## Code Quality
 Biome + TypeScript strict mode. See `biome.json` for configuration.

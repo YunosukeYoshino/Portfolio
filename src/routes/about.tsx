@@ -9,7 +9,7 @@ export const Route = createFileRoute('/about')({
       title: 'About｜Yunosuke Yoshino',
       path: '/about',
       description:
-        'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
+        'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Astroを活用したモダンなWeb開発と、AIエージェンティックコーディングによる業務自動化に取り組んでいます。',
     }),
   component: AboutPage,
 })
@@ -36,7 +36,7 @@ const timelineData = [
     year: '2023 - Present',
     title: 'Frontend Engineer',
     description:
-      '東京を拠点に、ReactやNext.jsを活用したモダンなフロントエンド開発に特化。ビジネス要件に基づいたUI/UXの改善提案や、Dify、n8nを用いたAIエージェントによる業務自動化など、幅広い技術領域で価値提供を行う。',
+      '東京を拠点に、ReactやAstroを活用したモダンなフロントエンド開発に特化。ビジネス要件に基づいたUI/UXの改善提案に加え、ClaudeやCodex、Dify、n8nを組み合わせたAIエージェンティックコーディングで開発と業務改善を推進する。',
   },
 ]
 
@@ -58,7 +58,7 @@ function AboutPage() {
             1995年生まれ、広島出身。アパレル販売の現場からウェブ開発の世界へと転身し、現在は東京を拠点に活動しています。ECサイトを中心としたフロントエンド開発に特化し、データ分析に基づく継続的な改善提案を行っています。
           </p>
           <p className="text-base text-ink-body">
-            ReactやNext.jsといったモダンなフレームワークを活用し、保守性と拡張性を重視したコードを書くことを大切にしています。業務の傍ら、AIエージェント構築やDify、n8nを活用した業務自動化など、新しい技術の研究と実装にも取り組んでいます。
+            ReactやAstroといったモダンなフレームワークを活用し、保守性と拡張性を重視したコードを書くことを大切にしています。近年はClaudeやCodex、Dify、n8nを組み合わせたAIエージェンティックコーディングを推進し、プロダクト開発と業務改善の両方に取り組んでいます。
           </p>
         </section>
 

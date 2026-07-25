@@ -236,14 +236,6 @@
     z-index: 100;
   }
 
-  ::view-transition-group(.article-image-morph) {
-    animation-duration: var(--vt-duration-move);
-  }
-
-  ::view-transition-image-pair(.article-image-morph) {
-    animation-name: vt-blur;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -268,6 +260,14 @@
 
   .lnk:hover {
     border-color: var(--color-ink);
+  }
+
+  /* Notice occupying a hairline row's slot (empty list, no search results, …) */
+  .note-row {
+    border-top: 1px solid var(--color-rule);
+    padding-block: var(--rowpad);
+    font-size: 15px;
+    color: var(--color-ink-soft);
   }
 
   /* Hairline row: shared by Work / Writing / Timeline lists */

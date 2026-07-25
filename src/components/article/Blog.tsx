@@ -7,7 +7,7 @@ import { getArticleTitleTransitionStyle } from '@/lib/viewTransitions'
 import type { ArticleFeedItem } from '@/types'
 
 interface BlogProps {
-  blogs: ArticleFeedItem[]
+  blogs: readonly ArticleFeedItem[]
   className?: string
 }
 
@@ -16,7 +16,7 @@ export default function Blog({ blogs, className = '' }: BlogProps) {
     const isDevelopment = import.meta.env.DEV
     return (
       <div className={className}>
-        <p className="border-t border-rule py-[var(--rowpad)] text-[15px] text-ink-soft">
+        <p className="note-row">
           {isDevelopment ? '開発モード: 記事データがありません' : '記事がありません'}
         </p>
         {isDevelopment && (
