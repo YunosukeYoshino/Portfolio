@@ -1,5 +1,4 @@
 import type { ReactNode, Ref } from 'react'
-import NoiseOverlay from '@/components/effects/NoiseOverlay'
 import { cn } from '@/lib/utils'
 import { PAGE_SHELL_TRANSITION_NAME } from '@/lib/viewTransitions'
 import Footer from './Footer'
@@ -9,23 +8,23 @@ interface SitePageProps {
   readonly children: ReactNode
   readonly mainClassName?: string
   readonly mainRef?: Ref<HTMLElement>
-  readonly noiseOverlay?: boolean
   readonly afterMain?: ReactNode
   readonly showFooter?: boolean
+  /** Render the site name as the page h1. Only the index page should set this. */
+  readonly siteRoot?: boolean
 }
 
 export default function SitePage({
   children,
   mainClassName,
   mainRef,
-  noiseOverlay = false,
   afterMain,
   showFooter = true,
+  siteRoot = false,
 }: SitePageProps) {
   return (
-    <>
-      {noiseOverlay ? <NoiseOverlay /> : null}
-      <Header />
+    <div className="measure relative z-[2] pt-[var(--pagetop)] pb-[var(--pagebottom)]">
+      <Header siteRoot={siteRoot} />
       <div style={{ viewTransitionName: PAGE_SHELL_TRANSITION_NAME }}>
         <main ref={mainRef} className={cn(mainClassName)}>
           {children}
@@ -33,6 +32,6 @@ export default function SitePage({
         {afterMain}
       </div>
       {showFooter ? <Footer /> : null}
-    </>
+    </div>
   )
 }

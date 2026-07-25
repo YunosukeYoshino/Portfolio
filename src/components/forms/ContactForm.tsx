@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import TextScramble from '@/components/effects/TextScramble'
 
 const contactSchema = z.object({
   name: z
@@ -27,6 +26,10 @@ const contactSchema = z.object({
 })
 
 type ContactFormData = z.infer<typeof contactSchema>
+
+const fieldClass =
+  'w-full border-b border-rule bg-transparent py-2.5 text-base text-ink transition-colors placeholder:text-ink-faint/60 focus:border-ink focus:outline-none aria-invalid:border-alert'
+const errorClass = 'mt-2 font-mono text-[12px] text-alert'
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -82,135 +85,124 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-        <div>
-          <label htmlFor="name" className="block text-sm font-bold uppercase tracking-wider mb-2">
-            NAME *
-          </label>
-          <input
-            {...register('name')}
-            type="text"
-            id="name"
-            required
-            aria-invalid={!!errors.name}
-            aria-describedby={errors.name ? 'name-error' : undefined}
-            className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
-            placeholder="山田 太郎"
-          />
-          {errors.name && (
-            <p id="name-error" className="mt-2 text-sm text-red-600">
-              {errors.name.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="email" className="block text-sm font-bold uppercase tracking-wider mb-2">
-            EMAIL *
-          </label>
-          <input
-            {...register('email')}
-            type="email"
-            id="email"
-            required
-            aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? 'email-error' : undefined}
-            className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
-            placeholder="example@yunosukeyoshino.com"
-          />
-          {errors.email && (
-            <p id="email-error" className="mt-2 text-sm text-red-600">
-              {errors.email.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label
-            htmlFor="company"
-            className="block text-sm font-bold uppercase tracking-wider mb-2"
-          >
-            COMPANY
-          </label>
-          <input
-            {...register('company')}
-            type="text"
-            id="company"
-            className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
-            placeholder="株式会社Example"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="subject"
-            className="block text-sm font-bold uppercase tracking-wider mb-2"
-          >
-            SUBJECT *
-          </label>
-          <input
-            {...register('subject')}
-            type="text"
-            id="subject"
-            required
-            aria-invalid={!!errors.subject}
-            aria-describedby={errors.subject ? 'subject-error' : undefined}
-            className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
-            placeholder="お問い合わせの件名"
-          />
-          {errors.subject && (
-            <p id="subject-error" className="mt-2 text-sm text-red-600">
-              {errors.subject.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label
-            htmlFor="message"
-            className="block text-sm font-bold uppercase tracking-wider mb-2"
-          >
-            MESSAGE *
-          </label>
-          <textarea
-            {...register('message')}
-            id="message"
-            rows={6}
-            required
-            aria-invalid={!!errors.message}
-            aria-describedby={errors.message ? 'message-error' : undefined}
-            className="w-full px-4 py-3 bg-white border-2 border-black text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors resize-none"
-            placeholder="お問い合わせ内容をご記入ください"
-          />
-          {errors.message && (
-            <p id="message-error" className="mt-2 text-sm text-red-600">
-              {errors.message.message}
-            </p>
-          )}
-        </div>
-
-        {submitStatus.type && (
-          <div
-            role="alert"
-            className={`p-4 border-2 ${
-              submitStatus.type === 'success'
-                ? 'border-green-600 bg-green-50 text-green-800'
-                : 'border-red-600 bg-red-50 text-red-800'
-            }`}
-          >
-            <p className="text-sm font-medium">{submitStatus.message}</p>
-          </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8" noValidate>
+      <div>
+        <label htmlFor="name" className="label-mono mb-2 block">
+          Name *
+        </label>
+        <input
+          {...register('name')}
+          type="text"
+          id="name"
+          required
+          aria-invalid={!!errors.name}
+          aria-describedby={errors.name ? 'name-error' : undefined}
+          className={fieldClass}
+          placeholder="山田 太郎"
+        />
+        {errors.name && (
+          <p id="name-error" className={errorClass}>
+            {errors.name.message}
+          </p>
         )}
+      </div>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full px-8 py-4 bg-black text-white font-bold uppercase tracking-wider border-2 border-black hover:bg-white hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+      <div>
+        <label htmlFor="email" className="label-mono mb-2 block">
+          Email *
+        </label>
+        <input
+          {...register('email')}
+          type="email"
+          id="email"
+          required
+          aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? 'email-error' : undefined}
+          className={fieldClass}
+          placeholder="example@yunosukeyoshino.com"
+        />
+        {errors.email && (
+          <p id="email-error" className={errorClass}>
+            {errors.email.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="company" className="label-mono mb-2 block">
+          Company
+        </label>
+        <input
+          {...register('company')}
+          type="text"
+          id="company"
+          className={fieldClass}
+          placeholder="株式会社Example"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="subject" className="label-mono mb-2 block">
+          Subject *
+        </label>
+        <input
+          {...register('subject')}
+          type="text"
+          id="subject"
+          required
+          aria-invalid={!!errors.subject}
+          aria-describedby={errors.subject ? 'subject-error' : undefined}
+          className={fieldClass}
+          placeholder="お問い合わせの件名"
+        />
+        {errors.subject && (
+          <p id="subject-error" className={errorClass}>
+            {errors.subject.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="message" className="label-mono mb-2 block">
+          Message *
+        </label>
+        <textarea
+          {...register('message')}
+          id="message"
+          rows={6}
+          required
+          aria-invalid={!!errors.message}
+          aria-describedby={errors.message ? 'message-error' : undefined}
+          className={`${fieldClass} resize-none`}
+          placeholder="お問い合わせ内容をご記入ください"
+        />
+        {errors.message && (
+          <p id="message-error" className={errorClass}>
+            {errors.message.message}
+          </p>
+        )}
+      </div>
+
+      {submitStatus.type && (
+        <p
+          role="alert"
+          className={`border-l-2 py-2 pl-4 text-[15px] ${
+            submitStatus.type === 'success'
+              ? 'border-affirm text-affirm'
+              : 'border-alert text-alert'
+          }`}
         >
-          {isSubmitting ? 'SENDING...' : <TextScramble text="SEND MESSAGE" />}
-        </button>
-      </form>
-    </div>
+          {submitStatus.message}
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="border border-ink px-6 py-2.5 font-mono text-[13px] tracking-[0.08em] uppercase transition-colors hover:bg-ink hover:text-paper disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        {isSubmitting ? 'Sending…' : 'Send message'}
+      </button>
+    </form>
   )
 }

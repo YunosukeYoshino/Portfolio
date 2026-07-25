@@ -46,16 +46,15 @@ src/
 ├── hooks/             # Custom hooks (useArticleFilter, useDebounce, articleFilterLogic)
 ├── routes/            # TanStack Router pages and layouts
 ├── components/        # React components
-│   ├── layout/        # Header, Footer, Breadcrumb
-│   ├── sections/      # HeroSection, AboutSection, WorksSection, ArticlesSection, SkillsMarquee
-│   ├── article/       # ArticleItem, ArticlesHoverEffect, Blog, CodeHighlight, ArticleCta, ArticleLink, ArticleSearchBar
-│   ├── effects/       # CustomCursor, NoiseOverlay, WebGLBackground, SplitText, TextScramble, MagneticButton
-│   ├── providers/     # LenisProvider, ClientLoader
+│   ├── layout/        # SitePage (page shell), Header, Footer, Breadcrumb
+│   ├── common/        # RuleList/RuleRowBody (hairline rows), HydratedEmail
+│   ├── article/       # Blog, CodeHighlight, ArticleCta, ArticleLink, ArticleSearchBar, PaginationNav
+│   ├── effects/       # WebMCPProvider
 │   ├── seo/           # GoogleAnalytics, JsonLd
 │   └── forms/         # ContactForm
 ├── lib/
 │   ├── microcms.ts    # Backward-compatible facade (@deprecated)
-│   ├── utils.ts       # cn(), formatDate()
+│   ├── utils.ts       # cn(), formatDate(), formatDateEditorial()
 │   ├── highlight.ts   # Code highlighting via Shiki (createServerFn)
 │   ├── link.ts        # External link utility (target="_blank" handling)
 │   ├── markdown.ts    # Markdown processing utilities
@@ -84,6 +83,20 @@ src/
 Breaking changes from v3. See `src/globals.css`.
 - Define CSS variables with `@theme` directive
 - Load plugins with `@plugin`
+
+### Design System (editorial paper theme)
+Single-column editorial layout on a Manila-paper surface. No WebGL, custom cursor,
+marquee, or scroll-driven animation — motion is limited to View Transitions.
+- **Colors**: `paper` / `ink` / `ink-body` / `ink-soft` / `ink-label` / `ink-faint` /
+  `rule` / `rule-strong` / `carbon` (code blocks) / `alert` / `affirm`
+- **Fonts**: Inter (body) + JetBrains Mono (labels and meta) only
+- **Rhythm**: `--measure` (760px), `--gutter`, `--pagetop`, `--sectiongap`,
+  `--rowpad` / `--rowpad-sm` — all narrowed at `max-width: 767px`
+- **Utilities**: `.measure` (page column), `.label-mono` (section heading),
+  `.meta-mono` (trailing meta), `.rule-row` (hairline grid row), `.lnk` (underlined link)
+- Every page renders inside `SitePage`; only `/` passes `siteRoot` so the site name is the `h1`
+- Paper grain and vignette are `body::before` / `body::after` (`z-index: 1`);
+  page content sits at `z-index: 2`
 
 ### microCMS Integration (Clean Architecture)
 **Recommended**: Use `useCases` directly

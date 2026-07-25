@@ -6,15 +6,12 @@ const privacyPolicyRoutePath = resolve(import.meta.dir, '../routes/privacy-polic
 const privacyPolicySource = readFileSync(privacyPolicyRoutePath, 'utf8')
 
 describe('privacy-policy route layout', () => {
-  it('固定ヘッダーと本文の間に十分なトップスペースを確保する', () => {
-    expect(privacyPolicySource).toContain('pt-40')
-    expect(privacyPolicySource).toContain('md:pt-48')
+  it('他ページと同じ1カラムのページシェルを使う', () => {
+    expect(privacyPolicySource).toContain('<SitePage>')
+    expect(privacyPolicySource).toContain('mb-[var(--sectiongap)]')
   })
 
-  it('main要素とcontainerを分離して余白と背景を安定させる', () => {
-    expect(privacyPolicySource).toContain(
-      '<SitePage mainClassName="min-h-screen bg-white pt-40 pb-24 md:pt-48 md:pb-32">'
-    )
-    expect(privacyPolicySource).toContain('<div className="container-custom">')
+  it('長文本文は prose で組む', () => {
+    expect(privacyPolicySource).toContain('<div className="prose max-w-none">')
   })
 })

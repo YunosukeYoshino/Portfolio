@@ -1,12 +1,17 @@
 import { Link } from '@tanstack/react-router'
-import { HydratedEmailText } from '@/components/common/HydratedEmail'
-import MagneticButton from '@/components/effects/MagneticButton'
+import { HydratedEmailLink } from '@/components/common/HydratedEmail'
 import { getCurrentYear } from '@/lib/utils'
 import {
   createPersistentTransitionStyle,
   fadeViewTransition,
   SITE_FOOTER_TRANSITION_NAME,
 } from '@/lib/viewTransitions'
+
+const elsewhereLinks = [
+  { label: 'GitHub', href: 'https://github.com/YunosukeYoshino' },
+  { label: 'Zenn', href: 'https://zenn.dev/yuche' },
+  { label: 'Qiita', href: 'https://qiita.com/pomufgd' },
+] as const
 
 export default function Footer() {
   const currentYear = getCurrentYear()
@@ -15,71 +20,55 @@ export default function Footer() {
     <footer
       id="contact"
       style={createPersistentTransitionStyle(SITE_FOOTER_TRANSITION_NAME)}
-      className="bg-[#F3F3F1] pt-32 pb-12 px-6 md:px-12 relative z-20"
+      className="text-[15px] text-ink-soft"
     >
-      <div className="flex flex-col min-h-[60vh] justify-between">
-        <div>
-          <h2 className="text-[12vw] font-display font-medium leading-[0.8] tracking-tighter mb-12">
-            Let's Talk
-          </h2>
-          <div className="max-w-2xl">
-            <p className="font-mono text-sm md:text-base text-gray-600 leading-relaxed">
-              Always open to discussing new opportunities, collaborations, and innovative projects.
-              <br />
-              Webサイト制作、アプリケーション開発、UI/UXデザインなど、
-              <br className="hidden md:block" />
-              お仕事のご依頼やご相談はお気軽にどうぞ。
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row justify-between items-end border-t border-black/10 pt-8 mt-12">
-          <div className="mb-8 md:mb-0">
-            <MagneticButton intensity={0.2}>
-              <Link
-                to="/contact/"
-                viewTransition={fadeViewTransition}
-                className="text-2xl md:text-3xl font-bold hover:text-blue-600 transition-colors hover-trigger block"
-              >
-                <HydratedEmailText
-                  user="hello"
-                  domain="yunosukeyoshino.com"
-                  placeholder="hello [at] yunosukeyoshino dot com"
-                  scramble
-                />
-              </Link>
-            </MagneticButton>
-            <p className="font-mono text-xs text-gray-500 mt-2">
-              Based in Tokyo, Available Worldwide.
-            </p>
-          </div>
-
-          <div className="flex gap-8 font-mono text-xs uppercase tracking-wide">
-            <MagneticButton intensity={0.3}>
-              <a
-                href="https://github.com/YunosukeYoshino"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-blue-600 transition-colors hover-trigger inline-block p-2 -m-2"
-                aria-label="GitHub (opens in a new tab)"
-              >
-                GitHub
-              </a>
-            </MagneticButton>
-          </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row justify-between items-center mt-8 pt-8 border-t border-black/10">
-          <p className="text-xs text-gray-500 font-mono">© {currentYear} Yunosuke Yoshino</p>
-          <Link
-            to="/privacy-policy/"
-            viewTransition={fadeViewTransition}
-            className="text-xs text-gray-500 hover:text-gray-700 transition-colors mt-4 md:mt-0"
+      <h2 className="label-mono mb-5">Elsewhere</h2>
+      <div className="mb-10 flex flex-wrap gap-x-[22px] gap-y-3">
+        <HydratedEmailLink
+          user="hello"
+          domain="yunosukeyoshino.com"
+          placeholder="Email"
+          label="Email"
+          className="lnk"
+        />
+        {elsewhereLinks.map((link) => (
+          <a
+            key={link.label}
+            className="lnk"
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Privacy Policy
-          </Link>
-        </div>
+            {link.label}
+          </a>
+        ))}
       </div>
+
+      <h2 className="label-mono mb-5">Index</h2>
+      <div className="mb-10 flex flex-wrap gap-x-[22px] gap-y-3">
+        <Link to="/" viewTransition={fadeViewTransition} className="lnk">
+          Home
+        </Link>
+        <Link to="/about/" viewTransition={fadeViewTransition} className="lnk">
+          About
+        </Link>
+        <Link
+          to="/article/page/$page/"
+          params={{ page: '1' }}
+          viewTransition={fadeViewTransition}
+          className="lnk"
+        >
+          Writing
+        </Link>
+        <Link to="/contact/" viewTransition={fadeViewTransition} className="lnk">
+          Contact
+        </Link>
+        <Link to="/privacy-policy/" viewTransition={fadeViewTransition} className="lnk">
+          Privacy
+        </Link>
+      </div>
+
+      <p className="meta-mono text-ink-faint">© {currentYear} Yunosuke Yoshino</p>
     </footer>
   )
 }

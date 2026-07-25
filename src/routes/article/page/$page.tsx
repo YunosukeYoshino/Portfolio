@@ -128,69 +128,68 @@ function BlogListPage() {
     <>
       <JsonLd data={blogSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <SitePage mainClassName="bg-white">
-        <div className="py-24 md:py-32">
-          <div className="container-custom">
-            <Breadcrumb items={breadcrumbItems} className="mb-8" />
+      <SitePage>
+        <section className="mb-[var(--sectiongap)]">
+          <Breadcrumb items={breadcrumbItems} className="mb-8" />
 
-            <header className="mb-16">
-              <h1 className="text-section-title text-display mb-6 uppercase tracking-tight text-black">
-                {currentPage === 1 ? 'ARTICLES' : `ARTICLES - PAGE ${currentPage}`}
-              </h1>
-              <p className="max-w-2xl text-lg text-gray-600">
-                Technical articles and insights about frontend development, UI/UX design, and modern
-                web technologies.
+          <header className="mb-10">
+            <h1 className="label-mono mb-5">
+              {currentPage === 1 ? 'Writing' : `Writing — Page ${currentPage}`}
+            </h1>
+            <p className="text-base text-ink-body">
+              フロントエンド開発、UI/UXデザイン、モダンなWeb技術についての記事。
+            </p>
+          </header>
+
+          <ArticleSearchBar
+            searchQuery={searchQuery}
+            onSearchChange={onSearchChange}
+            categories={categories}
+            activeCategory={activeCategory}
+            onCategorySelect={onCategorySelect}
+            resultCount={resultCount}
+          />
+
+          {isFiltering && resultCount === 0 ? (
+            <div className="mb-12 border-t border-rule py-[var(--rowpad)]">
+              <p className="mb-4 text-[15px] text-ink-soft">
+                条件に一致する記事が見つかりませんでした
               </p>
-            </header>
+              <button
+                type="button"
+                onClick={() => {
+                  onSearchChange('')
+                  onCategorySelect(null)
+                }}
+                className="meta-mono transition-colors hover:text-ink"
+              >
+                フィルターをリセット →
+              </button>
+            </div>
+          ) : (
+            <Blog blogs={displayedBlogs} className="mb-12" />
+          )}
 
-            <ArticleSearchBar
-              searchQuery={searchQuery}
-              onSearchChange={onSearchChange}
-              categories={categories}
-              activeCategory={activeCategory}
-              onCategorySelect={onCategorySelect}
-              resultCount={resultCount}
-            />
-
-            {isFiltering && resultCount === 0 ? (
-              <div className="mb-16 py-16 text-center">
-                <p className="text-lg text-gray-500">条件に一致する記事が見つかりませんでした</p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onSearchChange('')
-                    onCategorySelect(null)
-                  }}
-                  className="mt-4 border border-black px-6 py-2 text-sm font-medium text-black transition-all duration-300 hover:bg-black hover:text-white"
-                >
-                  フィルターをリセット
-                </button>
-              </div>
-            ) : (
-              <Blog blogs={displayedBlogs} column={3} className="mb-16" showViewAllButton={false} />
-            )}
-
-            {isFiltering
-              ? filteredTotalPages > 1 && (
-                  <PaginationNav
-                    mode="button"
-                    currentPage={filteredPage}
-                    totalPages={filteredTotalPages}
-                    ariaLabel="フィルター結果のページネーション"
-                    onPageChange={onFilteredPageChange}
-                  />
-                )
-              : totalPages > 1 && (
-                  <PaginationNav
-                    mode="link"
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    ariaLabel="ページネーション"
-                    getHref={(page) => `/article/page/${page}/`}
-                  />
-                )}
-          </div>
-        </div>
+          {isFiltering
+            ? filteredTotalPages > 1 && (
+                <PaginationNav
+                  mode="button"
+                  currentPage={filteredPage}
+                  totalPages={filteredTotalPages}
+                  ariaLabel="フィルター結果のページネーション"
+                  onPageChange={onFilteredPageChange}
+                />
+              )
+            : totalPages > 1 && (
+                <PaginationNav
+                  mode="link"
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  ariaLabel="ページネーション"
+                  getHref={(page) => `/article/page/${page}/`}
+                />
+              )}
+        </section>
       </SitePage>
     </>
   )

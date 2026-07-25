@@ -12,7 +12,6 @@ import { createStandardHead, DEFAULT_OG_IMAGE_URL, toCanonicalUrl } from '@/lib/
 import { formatDate } from '@/lib/utils'
 import {
   createDirectionalViewTransition,
-  getArticleImageTransitionStyle,
   getArticleTitleTransitionStyle,
 } from '@/lib/viewTransitions'
 
@@ -70,76 +69,47 @@ function BlogDetailPage() {
     <>
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <SitePage mainClassName="bg-white" afterMain={<ArticleCta />}>
-        <article className="py-24 md:py-32">
-          <div className="container-custom">
-            <Breadcrumb items={breadcrumbItems} className="mb-8" />
+      <SitePage afterMain={<ArticleCta />}>
+        <article className="mb-[var(--sectiongap)]">
+          <Breadcrumb items={breadcrumbItems} className="mb-8" />
 
-            <header className="mb-16">
-              <div className="mb-8 flex items-center justify-between">
-                <span className="bg-gray-100 px-4 py-2 text-sm font-medium uppercase tracking-wide text-gray-700">
-                  {blog.category.name}
-                </span>
-                <time
-                  dateTime={blog.publishedAt}
-                  className="text-sm uppercase tracking-wide text-gray-500"
-                >
-                  {formatDate(blog.publishedAt)}
-                </time>
-              </div>
-
-              <h1
-                style={getArticleTitleTransitionStyle(blog.id)}
-                className="text-section-title text-display mb-12 leading-tight tracking-tight text-black"
-              >
-                {blog.title}
-              </h1>
-
-              {blog.eyecatch ? (
-                <div className="relative aspect-video overflow-hidden rounded-lg border border-gray-200">
-                  <img
-                    src={`${blog.eyecatch.url}?w=1200&fm=webp`}
-                    alt={blog.eyecatch.alt || blog.title}
-                    width={1200}
-                    height={675}
-                    style={getArticleImageTransitionStyle(blog.id)}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ) : null}
-            </header>
-
-            <div className="mx-auto max-w-4xl">
-              <CodeHighlight content={highlightedContent} />
+          <header className="mb-10">
+            <div className="label-mono mb-5 flex items-center gap-3">
+              <span>{blog.category.name}</span>
+              <span aria-hidden="true">/</span>
+              <time dateTime={blog.publishedAt}>{formatDate(blog.publishedAt)}</time>
             </div>
 
-            <footer className="mt-20 border-t border-gray-200 pt-8">
-              <div className="flex justify-center">
-                <Link
-                  to="/article/page/$page/"
-                  params={{ page: '1' }}
-                  viewTransition={createDirectionalViewTransition('back', ['article-index'])}
-                  className="group relative inline-flex items-center gap-2 overflow-hidden border border-black px-6 py-3 text-sm font-medium text-black transition-all duration-300 ease-out hover:bg-black hover:text-white"
-                >
-                  <svg
-                    className="h-4 w-4 transition-transform group-hover:-translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                  <span className="uppercase tracking-wide">BACK TO ARTICLES</span>
-                </Link>
-              </div>
-            </footer>
-          </div>
+            <h1
+              style={getArticleTitleTransitionStyle(blog.id)}
+              className="text-[28px] leading-snug font-semibold tracking-[-0.015em] md:text-[32px]"
+            >
+              {blog.title}
+            </h1>
+
+            {blog.eyecatch ? (
+              <img
+                src={`${blog.eyecatch.url}?w=1200&fm=webp`}
+                alt={blog.eyecatch.alt || blog.title}
+                width={1200}
+                height={675}
+                className="mt-10 aspect-video w-full object-cover"
+              />
+            ) : null}
+          </header>
+
+          <CodeHighlight content={highlightedContent} />
+
+          <footer className="mt-16 border-t border-rule pt-8">
+            <Link
+              to="/article/page/$page/"
+              params={{ page: '1' }}
+              viewTransition={createDirectionalViewTransition('back', ['article-index'])}
+              className="meta-mono transition-colors hover:text-ink"
+            >
+              ← All writing
+            </Link>
+          </footer>
         </article>
       </SitePage>
     </>

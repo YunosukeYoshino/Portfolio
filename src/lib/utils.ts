@@ -33,6 +33,15 @@ export function formatDateCompact(dateString: string): string {
   return `${year}.${month.padStart(2, '0')}.${day.padStart(2, '0')}`
 }
 
+/** Trailing meta for hairline rows, e.g. "Nov 2025". */
+export function formatDateEditorial(dateString: string): string {
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: TOKYO_TIME_ZONE,
+    year: 'numeric',
+    month: 'short',
+  }).format(new Date(dateString))
+}
+
 export function getCurrentYear(): string {
   return new Intl.DateTimeFormat('en-US', {
     timeZone: TOKYO_TIME_ZONE,

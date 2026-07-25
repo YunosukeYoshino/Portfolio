@@ -1,11 +1,7 @@
 import { createRootRoute, HeadContent, Link, Outlet, Scripts } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import CustomCursor from '@/components/effects/CustomCursor'
 import { WebMCPProvider } from '@/components/effects/WebMCPProvider'
-import Footer from '@/components/layout/Footer'
-import Header from '@/components/layout/Header'
-import ClientLoader from '@/components/providers/ClientLoader'
-import LenisProvider from '@/components/providers/LenisProvider'
+import SitePage from '@/components/layout/SitePage'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import appCss from '@/globals.css?url'
 import {
@@ -25,7 +21,7 @@ export const Route = createRootRoute({
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { name: 'format-detection', content: 'email=no,telephone=no,address=no' },
-      { name: 'theme-color', content: '#F3F3F1' },
+      { name: 'theme-color', content: '#F4F1EA' },
       {
         name: 'description',
         content: DEFAULT_SITE_DESCRIPTION,
@@ -93,7 +89,7 @@ export const Route = createRootRoute({
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;700&family=JetBrains+Mono:wght@400&family=Manrope:wght@400;600&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap',
       },
     ],
   }),
@@ -171,11 +167,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <body className="antialiased" suppressHydrationWarning>
         <GoogleAnalytics />
         <WebMCPProvider />
-        <LenisProvider>
-          <ClientLoader />
-          <CustomCursor />
-          {children}
-        </LenisProvider>
+        {children}
         <Scripts />
       </body>
     </html>
@@ -185,35 +177,24 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 function NotFoundPage() {
   return (
     <RootDocument>
-      <Header />
-      <main className="flex min-h-screen flex-col items-center justify-center bg-white px-4">
-        <div className="text-center">
-          <h1 className="mb-4 text-8xl font-bold tracking-tight text-black">404</h1>
-          <p className="mb-8 text-xl text-gray-600">ページが見つかりませんでした</p>
+      <SitePage>
+        <section className="mb-[var(--sectiongap)]">
+          <p className="label-mono mb-5">404</p>
+          <h1 className="mb-4 text-[26px] leading-snug font-semibold tracking-[-0.01em]">
+            ページが見つかりませんでした
+          </h1>
+          <p className="mb-8 text-base text-ink-body">
+            URLが変更されたか、削除された可能性があります。
+          </p>
           <Link
             to="/"
             viewTransition={createDirectionalViewTransition('back')}
-            className="inline-flex items-center gap-2 border border-black px-6 py-3 text-sm font-medium uppercase tracking-wide text-black transition-all duration-300 hover:bg-black hover:text-white"
+            className="lnk text-base"
           >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            <span>ホームに戻る</span>
+            ← Index
           </Link>
-        </div>
-      </main>
-      <Footer />
+        </section>
+      </SitePage>
     </RootDocument>
   )
 }

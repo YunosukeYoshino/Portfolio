@@ -35,8 +35,6 @@
     "@tanstack/react-start": "^1.167.63",
     "@vitejs/plugin-react": "^6.0.1",
     "clsx": "^2.1.1",
-    "gsap": "^3.15.0",
-    "lenis": "^1.3.23",
     "lucide-react": "^1.14.0",
     "marked": "^18.0.3",
     "postcss-preset-env": "^11.2.1",
@@ -45,7 +43,6 @@
     "react-hook-form": "^7.75.0",
     "shiki": "^4.0.2",
     "tailwind-merge": "^3.5.0",
-    "three": "^0.184.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -62,7 +59,6 @@
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@types/three": "^0.184.0",
     "autoprefixer": "^10.5.0",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
