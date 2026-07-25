@@ -2,7 +2,7 @@
   <img src="public/assets/icons/icon-192x192.png" alt="Portfolio Logo" width="120" />
   <h1>Yunosuke Yoshino Portfolio</h1>
   <p>
-    A modern portfolio site built with TanStack Start, React 19, and Tailwind CSS v4
+    A modern portfolio site built with Astro 5, React 19, and Tailwind CSS v4
   </p>
   <p>
     <a href="https://yunosukeyoshino.com">Live Site</a> •
@@ -15,17 +15,17 @@
 
 ## Overview
 
-A personal portfolio and blog built with TanStack Start. microCMS-managed articles are rendered
+A personal portfolio and blog built with Astro 5. microCMS-managed articles are rendered
 into a single-column editorial paper layout, prerendered at build time, and served from a
-Cloudflare Worker.
+Cloudflare Worker via the `@astrojs/cloudflare` adapter.
 
 ## Tech Stack
 
 | Category | Technology |
 |----------|------------|
-| Framework | [TanStack Start](https://tanstack.com/start) |
-| UI | [React 19](https://react.dev/), [Tailwind CSS v4](https://tailwindcss.com/) |
-| Data Fetching | TanStack Router loaders + `createServerFn` |
+| Framework | [Astro 5](https://astro.build/) |
+| UI | [React 19](https://react.dev/) islands, [Tailwind CSS v4](https://tailwindcss.com/) |
+| Data Fetching | Astro Content Layer + on-demand SSR (`export const prerender = false`) |
 | CMS | [microCMS](https://microcms.io/) |
 | Content | [marked](https://marked.js.org/), [Shiki](https://shiki.style/) |
 | Forms | [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/), [Resend](https://resend.com/) |
@@ -64,7 +64,7 @@ bun run dev
 
 - Internal implementation guidance for contributors and coding agents lives in `CLAUDE.md`.
 - In development, microCMS-backed routes fall back to mock data when credentials are missing.
-- Routes are prerendered at build time and served from a Cloudflare Worker (`src/worker.ts`).
+- Routes are prerendered at build time and served from a Cloudflare Worker via the `@astrojs/cloudflare` adapter (see `wrangler.toml`).
 
 ### Architecture
 
