@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro'
 
+// Accept: text/markdown 配信（middleware）を有効にするため SSR 化。
+export const prerender = false
+
 // src/routes/index.tsx を移植。Writing 記事リストは後続 ticket（03/04）で復元。
 const works = [
   { description: 'WebGL & motion personal site', year: '2025' },

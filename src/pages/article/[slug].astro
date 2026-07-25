@@ -1,25 +1,24 @@
 ---
-import type { GetStaticPaths } from 'astro'
-import { getCollection } from 'astro:content'
+import { getEntry } from 'astro:content'
 import ArticleCta from '@/components/article/ArticleCta.astro'
 import Layout from '@/layouts/Layout.astro'
-import type { Blog } from '@/domain/entities/blog'
 import { renderArticleContent } from '@/lib/articleRender'
 import { formatDate } from '@/lib/utils'
 
-export const getStaticPaths = (async () => {
-  const entries = await getCollection('articles')
-  return entries.map((entry) => ({
-    params: { slug: entry.id },
-    props: { article: entry.data },
-  }))
-}) satisfies GetStaticPaths
+// Accept: text/markdown 配信（middleware）を有効にするため SSR 化。
+export const prerender = false
 
-interface Props {
-  readonly article: Blog
+const { slug } = Astro.params
+if (!slug) {
+  return new Response('Not Found', { status: 404 })
 }
 
-const { article } = Astro.props as Props
+const entry = await getEntry('articles', slug)
+if (!entry) {
+  return new Response('Not Found', { status: 404 })
+}
+
+const article = entry.data
 const renderedContent = await renderArticleContent(article.content)
 const description = article.content.replace(/<[^>]+>/g, '').slice(0, 120)
 ---

@@ -27,6 +27,9 @@ const {
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     {robots && <meta name="robots" content={robots} />}
+    {/* LLM クライアント向けの発見手がかり（HTTP Link ヘッダの静的ルート代替） */}
+    <link rel="api-catalog" href="/.well-known/api-catalog" />
+    <link rel="describedby" type="application/xml" href="/sitemap.xml" />
   </head>
   <body>
     <div class="measure relative z-[2] pt-[var(--pagetop)] pb-[var(--pagebottom)]">

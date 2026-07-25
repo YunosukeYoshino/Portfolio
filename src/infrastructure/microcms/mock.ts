@@ -14,7 +14,7 @@ export const createMockBlog = (contentId: string): Blog => ({
   id: contentId,
   title: 'Development Blog Post',
   content:
-    '<p>This is a mock blog post for development purposes. Configure your microCMS credentials in .env.local to see real content.</p>',
+    '<p># Mock Blog Post\n\nThis is a mock blog post for development purposes. Configure your microCMS credentials in .env.local to see real content. Code example:\n\n```typescript\nconst greeting: string = "hello"\nconsole.log(greeting)\n```\n\nExternal link: [Astro](https://astro.build).</p>',
   eyecatch: {
     url: '/assets/images/noise.png',
     width: 1200,
