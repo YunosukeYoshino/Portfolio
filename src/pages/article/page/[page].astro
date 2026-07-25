@@ -85,31 +85,35 @@ const breadcrumbSchema = createBreadcrumbSchema([
       items.length === 0 ? (
         <p class="note-row">記事がありません</p>
       ) : (
-        <ul class="mb-12">
+        <div class="mb-12 flex flex-col article-list">
           {items.map((item) => {
             const isInternal = !item.externalUrl
             const href = item.externalUrl ?? `/article/${item.id}`
             return (
-              <li>
-                <a
-                  class="rule-row flex items-baseline justify-between gap-4 py-[var(--rowpad-sm)] transition-opacity hover:opacity-60"
-                  href={href}
-                  {...(!isInternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                >
+              <a
+                class="article-item group block w-full py-2.5 transition-all duration-300"
+                href={href}
+                {...(!isInternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                <div class="flex items-center gap-3 not-italic">
                   <span class="flex min-w-0 items-baseline gap-2">
-                    <span class="truncate text-base font-medium">{item.title}</span>
-                    <span class="text-[15px] text-ink-soft">— {item.category.name}</span>
+                    <span class="truncate text-base font-serif italic text-ink-body group-hover:text-ink transition-colors duration-150">
+                      {item.title}
+                    </span>
+                    <span class="text-xs text-ink-soft opacity-75">— {item.category.name}</span>
                   </span>
-                  <span class="meta-mono whitespace-nowrap">
+                  <div class="flex-1 min-w-[12px] self-end mb-1.5">
+                    <div class="w-full h-[1px] opacity-25 group-hover:opacity-60 transition-opacity duration-150 dotted-line" />
+                  </div>
+                  <span class="meta-mono text-ink-faint group-hover:text-ink transition-colors duration-150 whitespace-nowrap">
                     {formatDateEditorial(item.publishedAt)}
                     {!isInternal ? ' ↗' : ''}
                   </span>
-                </a>
-              </li>
+                </div>
+              </a>
             )
           })}
-          <li aria-hidden="true" class="border-t border-rule" />
-        </ul>
+        </div>
       )
     }
 
@@ -125,3 +129,16 @@ const breadcrumbSchema = createBreadcrumbSchema([
     }
   </section>
 </Layout>
+
+<style>
+  .dotted-line {
+    background-image: radial-gradient(circle, var(--color-ink-label) 1px, transparent 1px);
+    background-size: 5px 1px;
+    background-repeat: repeat-x;
+    height: 1px;
+  }
+  .article-list:hover .article-item:not(:hover) {
+    opacity: 0.45;
+    filter: blur(0.5px);
+  }
+</style>
