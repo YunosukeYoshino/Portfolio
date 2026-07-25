@@ -1,7 +1,9 @@
 ---
+import { getCollection } from 'astro:content'
 import JsonLdScript from '@/components/seo/JsonLdScript.astro'
 import { createWebsiteSchema } from '@/components/seo/JsonLd'
 import Layout from '../layouts/Layout.astro'
+import { formatDateEditorial } from '@/lib/utils'
 
 // Accept: text/markdown 配信（middleware）を有効にするため SSR 化。
 export const prerender = false
@@ -29,6 +31,15 @@ const works = [
     year: '2023',
   },
 ] as const
+
+// Writing セクション用：最新記事を publishedAt 降順で上位3件
+const articleEntries = await getCollection('articles')
+const recentArticles = articleEntries
+  .sort(
+    (left, right) =>
+      new Date(right.data.publishedAt).getTime() - new Date(left.data.publishedAt).getTime()
+  )
+  .slice(0, 3)
 ---
 
 <Layout siteRoot canonicalPath="/" ogType="website">
@@ -71,7 +82,35 @@ const works = [
 
   <section class="mb-[var(--sectiongap)]">
     <h2 class="label-mono mb-5">Writing</h2>
-    <p class="note-row">(Articles coming soon)</p>
+    {
+      recentArticles.length === 0 ? (
+        <p class="note-row">(Articles coming soon)</p>
+      ) : (
+        <div class="flex flex-col article-list">
+          {recentArticles.map((entry) => (
+            <a
+              class="article-item group block w-full py-2.5 transition-all duration-300"
+              href={`/article/${entry.id}`}
+            >
+              <div class="flex items-center gap-3 not-italic">
+                <span class="flex min-w-0 items-baseline gap-2">
+                  <span class="truncate text-base font-serif italic text-ink-body group-hover:text-ink transition-colors duration-150">
+                    {entry.data.title}
+                  </span>
+                  <span class="text-xs text-ink-soft opacity-75">— {entry.data.category.name}</span>
+                </span>
+                <div class="flex-1 min-w-[12px] self-end mb-1.5">
+                  <div class="w-full h-[1px] opacity-25 group-hover:opacity-60 transition-opacity duration-150 dotted-line" />
+                </div>
+                <span class="meta-mono text-ink-faint group-hover:text-ink transition-colors duration-150 whitespace-nowrap">
+                  {formatDateEditorial(entry.data.publishedAt)}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      )
+    }
   </section>
 </Layout>
 
@@ -85,6 +124,10 @@ const works = [
   
   /* Sue Park風のホバーエフェクト：ホバー時に対象外のアイテムを薄くぼかす */
   .project-list:hover .project-item:not(:hover) {
+    opacity: 0.45;
+    filter: blur(0.5px);
+  }
+  .article-list:hover .article-item:not(:hover) {
     opacity: 0.45;
     filter: blur(0.5px);
   }
