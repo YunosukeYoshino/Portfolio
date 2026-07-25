@@ -53,7 +53,7 @@ const articles = defineCollection({
       url: z.string(),
       width: z.number(),
       height: z.number(),
-      alt: z.string(),
+      alt: z.string().optional(),
     }),
   }),
 })

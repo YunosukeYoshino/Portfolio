@@ -14,7 +14,7 @@ export interface BlogEyecatch {
   readonly url: string
   readonly width: number
   readonly height: number
-  readonly alt: string
+  readonly alt?: string
 }
 
 export interface Blog {
