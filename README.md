@@ -86,6 +86,11 @@ bun run deploy:preview
 > [!IMPORTANT]
 > The deploy workflow runs on Node.js 22. Use Node.js 22 or higher for local deploys as well.
 
+## Contributing
+
+Bug reports and fixes are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+For security issues, follow [SECURITY.md](SECURITY.md) instead of opening an issue.
+
 ## License
 
 Source code is released under the [MIT License](LICENSE).
