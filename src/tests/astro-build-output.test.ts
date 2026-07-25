@@ -87,9 +87,13 @@ describe.skipIf(SKIP_BUILD || !hasBuild)('Astro ビルド成果物（dist/）', 
     expect(assetsignore).toContain('_routes.json')
   })
 
-  it('_astro/* に immutable キャッシュヘッダを配信する', () => {
+  it('_astro/* に immutable、/assets/* に短期キャッシュヘッダを配信する', () => {
     const headers = readFileSync(resolve(distDir, '_headers'), 'utf8')
     expect(headers).toMatch(/\/_astro\/\*\n\s+Cache-Control: public, max-age=31536000, immutable/)
+    // /assets/* はハッシュを持たない静的ファイルなので immutable にしない
+    expect(headers).toMatch(
+      /\/assets\/\*\n\s+Cache-Control: public, max-age=86400, stale-while-revalidate=604800/
+    )
   })
 
   it('api-catalog well-known エンドポイントを静的配置する', () => {

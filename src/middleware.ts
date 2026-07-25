@@ -21,6 +21,21 @@ function approxTokens(text: string): string {
 const HTML_CACHE_CONTROL = 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400'
 
 /**
+ * 上流が付けた Vary（Cookie など）を保ったまま Accept を足す。
+ * `Vary: *` は全ヘッダで変化する指定なのでそのまま残す。
+ */
+function appendVaryAccept(headers: Headers): void {
+  const existing = headers.get('vary')
+  if (!existing) {
+    headers.set('vary', 'Accept')
+    return
+  }
+  const fields = existing.split(',').map((field) => field.trim())
+  if (fields.includes('*') || fields.some((field) => field.toLowerCase() === 'accept')) return
+  headers.set('vary', `${existing}, Accept`)
+}
+
+/**
  * LLM クライアント向けの markdown 配信と HTML Link ヘッダ注入。
  *
  * - Accept: text/markdown で / と /article/[slug] への GET を markdown で返す
@@ -66,7 +81,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (contentType.includes('text/html')) {
     const existing = response.headers.get('link')
     response.headers.set('link', existing ? `${existing}, ${LINK_HEADER}` : LINK_HEADER)
-    response.headers.set('vary', 'Accept')
+    appendVaryAccept(response.headers)
     // API ルートなど、既に Cache-Control を持つ応答は尊重する。
     if (!response.headers.has('cache-control')) {
       response.headers.set('cache-control', HTML_CACHE_CONTROL)

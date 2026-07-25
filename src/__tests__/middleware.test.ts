@@ -6,8 +6,9 @@ mock.module('astro:middleware', () => ({
   defineMiddleware: (handler: unknown) => handler,
 }))
 // 記事 markdown は microCMS に到達するため、ヘッダ検証には不要な依存を切る。
+const ARTICLE_MARKDOWN = '# サンプル記事 1\n\npublished: 2026-07-26\n\n本文\n'
 mock.module('@/lib/server/markdown/article', () => ({
-  getArticleMarkdown: async () => null,
+  getArticleMarkdown: async (slug: string) => (slug === 'sample-blog-1' ? ARTICLE_MARKDOWN : null),
 }))
 
 const { onRequest } = await import('@/middleware')
@@ -31,6 +32,27 @@ describe('middleware の Vary / Cache-Control 付与', () => {
     expect(response.headers.get('vary')).toBe('Accept')
   })
 
+  it('Accept: text/markdown の記事詳細を markdown で返し Vary: Accept を付ける', async () => {
+    const response: Response = await invoke(
+      contextFor('/article/sample-blog-1', { accept: 'text/markdown' }),
+      async () => new Response('unused')
+    )
+
+    expect(response.headers.get('content-type')).toContain('text/markdown')
+    expect(response.headers.get('vary')).toBe('Accept')
+    expect(await response.text()).toBe(ARTICLE_MARKDOWN)
+  })
+
+  it('markdown を持たない記事は HTML 応答にフォールバックする', async () => {
+    const response: Response = await invoke(
+      contextFor('/article/no-markdown', { accept: 'text/markdown' }),
+      async () =>
+        new Response('<!doctype html>', { headers: { 'Content-Type': 'text/html; charset=utf-8' } })
+    )
+
+    expect(response.headers.get('content-type')).toContain('text/html')
+  })
+
   it('HTML 応答に Vary: Accept と CDN 向け Cache-Control を付ける', async () => {
     const response: Response = await invoke(
       contextFor('/'),
@@ -42,6 +64,30 @@ describe('middleware の Vary / Cache-Control 付与', () => {
     expect(response.headers.get('cache-control')).toBe(
       'public, max-age=0, s-maxage=300, stale-while-revalidate=86400'
     )
+  })
+
+  it('上流の Vary を保ったまま Accept を追加する', async () => {
+    const response: Response = await invoke(
+      contextFor('/'),
+      async () =>
+        new Response('<!doctype html>', {
+          headers: { 'Content-Type': 'text/html; charset=utf-8', Vary: 'Cookie' },
+        })
+    )
+
+    expect(response.headers.get('vary')).toBe('Cookie, Accept')
+  })
+
+  it('Vary: * はそのまま残す', async () => {
+    const response: Response = await invoke(
+      contextFor('/'),
+      async () =>
+        new Response('<!doctype html>', {
+          headers: { 'Content-Type': 'text/html; charset=utf-8', Vary: '*' },
+        })
+    )
+
+    expect(response.headers.get('vary')).toBe('*')
   })
 
   it('既に Cache-Control を持つ HTML 応答は上書きしない', async () => {

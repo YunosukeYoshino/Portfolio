@@ -9,6 +9,13 @@ on:
 permissions:
   contents: read
 
+# 本番デプロイは常に 1 本だけ走らせる。
+# 実行中の run を途中で止めるとシークレット同期とデプロイの状態がずれるため、
+# キャンセルせず順番待ちさせる。
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 env:
   NODE_VERSION: "22"
   BUN_VERSION: "latest"
@@ -22,6 +29,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          # 以降の依存インストール / ビルドに認証情報を残さない
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
