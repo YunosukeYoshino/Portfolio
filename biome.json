@@ -14,11 +14,8 @@
       "!!**/.wrangler",
       "!!**/out",
       "!!**/public",
-      "!!**/astro-backup",
-      "!!**/scripts-backup",
       "!!**/*.config.js",
       "!!**/next-env.d.ts",
-      "!!**/routeTree.gen.ts",
       "!!**/*.astro"
     ]
   },
