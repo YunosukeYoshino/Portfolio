@@ -27,25 +27,38 @@ function extractMarkdownFromRichEditor(content: string): string {
     .replace(/&nbsp;/g, ' ')
 }
 
+/**
+ * Framework-agnostic core.
+ * microCMS のリッチエディタ本文が Markdown を含む場合は marked で HTML へ変換する。
+ * TanStack の server fn と Astro のビルド時描画の双方から呼ばれる。
+ */
+export async function parseContentMarkdownCore(content: string): Promise<{
+  html: string
+  isMarkdown: boolean
+}> {
+  if (!content) return { html: '', isMarkdown: false }
+
+  if (!isMarkdownContent(content)) {
+    return { html: content, isMarkdown: false }
+  }
+
+  const { marked } = await import('marked')
+
+  marked.setOptions({
+    gfm: true,
+    breaks: false,
+  })
+
+  const markdown = extractMarkdownFromRichEditor(content)
+  const html = await marked.parse(markdown)
+
+  return { html, isMarkdown: true }
+}
+
 // Article bodies exceed URL limits when fetched during SPA navigations, so use POST here.
 export const parseContentMarkdown = createServerFn({ method: 'POST' })
   .inputValidator((data: unknown) => markdownInputSchema.parse(data))
-  .handler(async ({ data: { content } }): Promise<{ html: string; isMarkdown: boolean }> => {
-    if (!content) return { html: '', isMarkdown: false }
-
-    if (!isMarkdownContent(content)) {
-      return { html: content, isMarkdown: false }
-    }
-
-    const { marked } = await import('marked')
-
-    marked.setOptions({
-      gfm: true,
-      breaks: false,
-    })
-
-    const markdown = extractMarkdownFromRichEditor(content)
-    const html = await marked.parse(markdown)
-
-    return { html, isMarkdown: true }
-  })
+  .handler(
+    async ({ data: { content } }): Promise<{ html: string; isMarkdown: boolean }> =>
+      parseContentMarkdownCore(content)
+  )

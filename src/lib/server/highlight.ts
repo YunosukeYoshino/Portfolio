@@ -28,69 +28,71 @@ type SupportedLang = (typeof SUPPORTED_LANGS)[number]
 // biome-ignore lint/suspicious/noExplicitAny: Shiki type only available server-side
 let cachedHighlighterPromise: Promise<any> | null = null
 
-// Highlight payloads can be large on client-side navigations, so send them in the request body.
-export const highlightContent = createServerFn({ method: 'POST' })
-  .inputValidator((data: unknown) => highlightInputSchema.parse(data))
-  .handler(async ({ data: { html } }): Promise<string> => {
-    if (!html) return ''
+/**
+ * Framework-agnostic core.
+ * HTML 中の <pre><code> ブロックを Shiki でハイライトする。
+ * TanStack server fn と Astro ビルド時描画の双方から呼ばれる。
+ */
+export async function highlightContentCore(html: string): Promise<string> {
+  if (!html) return ''
 
-    // Singleton: reuse the highlighter across prerender calls in the same process
-    if (!cachedHighlighterPromise) {
-      cachedHighlighterPromise = Promise.all([
-        import('shiki'),
-        import('shiki/engine/javascript'),
-      ]).then(([{ createHighlighter }, { createJavaScriptRegexEngine }]) =>
-        createHighlighter({
-          themes: ['github-dark-default'],
-          langs: [...SUPPORTED_LANGS],
-          engine: createJavaScriptRegexEngine({ forgiving: true }),
-        })
-      )
-    }
-    const highlighter = await cachedHighlighterPromise
+  // Singleton: reuse the highlighter across prerender calls in the same process
+  if (!cachedHighlighterPromise) {
+    cachedHighlighterPromise = Promise.all([
+      import('shiki'),
+      import('shiki/engine/javascript'),
+    ]).then(([{ createHighlighter }, { createJavaScriptRegexEngine }]) =>
+      createHighlighter({
+        themes: ['github-dark-default'],
+        langs: [...SUPPORTED_LANGS],
+        engine: createJavaScriptRegexEngine({ forgiving: true }),
+      })
+    )
+  }
+  const highlighter = await cachedHighlighterPromise
 
-    const codeBlockRegex = /<pre><code(?:\s+class="language-(\w+)")?>([\s\S]*?)<\/code><\/pre>/g
-    let result = html
-    const matches = Array.from(html.matchAll(codeBlockRegex))
+  const codeBlockRegex = /<pre><code(?:\s+class="language-(\w+)")?>([\s\S]*?)<\/code><\/pre>/g
+  let result = html
+  const matches = Array.from(html.matchAll(codeBlockRegex))
 
-    for (const match of matches) {
-      const [fullMatch, language = '', code] = match
-      const decodedCode = decodeHtmlEntities(code)
+  for (const match of matches) {
+    const [fullMatch, language = '', code] = match
+    const decodedCode = decodeHtmlEntities(code)
 
-      let detectedLang: SupportedLang = 'shell'
-      if (language && SUPPORTED_LANGS.includes(language as SupportedLang)) {
-        detectedLang = language as SupportedLang
-      } else if (!language) {
-        if (/import|export|const|let|var|class|function|=>|React\.|\(props\)/.test(decodedCode)) {
-          detectedLang = 'javascript'
-        } else if (
-          /\b(npm|npx|yarn|bun|pnpm|cd|ls|git|docker)\b/.test(decodedCode) ||
-          decodedCode.startsWith('$ ')
-        ) {
-          detectedLang = 'bash'
-        } else if (
-          /\btype\s+\w+\s*=/.test(decodedCode) ||
-          /\binterface\s+\w+\s*\{/.test(decodedCode) ||
-          /\bclass\s+\w+\s+(extends|implements)\b/.test(decodedCode) ||
-          /\benum\s+\w+\s*\{/.test(decodedCode)
-        ) {
-          detectedLang = 'typescript'
-        }
-      }
-
-      try {
-        const highlighted = highlighter.codeToHtml(decodedCode, {
-          lang: detectedLang,
-          theme: 'github-dark-default',
-        })
-        result = result.replace(fullMatch, highlighted)
-      } catch {
-        // Fallback: keep original content if highlighting fails
+    let detectedLang: SupportedLang = 'shell'
+    if (language && SUPPORTED_LANGS.includes(language as SupportedLang)) {
+      detectedLang = language as SupportedLang
+    } else if (!language) {
+      if (/import|export|const|let|var|class|function|=>|React\.|\(props\)/.test(decodedCode)) {
+        detectedLang = 'javascript'
+      } else if (
+        /\b(npm|npx|yarn|bun|pnpm|cd|ls|git|docker)\b/.test(decodedCode) ||
+        decodedCode.startsWith('$ ')
+      ) {
+        detectedLang = 'bash'
+      } else if (
+        /\btype\s+\w+\s*=/.test(decodedCode) ||
+        /\binterface\s+\w+\s*\{/.test(decodedCode) ||
+        /\bclass\s+\w+\s+(extends|implements)\b/.test(decodedCode) ||
+        /\benum\s+\w+\s*\{/.test(decodedCode)
+      ) {
+        detectedLang = 'typescript'
       }
     }
 
-    return result
-  })
+    try {
+      const highlighted = highlighter.codeToHtml(decodedCode, {
+        lang: detectedLang,
+        theme: 'github-dark-default',
+      })
+      result = result.replace(fullMatch, highlighted)
+    } catch {
+      // Fallback: keep original content if highlighting fails
+    }
+  }
+
+  return result
+}
 
 function decodeHtmlEntities(text: string): string {
   const entities: Record<string, string> = {
@@ -101,21 +103,21 @@ function decodeHtmlEntities(text: string): string {
     '&#39;': "'",
     '&apos;': "'",
     '&nbsp;': ' ',
-    '&copy;': '\u00A9',
-    '&reg;': '\u00AE',
-    '&trade;': '\u2122',
-    '&euro;': '\u20AC',
-    '&pound;': '\u00A3',
-    '&yen;': '\u00A5',
-    '&hellip;': '\u2026',
-    '&mdash;': '\u2014',
-    '&ndash;': '\u2013',
-    '&laquo;': '\u00AB',
-    '&raquo;': '\u00BB',
-    '&ldquo;': '\u201C',
-    '&rdquo;': '\u201D',
-    '&lsquo;': '\u2018',
-    '&rsquo;': '\u2019',
+    '&copy;': '©',
+    '&reg;': '®',
+    '&trade;': '™',
+    '&euro;': '€',
+    '&pound;': '£',
+    '&yen;': '¥',
+    '&hellip;': '…',
+    '&mdash;': '—',
+    '&ndash;': '–',
+    '&laquo;': '«',
+    '&raquo;': '»',
+    '&ldquo;': '“',
+    '&rdquo;': '”',
+    '&lsquo;': '‘',
+    '&rsquo;': '’',
   }
 
   return text.replace(/&(?:#x([0-9a-fA-F]+)|#(\d+)|(\w+));/g, (entity, hex, dec, named) => {
@@ -125,3 +127,8 @@ function decodeHtmlEntities(text: string): string {
     return entity
   })
 }
+
+// Highlight payloads can be large on client-side navigations, so send them in the request body.
+export const highlightContent = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => highlightInputSchema.parse(data))
+  .handler(async ({ data: { html } }): Promise<string> => highlightContentCore(html))
