@@ -7,11 +7,7 @@ import {
   SITE_FOOTER_TRANSITION_NAME,
 } from '@/lib/viewTransitions'
 
-const elsewhereLinks = [
-  { label: 'GitHub', href: 'https://github.com/YunosukeYoshino' },
-  { label: 'Zenn', href: 'https://zenn.dev/yuche' },
-  { label: 'Qiita', href: 'https://qiita.com/pomufgd' },
-] as const
+const elsewhereLinks = [{ label: 'GitHub', href: 'https://github.com/YunosukeYoshino' }] as const
 
 export default function Footer() {
   const currentYear = getCurrentYear()

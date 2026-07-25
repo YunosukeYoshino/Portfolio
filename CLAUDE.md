@@ -58,8 +58,7 @@ src/
 │   ├── highlight.ts   # Code highlighting via Shiki (createServerFn)
 │   ├── link.ts        # External link utility (target="_blank" handling)
 │   ├── markdown.ts    # Markdown processing utilities
-│   ├── zennRss.ts     # Zenn RSS feed fetcher (createServerFn)
-│   └── qiitaRss.ts    # Qiita Atom feed fetcher with OGP image fetch (createServerFn)
+│   └── articleFeed.ts # Source adapters + pagination for the article feed
 └── types/             # Shared type definitions (domain re-exports)
 ```
 
@@ -68,15 +67,13 @@ src/
 - `src/domain/` - Domain layer (no external dependencies)
 - `src/hooks/` - Custom hooks (article filtering, debounce)
 - `src/lib/microcms.ts` - Backward-compatible facade (@deprecated)
-- `src/lib/zennRss.ts` - Zenn RSS feed fetcher
-- `src/lib/qiitaRss.ts` - Qiita Atom feed fetcher (fetches OGP image per article)
 - `vite.config.ts` - Prerender/SSG configuration
 
 ## Important Patterns
 
 ### Data Fetching
 - **loader**: Server-side fetch via TanStack Router loader
-- **createServerFn**: Server functions for secure API key handling (e.g., `src/lib/highlight.ts`, `src/lib/zennRss.ts`)
+- **createServerFn**: Server functions for secure API key handling (e.g., `src/lib/highlight.ts`, `src/lib/markdown.ts`)
 - Reference: `src/routes/article/$slug.tsx` (loader + createServerFn example)
 
 ### Tailwind CSS v4
@@ -118,13 +115,11 @@ import { createUseCases } from '@/infrastructure/di'
 const testUseCases = createUseCases(fakeBlogRepository)
 ```
 
-### Zenn / Qiita RSS Integration
-Fetches articles from RSS/Atom feeds and displays them alongside microCMS articles.
-- `src/lib/zennRss.ts` - Zenn RSS (RSS format: `<item>`, thumbnail from enclosure tag)
-- `src/lib/qiitaRss.ts` - Qiita Atom (Atom format: `<entry>`; fetches og:image from each article HTML)
-- `ArticleFeedItem` in `src/types/index.ts` distinguishes sources via `source: 'microcms' | 'zenn' | 'qiita'`
+### Article Feed
+microCMS is currently the only article source. `src/lib/articleFeed.ts` keeps a
+`ArticleSourceAdapter` seam so another source can be added without touching the routes.
+- `ArticleFeedItem` in `src/types/index.ts` tags each item via `source: 'microcms'`
 - External link detection uses `externalUrl` presence, not source name (`Blog.tsx`)
-- imgix transform params (`?w=800&fm=webp`) are only applied to microCMS-hosted images
 
 ### Prerendering
 See prerender configuration in `vite.config.ts`.
