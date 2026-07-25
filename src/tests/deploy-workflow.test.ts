@@ -4,14 +4,6 @@ import { resolve } from 'node:path'
 
 const workflowPath = resolve(import.meta.dir, '../../.github/workflows/deploy-gh-pages.yml')
 const workflowSource = readFileSync(workflowPath, 'utf8')
-const viteConfigPath = resolve(import.meta.dir, '../../vite.config.ts')
-const viteConfigSource = readFileSync(viteConfigPath, 'utf8')
-const wranglerConfigPath = resolve(import.meta.dir, '../../wrangler.toml')
-const wranglerConfigSource = readFileSync(wranglerConfigPath, 'utf8')
-const contactApiRoutePath = resolve(import.meta.dir, '../routes/api/contact.ts')
-const contactApiRouteSource = readFileSync(contactApiRoutePath, 'utf8')
-const workerPath = resolve(import.meta.dir, '../worker.ts')
-const workerSource = readFileSync(workerPath, 'utf8')
 
 describe('deploy workflow verification target', () => {
   it('デプロイ直後の asset 検証は custom domain を使う', () => {
@@ -28,29 +20,9 @@ describe('deploy workflow verification target', () => {
     expect(workflowSource).toContain('Sync worker secrets')
     expect(workflowSource).toContain('wrangler secret bulk .worker-secrets.env')
   })
-})
 
-describe('cloudflare workers hosting configuration', () => {
-  it('Vite config uses the Cloudflare plugin before TanStack Start', () => {
-    expect(viteConfigSource).toContain("import { cloudflare } from '@cloudflare/vite-plugin'")
-    expect(viteConfigSource).toContain("cloudflare({ viteEnvironment: { name: 'ssr' } })")
-  })
-
-  it('Wrangler config targets the custom worker that wraps the TanStack Start entry', () => {
-    expect(wranglerConfigSource).toContain('main = "src/worker.ts"')
-    expect(workerSource).toContain("import handler from '@tanstack/react-start/server-entry'")
-    expect(wranglerConfigSource).toContain(
-      'compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]'
-    )
-  })
-
-  it('static assets are served from the client build output', () => {
-    expect(wranglerConfigSource).toContain('directory = "./dist/client"')
-  })
-
-  it('contact API is implemented as a TanStack Start server route', () => {
-    expect(contactApiRouteSource).toContain("createFileRoute('/api/contact')")
-    expect(contactApiRouteSource).toContain('POST: async ({ request }) => {')
-    expect(contactApiRouteSource).toContain('OPTIONS: async () => {')
+  it('Astro ビルド成果物（dist/server/wrangler.json）経由でデプロイする', () => {
+    expect(workflowSource).toContain('bun run build')
+    expect(workflowSource).toContain('dist/server/wrangler.json')
   })
 })

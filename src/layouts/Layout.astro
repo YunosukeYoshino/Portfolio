@@ -2,7 +2,12 @@
 import '../globals.css'
 import Footer from '../components/layout/Footer.astro'
 import Header from '../components/layout/Header.astro'
-import { DEFAULT_OG_IMAGE_URL, toCanonicalUrl } from '@/lib/siteMetadata'
+import {
+  DEFAULT_OG_IMAGE_URL,
+  GA_TRACKING_ID,
+  GOOGLE_SITE_VERIFICATION,
+  toCanonicalUrl,
+} from '@/lib/siteMetadata'
 
 interface Props {
   /** Render the site name as the page h1. Only the index page should set this. */
@@ -47,9 +52,25 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImage} />
+    <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />
     {/* LLM クライアント向けの発見手がかり（HTTP Link ヘッダの静的ルート代替） */}
     <link rel="api-catalog" href="/.well-known/api-catalog" />
     <link rel="describedby" type="application/xml" href="/sitemap.xml" />
+    {GA_TRACKING_ID && (
+      <Fragment>
+        <script
+          is:inline
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        />
+        <script is:inline define:vars={{ GA_TRACKING_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {{ dataLayer.push(arguments); }}
+          gtag('js', new Date());
+          gtag('config', GA_TRACKING_ID);
+        </script>
+      </Fragment>
+    )}
   </head>
   <body>
     <div class="measure relative z-[2] pt-[var(--pagetop)] pb-[var(--pagebottom)]">

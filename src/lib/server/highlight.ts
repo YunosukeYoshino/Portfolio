@@ -1,10 +1,3 @@
-import { createServerFn } from '@tanstack/react-start'
-import { z } from 'zod'
-
-const highlightInputSchema = z.object({
-  html: z.string(),
-})
-
 const SUPPORTED_LANGS = [
   'javascript',
   'typescript',
@@ -20,9 +13,6 @@ const SUPPORTED_LANGS = [
 
 type SupportedLang = (typeof SUPPORTED_LANGS)[number]
 
-// Null ref at module level - harmless on the client.
-// The actual Shiki imports live inside the handler body which
-// TanStack Start strips from the client bundle entirely.
 // Workers cannot initialize the default WASM engine from binary data,
 // so use Shiki's JavaScript regex engine instead.
 // biome-ignore lint/suspicious/noExplicitAny: Shiki type only available server-side
@@ -31,7 +21,7 @@ let cachedHighlighterPromise: Promise<any> | null = null
 /**
  * Framework-agnostic core.
  * HTML 中の <pre><code> ブロックを Shiki でハイライトする。
- * TanStack server fn と Astro ビルド時描画の双方から呼ばれる。
+ * Astro のビルド時描画から呼ばれる。
  */
 export async function highlightContentCore(html: string): Promise<string> {
   if (!html) return ''
@@ -127,8 +117,3 @@ function decodeHtmlEntities(text: string): string {
     return entity
   })
 }
-
-// Highlight payloads can be large on client-side navigations, so send them in the request body.
-export const highlightContent = createServerFn({ method: 'POST' })
-  .inputValidator((data: unknown) => highlightInputSchema.parse(data))
-  .handler(async ({ data: { html } }): Promise<string> => highlightContentCore(html))

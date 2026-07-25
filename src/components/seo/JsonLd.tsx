@@ -1,25 +1,5 @@
 import { DEFAULT_SITE_DESCRIPTION, SITE_NAME, SITE_URL, toCanonicalUrl } from '@/lib/siteMetadata'
 
-interface JsonLdProps {
-  data: Record<string, unknown>
-}
-
-function sanitizeJsonLd(obj: Record<string, unknown>): string {
-  return JSON.stringify(obj, null, 2).replace(/</g, '\\u003c')
-}
-
-export default function JsonLd({ data }: JsonLdProps) {
-  return (
-    <script
-      type="application/ld+json"
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires dangerouslySetInnerHTML for structured data
-      dangerouslySetInnerHTML={{
-        __html: sanitizeJsonLd(data),
-      }}
-    />
-  )
-}
-
 // Structured data generators
 export const createPersonSchema = () => ({
   '@context': 'https://schema.org',
