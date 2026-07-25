@@ -85,7 +85,7 @@ describe('Header heading level', () => {
       Link: createMockLink,
     }))
 
-    const { default: Header } = await import('../components/layout/Header')
+    const { default: Header } = await import('../layout/Header')
 
     await renderNode(
       React.createElement(Header as React.ComponentType<{ siteRoot?: boolean }>, {
@@ -104,7 +104,7 @@ describe('Header heading level', () => {
       Link: createMockLink,
     }))
 
-    const { default: Header } = await import('../components/layout/Header')
+    const { default: Header } = await import('../layout/Header')
     await renderNode(React.createElement(Header as React.ComponentType))
 
     expect(container?.querySelector('a')?.getAttribute('href')).toBe('/')
@@ -114,7 +114,7 @@ describe('Header heading level', () => {
 describe('PaginationNav rendering', () => {
   it('props の誤用を runtime throw ではなく型で防ぐ', () => {
     const paginationSource = readFileSync(
-      resolve(import.meta.dir, '../components/article/PaginationNav.tsx'),
+      resolve(import.meta.dir, '../article/PaginationNav.tsx'),
       'utf8'
     )
 
@@ -128,7 +128,7 @@ describe('PaginationNav rendering', () => {
 describe('Article detail navigation on workers hosting', () => {
   it('ArticleLink keeps SPA navigation enabled for view transitions', () => {
     const articleLinkSource = readFileSync(
-      resolve(import.meta.dir, '../components/article/ArticleLink.tsx'),
+      resolve(import.meta.dir, '../article/ArticleLink.tsx'),
       'utf8'
     )
 

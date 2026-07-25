@@ -53,12 +53,13 @@ src/
 │   ├── seo/           # GoogleAnalytics, JsonLd
 │   └── forms/         # ContactForm
 ├── lib/
-│   ├── microcms.ts    # Backward-compatible facade (@deprecated)
+│   ├── server/        # createServerFn modules (highlight.ts, markdown.ts)
+│   ├── microcms.ts    # Backward-compatible facade (@deprecated, createServerFn)
 │   ├── utils.ts       # cn(), formatDate(), formatDateEditorial()
-│   ├── highlight.ts   # Code highlighting via Shiki (createServerFn)
 │   ├── link.ts        # External link utility (target="_blank" handling)
-│   ├── markdown.ts    # Markdown processing utilities
 │   └── articleFeed.ts # Source adapters + pagination for the article feed
+├── server/            # Worker-only code (markdown/ serves llms-style responses)
+├── tests/             # Repo-wide config tests only (see Testing below)
 └── types/             # Shared type definitions (domain re-exports)
 ```
 
@@ -67,7 +68,13 @@ src/
 - `src/domain/` - Domain layer (no external dependencies)
 - `src/hooks/` - Custom hooks (article filtering, debounce)
 - `src/lib/microcms.ts` - Backward-compatible facade (@deprecated)
+- `src/server/markdown/home.ts` - Homepage markdown for LLM clients; keep in sync with `src/routes/index.tsx`
 - `vite.config.ts` - Prerender/SSG configuration
+
+## Testing
+- Module-level tests colocate in a sibling `__tests__/` (`src/lib/__tests__/`, `src/components/__tests__/`, `src/routes/__tests__/`, `src/hooks/__tests__/`)
+- `src/tests/` holds only repo-wide config tests that span wrangler/CI/vite
+- Run with `bun test`
 
 ## Important Patterns
 
