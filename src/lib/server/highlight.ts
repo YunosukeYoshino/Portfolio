@@ -1,3 +1,5 @@
+import type { Highlighter } from 'shiki'
+
 const SUPPORTED_LANGS = [
   'javascript',
   'typescript',
@@ -13,10 +15,13 @@ const SUPPORTED_LANGS = [
 
 type SupportedLang = (typeof SUPPORTED_LANGS)[number]
 
+function isSupportedLang(value: string): value is SupportedLang {
+  return (SUPPORTED_LANGS as readonly string[]).includes(value)
+}
+
 // Workers cannot initialize the default WASM engine from binary data,
 // so use Shiki's JavaScript regex engine instead.
-// biome-ignore lint/suspicious/noExplicitAny: Shiki type only available server-side
-let cachedHighlighterPromise: Promise<any> | null = null
+let cachedHighlighterPromise: Promise<Highlighter> | null = null
 
 /**
  * Framework-agnostic core.
@@ -50,8 +55,8 @@ export async function highlightContentCore(html: string): Promise<string> {
     const decodedCode = decodeHtmlEntities(code)
 
     let detectedLang: SupportedLang = 'shell'
-    if (language && SUPPORTED_LANGS.includes(language as SupportedLang)) {
-      detectedLang = language as SupportedLang
+    if (language && isSupportedLang(language)) {
+      detectedLang = language
     } else if (!language) {
       if (/import|export|const|let|var|class|function|=>|React\.|\(props\)/.test(decodedCode)) {
         detectedLang = 'javascript'
