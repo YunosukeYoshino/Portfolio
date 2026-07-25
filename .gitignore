@@ -63,6 +63,8 @@ settings.local.json
 
 .harness
 skills-lock.json
+.claude/.headroom_wrap_marker.json
+.scratch/
 
 
 ## plan
