@@ -1,0 +1,114 @@
+---
+import type { GetStaticPaths } from 'astro'
+import { getCollection } from 'astro:content'
+import PaginationNav from '@/components/article/PaginationNav.astro'
+import Layout from '@/layouts/Layout.astro'
+import type { ArticleFeedItem } from '@/types'
+import {
+  buildArticleFeed,
+  getArticleFeedPage,
+  microcmsArticleSourceAdapter,
+} from '@/lib/articleFeed'
+import { formatDateEditorial } from '@/lib/utils'
+
+interface PageProps {
+  readonly items: readonly ArticleFeedItem[]
+  readonly currentPage: number
+  readonly totalPages: number
+  readonly totalCount: number
+}
+
+export const getStaticPaths = (async () => {
+  const PER_PAGE = 12
+  const entries = await getCollection('articles')
+  const articles = buildArticleFeed([
+    {
+      adapter: microcmsArticleSourceAdapter,
+      items: entries.map((entry) => entry.data),
+    },
+  ])
+  const totalPages = Math.max(1, Math.ceil(articles.length / PER_PAGE))
+
+  return Array.from({ length: totalPages }, (_, index) => {
+    const currentPage = index + 1
+    const page = getArticleFeedPage(articles, currentPage, PER_PAGE)
+    return {
+      params: { page: String(currentPage) },
+      props: {
+        items: page.items,
+        currentPage,
+        totalPages,
+        totalCount: page.totalCount,
+      } satisfies PageProps,
+    }
+  })
+}) satisfies GetStaticPaths
+
+const { items, currentPage, totalPages } = Astro.props as PageProps
+
+const pageTitle =
+  currentPage === 1
+    ? 'Writing | Yunosuke Yoshino'
+    : `Writing — Page ${currentPage} | Yunosuke Yoshino`
+const description =
+  'フロントエンド開発、UI/UXデザイン、モダンなWeb技術についての記事。'
+const getPageHref = (page: number) => `/article/page/${page}`
+---
+
+<Layout
+  title={pageTitle}
+  description={description}
+  robots={currentPage > 1 ? 'noindex, follow' : undefined}
+>
+  <section class="mb-[var(--sectiongap)]">
+    <header class="mb-10">
+      <h1 class="label-mono mb-5">{currentPage === 1 ? 'Writing' : `Writing — Page ${currentPage}`}</h1>
+      <p class="text-base text-ink-body">
+        フロントエンド開発、UI/UXデザイン、モダンなWeb技術についての記事。
+      </p>
+    </header>
+
+    {
+      items.length === 0 ? (
+        <p class="note-row">記事がありません</p>
+      ) : (
+        <ul class="mb-12">
+          {items.map((item) => {
+            const isInternal = !item.externalUrl
+            const href = item.externalUrl ?? `/article/${item.id}`
+            return (
+              <li>
+                <a
+                  class="rule-row flex items-baseline justify-between gap-4 py-[var(--rowpad-sm)] transition-opacity hover:opacity-60"
+                  href={href}
+                  {...(!isInternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  <span class="flex min-w-0 items-baseline gap-2">
+                    <span class="truncate text-base font-medium">{item.title}</span>
+                    <span class="text-[15px] text-ink-soft">— {item.category.name}</span>
+                  </span>
+                  <span class="meta-mono whitespace-nowrap">
+                    {formatDateEditorial(item.publishedAt)}
+                    {!isInternal ? ' ↗' : ''}
+                  </span>
+                </a>
+              </li>
+            )
+          })}
+          <li aria-hidden="true" class="border-t border-rule" />
+        </ul>
+      )
+    }
+
+    {
+      totalPages > 1 && (
+        <PaginationNav
+          currentPage={currentPage}
+          totalPages={totalPages}
+          ariaLabel="ページネーション"
+          getPageHref={getPageHref}
+        />
+      )
+    }
+  </section>
+</Layout>
