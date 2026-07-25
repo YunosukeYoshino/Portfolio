@@ -11,27 +11,22 @@ const works = [
   {
     title: 'Building AI Agents & MCP Servers',
     year: '2026',
-    url: 'https://github.com/YunosukeYoshino',
   },
   {
     title: 'Building Agent Skill Management App',
     year: '2025',
-    url: 'https://github.com/YunosukeYoshino/my-skills',
   },
   {
     title: 'WebGL & Astro Personal Portfolio Site',
     year: '2025',
-    url: 'https://yunosukeyoshino.com',
   },
   {
     title: 'Internal Business Application with React & Next.js',
     year: '2024',
-    url: 'https://github.com/YunosukeYoshino',
   },
   {
     title: 'Custom E-Commerce Storefront with Shopify',
     year: '2023',
-    url: 'https://github.com/YunosukeYoshino',
   },
 ] as const
 ---
@@ -55,15 +50,9 @@ const works = [
   </section>
 
   <section class="mb-[var(--sectiongap)]">
-    <h2 class="label-mono mb-5">Selected Works</h2>
     <div class="flex flex-col project-list">
       {works.map((work) => (
-        <a
-          href={work.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="project-item group block w-full py-2 transition-all duration-300"
-        >
+        <div class="project-item group block w-full py-2 transition-all duration-300">
           <div class="flex items-center gap-3 not-italic">
             <span class="text-base font-serif italic text-ink-body group-hover:text-ink transition-colors duration-150">
               {work.title}
@@ -75,7 +64,7 @@ const works = [
               {work.year}
             </span>
           </div>
-        </a>
+        </div>
       ))}
     </div>
   </section>
