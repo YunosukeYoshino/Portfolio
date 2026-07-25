@@ -1,7 +1,7 @@
 import { createRootRoute, HeadContent, Link, Outlet, Scripts } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { WebMCPProvider } from '@/components/effects/WebMCPProvider'
 import SitePage from '@/components/layout/SitePage'
+import { WebMCPProvider } from '@/components/providers/WebMCPProvider'
 import GoogleAnalytics from '@/components/seo/GoogleAnalytics'
 import appCss from '@/globals.css?url'
 import {

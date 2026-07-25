@@ -49,7 +49,7 @@ src/
 │   ├── layout/        # SitePage (page shell), Header, Footer, Breadcrumb
 │   ├── common/        # RuleList/RuleRowBody (hairline rows), HydratedEmail
 │   ├── article/       # Blog, CodeHighlight, ArticleCta, ArticleLink, ArticleSearchBar, PaginationNav
-│   ├── effects/       # WebMCPProvider
+│   ├── providers/     # WebMCPProvider
 │   ├── seo/           # GoogleAnalytics, JsonLd
 │   └── forms/         # ContactForm
 ├── lib/
