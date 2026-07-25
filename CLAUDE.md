@@ -21,7 +21,7 @@ Personal portfolio site that fetches blog articles from microCMS and showcases s
 
 ## Key Commands
 ```
-bun run dev             # Dev server -> http://portfolio.localhost (portless)
+bun run dev             # Dev server -> https://portfolio.localhost (portless)
 bun run build           # Production build
 bun run lint            # Biome + TypeScript + Markuplint
 bun run fix             # Auto-fix
@@ -46,21 +46,20 @@ src/
 ├── hooks/             # Custom hooks (useArticleFilter, useDebounce, articleFilterLogic)
 ├── routes/            # TanStack Router pages and layouts
 ├── components/        # React components
-│   ├── layout/        # Header, Footer, Breadcrumb
-│   ├── sections/      # HeroSection, AboutSection, WorksSection, ArticlesSection, SkillsMarquee
-│   ├── article/       # ArticleItem, ArticlesHoverEffect, Blog, CodeHighlight, ArticleCta, ArticleLink, ArticleSearchBar
-│   ├── effects/       # CustomCursor, NoiseOverlay, WebGLBackground, SplitText, TextScramble, MagneticButton
-│   ├── providers/     # LenisProvider, ClientLoader
+│   ├── layout/        # SitePage (page shell), Header, Footer, Breadcrumb
+│   ├── common/        # RuleList/RuleRowBody (hairline rows), HydratedEmail
+│   ├── article/       # Blog, CodeHighlight, ArticleCta, ArticleLink, ArticleSearchBar, PaginationNav
+│   ├── providers/     # WebMCPProvider
 │   ├── seo/           # GoogleAnalytics, JsonLd
 │   └── forms/         # ContactForm
 ├── lib/
-│   ├── microcms.ts    # Backward-compatible facade (@deprecated)
-│   ├── utils.ts       # cn(), formatDate()
-│   ├── highlight.ts   # Code highlighting via Shiki (createServerFn)
+│   ├── server/        # createServerFn modules (highlight.ts, markdown.ts)
+│   ├── microcms.ts    # Backward-compatible facade (@deprecated, createServerFn)
+│   ├── utils.ts       # cn(), formatDate(), formatDateEditorial()
 │   ├── link.ts        # External link utility (target="_blank" handling)
-│   ├── markdown.ts    # Markdown processing utilities
-│   ├── zennRss.ts     # Zenn RSS feed fetcher (createServerFn)
-│   └── qiitaRss.ts    # Qiita Atom feed fetcher with OGP image fetch (createServerFn)
+│   └── articleFeed.ts # Source adapters + pagination for the article feed
+├── server/            # Worker-only code (markdown/ serves llms-style responses)
+├── tests/             # Repo-wide config tests only (see Testing below)
 └── types/             # Shared type definitions (domain re-exports)
 ```
 
@@ -69,21 +68,39 @@ src/
 - `src/domain/` - Domain layer (no external dependencies)
 - `src/hooks/` - Custom hooks (article filtering, debounce)
 - `src/lib/microcms.ts` - Backward-compatible facade (@deprecated)
-- `src/lib/zennRss.ts` - Zenn RSS feed fetcher
-- `src/lib/qiitaRss.ts` - Qiita Atom feed fetcher (fetches OGP image per article)
+- `src/server/markdown/home.ts` - Homepage markdown for LLM clients; keep in sync with `src/routes/index.tsx`
 - `vite.config.ts` - Prerender/SSG configuration
+
+## Testing
+- Module-level tests colocate in a sibling `__tests__/` (`src/lib/__tests__/`, `src/components/__tests__/`, `src/routes/__tests__/`, `src/hooks/__tests__/`)
+- `src/tests/` holds only repo-wide config tests that span wrangler/CI/vite
+- Run with `bun test`
 
 ## Important Patterns
 
 ### Data Fetching
 - **loader**: Server-side fetch via TanStack Router loader
-- **createServerFn**: Server functions for secure API key handling (e.g., `src/lib/highlight.ts`, `src/lib/zennRss.ts`)
+- **createServerFn**: Server functions for secure API key handling (e.g., `src/lib/server/highlight.ts`, `src/lib/server/markdown.ts`)
 - Reference: `src/routes/article/$slug.tsx` (loader + createServerFn example)
 
 ### Tailwind CSS v4
 Breaking changes from v3. See `src/globals.css`.
 - Define CSS variables with `@theme` directive
 - Load plugins with `@plugin`
+
+### Design System (editorial paper theme)
+Single-column editorial layout on a Manila-paper surface. No WebGL, custom cursor,
+marquee, or scroll-driven animation — motion is limited to View Transitions.
+- **Colors**: `paper` / `ink` / `ink-body` / `ink-soft` / `ink-label` / `ink-faint` /
+  `rule` / `rule-strong` / `carbon` (code blocks) / `alert` / `affirm`
+- **Fonts**: Inter (body) + JetBrains Mono (labels and meta) only
+- **Rhythm**: `--measure` (760px), `--gutter`, `--pagetop`, `--sectiongap`,
+  `--rowpad` / `--rowpad-sm` — all narrowed at `max-width: 767px`
+- **Utilities**: `.measure` (page column), `.label-mono` (section heading),
+  `.meta-mono` (trailing meta), `.rule-row` (hairline grid row), `.lnk` (underlined link)
+- Every page renders inside `SitePage`; only `/` passes `siteRoot` so the site name is the `h1`
+- Paper grain and vignette are `body::before` / `body::after` (`z-index: 1`);
+  page content sits at `z-index: 2`
 
 ### microCMS Integration (Clean Architecture)
 **Recommended**: Use `useCases` directly
@@ -105,19 +122,17 @@ import { createUseCases } from '@/infrastructure/di'
 const testUseCases = createUseCases(fakeBlogRepository)
 ```
 
-### Zenn / Qiita RSS Integration
-Fetches articles from RSS/Atom feeds and displays them alongside microCMS articles.
-- `src/lib/zennRss.ts` - Zenn RSS (RSS format: `<item>`, thumbnail from enclosure tag)
-- `src/lib/qiitaRss.ts` - Qiita Atom (Atom format: `<entry>`; fetches og:image from each article HTML)
-- `ArticleFeedItem` in `src/types/index.ts` distinguishes sources via `source: 'microcms' | 'zenn' | 'qiita'`
+### Article Feed
+microCMS is currently the only article source. `src/lib/articleFeed.ts` keeps a
+`ArticleSourceAdapter` seam so another source can be added without touching the routes.
+- `ArticleFeedItem` in `src/types/index.ts` tags each item via `source: 'microcms'`
 - External link detection uses `externalUrl` presence, not source name (`Blog.tsx`)
-- imgix transform params (`?w=800&fm=webp`) are only applied to microCMS-hosted images
 
 ### Prerendering
 See prerender configuration in `vite.config.ts`.
 
 ### Form Validation
-Zod + react-hook-form pattern. See `src/components/ContactForm.tsx`.
+Zod + react-hook-form pattern. See `src/components/forms/ContactForm.tsx`.
 
 ## Code Quality
 Biome + TypeScript strict mode. See `biome.json` for configuration.

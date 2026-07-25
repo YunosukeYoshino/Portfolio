@@ -4,45 +4,33 @@ export const homeMarkdown = `# Yunosuke Yoshino — Portfolio
 
 ## About
 
-I am Yunosuke Yoshino, a multidisciplinary creator. I build digital products that blend technical precision with visual elegance.
+I design and build front-ends with React, Astro, JavaScript and TypeScript. Previously in apparel retail; now writing code in Tokyo.
 
-Born in 1995 in Hiroshima, Japan. I transitioned from apparel retail into web development and now work in Tokyo, specialising in front-end development for e-commerce sites and delivering continuous improvement proposals backed by data analysis.
+Born in 1995 in Hiroshima, Japan. I specialise in front-end development for e-commerce sites and deliver continuous improvement proposals backed by data analysis, writing maintainable and scalable code.
 
-I write maintainable, scalable code with React and Next.js, and I'm also researching AI agent construction, Dify, and n8n-based workflow automation in my spare time.
+I also drive AI agentic coding — combining Claude, Codex, Dify and n8n — to improve both product development itself and internal business processes.
 
 - **Location**: Tokyo, Japan
-- **Specialisation**: Front-end development (e-commerce focus)
+- **Specialisation**: Front-end development (e-commerce focus), AI agentic coding
 - **Contact**: [Contact form](https://yunosukeyoshino.com/contact)
 
-## Selected Works (2023 — 2025)
+## Work
 
-### YUNOSUKE Portfolio
-Category: Design / WebGL
-My personal portfolio site, combining WebGL backgrounds, GSAP-driven scroll animations and smooth view transitions.
+Things I have worked on, most recent first:
 
-### Corporate Renewal
-Category: Frontend / Jamstack
-A full corporate site renewal using a Jamstack architecture for performance and maintainability.
-
-### E-Commerce Platform
-Category: React / Next.js
-Headless commerce implementation with a modern React front-end, focused on conversion optimisation.
-
-### Nanatau
-Category: Blog / Content
-A personal blog at [blog.nanatau.com](https://blog.nanatau.com).
+- WebGL & motion personal site (2025)
+- Jamstack corporate rebuild (2024)
+- Headless commerce frontend (2024)
 
 ## Skills
 
-- UI/UX Design
-- Creative Development
-- WebGL
-- React / Next.js
-- Interaction Design
+- React / Astro
+- TypeScript / JavaScript
 - TanStack Start / React Router
-- TypeScript
 - Tailwind CSS
-- Cloudflare Workers / Pages
+- AI agentic coding (Claude, Codex)
+- Workflow automation (Dify, n8n)
+- Cloudflare Workers
 
 ## Articles
 

@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { RuleList } from '@/components/common/RuleList'
 import SitePage from '@/components/layout/SitePage'
 import JsonLd, { createBreadcrumbSchema, createPersonSchema } from '@/components/seo/JsonLd'
 import { createStandardHead } from '@/lib/siteMetadata'
@@ -9,7 +10,7 @@ export const Route = createFileRoute('/about')({
       title: 'About｜Yunosuke Yoshino',
       path: '/about',
       description:
-        'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Next.jsを活用したモダンなWeb開発と、AIエージェント構築による業務自動化に取り組んでいます。',
+        'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Astroを活用したモダンなWeb開発と、AIエージェンティックコーディングによる業務自動化に取り組んでいます。',
     }),
   component: AboutPage,
 })
@@ -36,7 +37,7 @@ const timelineData = [
     year: '2023 - Present',
     title: 'Frontend Engineer',
     description:
-      '東京を拠点に、ReactやNext.jsを活用したモダンなフロントエンド開発に特化。ビジネス要件に基づいたUI/UXの改善提案や、Dify、n8nを用いたAIエージェントによる業務自動化など、幅広い技術領域で価値提供を行う。',
+      '東京を拠点に、ReactやAstroを活用したモダンなフロントエンド開発に特化。ビジネス要件に基づいたUI/UXの改善提案に加え、ClaudeやCodex、Dify、n8nを組み合わせたAIエージェンティックコーディングで開発と業務改善を推進する。',
   },
 ]
 
@@ -51,45 +52,34 @@ function AboutPage() {
     <>
       <JsonLd data={personSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <SitePage noiseOverlay mainClassName="min-h-screen bg-[#F3F3F1] pt-32 pb-24">
-        <div className="max-w-4xl mx-auto px-6 md:px-12">
-          {/* Header */}
-          <div className="mb-20">
-            <span className="text-xs font-mono uppercase tracking-widest border-b border-black/20 pb-2 inline-block text-gray-500 mb-8">
-              About
-            </span>
-            <h1 className="text-5xl md:text-7xl font-display font-medium leading-tight mb-8">
-              My Journey
-            </h1>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-2xl font-mono">
-              アパレル販売からフロントエンドエンジニアへ。技術の探求と、より良いユーザー体験の実現を目指して歩んできた道のり。
-            </p>
-          </div>
+      <SitePage>
+        <section className="mb-[var(--sectiongap)]">
+          <h1 className="label-mono mb-5">About</h1>
+          <p className="mb-4 text-base text-ink-body">
+            1995年生まれ、広島出身。アパレル販売の現場からウェブ開発の世界へと転身し、現在は東京を拠点に活動しています。ECサイトを中心としたフロントエンド開発に特化し、データ分析に基づく継続的な改善提案を行っています。
+          </p>
+          <p className="text-base text-ink-body">
+            ReactやAstroといったモダンなフレームワークを活用し、保守性と拡張性を重視したコードを書くことを大切にしています。近年はClaudeやCodex、Dify、n8nを組み合わせたAIエージェンティックコーディングを推進し、プロダクト開発と業務改善の両方に取り組んでいます。
+          </p>
+        </section>
 
-          {/* Timeline UI */}
-          <div className="relative border-l border-black/20 md:ml-0 md:pl-12 ml-4 pl-8">
+        <section className="mb-[var(--sectiongap)]">
+          <h2 className="label-mono mb-5">Timeline</h2>
+          <RuleList>
             {timelineData.map((item) => (
-              <div key={item.year} className="mb-16 relative">
-                {/* Timeline dot */}
-                <div className="absolute w-3 h-3 bg-black rounded-full -left-[38px] md:-left-[54px] top-1.5" />
-
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 hover-trigger">
-                  <div className="md:col-span-1">
-                    <span className="text-sm font-mono text-gray-500 font-bold tracking-widest uppercase">
-                      {item.year}
-                    </span>
-                  </div>
-                  <div className="md:col-span-3">
-                    <h2 className="text-2xl font-display font-medium mb-4">{item.title}</h2>
-                    <p className="text-gray-600 leading-relaxed font-mono text-sm md:text-base">
-                      {item.description}
-                    </p>
-                  </div>
+              <div
+                key={item.year}
+                className="grid grid-cols-1 gap-2 border-t border-rule py-[var(--rowpad)] sm:grid-cols-[100px_1fr] sm:gap-6"
+              >
+                <span className="meta-mono sm:pt-0.5">{item.year}</span>
+                <div>
+                  <h3 className="mb-2 text-base font-medium">{item.title}</h3>
+                  <p className="text-[15px] text-ink-soft">{item.description}</p>
                 </div>
               </div>
             ))}
-          </div>
-        </div>
+          </RuleList>
+        </section>
       </SitePage>
     </>
   )

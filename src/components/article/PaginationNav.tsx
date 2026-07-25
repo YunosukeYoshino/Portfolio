@@ -32,31 +32,23 @@ interface PaginationControlProps {
   readonly ariaLabel?: string
 }
 
-const activeClass = 'bg-black text-white border-black'
-const inactiveClass =
-  'border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black'
-const baseClass = 'px-4 py-2 border font-medium transition-all duration-300'
-const navClass =
-  'px-4 py-2 border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300'
+const activeClass = 'text-ink underline underline-offset-4'
+const inactiveClass = 'text-ink-label hover:text-ink'
+const baseClass = 'font-mono text-[13px] transition-colors'
+const navClass = 'font-mono text-[13px] text-ink-label transition-colors hover:text-ink'
 
-const prevArrow = (
-  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-  </svg>
-)
-
-const nextArrow = (
-  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-  </svg>
-)
+const prevArrow = <span aria-hidden="true">←</span>
+const nextArrow = <span aria-hidden="true">→</span>
 
 export default function PaginationNav(props: PaginationNavProps) {
   const { currentPage, totalPages, ariaLabel } = props
   const model = buildPaginationModel({ currentPage, totalPages })
 
   const renderNav = (renderControl: (props: PaginationControlProps) => ReactNode) => (
-    <nav className="flex items-center justify-center space-x-2" aria-label={ariaLabel}>
+    <nav
+      className="flex items-center justify-center gap-4 border-t border-rule pt-8"
+      aria-label={ariaLabel}
+    >
       {model.hasPrevious && model.previousPage !== null
         ? renderControl({
             page: model.previousPage,
@@ -73,7 +65,7 @@ export default function PaginationNav(props: PaginationNavProps) {
             className: `${baseClass} ${inactiveClass}`,
             children: 1,
           })}
-          {model.hasLeadingEllipsis ? <span className="px-2 text-gray-400">...</span> : null}
+          {model.hasLeadingEllipsis ? <span className="meta-mono">…</span> : null}
         </>
       ) : null}
 
@@ -90,7 +82,7 @@ export default function PaginationNav(props: PaginationNavProps) {
 
       {model.showLastPage ? (
         <>
-          {model.hasTrailingEllipsis ? <span className="px-2 text-gray-400">...</span> : null}
+          {model.hasTrailingEllipsis ? <span className="meta-mono">…</span> : null}
           {renderControl({
             page: totalPages,
             className: `${baseClass} ${inactiveClass}`,

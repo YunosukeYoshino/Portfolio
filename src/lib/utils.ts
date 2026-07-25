@@ -33,6 +33,19 @@ export function formatDateCompact(dateString: string): string {
   return `${year}.${month.padStart(2, '0')}.${day.padStart(2, '0')}`
 }
 
+const editorialDateFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: TOKYO_TIME_ZONE,
+  year: 'numeric',
+  month: 'short',
+})
+
+/** Trailing meta for hairline rows, e.g. "Nov 2025". Empty for an unparsable date. */
+export function formatDateEditorial(dateString: string): string {
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) return ''
+  return editorialDateFormatter.format(date)
+}
+
 export function getCurrentYear(): string {
   return new Intl.DateTimeFormat('en-US', {
     timeZone: TOKYO_TIME_ZONE,

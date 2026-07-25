@@ -2,7 +2,7 @@ export const SITE_URL = 'https://yunosukeyoshino.com'
 export const SITE_NAME = 'Yunosuke Yoshino Portfolio'
 export const DEFAULT_SITE_TITLE = 'Yunosuke Yoshino｜Portfolio'
 export const DEFAULT_SITE_DESCRIPTION =
-  'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Next.js, TypeScriptを専門とし、ECサイトを中心としたモダンなWeb開発と技術記事を発信しています。'
+  'フロントエンドエンジニア Yunosuke Yoshinoのポートフォリオサイト。React, Astro, TypeScriptを軸にしたWeb開発に加え、ClaudeやCodex、Dify、n8nを組み合わせたAIエージェンティックコーディングで開発と業務改善を推進しています。'
 export const DEFAULT_OG_IMAGE_URL = `${SITE_URL}/assets/og-image.png`
 export const GA_TRACKING_ID = 'G-7C1W0FTJR6'
 

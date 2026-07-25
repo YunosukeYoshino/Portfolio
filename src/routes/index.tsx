@@ -1,22 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import Blog from '@/components/article/Blog'
 import SitePage from '@/components/layout/SitePage'
-import AboutSection from '@/components/sections/AboutSection'
-import ArticlesSection from '@/components/sections/ArticlesSection'
-import HeroSection from '@/components/sections/HeroSection'
-import SkillsMarquee from '@/components/sections/SkillsMarquee'
-import WorksSection from '@/components/sections/WorksSection'
 import JsonLd, {
   createBreadcrumbSchema,
   createPersonSchema,
   createWebsiteSchema,
 } from '@/components/seo/JsonLd'
+import { buildArticleFeed, microcmsArticleSourceAdapter } from '@/lib/articleFeed'
 import { getBlogs } from '@/lib/microcms'
 import { createStandardHead, DEFAULT_SITE_TITLE } from '@/lib/siteMetadata'
+import { fadeViewTransition } from '@/lib/viewTransitions'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const { contents: articles } = await getBlogs({
+    const { contents } = await getBlogs({
       data: {
         queries: {
           limit: 3,
@@ -24,6 +21,7 @@ export const Route = createFileRoute('/')({
         },
       },
     })
+    const articles = buildArticleFeed([{ adapter: microcmsArticleSourceAdapter, items: contents }])
     return { articles }
   },
   // Prevent re-fetching on client-side navigation for static sites
@@ -37,66 +35,17 @@ export const Route = createFileRoute('/')({
 })
 
 /**
- * Section background color mapping for scroll-linked transitions.
- * Each entry defines the target background color when scrolling into
- * the corresponding section. The transition is driven by ScrollTrigger
- * scrub so the color blends smoothly over a short scroll distance.
+ * What I have worked on — a plain enumeration, not a portfolio of deliverables.
+ * Keep in sync with the "Selected Works" section of src/server/markdown/home.ts.
  */
-const SECTION_COLORS = [
-  { selector: '[data-section="hero"]', color: 'transparent' },
-  { selector: '[data-section="skills"]', color: '#f3f3f1' },
-  { selector: '[data-section="about"]', color: '#f3f3f1' },
-  { selector: '[data-section="works"]', color: '#ffffff' },
-  { selector: '[data-section="articles"]', color: '#111111' },
+const works = [
+  { description: 'WebGL & motion personal site', year: '2025' },
+  { description: 'Jamstack corporate rebuild', year: '2024' },
+  { description: 'Headless commerce frontend', year: '2024' },
 ] as const
-
-function useScrollBackgroundTransitions(mainRef: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (!mainRef.current) return
-
-    let ctx: { revert: () => void } | undefined
-
-    const initScrollColors = async () => {
-      const gsap = (await import('gsap')).default
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-      gsap.registerPlugin(ScrollTrigger)
-
-      const mainEl = mainRef.current
-      if (!mainEl) return
-
-      ctx = gsap.context(() => {
-        for (const { selector, color } of SECTION_COLORS) {
-          const trigger = mainEl.querySelector(selector)
-          if (!trigger) continue
-
-          gsap.to(mainEl, {
-            backgroundColor: color,
-            ease: 'none',
-            scrollTrigger: {
-              trigger,
-              start: 'top 80%',
-              end: 'top 20%',
-              scrub: true,
-            },
-          })
-        }
-      }, mainEl)
-    }
-
-    initScrollColors()
-
-    return () => {
-      ctx?.revert()
-    }
-  }, [mainRef])
-}
 
 function HomePage() {
   const { articles } = Route.useLoaderData()
-  const mainRef = useRef<HTMLElement>(null)
-
-  useScrollBackgroundTransitions(mainRef)
 
   const personSchema = createPersonSchema()
   const websiteSchema = createWebsiteSchema()
@@ -109,22 +58,39 @@ function HomePage() {
       <JsonLd data={personSchema} />
       <JsonLd data={websiteSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <SitePage noiseOverlay mainRef={mainRef}>
-        <div data-section="hero">
-          <HeroSection />
-        </div>
-        <div data-section="skills">
-          <SkillsMarquee />
-        </div>
-        <div data-section="about">
-          <AboutSection />
-        </div>
-        <div data-section="works">
-          <WorksSection />
-        </div>
-        <div data-section="articles">
-          <ArticlesSection articles={articles} />
-        </div>
+      <SitePage siteRoot>
+        <section className="mb-10 text-base text-ink-body">
+          <p className="mb-4">
+            React、Astro、JavaScript、TypeScript
+            を軸にフロントエンドを設計・実装しています。もとはアパレル販売、いまは東京でコードを書いています。
+          </p>
+          <p>
+            Claude や Codex、Dify、n8n を組み合わせた AI
+            エージェンティックコーディングを推進し、プロダクト開発と業務改善の両方に取り組んでいます。
+          </p>
+        </section>
+
+        <ul className="mb-[var(--sectiongap)] space-y-1.5">
+          {works.map((work) => (
+            <li key={work.description} className="flex gap-4 text-[15px] text-ink-soft">
+              <span>{work.description}</span>
+              <span className="meta-mono ml-auto">{work.year}</span>
+            </li>
+          ))}
+        </ul>
+
+        <section className="mb-[var(--sectiongap)]">
+          <h2 className="label-mono mb-5">Writing</h2>
+          <Blog blogs={articles} />
+          <Link
+            to="/article/page/$page/"
+            params={{ page: '1' }}
+            viewTransition={fadeViewTransition}
+            className="meta-mono mt-6 inline-block transition-opacity hover:opacity-60"
+          >
+            All writing →
+          </Link>
+        </section>
       </SitePage>
     </>
   )

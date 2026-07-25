@@ -10,6 +10,8 @@ const wranglerConfigPath = resolve(import.meta.dir, '../../wrangler.toml')
 const wranglerConfigSource = readFileSync(wranglerConfigPath, 'utf8')
 const contactApiRoutePath = resolve(import.meta.dir, '../routes/api/contact.ts')
 const contactApiRouteSource = readFileSync(contactApiRoutePath, 'utf8')
+const workerPath = resolve(import.meta.dir, '../worker.ts')
+const workerSource = readFileSync(workerPath, 'utf8')
 
 describe('deploy workflow verification target', () => {
   it('デプロイ直後の asset 検証は custom domain を使う', () => {
@@ -34,12 +36,16 @@ describe('cloudflare workers hosting configuration', () => {
     expect(viteConfigSource).toContain("cloudflare({ viteEnvironment: { name: 'ssr' } })")
   })
 
-  it('Wrangler config targets TanStack Start server entry on Workers', () => {
-    expect(wranglerConfigSource).toContain('main = "@tanstack/react-start/server-entry"')
+  it('Wrangler config targets the custom worker that wraps the TanStack Start entry', () => {
+    expect(wranglerConfigSource).toContain('main = "src/worker.ts"')
+    expect(workerSource).toContain("import handler from '@tanstack/react-start/server-entry'")
     expect(wranglerConfigSource).toContain(
       'compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]'
     )
-    expect(wranglerConfigSource).toContain('pattern = "yunosukeyoshino.com/*"')
+  })
+
+  it('static assets are served from the client build output', () => {
+    expect(wranglerConfigSource).toContain('directory = "./dist/client"')
   })
 
   it('contact API is implemented as a TanStack Start server route', () => {

@@ -52,18 +52,6 @@ export default defineConfig({
           if (id.includes('node_modules/@tanstack/')) {
             return 'tanstack-vendor'
           }
-          // Three.js (WebGL)
-          if (id.includes('node_modules/three')) {
-            return 'three-vendor'
-          }
-          // GSAP (animations)
-          if (id.includes('node_modules/gsap')) {
-            return 'gsap-vendor'
-          }
-          // Lenis (smooth scroll)
-          if (id.includes('node_modules/lenis')) {
-            return 'lenis-vendor'
-          }
           // Shiki (syntax highlighting)
           if (id.includes('node_modules/shiki')) {
             return 'shiki-vendor'
