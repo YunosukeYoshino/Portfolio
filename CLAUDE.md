@@ -1,5 +1,5 @@
 ---
-last-validated: 2026-04-10
+last-validated: 2026-07-25
 ---
 
 Please reason in English and respond in Japanese.
@@ -13,8 +13,8 @@ Personal portfolio site that fetches blog articles from microCMS and showcases s
 - **Framework**: TanStack Start + React 19
 - **CMS**: microCMS
 - **Styling**: Tailwind CSS v4 (CSS-first configuration)
-- **Data Fetching**: TanStack Query (React Query)
-- **Deploy**: Cloudflare Pages (static export)
+- **Data Fetching**: TanStack Router loaders + `createServerFn`
+- **Deploy**: Cloudflare Workers (prerendered assets served from `src/worker.ts`)
 
 ## Package Manager
 **Required**: Use **Bun**, not `npm`.
@@ -25,12 +25,17 @@ bun run dev             # Dev server -> https://portfolio.localhost (portless)
 bun run build           # Production build
 bun run lint            # Biome + TypeScript + Markuplint
 bun run fix             # Auto-fix
+bun run typecheck       # TypeScript type-checking only
+bun test                # Run the test suite
 bun run deploy          # Deploy to main branch
 bun run deploy:preview  # Deploy to preview branch
+bun run cf:typegen      # Regenerate Cloudflare binding types (wrangler types)
+bun run seo:optimize    # Regenerate src/data/seo-metadata.json (:dry / :force variants)
+bun run verify:deployment # Check deployment assets after a build
 ```
 
 ## Known Constraints
-- **Zod v3**: Must use v3 (^3.24.2) for compatibility with @tanstack/router-generator. v4 is not allowed.
+- **Zod v3**: Must use v3 (^3.25.76) for compatibility with @tanstack/router-generator. v4 is not allowed.
 
 ## Directory Structure
 ```
@@ -45,6 +50,8 @@ src/
 │   └── di/            # Dependency injection container
 ├── hooks/             # Custom hooks (useArticleFilter, useDebounce, articleFilterLogic)
 ├── routes/            # TanStack Router pages and layouts
+│   └── api/           # Server routes (contact.ts - Resend-backed contact endpoint)
+├── data/              # Generated static data (seo-metadata.json, see seo:optimize)
 ├── components/        # React components
 │   ├── layout/        # SitePage (page shell), Header, Footer, Breadcrumb
 │   ├── common/        # RuleList/RuleRowBody (hairline rows), HydratedEmail
@@ -60,16 +67,22 @@ src/
 │   └── articleFeed.ts # Source adapters + pagination for the article feed
 ├── server/            # Worker-only code (markdown/ serves llms-style responses)
 ├── tests/             # Repo-wide config tests only (see Testing below)
-└── types/             # Shared type definitions (domain re-exports)
+├── types/             # Shared type definitions (domain re-exports)
+├── router.tsx         # Router instance
+├── routeTree.gen.ts   # Generated route tree (do not edit)
+└── worker.ts          # Cloudflare Worker entry (serves prerendered assets)
 ```
 
 ## Key Locations
+- `src/worker.ts` - Cloudflare Worker entry point (deploy target)
 - `src/infrastructure/di/` - DI container (useCases)
 - `src/domain/` - Domain layer (no external dependencies)
 - `src/hooks/` - Custom hooks (article filtering, debounce)
 - `src/lib/microcms.ts` - Backward-compatible facade (@deprecated)
+- `src/routes/api/contact.ts` - Contact form endpoint (Resend)
 - `src/server/markdown/home.ts` - Homepage markdown for LLM clients; keep in sync with `src/routes/index.tsx`
 - `vite.config.ts` - Prerender/SSG configuration
+- `wrangler.toml` - Cloudflare Workers configuration
 
 ## Testing
 - Module-level tests colocate in a sibling `__tests__/` (`src/lib/__tests__/`, `src/components/__tests__/`, `src/routes/__tests__/`, `src/hooks/__tests__/`)
