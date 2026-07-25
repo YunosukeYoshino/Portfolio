@@ -15,10 +15,9 @@
     "url": "https://github.com/YunosukeYoshino/Portfolio/issues"
   },
   "scripts": {
-    "dev": "portless portfolio vite",
-    "build": "vite build",
-    "start": "vite preview",
-    "preview": "vite build && vite preview",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro build && astro preview",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "lint": "bun run lint:biome && bun run lint:tsc && bun run lint:markup",
@@ -41,6 +40,9 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^12.0.0",
+    "@astrojs/react": "^4.0.0",
+    "astro": "^5.0.0",
     "@hookform/resolvers": "^5.2.2",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-router": "^1.169.1",

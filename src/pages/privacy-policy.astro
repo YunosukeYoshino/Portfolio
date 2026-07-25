@@ -1,0 +1,98 @@
+---
+import Layout from '../layouts/Layout.astro'
+
+const description = 'Yunosuke Yoshinoのポートフォリオサイトのプライバシーポリシー'
+---
+
+<Layout
+  title="プライバシーポリシー | Yunosuke Yoshino"
+  description={description}
+  robots="noindex, follow"
+>
+  <section class="mb-[var(--sectiongap)]">
+    <div>
+      <header class="mb-12">
+        <h1 class="label-mono mb-5">Privacy Policy</h1>
+        <p class="text-base text-ink-body">
+          本サイトで取得する情報と、その利用目的、第三者サービスの取り扱いについてまとめています。
+        </p>
+      </header>
+
+      <div class="prose max-w-none">
+        <section class="mb-10">
+          <h2 class="mb-4 text-lg font-semibold">収集する情報</h2>
+          <p class="mb-4">
+            当サイトは主にポートフォリオサイトです。訪問者から収集する情報は最小限に留めており、以下の情報を収集します：
+          </p>
+          <ul class="list-disc space-y-1 pl-5">
+            <li>基本的なアクセス解析データ（ページビュー、訪問者数、大まかな地域情報）</li>
+            <li>お問い合わせフォームやメールを通じて自発的に提供される情報</li>
+            <li>セキュリティ目的でのブラウザタイプやIPアドレスなどの技術情報</li>
+          </ul>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="mb-4 text-lg font-semibold">情報の利用目的</h2>
+          <p class="mb-4">収集した限定的な情報は、以下の目的でのみ使用します：</p>
+          <ul class="list-disc space-y-1 pl-5">
+            <li>ウェブサイトの利用状況の把握とユーザーエクスペリエンスの向上</li>
+            <li>お問い合わせやコミュニケーションへの対応</li>
+            <li>ウェブサイトのセキュリティと機能の維持</li>
+          </ul>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="mb-4 text-lg font-semibold">Google Analyticsの使用</h2>
+          <p class="mb-4">
+            当サイトでは、ウェブサイトの利用状況を分析するためにGoogle
+            Analyticsを使用しています。Google Analyticsは以下の情報を収集します：
+          </p>
+          <ul class="list-disc space-y-1 pl-5">
+            <li>ページビュー数、セッション数、滞在時間</li>
+            <li>デバイス情報（デバイスタイプ、OS、ブラウザ）</li>
+            <li>大まかな地理的位置情報（国・地域レベル）</li>
+            <li>リファラー情報（どこから当サイトにアクセスしたか）</li>
+          </ul>
+          <p class="mb-4">
+            これらの情報は匿名化されており、個人を特定することはできません。Google
+            Analyticsの詳細については、
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="lnk"
+            >
+              Googleのプライバシーポリシー
+            </a>
+            をご確認ください。
+          </p>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="mb-4 text-lg font-semibold">第三者との情報共有</h2>
+          <p class="mb-4">
+            個人情報を第三者に販売、取引、または譲渡することはありません。ただし、上記のGoogle
+            Analyticsなど、ウェブサイトの基本的な統計情報を取得するための第三者サービスを利用する場合があります。
+          </p>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="mb-4 text-lg font-semibold">Cookieについて</h2>
+          <p class="mb-4">
+            当サイトでは、ブラウジング体験の向上と基本的な解析情報の収集のためにCookieを使用する場合があります。ほとんどのブラウザでは、設定でCookieの制御が可能です。
+          </p>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="mb-4 text-lg font-semibold">お問い合わせ</h2>
+          <p class="mb-4">
+            このプライバシーポリシーやお客様のデータに関してご質問がございましたら、
+            {/* TODO: HydratedEmailLink island に戻す（info@yunosukeyoshino.com） */}
+            <a class="lnk" href="mailto:info@yunosukeyoshino.com">info@yunosukeyoshino.com</a>
+            までお気軽にお問い合わせください。
+          </p>
+        </section>
+      </div>
+    </div>
+  </section>
+</Layout>

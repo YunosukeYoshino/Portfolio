@@ -1,0 +1,38 @@
+---
+import '../globals.css'
+import Footer from '../components/layout/Footer.astro'
+import Header from '../components/layout/Header.astro'
+
+interface Props {
+  /** Render the site name as the page h1. Only the index page should set this. */
+  readonly siteRoot?: boolean
+  readonly title?: string
+  readonly description?: string
+  readonly robots?: string
+}
+
+const {
+  siteRoot = false,
+  title = 'Yunosuke Yoshino',
+  description,
+  robots,
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {robots && <meta name="robots" content={robots} />}
+  </head>
+  <body>
+    <div class="measure relative z-[2] pt-[var(--pagetop)] pb-[var(--pagebottom)]">
+      <Header siteRoot={siteRoot} />
+      <main><slot /></main>
+      <Footer />
+    </div>
+  </body>
+</html>

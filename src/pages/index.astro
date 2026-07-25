@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro'
+
+// src/routes/index.tsx を移植。Writing 記事リストは後続 ticket（03/04）で復元。
+const works = [
+  { description: 'WebGL & motion personal site', year: '2025' },
+  { description: 'Jamstack corporate rebuild', year: '2024' },
+  { description: 'Headless commerce frontend', year: '2024' },
+] as const
+---
+
+<Layout siteRoot>
+  <section class="mb-10 text-base text-ink-body">
+    <p class="mb-4">
+      React、Astro、JavaScript、TypeScript
+      を軸にフロントエンドを設計・実装しています。もとはアパレル販売、いまは東京でコードを書いています。
+    </p>
+    <p>
+      Claude や Codex、Dify、n8n を組み合わせた AI
+      エージェンティックコーディングを推進し、プロダクト開発と業務改善の両方に取り組んでいます。
+    </p>
+  </section>
+
+  <ul class="mb-[var(--sectiongap)] space-y-1.5">
+    {works.map((work) => (
+      <li class="flex gap-4 text-[15px] text-ink-soft">
+        <span>{work.description}</span>
+        <span class="meta-mono ml-auto">{work.year}</span>
+      </li>
+    ))}
+  </ul>
+
+  <section class="mb-[var(--sectiongap)]">
+    <h2 class="label-mono mb-5">Writing</h2>
+    <p class="note-row">（記事一覧は後続 ticket で復元されます）</p>
+  </section>
+</Layout>

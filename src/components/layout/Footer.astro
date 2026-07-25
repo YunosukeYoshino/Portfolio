@@ -1,0 +1,29 @@
+---
+const currentYear = new Date().getFullYear()
+
+const elsewhereLinks = [{ label: 'GitHub', href: 'https://github.com/YunosukeYoshino' }] as const
+---
+
+<footer id="contact" class="text-[15px] text-ink-soft">
+  <h2 class="label-mono mb-5">Elsewhere</h2>
+  <div class="mb-10 flex flex-wrap gap-x-[22px] gap-y-3">
+    {/* TODO: HydratedEmailLink island に戻す（spam 対策の遅延ハイドレーション） */}
+    <a class="lnk" href="mailto:hello@yunosukeyoshino.com">Email</a>
+    {elsewhereLinks.map((link) => (
+      <a class="lnk" href={link.href} target="_blank" rel="noopener noreferrer">
+        {link.label}
+      </a>
+    ))}
+  </div>
+
+  <h2 id="footer-index" class="label-mono mb-5">Index</h2>
+  <nav aria-labelledby="footer-index" class="mb-10 flex flex-wrap gap-x-[22px] gap-y-3">
+    <a class="lnk" href="/">Home</a>
+    <a class="lnk" href="/about">About</a>
+    <a class="lnk" href="/article/page/1">Writing</a>
+    <a class="lnk" href="/contact">Contact</a>
+    <a class="lnk" href="/privacy-policy">Privacy</a>
+  </nav>
+
+  <p class="meta-mono text-ink-faint">© {currentYear} Yunosuke Yoshino</p>
+</footer>

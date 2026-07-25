@@ -1,0 +1,16 @@
+---
+interface Props {
+  /** On the index page the site name doubles as the page h1. */
+  readonly siteRoot?: boolean
+}
+
+const { siteRoot = false } = Astro.props
+const Tag = siteRoot ? 'h1' : 'p'
+---
+
+<header class="mb-[var(--sectiongap)]">
+  <a href="/" class="inline-block" aria-label="Yunosuke Yoshino — Home">
+    <Tag class="text-base font-semibold tracking-[-0.01em]">Yunosuke Yoshino</Tag>
+    <p class="mt-0.5 text-[15px] text-ink-soft">Frontend Developer, Tokyo</p>
+  </a>
+</header>
