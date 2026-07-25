@@ -1,14 +1,8 @@
-import { z } from 'zod'
+import type { ContactPayload } from '@/lib/contactSchema'
+import { contactBaseSchema } from '@/lib/contactSchema'
 
-export const contactSchema = z.object({
-  name: z.string().min(1).max(100),
-  email: z.string().email(),
-  company: z.string().optional(),
-  subject: z.string().min(1).max(200),
-  message: z.string().min(1).max(1000),
-})
-
-export type ContactPayload = z.infer<typeof contactSchema>
+export const contactSchema = contactBaseSchema
+export type { ContactPayload }
 
 /**
  * Resend 経由で管理者宛て（info@）と差出人宛て（確認メール）の 2 通を送る。
@@ -135,5 +129,5 @@ export async function sendResendEmail(
     }),
   })
 
-  return mainResponse.json() as Promise<{ id: string }>
+  return (await mainResponse.json()) as { id: string }
 }

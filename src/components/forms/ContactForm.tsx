@@ -4,8 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { contactBaseSchema } from '@/lib/contactSchema'
 
-const contactSchema = z.object({
+/**
+ * サーバー (API route) と共通の base スキーマを extend し、
+ * UI 向けの日本語メッセージを付与する。制約値（min/max）は base 側が SSOT。
+ */
+const contactSchema = contactBaseSchema.extend({
   name: z
     .string()
     .min(1, 'お名前を入力してください')
@@ -14,7 +19,6 @@ const contactSchema = z.object({
     .string()
     .min(1, 'メールアドレスを入力してください')
     .email('有効なメールアドレスを入力してください'),
-  company: z.string().optional(),
   subject: z
     .string()
     .min(1, '件名を入力してください')
@@ -27,16 +31,18 @@ const contactSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactSchema>
 
+type SubmitStatus =
+  | { readonly type: 'success'; readonly message: string }
+  | { readonly type: 'error'; readonly message: string }
+  | { readonly type: null; readonly message: '' }
+
 const fieldClass =
   'w-full border-b border-rule bg-transparent py-2.5 text-base text-ink transition-colors placeholder:text-ink-faint/60 focus:border-ink focus:outline-none aria-invalid:border-alert'
 const errorClass = 'mt-2 font-mono text-[12px] text-alert'
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<{
-    type: 'success' | 'error' | null
-    message: string
-  }>({ type: null, message: '' })
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({ type: null, message: '' })
 
   const {
     register,

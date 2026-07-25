@@ -17,19 +17,26 @@ type SeoMetadataCache = Record<string, SeoEntry>
 
 let cache: SeoMetadataCache | null = null
 
+/**
+ * `seo-metadata.json` のビルド時生成キャッシュは { [articleId]: SeoEntry } の Record。
+ * 取得失敗時は空キャッシュへフォールバックさせるため、object かどうかだけ緩く検証する。
+ */
+function isSeoMetadataCache(value: unknown): value is SeoMetadataCache {
+  return typeof value === 'object' && value !== null
+}
+
 function loadCache(): SeoMetadataCache {
   if (cache) return cache
 
   try {
-    // Vite handles JSON imports at build time
-    // Dynamic import not needed since this is resolved statically
-    const data = import.meta.glob('../data/seo-metadata.json', { eager: true })
-    const moduleKey = Object.keys(data)[0]
-    if (moduleKey && data[moduleKey]) {
-      cache = (data[moduleKey] as { default: SeoMetadataCache }).default ?? {}
-    } else {
-      cache = {}
-    }
+    // Vite resolves this glob at build time; the JSON default export is untyped,
+    // so narrow with isSeoMetadataCache before using it as a cache.
+    const modules = import.meta.glob('../data/seo-metadata.json', {
+      eager: true,
+      import: 'default',
+    })
+    const raw = Object.values(modules)[0]
+    cache = isSeoMetadataCache(raw) ? raw : {}
   } catch {
     cache = {}
   }

@@ -1,8 +1,8 @@
 import type { Blog } from '@/domain/entities/blog'
-import type { ArticleFeedItem } from '@/types'
+import type { ArticleFeedItem, ArticleSource } from '@/types'
 
 export interface ArticleSourceAdapter<TSourceItem> {
-  readonly source: ArticleFeedItem['source']
+  readonly source: ArticleSource
   toFeedItems(items: readonly TSourceItem[]): readonly ArticleFeedItem[]
 }
 
@@ -24,16 +24,8 @@ export const microcmsArticleSourceAdapter: ArticleSourceAdapter<Blog> = {
       id: blog.id,
       title: blog.title,
       publishedAt: blog.publishedAt,
-      category: {
-        id: blog.category.id,
-        name: blog.category.name,
-      },
-      eyecatch: {
-        url: blog.eyecatch.url,
-        width: blog.eyecatch.width,
-        height: blog.eyecatch.height,
-        alt: blog.eyecatch.alt || blog.title,
-      },
+      category: blog.category,
+      eyecatch: { ...blog.eyecatch, alt: blog.eyecatch.alt || blog.title },
       source: 'microcms',
     })),
 }

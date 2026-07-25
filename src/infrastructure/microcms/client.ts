@@ -94,6 +94,6 @@ export class MicroCMSClient {
       throw new Error(`microCMS API error: ${response.status} ${response.statusText}`)
     }
 
-    return response.json()
+    return (await response.json()) as T
   }
 }

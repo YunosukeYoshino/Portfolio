@@ -81,20 +81,17 @@ export class MicroCMSBlogRepository implements BlogRepository {
     }
   }
 
-  // biome-ignore lint/suspicious/noExplicitAny: Development logging accepts any type
-  private logDev(...args: any[]): void {
+  private logDev(...args: readonly unknown[]): void {
     // biome-ignore lint/suspicious/noConsole: Development logging
     console.log(...args)
   }
 
-  // biome-ignore lint/suspicious/noExplicitAny: Development warning accepts any type
-  private logDevWarning(...args: any[]): void {
+  private logDevWarning(...args: readonly unknown[]): void {
     // biome-ignore lint/suspicious/noConsole: Development warning
     console.warn(...args)
   }
 
-  // biome-ignore lint/suspicious/noExplicitAny: Error logging accepts any type
-  private logError(...args: any[]): void {
+  private logError(...args: readonly unknown[]): void {
     // biome-ignore lint/suspicious/noConsole: Error logging
     console.error(...args)
   }
