@@ -6,7 +6,7 @@ export type { ContactPayload }
 
 /**
  * Resend 経由で管理者宛て（info@）と差出人宛て（確認メール）の 2 通を送る。
- * TanStack server handler と Astro API route の双方から呼ばれる。
+ * Astro API route (`src/pages/api/contact.ts`) から呼ばれる。
  */
 export async function sendResendEmail(
   apiKey: string,

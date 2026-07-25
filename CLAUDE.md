@@ -1,5 +1,5 @@
 ---
-last-validated: 2026-07-25
+last-validated: 2026-07-26
 ---
 
 Please reason in English and respond in Japanese.
@@ -10,19 +10,19 @@ Please reason in English and respond in Japanese.
 Personal portfolio site that fetches blog articles from microCMS and showcases skills and projects.
 
 ## Tech Stack
-- **Framework**: TanStack Start + React 19
-- **CMS**: microCMS
-- **Styling**: Tailwind CSS v4 (CSS-first configuration)
-- **Data Fetching**: TanStack Router loaders + `createServerFn`
-- **Deploy**: Cloudflare Workers (prerendered assets served from `src/worker.ts`)
+- **Framework**: Astro 5 (`output: 'static'` with per-route SSR via `export const prerender = false`) + React 19 islands
+- **CMS**: microCMS (synced via the Astro Content Layer API — see `src/content.config.ts`)
+- **Styling**: Tailwind CSS v4 (CSS-first, loaded through `@tailwindcss/vite`)
+- **Data Fetching**: Astro loaders + Content Layer; server endpoints live in `src/pages/api/`
+- **Deploy**: Cloudflare Workers via `@astrojs/cloudflare` (built artifacts under `dist/`)
 
 ## Package Manager
 **Required**: Use **Bun**, not `npm`.
 
 ## Key Commands
 ```
-bun run dev             # Dev server -> https://portfolio.localhost (portless)
-bun run build           # Production build
+bun run dev             # Astro dev server (http://localhost:4321)
+bun run build           # Production build (astro build -> dist/)
 bun run lint            # Biome + TypeScript + Markuplint
 bun run fix             # Auto-fix
 bun run typecheck       # TypeScript type-checking only
@@ -35,7 +35,7 @@ bun run verify:deployment # Check deployment assets after a build
 ```
 
 ## Known Constraints
-- **Zod v3**: Must use v3 (^3.25.76) for compatibility with @tanstack/router-generator. v4 is not allowed.
+- **Zod v3**: Pinned to `^3.25.76`. Schemas in `src/lib/contactSchema.ts` rely on the v3 API; verify behavior before upgrading to v4.
 
 ## Directory Structure
 ```
@@ -47,54 +47,65 @@ src/
 │   └── blog/          # GetBlogsUseCase, GetBlogDetailUseCase, GetAllBlogIdsUseCase
 ├── infrastructure/    # Infrastructure layer (concrete implementations)
 │   ├── microcms/      # microCMS adapter
-│   └── di/            # Dependency injection container
-├── hooks/             # Custom hooks (useArticleFilter, useDebounce, articleFilterLogic)
-├── routes/            # TanStack Router pages and layouts
-│   └── api/           # Server routes (contact.ts - Resend-backed contact endpoint)
-├── data/              # Generated static data (seo-metadata.json, see seo:optimize)
-├── components/        # React components
-│   ├── layout/        # SitePage (page shell), Header, Footer, Breadcrumb
-│   ├── common/        # RuleList/RuleRowBody (hairline rows), HydratedEmail
-│   ├── article/       # Blog, CodeHighlight, ArticleCta, ArticleLink, ArticleSearchBar, PaginationNav
-│   ├── providers/     # WebMCPProvider
-│   ├── seo/           # GoogleAnalytics, JsonLd
-│   └── forms/         # ContactForm
+│   └── di/            # Dependency injection container (createUseCases)
+├── pages/             # Astro file-based routes
+│   ├── api/           # Server endpoints (contact.ts - Resend-backed contact API)
+│   ├── article/       # [slug].astro (detail), page/[page].astro (paginated list)
+│   ├── index.astro    # Home
+│   ├── about.astro, contact.astro, privacy-policy.astro
+│   └── sitemap.xml.ts # Dynamic sitemap (uses useCases.getAllBlogIds)
+├── layouts/           # Layout.astro (site shell, head, GA, JSON-LD)
+├── components/        # UI components (Astro + React islands)
+│   ├── layout/        # Header.astro, Footer.astro
+│   ├── article/       # ArticleCta.astro, PaginationNav.astro
+│   ├── seo/           # JsonLd.tsx (schema generators), JsonLdScript.astro
+│   └── forms/         # ContactForm.tsx (React island, react-hook-form + Zod)
 ├── lib/
-│   ├── server/        # createServerFn modules (highlight.ts, markdown.ts)
-│   ├── microcms.ts    # Backward-compatible facade (@deprecated, createServerFn)
-│   ├── utils.ts       # cn(), formatDate(), formatDateEditorial()
+│   ├── server/        # Server-only code
+│   │   ├── markdown/  # home.ts / article.ts / index.ts (LLM-facing markdown delivery)
+│   │   ├── highlight.ts  # Shiki highlight core (content type -> html)
+│   │   └── contactMail.ts # Resend email sender (Astro API route only)
+│   ├── articleFeed.ts # Source adapters + pagination for the article feed
+│   ├── articleRender.ts # Article rendering helpers
+│   ├── articles.ts    # Article fetching façade for pages
+│   ├── contactSchema.ts # Zod schemas (ContactPayload)
+│   ├── pagination.ts  # Pagination math
+│   ├── seoMetadata.ts # Per-page SEO metadata builder
+│   ├── siteMetadata.ts # Site-wide constants (SITE_URL, GA_TRACKING_ID, etc.)
 │   ├── link.ts        # External link utility (target="_blank" handling)
-│   └── articleFeed.ts # Source adapters + pagination for the article feed
-├── server/            # Worker-only code (markdown/ serves llms-style responses)
-├── tests/             # Repo-wide config tests only (see Testing below)
+│   └── utils.ts       # cn(), formatDate(), formatDateEditorial()
+├── data/              # Generated static data (seo-metadata.json, see seo:optimize)
+├── tests/             # Repo-wide config tests (Astro build output, deploy workflow)
 ├── types/             # Shared type definitions (domain re-exports)
-├── router.tsx         # Router instance
-├── routeTree.gen.ts   # Generated route tree (do not edit)
-└── worker.ts          # Cloudflare Worker entry (serves prerendered assets)
+├── content.config.ts  # microCMS Content Layer loader (glob + API fetch)
+├── globals.css        # Tailwind v4 + paper theme (@theme tokens, utilities)
+└── middleware.ts      # Astro middleware
 ```
 
 ## Key Locations
-- `src/worker.ts` - Cloudflare Worker entry point (deploy target)
+- `astro.config.mjs` - Astro config (output mode, adapter, integrations, redirects)
+- `src/content.config.ts` - microCMS Content Layer loader
+- `src/layouts/Layout.astro` - Site shell (head, GA, google-site-verification, JSON-LD)
 - `src/infrastructure/di/` - DI container (useCases)
 - `src/domain/` - Domain layer (no external dependencies)
-- `src/hooks/` - Custom hooks (article filtering, debounce)
-- `src/lib/microcms.ts` - Backward-compatible facade (@deprecated)
-- `src/routes/api/contact.ts` - Contact form endpoint (Resend)
-- `src/server/markdown/home.ts` - Homepage markdown for LLM clients; keep in sync with `src/routes/index.tsx`
-- `vite.config.ts` - Prerender/SSG configuration
+- `src/pages/api/contact.ts` - Contact form endpoint (Resend)
+- `src/lib/server/markdown/home.ts` - Homepage markdown for LLM clients; keep in sync with `src/pages/index.astro`
 - `wrangler.toml` - Cloudflare Workers configuration
+- `src/globals.css` - Tailwind v4 theme + paper design tokens
 
 ## Testing
-- Module-level tests colocate in a sibling `__tests__/` (`src/lib/__tests__/`, `src/components/__tests__/`, `src/routes/__tests__/`, `src/hooks/__tests__/`)
-- `src/tests/` holds only repo-wide config tests that span wrangler/CI/vite
+- Module-level tests colocate in a sibling `__tests__/` (e.g. `src/lib/__tests__/`)
+- `src/tests/` holds repo-wide config tests (Astro build output, deploy workflow)
 - Run with `bun test`
 
 ## Important Patterns
 
 ### Data Fetching
-- **loader**: Server-side fetch via TanStack Router loader
-- **createServerFn**: Server functions for secure API key handling (e.g., `src/lib/server/highlight.ts`, `src/lib/server/markdown.ts`)
-- Reference: `src/routes/article/$slug.tsx` (loader + createServerFn example)
+- **Content Layer**: microCMS content is loaded via `src/content.config.ts` and queried through the use cases.
+- **Astro loaders**: Pages fetch data via `useCases` through the `src/lib/articles.ts` façade.
+- **Server endpoints**: `src/pages/api/*.ts` for form submissions (Resend).
+- **Server-only helpers**: `src/lib/server/` (highlight, markdown, contactMail) — never import these from client islands.
+- Reference: `src/pages/article/[slug].astro` (detail page)
 
 ### Tailwind CSS v4
 Breaking changes from v3. See `src/globals.css`.
@@ -111,7 +122,7 @@ marquee, or scroll-driven animation — motion is limited to View Transitions.
   `--rowpad` / `--rowpad-sm` — all narrowed at `max-width: 767px`
 - **Utilities**: `.measure` (page column), `.label-mono` (section heading),
   `.meta-mono` (trailing meta), `.rule-row` (hairline grid row), `.lnk` (underlined link)
-- Every page renders inside `SitePage`; only `/` passes `siteRoot` so the site name is the `h1`
+- Every page renders inside `Layout.astro`; only `/` passes `siteRoot` so the site name is the `h1`
 - Paper grain and vignette are `body::before` / `body::after` (`z-index: 1`);
   page content sits at `z-index: 2`
 
@@ -126,8 +137,7 @@ const paged = await useCases.getBlogs.paginated(1, 6)
 const ids = await useCases.getAllBlogIds.execute()
 ```
 
-**Backward compatible**: Facade functions in `src/lib/microcms.ts` still work (@deprecated).
-Returns mock data in development when credentials are not set.
+The Content Layer loader (`src/content.config.ts`) returns mock data in development when credentials are not set.
 
 **For testing**: Inject a fake repository
 ```typescript
@@ -136,16 +146,16 @@ const testUseCases = createUseCases(fakeBlogRepository)
 ```
 
 ### Article Feed
-microCMS is currently the only article source. `src/lib/articleFeed.ts` keeps a
-`ArticleSourceAdapter` seam so another source can be added without touching the routes.
+microCMS is currently the only article source. `src/lib/articleFeed.ts` keeps an
+`ArticleSourceAdapter` seam so another source can be added without touching the pages.
 - `ArticleFeedItem` in `src/types/index.ts` tags each item via `source: 'microcms'`
-- External link detection uses `externalUrl` presence, not source name (`Blog.tsx`)
+- External link detection uses `externalUrl` presence, not source name
 
 ### Prerendering
-See prerender configuration in `vite.config.ts`.
+`output: 'static'` in `astro.config.mjs`. Per-route `export const prerender = false` opts into on-demand SSR (contact API, LLM markdown).
 
 ### Form Validation
-Zod + react-hook-form pattern. See `src/components/forms/ContactForm.tsx`.
+Zod + react-hook-form pattern. See `src/components/forms/ContactForm.tsx` and `src/lib/contactSchema.ts`.
 
 ## Code Quality
 Biome + TypeScript strict mode. See `biome.json` for configuration.
