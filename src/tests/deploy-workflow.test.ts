@@ -4,6 +4,8 @@ import { resolve } from 'node:path'
 
 const workflowPath = resolve(import.meta.dir, '../../.github/workflows/deploy-gh-pages.yml')
 const workflowSource = readFileSync(workflowPath, 'utf8')
+const wranglerPath = resolve(import.meta.dir, '../../wrangler.toml')
+const wranglerSource = readFileSync(wranglerPath, 'utf8')
 
 describe('deploy workflow verification target', () => {
   it('デプロイ直後の asset 検証は custom domain を使う', () => {
@@ -21,8 +23,15 @@ describe('deploy workflow verification target', () => {
     expect(workflowSource).toContain('wrangler secret bulk .worker-secrets.env')
   })
 
-  it('Astro ビルド成果物（dist/server/wrangler.json）経由でデプロイする', () => {
+  it('Astro ビルド成果物経由でデプロイする', () => {
     expect(workflowSource).toContain('bun run build')
-    expect(workflowSource).toContain('dist/server/wrangler.json')
+    expect(workflowSource).toContain('Deploy to Cloudflare Workers via Wrangler')
+  })
+})
+
+describe('wrangler configuration', () => {
+  it('Astro の Worker エントリと assets ディレクトリを指定する', () => {
+    expect(wranglerSource).toContain('main = "dist/_worker.js/index.js"')
+    expect(wranglerSource).toContain('directory = "dist"')
   })
 })
