@@ -7,7 +7,11 @@ export const createPersonSchema = () => ({
   name: 'Yunosuke Yoshino',
   description: 'フロントエンドエンジニア。React、Next.js、モダンなWeb技術を専門としています。',
   url: SITE_URL,
-  sameAs: ['https://github.com/YunosukeYoshino', 'https://twitter.com/YunosukeYoshino'],
+  sameAs: [
+    'https://github.com/YunosukeYoshino',
+    'https://www.linkedin.com/in/yunosukeyoshino',
+    'https://twitter.com/YunosukeYoshino',
+  ],
   jobTitle: 'フロントエンドエンジニア',
   worksFor: {
     '@type': 'Organization',
