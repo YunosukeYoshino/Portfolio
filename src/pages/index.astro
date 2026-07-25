@@ -6,38 +6,90 @@ import Layout from '../layouts/Layout.astro'
 // Accept: text/markdown 配信（middleware）を有効にするため SSR 化。
 export const prerender = false
 
-// src/routes/index.tsx を移植。Writing 記事リストは後続 ticket（03/04）で復元。
+// 年代順の主な実績・取り組み
 const works = [
-  { description: 'WebGL & motion personal site', year: '2025' },
-  { description: 'Jamstack corporate rebuild', year: '2024' },
-  { description: 'Headless commerce frontend', year: '2024' },
+  {
+    title: 'MCP Server の構築',
+    year: '2026',
+    url: 'https://github.com/YunosukeYoshino',
+  },
+  {
+    title: 'Agent skill Management App の構築',
+    year: '2025',
+    url: 'https://github.com/YunosukeYoshino/my-skills',
+  },
+  {
+    title: 'WebGL / Astro ポートフォリオサイトのリニューアル',
+    year: '2025',
+    url: 'https://yunosukeyoshino.com',
+  },
+  {
+    title: 'React / Next.js 業務開発アプリの構築',
+    year: '2024',
+    url: 'https://github.com/YunosukeYoshino',
+  },
+  {
+    title: 'Shopify Eコマースサイトの構築',
+    year: '2023',
+    url: 'https://github.com/YunosukeYoshino',
+  },
 ] as const
 ---
 
 <Layout siteRoot canonicalPath="/" ogType="website">
   <JsonLdScript data={createWebsiteSchema()} />
-  <section class="mb-10 text-base text-ink-body">
+  <section class="mb-10 text-base text-ink-body leading-relaxed">
     <p class="mb-4">
-      React、Astro、JavaScript、TypeScript
-      を軸にフロントエンドを設計・実装しています。もとはアパレル販売、いまは東京でコードを書いています。
+      React、Astro、TypeScript を軸に、高いパフォーマンスと心地よいUXを両立するフロントエンドを設計・実装しています。
     </p>
     <p>
-      Claude や Codex、Dify、n8n を組み合わせた AI
-      エージェンティックコーディングを推進し、プロダクト開発と業務改善の両方に取り組んでいます。
+      開発現場において、品質の追求とデリバリーの速度は時にトレードオフになります。その壁を破る解として、Claude や Codex、Dify、n8n を組み上げた AI エージェンティックコーディングを推進。プロダクト開発の高速化と、手作業を削る業務改善の両輪をコードとデータで駆動させています。
     </p>
   </section>
 
-  <ul class="mb-[var(--sectiongap)] space-y-1.5">
-    {works.map((work) => (
-      <li class="flex gap-4 text-[15px] text-ink-soft">
-        <span>{work.description}</span>
-        <span class="meta-mono ml-auto">{work.year}</span>
-      </li>
-    ))}
-  </ul>
+  <section class="mb-[var(--sectiongap)]">
+    <h2 class="label-mono mb-5">Selected Works & Projects</h2>
+    <div class="flex flex-col project-list">
+      {works.map((work) => (
+        <a
+          href={work.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project-item group block w-full py-2 transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 not-italic">
+            <span class="text-base font-serif italic text-ink-body group-hover:text-ink transition-colors duration-150">
+              {work.title}
+            </span>
+            <div class="flex-1 min-w-[12px] self-end mb-1.5">
+              <div class="w-full h-[1px] opacity-25 group-hover:opacity-60 transition-opacity duration-150 dotted-line"></div>
+            </div>
+            <span class="meta-mono text-ink-faint group-hover:text-ink transition-colors duration-150">
+              {work.year}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
 
   <section class="mb-[var(--sectiongap)]">
     <h2 class="label-mono mb-5">Writing</h2>
     <p class="note-row">（記事一覧は後続 ticket で復元されます）</p>
   </section>
 </Layout>
+
+<style>
+  .dotted-line {
+    background-image: radial-gradient(circle, var(--color-ink-label) 1px, transparent 1px);
+    background-size: 5px 1px;
+    background-repeat: repeat-x;
+    height: 1px;
+  }
+  
+  /* Sue Park風のホバーエフェクト：ホバー時に対象外のアイテムを薄くぼかす */
+  .project-list:hover .project-item:not(:hover) {
+    opacity: 0.45;
+    filter: blur(0.5px);
+  }
+</style>
