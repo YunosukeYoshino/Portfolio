@@ -53,12 +53,6 @@ const works = [
     year: '2024',
     link: '#',
   },
-  {
-    title: 'Nanatau',
-    description: 'Content-first blog on microCMS',
-    year: '2023',
-    link: 'https://blog.nanatau.com',
-  },
 ] as const
 
 function HomePage() {
@@ -78,12 +72,12 @@ function HomePage() {
       <SitePage siteRoot>
         <section className="mb-[var(--sectiongap)] text-base text-ink-body">
           <p className="mb-4">
-            React と Next.js を軸に、EC
-            を中心としたフロントエンドを設計・実装しています。保守しやすい UI
-            を届け、データをもとに改善を重ねること。もとはアパレル販売、いまは東京でコードを書いています。
+            React、Astro、JavaScript、TypeScript
+            を軸にフロントエンドを設計・実装しています。もとはアパレル販売、いまは東京でコードを書いています。
           </p>
           <p>
-            現在は WebGL とモーション表現、Dify や n8n を使った AI 活用の業務自動化を探求中です。
+            Claude や Codex、Dify、n8n を組み合わせた AI
+            エージェンティックコーディングを推進し、プロダクト開発と業務改善の両方に取り組んでいます。
           </p>
         </section>
 
