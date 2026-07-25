@@ -59,6 +59,8 @@ tsconfig.json.astro
 settings.local.json
 .playwright-mcp
 .wrangler/
+# Cloudflare binding types (regenerate with `bun run cf:typegen`)
+worker-configuration.d.ts
 .kiro
 
 .harness

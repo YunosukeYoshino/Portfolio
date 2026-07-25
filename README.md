@@ -69,7 +69,7 @@ bun run dev
 ## Deployment
 
 Deployed to Cloudflare Workers with Wrangler. Pushes to `main` deploy automatically via
-[`.github/workflows/deploy-gh-pages.yml`](.github/workflows/deploy-gh-pages.yml).
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 
 ```bash
 # Production deploy

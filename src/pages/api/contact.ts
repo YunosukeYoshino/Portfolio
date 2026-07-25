@@ -11,6 +11,13 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type',
 }
 
+// フォーム送信の応答は CDN / ブラウザのどちらにもキャッシュさせない。
+const jsonHeaders = {
+  'Content-Type': 'application/json',
+  'Cache-Control': 'no-store',
+  ...corsHeaders,
+}
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json()
@@ -25,10 +32,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     return new Response(JSON.stringify({ message: 'メールを送信しました', id: emailResult.id }), {
       status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        ...corsHeaders,
-      },
+      headers: jsonHeaders,
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -36,20 +40,14 @@ export const POST: APIRoute = async ({ request }) => {
         JSON.stringify({ error: '入力データが無効です', details: error.issues }),
         {
           status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            ...corsHeaders,
-          },
+          headers: jsonHeaders,
         }
       )
     }
 
     return new Response(JSON.stringify({ error: 'サーバーエラーが発生しました' }), {
       status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        ...corsHeaders,
-      },
+      headers: jsonHeaders,
     })
   }
 }

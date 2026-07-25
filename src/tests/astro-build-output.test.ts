@@ -80,6 +80,18 @@ describe.skipIf(SKIP_BUILD || !hasBuild)('Astro ビルド成果物（dist/）', 
     expect(routes).toContain('/sitemap.xml')
   })
 
+  it('Worker エントリとルーティングマニフェストを .assetsignore で除外する', () => {
+    const assetsignore = readFileSync(resolve(distDir, '.assetsignore'), 'utf8')
+    expect(assetsignore).toContain('_worker.js')
+    // Workers では _routes.json は無視されるため、静的アセットとして公開しない
+    expect(assetsignore).toContain('_routes.json')
+  })
+
+  it('_astro/* に immutable キャッシュヘッダを配信する', () => {
+    const headers = readFileSync(resolve(distDir, '_headers'), 'utf8')
+    expect(headers).toMatch(/\/_astro\/\*\n\s+Cache-Control: public, max-age=31536000, immutable/)
+  })
+
   it('api-catalog well-known エンドポイントを静的配置する', () => {
     expect(existsSync(resolve(distDir, '.well-known', 'api-catalog'))).toBe(true)
   })

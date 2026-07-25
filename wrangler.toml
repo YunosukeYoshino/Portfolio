@@ -2,7 +2,9 @@
 name = "yunosuke-portfolio"
 main = "dist/_worker.js/index.js"
 compatibility_date = "2026-03-17"
-compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
+# nodejs_compat_populate_process_env は compatibility_date >= 2025-04-01 で既定有効。
+# （src/pages/api/contact.ts の process.env.RESEND_API_KEY はこの既定挙動に依存する）
+compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 
 [assets]

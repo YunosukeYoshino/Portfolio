@@ -158,8 +158,8 @@ Zod + react-hook-form pattern. See `src/components/forms/ContactForm.tsx` and `s
 ### Cloudflare Workers Deploy
 The `@astrojs/cloudflare` adapter emits `dist/_worker.js/index.js` (referenced by `main` in
 `wrangler.toml`); `[assets]` serves `dist/` as static assets. The `build` script writes
-`dist/.assetsignore` containing `_worker.js` so the worker entry is not also uploaded as a
-static asset. After deploy, `bun run verify:deployment <url>` fetches the live HTML and
+`dist/.assetsignore` containing `_worker.js` and `_routes.json` so neither the worker entry nor
+the (Workers-ignored) routing manifest is uploaded as a static asset. After deploy, `bun run verify:deployment <url>` fetches the live HTML and
 confirms `/_astro/*` (and legacy `/assets/*`) scripts and styles return the expected
 content-type rather than an HTML fallback.
 
