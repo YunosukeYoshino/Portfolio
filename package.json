@@ -73,7 +73,7 @@
     "wrangler": "^4.87.0"
   },
   "overrides": {
-    "undici": ">=7.24.0",
+    "undici": ">=7.25.0 <8",
     "uuid": ">=14.0.0",
     "yaml": ">=2.8.3",
     "picomatch": ">=2.3.2",
