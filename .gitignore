@@ -65,6 +65,8 @@ settings.local.json
 skills-lock.json
 .claude/.headroom_wrap_marker.json
 .scratch/
+.sc/
+skills/
 
 
 ## plan
