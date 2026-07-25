@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { RuleList } from '@/components/common/RuleList'
 import SitePage from '@/components/layout/SitePage'
 import JsonLd, { createBreadcrumbSchema, createPersonSchema } from '@/components/seo/JsonLd'
 import { createStandardHead } from '@/lib/siteMetadata'
@@ -64,7 +65,7 @@ function AboutPage() {
 
         <section className="mb-[var(--sectiongap)]">
           <h2 className="label-mono mb-5">Timeline</h2>
-          <div>
+          <RuleList>
             {timelineData.map((item) => (
               <div
                 key={item.year}
@@ -77,8 +78,7 @@ function AboutPage() {
                 </div>
               </div>
             ))}
-            <div className="border-t border-rule" />
-          </div>
+          </RuleList>
         </section>
       </SitePage>
     </>

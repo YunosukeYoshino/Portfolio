@@ -40,8 +40,10 @@ export default function Footer() {
         ))}
       </div>
 
-      <h2 className="label-mono mb-5">Index</h2>
-      <div className="mb-10 flex flex-wrap gap-x-[22px] gap-y-3">
+      <h2 id="footer-index" className="label-mono mb-5">
+        Index
+      </h2>
+      <nav aria-labelledby="footer-index" className="mb-10 flex flex-wrap gap-x-[22px] gap-y-3">
         <Link to="/" viewTransition={fadeViewTransition} className="lnk">
           Home
         </Link>
@@ -62,7 +64,7 @@ export default function Footer() {
         <Link to="/privacy-policy/" viewTransition={fadeViewTransition} className="lnk">
           Privacy
         </Link>
-      </div>
+      </nav>
 
       <p className="meta-mono text-ink-faint">© {currentYear} Yunosuke Yoshino</p>
     </footer>
