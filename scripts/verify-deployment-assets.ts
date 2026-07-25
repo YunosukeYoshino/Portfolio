@@ -31,7 +31,7 @@ function normalizeTargetUrl(value: string) {
 
 function extractAssets(html: string, baseUrl: string): AssetExpectation[] {
   const assetRegex =
-    /<link[^>]+href="([^"]*\/assets\/[^"]+\.(?:js|css))"[^>]*>|<script[^>]+src="([^"]*\/assets\/[^"]+\.js)"/g
+    /<link[^>]+href="([^"]*\/(?:assets|_astro)\/[^"]+\.(?:js|css))"[^>]*>|<script[^>]+src="([^"]*\/(?:assets|_astro)\/[^"]+\.js)"/g
   const assets = new Map<string, AssetExpectation['kind']>()
 
   for (const match of html.matchAll(assetRegex)) {
@@ -75,7 +75,7 @@ async function verifyAssets(targetUrl: string) {
   const assets = extractAssets(page.body, targetUrl)
 
   if (assets.length === 0) {
-    throw new Error('No /assets/* references found in HTML')
+    throw new Error('No asset references (/_astro/* or /assets/*) found in HTML')
   }
 
   const failures: string[] = []
