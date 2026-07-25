@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-const workflowPath = resolve(import.meta.dir, '../../.github/workflows/deploy-gh-pages.yml')
+const workflowPath = resolve(import.meta.dir, '../../.github/workflows/deploy.yml')
 const workflowSource = readFileSync(workflowPath, 'utf8')
 const wranglerPath = resolve(import.meta.dir, '../../wrangler.toml')
 const wranglerSource = readFileSync(wranglerPath, 'utf8')

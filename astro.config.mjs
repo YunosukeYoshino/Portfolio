@@ -4,6 +4,7 @@ import react from '@astrojs/react'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 import { loadEnv } from 'vite'
+import { SITE_URL } from './src/lib/siteMetadata.ts'
 
 // Content Layer loader (src/content.config.ts) が process.env 経由で
 // microCMS credentials を読めるように、.env / .env.local を先に展開しておく。
@@ -13,6 +14,8 @@ Object.assign(process.env, loadEnv(envMode, process.cwd(), ''))
 
 // https://astro.build/config
 export default defineConfig({
+  // canonical / sitemap の絶対 URL は src/lib/siteMetadata.ts と同一ソースにする。
+  site: SITE_URL,
   // SSG by default; per-route `export const prerender = false` opts into
   // on-demand server rendering (contact API, LLM markdown).
   output: 'static',
