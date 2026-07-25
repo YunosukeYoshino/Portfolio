@@ -1,13 +1,13 @@
 const MARKDOWN_HEADING_PATTERN = /^<p>(#{1,6}\s)/
 
-function isMarkdownContent(content: string): boolean {
+export function isMarkdownContent(content: string): boolean {
   if (!content.startsWith('<p>')) return false
   const inner = content.replace(/^<p>/, '').replace(/<\/p>$/, '')
   const decoded = inner.replace(/<br>/g, '\n').replace(/&gt;/g, '>').replace(/&lt;/g, '<')
   return MARKDOWN_HEADING_PATTERN.test(content) || /\n#{1,6}\s/.test(decoded)
 }
 
-function extractMarkdownFromRichEditor(content: string): string {
+export function extractMarkdownFromRichEditor(content: string): string {
   return content
     .replace(/^<p>/, '')
     .replace(/<\/p>$/, '')
@@ -23,7 +23,7 @@ function extractMarkdownFromRichEditor(content: string): string {
 /**
  * Framework-agnostic core.
  * microCMS のリッチエディタ本文が Markdown を含む場合は marked で HTML へ変換する。
- * Astro のビルド時描画から呼ばれる。
+ * ビルド時描画（articleRender）と LLM 向け markdown 配信（article）の双方から呼ばれる。
  */
 export async function parseContentMarkdownCore(content: string): Promise<{
   html: string

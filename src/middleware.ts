@@ -1,7 +1,7 @@
 import { defineMiddleware } from 'astro:middleware'
 
-import { getArticleMarkdown } from './server/markdown/article'
-import { homeMarkdown } from './server/markdown/home'
+import { getArticleMarkdown } from '@/lib/server/markdown/article'
+import { homeMarkdown } from '@/lib/server/markdown/home'
 
 const LINK_HEADER = [
   '</.well-known/api-catalog>; rel="api-catalog"',
