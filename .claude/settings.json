@@ -1,12 +1,12 @@
 {
   "permissions": {
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "auto"
   },
   "enabledPlugins": {
     "threejs-skills@threejs-skills": true
   },
   "enableAllProjectMcpServers": true,
-  "model": "opusplan",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
