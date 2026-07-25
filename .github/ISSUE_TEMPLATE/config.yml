@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Contact
+    url: https://yunosukeyoshino.com/contact
+    about: Anything that is not a bug in this repository — questions, work inquiries, feedback.
+  - name: Report a security vulnerability
+    url: https://github.com/YunosukeYoshino/Portfolio/security/advisories/new
+    about: Please report security issues privately, not through public issues.

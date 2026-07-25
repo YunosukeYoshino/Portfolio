@@ -1,0 +1,31 @@
+version: 2
+updates:
+  # Bun/npm dependencies. bun.lock is handled by the npm ecosystem.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    # Mirror the supply-chain hardening in bunfig.toml (minimumReleaseAge = 3 days).
+    cooldown:
+      default-days: 3
+    open-pull-requests-limit: 5
+    groups:
+      production-dependencies:
+        dependency-type: production
+      development-dependencies:
+        dependency-type: development
+    commit-message:
+      prefix: chore
+    labels:
+      - dependencies
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: chore
+    labels:
+      - dependencies

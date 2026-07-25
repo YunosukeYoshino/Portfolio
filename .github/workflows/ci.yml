@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUN_VERSION: "latest"
+  BUN_INSTALL_FLAGS: "--frozen-lockfile --ignore-scripts"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    name: Lint and Test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@f4d14e03ff726c06358e5557344e1da148b56cf7 # v1.2.2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install ${{ env.BUN_INSTALL_FLAGS }}
+
+      - name: Lint (Biome + TypeScript + Markuplint)
+        run: bun run lint
+
+      - name: Test
+        run: bun test

@@ -37,7 +37,11 @@ next-env.d.ts
 .DS_Store
 
 # IDE
-.vscode/
+# Shared editor config is tracked; local overrides are not.
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
 .idea/
 
 # Deployment

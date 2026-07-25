@@ -15,7 +15,9 @@
 
 ## Overview
 
-A personal portfolio and blog built with TanStack Start. It combines microCMS-managed articles, external feed aggregation, and motion-heavy presentation for projects and writing.
+A personal portfolio and blog built with TanStack Start. microCMS-managed articles are rendered
+into a single-column editorial paper layout, prerendered at build time, and served from a
+Cloudflare Worker.
 
 ## Tech Stack
 
@@ -23,10 +25,11 @@ A personal portfolio and blog built with TanStack Start. It combines microCMS-ma
 |----------|------------|
 | Framework | [TanStack Start](https://tanstack.com/start) |
 | UI | [React 19](https://react.dev/), [Tailwind CSS v4](https://tailwindcss.com/) |
-| Data Fetching | [TanStack Query](https://tanstack.com/query) |
+| Data Fetching | TanStack Router loaders + `createServerFn` |
 | CMS | [microCMS](https://microcms.io/) |
-| Animation | [Lenis](https://github.com/studio-freight/lenis), [Three.js](https://threejs.org/), [GSAP](https://greensock.com/gsap/) |
+| Content | [marked](https://marked.js.org/), [Shiki](https://shiki.style/) |
 | Forms | [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/), [Resend](https://resend.com/) |
+| Hosting | [Cloudflare Workers](https://workers.cloudflare.com/) |
 | Tooling | [Biome](https://biomejs.dev/), [TypeScript](https://www.typescriptlang.org/), [Bun](https://bun.sh/) |
 
 ## Getting Started
@@ -53,14 +56,15 @@ bun run dev
 | `bun run lint` | Run Biome + TypeScript + Markuplint checks |
 | `bun run fix` | Auto-fix linting issues |
 | `bun run typecheck` | TypeScript type-checking only |
-| `bun run deploy` | Deploy to Cloudflare Pages |
-| `bun run deploy:preview` | Deploy to preview branch |
+| `bun test` | Run the test suite |
+| `bun run deploy` | Deploy to Cloudflare Workers |
+| `bun run deploy:preview` | Deploy to the preview environment |
 
 ### Notes
 
 - Internal implementation guidance for contributors and coding agents lives in `CLAUDE.md`.
 - In development, microCMS-backed routes fall back to mock data when credentials are missing.
-- The site is statically exported and deployed to Cloudflare Pages.
+- Routes are prerendered at build time and served from a Cloudflare Worker (`src/worker.ts`).
 
 ### Architecture
 
@@ -68,7 +72,8 @@ bun run dev
 
 ## Deployment
 
-Deployed as a static site to Cloudflare Pages.
+Deployed to Cloudflare Workers with Wrangler. Pushes to `main` deploy automatically via
+[`.github/workflows/deploy-gh-pages.yml`](.github/workflows/deploy-gh-pages.yml).
 
 ```bash
 # Production deploy
@@ -79,4 +84,15 @@ bun run deploy:preview
 ```
 
 > [!IMPORTANT]
-> Set `NODE_VERSION=20` or higher in your Cloudflare Pages project settings.
+> The deploy workflow runs on Node.js 22. Use Node.js 22 or higher for local deploys as well.
+
+## Contributing
+
+Bug reports and fixes are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+For security issues, follow [SECURITY.md](SECURITY.md) instead of opening an issue.
+
+## License
+
+Source code is released under the [MIT License](LICENSE).
+Site content (blog articles, images, and other assets under `public/`) is © Yunosuke Yoshino
+and is not covered by the MIT License.
