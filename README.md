@@ -66,10 +66,6 @@ bun run dev
 - In development, microCMS-backed routes fall back to mock data when credentials are missing.
 - Routes are prerendered at build time and served from a Cloudflare Worker via the `@astrojs/cloudflare` adapter (see `wrangler.toml`).
 
-### Architecture
-
-![Portfolio Architecture](docs/diagrams/architecture.svg)
-
 ## Deployment
 
 Deployed to Cloudflare Workers with Wrangler. Pushes to `main` deploy automatically via
