@@ -2,6 +2,7 @@
 import '../globals.css'
 import Footer from '../components/layout/Footer.astro'
 import Header from '../components/layout/Header.astro'
+import { DEFAULT_OG_IMAGE_URL, toCanonicalUrl } from '@/lib/siteMetadata'
 
 interface Props {
   /** Render the site name as the page h1. Only the index page should set this. */
@@ -9,6 +10,9 @@ interface Props {
   readonly title?: string
   readonly description?: string
   readonly robots?: string
+  readonly ogType?: 'website' | 'article'
+  readonly image?: string
+  readonly canonicalPath?: string
 }
 
 const {
@@ -16,7 +20,13 @@ const {
   title = 'Yunosuke Yoshino',
   description,
   robots,
+  ogType = 'website',
+  image,
+  canonicalPath,
 } = Astro.props
+
+const canonicalUrl = canonicalPath ? toCanonicalUrl(canonicalPath) : undefined
+const ogImage = image ?? DEFAULT_OG_IMAGE_URL
 ---
 
 <!doctype html>
@@ -27,6 +37,16 @@ const {
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     {robots && <meta name="robots" content={robots} />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content={ogType} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImage} />
     {/* LLM クライアント向けの発見手がかり（HTTP Link ヘッダの静的ルート代替） */}
     <link rel="api-catalog" href="/.well-known/api-catalog" />
     <link rel="describedby" type="application/xml" href="/sitemap.xml" />

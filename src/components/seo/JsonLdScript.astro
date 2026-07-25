@@ -1,0 +1,10 @@
+---
+interface Props {
+  readonly data: Record<string, unknown>
+}
+
+const { data } = Astro.props
+const json = JSON.stringify(data, null, 2).replace(/</g, '\\u003c')
+---
+
+<script type="application/ld+json" set:html={json} />

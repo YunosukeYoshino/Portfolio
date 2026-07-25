@@ -1,8 +1,12 @@
 ---
 import { getEntry } from 'astro:content'
 import ArticleCta from '@/components/article/ArticleCta.astro'
+import JsonLdScript from '@/components/seo/JsonLdScript.astro'
+import { createArticleSchema, createBreadcrumbSchema } from '@/components/seo/JsonLd'
 import Layout from '@/layouts/Layout.astro'
 import { renderArticleContent } from '@/lib/articleRender'
+import { getSeoMetadata } from '@/lib/seoMetadata'
+import { toCanonicalUrl } from '@/lib/siteMetadata'
 import { formatDate } from '@/lib/utils'
 
 // Accept: text/markdown 配信（middleware）を有効にするため SSR 化。
@@ -21,13 +25,24 @@ if (!entry) {
 const article = entry.data
 const renderedContent = await renderArticleContent(article.content)
 const description = article.content.replace(/<[^>]+>/g, '').slice(0, 120)
+const seo = getSeoMetadata(slug)
+const articleSchema = createArticleSchema({ ...article, id: slug }, seo ?? undefined)
+const breadcrumbSchema = createBreadcrumbSchema([
+  { name: 'ホーム', url: toCanonicalUrl('/') },
+  { name: '記事一覧', url: toCanonicalUrl('/article/page/1') },
+  { name: article.title, url: toCanonicalUrl(`/article/${slug}`) },
+])
 ---
 
 <Layout
   title={`${article.title} | Yunosuke Yoshino`}
   description={description}
+  canonicalPath={`/article/${slug}`}
+  ogType="article"
   image={article.eyecatch?.url}
 >
+  <JsonLdScript data={articleSchema} />
+  <JsonLdScript data={breadcrumbSchema} />
   <article class="mb-[var(--sectiongap)]">
     <nav
       aria-label="パンくずリスト"

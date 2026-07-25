@@ -2,6 +2,8 @@
 import type { GetStaticPaths } from 'astro'
 import { getCollection } from 'astro:content'
 import PaginationNav from '@/components/article/PaginationNav.astro'
+import JsonLdScript from '@/components/seo/JsonLdScript.astro'
+import { createBlogSchema, createBreadcrumbSchema } from '@/components/seo/JsonLd'
 import Layout from '@/layouts/Layout.astro'
 import type { ArticleFeedItem } from '@/types'
 import {
@@ -9,6 +11,7 @@ import {
   getArticleFeedPage,
   microcmsArticleSourceAdapter,
 } from '@/lib/articleFeed'
+import { toCanonicalUrl } from '@/lib/siteMetadata'
 import { formatDateEditorial } from '@/lib/utils'
 
 interface PageProps {
@@ -53,13 +56,23 @@ const pageTitle =
 const description =
   'フロントエンド開発、UI/UXデザイン、モダンなWeb技術についての記事。'
 const getPageHref = (page: number) => `/article/page/${page}`
+
+const blogSchema = createBlogSchema()
+const breadcrumbSchema = createBreadcrumbSchema([
+  { name: 'ホーム', url: toCanonicalUrl('/') },
+  { name: 'Writing', url: toCanonicalUrl(`/article/page/${currentPage}`) },
+])
 ---
 
 <Layout
   title={pageTitle}
   description={description}
   robots={currentPage > 1 ? 'noindex, follow' : undefined}
+  canonicalPath={`/article/page/${currentPage}`}
+  ogType="website"
 >
+  <JsonLdScript data={blogSchema} />
+  <JsonLdScript data={breadcrumbSchema} />
   <section class="mb-[var(--sectiongap)]">
     <header class="mb-10">
       <h1 class="label-mono mb-5">{currentPage === 1 ? 'Writing' : `Writing — Page ${currentPage}`}</h1>

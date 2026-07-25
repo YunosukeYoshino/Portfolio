@@ -1,4 +1,6 @@
 ---
+import JsonLdScript from '@/components/seo/JsonLdScript.astro'
+import { createWebsiteSchema } from '@/components/seo/JsonLd'
 import Layout from '../layouts/Layout.astro'
 
 // Accept: text/markdown 配信（middleware）を有効にするため SSR 化。
@@ -12,7 +14,8 @@ const works = [
 ] as const
 ---
 
-<Layout siteRoot>
+<Layout siteRoot canonicalPath="/" ogType="website">
+  <JsonLdScript data={createWebsiteSchema()} />
   <section class="mb-10 text-base text-ink-body">
     <p class="mb-4">
       React、Astro、JavaScript、TypeScript
