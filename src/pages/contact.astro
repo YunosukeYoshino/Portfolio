@@ -1,0 +1,17 @@
+---
+import ContactForm from '@/components/forms/ContactForm'
+import Layout from '@/layouts/Layout.astro'
+
+const description = 'お仕事のご依頼、ご相談などお気軽にお問い合わせください。'
+---
+
+<Layout title="Contact | Yunosuke Yoshino" description={description}>
+  <section class="mb-[var(--sectiongap)]">
+    <h1 class="label-mono mb-5">Contact</h1>
+    <p class="mb-12 text-base text-ink-body">
+      お仕事のご依頼、ご相談などお気軽にお問い合わせください。
+    </p>
+
+    <ContactForm client:load />
+  </section>
+</Layout>
