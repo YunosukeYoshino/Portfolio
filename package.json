@@ -16,7 +16,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && echo '_worker.js' > dist/.assetsignore",
     "preview": "astro build && astro preview",
     "typecheck": "tsc --noEmit",
     "test": "bun test",

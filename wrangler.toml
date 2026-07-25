@@ -1,8 +1,13 @@
 "$schema" = "node_modules/wrangler/config-schema.json"
 name = "yunosuke-portfolio"
+main = "dist/_worker.js/index.js"
 compatibility_date = "2026-03-17"
 compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 workers_dev = true
+
+[assets]
+directory = "dist"
+binding = "ASSETS"
 
 [observability]
 enabled = true
