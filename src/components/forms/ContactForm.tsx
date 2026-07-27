@@ -202,6 +202,16 @@ export default function ContactForm() {
         </p>
       )}
 
+      <input
+        type="text"
+        {...register('website')}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+        placeholder="Leave this field empty"
+      />
+
       <button
         type="submit"
         disabled={isSubmitting}

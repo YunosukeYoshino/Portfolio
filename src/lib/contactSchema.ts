@@ -13,6 +13,8 @@ export const contactBaseSchema = z.object({
   company: z.string().optional(),
   subject: z.string().min(1).max(200),
   message: z.string().min(1).max(1000),
+  // ハニーポット: 人間には空、bot は埋めがちなダミー項目。
+  website: z.string().max(0).optional(),
 })
 
 export type ContactPayload = z.infer<typeof contactBaseSchema>
