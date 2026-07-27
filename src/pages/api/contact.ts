@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
 import { contactSchema, sendResendEmail } from '@/lib/server/contactMail'
-import { SITE_URL } from '@/lib/siteMetadata.ts'
+import { SITE_URL } from '@/lib/siteMetadata'
 
 // on-demand SSR（Cloudflare Workers 上で動かす）
 export const prerender = false
@@ -9,7 +9,7 @@ export const prerender = false
 // 許可するリクエスト元 (Origin) のホワイトリスト。
 const ALLOWED_ORIGINS = new Set([
   SITE_URL,
-  'https://yunosukeyoshino.com',
+  // プレビュー環境 (wrangler.toml の env.preview.name 由来)
   'https://yunosuke-portfolio-preview.workers.dev',
 ])
 
