@@ -163,13 +163,13 @@
    specificity: an unlayered rule beats any layered one regardless of
    selector weight or declaration order). */
 :root {
-  --vt-duration-exit: 300ms;
-  --vt-duration-enter: 420ms;
-  --vt-duration-move: 900ms;
+  --vt-duration-exit: 340ms;
+  --vt-duration-enter: 340ms;
+  --vt-duration-move: 600ms;
   --vt-slide-distance: 72px;
   --vt-slide-offset: var(--vt-slide-distance);
   --vt-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
-  --vt-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  --vt-ease-exit: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes vt-fade {
