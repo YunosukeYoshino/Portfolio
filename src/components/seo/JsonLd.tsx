@@ -20,12 +20,38 @@ export const createPersonSchema = () => ({
   knowsAbout: [
     'React',
     'Next.js',
+    'Astro',
     'TypeScript',
     'JavaScript',
     'フロントエンド開発',
     'UI/UX デザイン',
-    'レスポンシブ Web デザイン',
+    'AI エージェント',
+    'MCP (Model Context Protocol)',
+    'n8n / 自動化ワークフロー',
   ],
+})
+
+export const createProfilePageSchema = () => ({
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  url: toCanonicalUrl('/about'),
+  name: 'About Yunosuke Yoshino',
+  description: 'フロントエンドエンジニア Yunosuke Yoshino のプロフィール、経歴、専門分野、FAQ。',
+  inLanguage: 'ja-JP',
+  mainEntity: createPersonSchema(),
+})
+
+export const createFAQSchema = (faqs: Array<{ question: string; answer: string }>) => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
 })
 
 export const createWebsiteSchema = () => ({

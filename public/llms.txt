@@ -1,0 +1,24 @@
+# Yunosuke Yoshino - Portfolio & Profile
+
+> Tokyo-based Frontend Engineer specializing in React, Astro, TypeScript, and AI-agentic workflows (Claude, Codex, Dify, n8n).
+
+## Profile & Background
+- Name: Yunosuke Yoshino (吉野 悠之介)
+- Role: Frontend Engineer / AI Workflow Specialist
+- Location: Tokyo, Japan (Born in Hiroshima, 1995)
+- Main Focus: Building high-performance web applications, UI/UX optimization, and automating dev workflows via AI agents.
+
+## Core Technical Skills
+- Frontend: React, Next.js, Astro, TypeScript, JavaScript, HTML5/CSS3, Tailwind CSS
+- AI & Automation: Claude, Codex, Dify, n8n, MCP (Model Context Protocol) Servers, AI Agents
+- Build & Tools: Vite, Bun, Cloudflare Workers, Git/GitHub
+
+## Key Pages
+- [About Page](https://yunosukeyoshino.com/about): Career background, expertise, and FAQ.
+- [Articles / Writing](https://yunosukeyoshino.com/article): Technical posts on frontend development and AI workflows.
+- [GitHub Profile](https://github.com/YunosukeYoshino): Open source projects and repositories.
+
+## Contact & Links
+- Email: hello@yunosukeyoshino.com
+- GitHub: https://github.com/YunosukeYoshino
+- LinkedIn: https://www.linkedin.com/in/yunosukeyoshino

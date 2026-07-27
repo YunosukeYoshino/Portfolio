@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import JsonLdScript from '@/components/seo/JsonLdScript.astro'
+import { createProfilePageSchema, createFAQSchema } from '@/components/seo/JsonLd'
 
 const description =
   'アパレル販売からフロントエンドエンジニアへ転身したYunosuke Yoshinoの経歴。React、Astroを活用したモダンなWeb開発と、AIエージェンティックコーディングによる業務自動化に取り組んでいます。'
@@ -29,15 +31,31 @@ const timelineData = [
       '東京を拠点に、ReactやAstroを活用したモダンなフロントエンド開発に特化。ビジネス要件に基づいたUI/UXの改善提案に加え、ClaudeやCodex、Dify、n8nを組み合わせたAIエージェンティックコーディングで開発と業務改善を推進する。',
   },
 ]
+
+const faqData = [
+  {
+    question: 'Yunosuke Yoshino の専門分野・強みは何ですか？',
+    answer:
+      'React、Next.js、Astro、TypeScript を用いたモダンフロントエンド開発と、Claude、Codex、Dify、n8n、MCP（Model Context Protocol）を活用した AI エージェント連携・開発フロー自動化を専門としています。',
+  },
+  {
+    question: 'どのようなWeb案件や開発業務に対応していますか？',
+    answer:
+      'WebアプリケーションのUI/UX改善・コンポーネント開発、ECサイト構築・運用、パフォーマンス高速化、ならびにAIエージェントの社内開発プロセス導入・自動化支援に対応しています。',
+  },
+]
 ---
 
 <Layout title="About｜Yunosuke Yoshino" description={description} canonicalPath="/about" ogType="website">
+  <JsonLdScript data={createProfilePageSchema()} />
+  <JsonLdScript data={createFAQSchema(faqData)} />
+
   <section class="mb-[var(--sectiongap)]">
     <h1 class="label-mono mb-5">About</h1>
-    <p class="mb-4 text-base text-ink-body">
+    <p class="mb-4 text-base text-ink-body leading-relaxed">
       1995年生まれ、広島出身。アパレル販売の現場からウェブ開発の世界へと転身し、現在は東京を拠点に活動しています。ECサイトを中心としたフロントエンド開発に特化し、データ分析に基づく継続的な改善提案を行っています。
     </p>
-    <p class="text-base text-ink-body">
+    <p class="text-base text-ink-body leading-relaxed">
       ReactやAstroといったモダンなフレームワークを活用し、保守性と拡張性を重視したコードを書くことを大切にしています。近年はClaudeやCodex、Dify、n8nを組み合わせたAIエージェンティックコーディングを推進し、プロダクト開発と業務改善の両方に取り組んでいます。
     </p>
   </section>
@@ -53,5 +71,17 @@ const timelineData = [
         </div>
       </div>
     ))}
+  </section>
+
+  <section class="mb-[var(--sectiongap)]">
+    <h2 class="label-mono mb-5">Frequently Asked Questions</h2>
+    <div class="space-y-6">
+      {faqData.map((faq) => (
+        <div class="border-t border-rule pt-4">
+          <h3 class="mb-2 text-base font-medium text-ink">{faq.question}</h3>
+          <p class="text-[15px] text-ink-soft leading-relaxed">{faq.answer}</p>
+        </div>
+      ))}
+    </div>
   </section>
 </Layout>
