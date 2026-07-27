@@ -7,11 +7,16 @@ import { SITE_URL } from '@/lib/siteMetadata'
 export const prerender = false
 
 // 許可するリクエスト元 (Origin) のホワイトリスト。
-const ALLOWED_ORIGINS = new Set([
+const PROD_ALLOWED_ORIGINS = [
   SITE_URL,
   // プレビュー環境 (wrangler.toml の env.preview.name 由来)
   'https://yunosuke-portfolio-preview.workers.dev',
-])
+]
+// astro dev (デフォルト 4321 番) は本番ビルドでは絶対に許可しない。
+const DEV_ALLOWED_ORIGINS = ['http://localhost:4321']
+export const ALLOWED_ORIGINS = new Set(
+  import.meta.env.DEV ? [...PROD_ALLOWED_ORIGINS, ...DEV_ALLOWED_ORIGINS] : PROD_ALLOWED_ORIGINS
+)
 
 function originHeader(request: Request): string | null {
   const origin = request.headers.get('origin')
@@ -44,16 +49,14 @@ async function isRateLimited(request: Request): Promise<boolean> {
 }
 
 function corsHeadersFor(origin: string | null): Record<string, string> {
-  return origin
-    ? {
-        'Access-Control-Allow-Origin': origin,
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      }
-    : {
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      }
+  // Origin ごとに Allow-Origin が変わるため、経路上のキャッシュが
+  // 別 Origin 向けのヘッダを誤って再利用しないよう Vary: Origin を付ける。
+  return {
+    Vary: 'Origin',
+    ...(origin ? { 'Access-Control-Allow-Origin': origin } : {}),
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  }
 }
 
 // フォーム送信の応答は CDN / ブラウザのどちらにもキャッシュさせない。

@@ -101,6 +101,22 @@ describe('POST /api/contact', () => {
     expect(calls).toHaveLength(0)
   })
 
+  it('allows a request with no Origin header (curl / non-browser) and dispatches emails', async () => {
+    const { calls, restore } = stubFetch()
+    restoreFetch = restore
+
+    // Origin ヘッダを付けない = buildRequest の headers に origin を渡さない
+    const response = await POST({
+      request: buildRequest('POST', validBody()),
+    } as unknown as Parameters<typeof POST>[0])
+
+    expect(response.status).toBe(200)
+    // Origin が不明なため Allow-Origin は付与されず、Vary のみ付く。
+    expect(response.headers.get('access-control-allow-origin')).toBeNull()
+    expect(response.headers.get('vary')).toBe('Origin')
+    expect(calls.length).toBeGreaterThan(0)
+  })
+
   it('returns 400 when the honeypot field is non-empty', async () => {
     const { calls, restore } = stubFetch()
     restoreFetch = restore
@@ -152,5 +168,15 @@ describe('OPTIONS /api/contact (preflight)', () => {
 
     expect(response.status).toBe(403)
     expect(response.headers.get('access-control-allow-origin')).toBeNull()
+  })
+
+  it('allows a preflight with no Origin header and still advertises methods', async () => {
+    const response = await OPTIONS({
+      request: buildRequest('OPTIONS', null),
+    } as unknown as Parameters<typeof OPTIONS>[0])
+
+    expect(response.status).toBe(200)
+    expect(response.headers.get('access-control-allow-origin')).toBeNull()
+    expect(response.headers.get('access-control-allow-methods')).toBe('POST, OPTIONS')
   })
 })
