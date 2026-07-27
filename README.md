@@ -32,6 +32,21 @@ Cloudflare Worker via the `@astrojs/cloudflare` adapter.
 | Hosting | [Cloudflare Workers](https://workers.cloudflare.com/) |
 | Tooling | [Biome](https://biomejs.dev/), [TypeScript](https://www.typescriptlang.org/), [Bun](https://bun.sh/) |
 
+## Project Structure
+
+```
+src/
+├── domain/          # Entities & Repository interfaces
+├── usecases/        # Business logic / application services
+├── infrastructure/  # microCMS adapter & DI container
+├── pages/           # Astro file-based routes & API endpoints
+├── layouts/         # Base layout & HTML shell
+├── components/      # UI components (Astro & React islands)
+├── lib/             # Utility functions, helpers & server logic
+├── data/            # Static data assets (SEO metadata)
+└── tests/           # Configuration & build verification tests
+```
+
 ## Getting Started
 
 ```bash
