@@ -3,7 +3,7 @@
 > Tokyo-based Frontend Engineer specializing in React, Astro, TypeScript, and AI-agentic workflows (Claude, Codex, Dify, n8n).
 
 ## Profile & Background
-- Name: Yunosuke Yoshino (吉野 悠之介)
+- Name: Yunosuke Yoshino
 - Role: Frontend Engineer / AI Workflow Specialist
 - Location: Tokyo, Japan (Born in Hiroshima, 1995)
 - Main Focus: Building high-performance web applications, UI/UX optimization, and automating dev workflows via AI agents.
