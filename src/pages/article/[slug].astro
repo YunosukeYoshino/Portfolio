@@ -108,7 +108,11 @@ const prevArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[cu
           <div class="flex justify-between items-start gap-8">
             <div class="flex-1 text-left">
               {prevArticle && (
-                <a class="group inline-flex flex-col no-underline" href={`/article/${prevArticle.id}`}>
+                <a
+                  class="group inline-flex flex-col no-underline"
+                  href={`/article/${prevArticle.id}`}
+                  data-transition-type="back"
+                >
                   <span class="text-xs font-sans text-ink-label mb-1.5 flex items-center gap-1.5 group-hover:text-ink transition-colors">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +140,11 @@ const prevArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[cu
 
             <div class="flex-1 text-right">
               {nextArticle && (
-                <a class="group inline-flex flex-col items-end no-underline" href={`/article/${nextArticle.id}`}>
+                <a
+                  class="group inline-flex flex-col items-end no-underline"
+                  href={`/article/${nextArticle.id}`}
+                  data-transition-type="forward"
+                >
                   <span class="text-xs font-sans text-ink-label mb-1.5 flex items-center gap-1.5 group-hover:text-ink transition-colors">
                     Next
                     <svg

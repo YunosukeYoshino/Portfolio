@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions'
 import '../globals.css'
 import Footer from '../components/layout/Footer.astro'
 import Header from '../components/layout/Header.astro'
@@ -72,6 +73,39 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
     {/* LLM クライアント向けの発見手がかり（HTTP Link ヘッダの静的ルート代替） */}
     <link rel="api-catalog" href="/.well-known/api-catalog" />
     <link rel="describedby" type="application/xml" href="/sitemap.xml" />
+    <ClientRouter />
+    {/* astro:before-swap で page-shell の view-transition-type を決定する。
+        Previous/Next 記事リンクの data-transition-type を優先し、
+        なければ記事一覧⇔記事詳細の遷移から forward/back を推測、
+        それ以外は route-fade にフォールバックする。 */}
+    <script is:inline>
+      if (!window.__vtTypeListenerAttached) {
+        window.__vtTypeListenerAttached = true
+
+        document.addEventListener('astro:before-swap', (event) => {
+          const types = event.viewTransition?.types
+          if (!types) return
+
+          const explicit = event.sourceElement?.getAttribute?.('data-transition-type')
+          if (explicit === 'forward' || explicit === 'back') {
+            types.add(explicit === 'forward' ? 'nav-forward' : 'nav-back')
+            return
+          }
+
+          const isArticle = (value) => /^\/article\/(?!page\/)/.test(new URL(String(value), location.origin).pathname)
+          const fromArticle = isArticle(event.from)
+          const toArticle = isArticle(event.to)
+
+          if (toArticle && !fromArticle) {
+            types.add('nav-forward')
+          } else if (fromArticle && !toArticle) {
+            types.add('nav-back')
+          } else {
+            types.add('route-fade')
+          }
+        })
+      }
+    </script>
     {GA_TRACKING_ID && (
       <Fragment>
         <script
@@ -91,7 +125,7 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
   <body>
     <div class="measure relative z-[2] pt-[var(--pagetop)] pb-[var(--pagebottom)]">
       <Header siteRoot={siteRoot} />
-      <main><slot /></main>
+      <main transition:name="page-shell" transition:animate="none"><slot /></main>
       <Footer />
     </div>
   </body>
