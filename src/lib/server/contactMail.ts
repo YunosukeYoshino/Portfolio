@@ -14,6 +14,15 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;')
 }
 
+/** Resend の送信成功レスポンスを unknown から安全に窄込む。 */
+function isResendSuccess(value: unknown): value is { id: string } {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as Record<string, unknown>).id === 'string'
+  )
+}
+
 /**
  * Resend 経由で管理者宛て（info@）と差出人宛て（確認メール）の 2 通を送る。
  * Astro API route (`src/pages/api/contact.ts`) から呼ばれる。
@@ -149,5 +158,9 @@ export async function sendResendEmail(
     console.warn('Confirmation email threw:', error)
   }
 
-  return (await mainResponse.json()) as { id: string }
+  const json: unknown = await mainResponse.json()
+  if (!isResendSuccess(json)) {
+    throw new Error('Unexpected Resend response shape')
+  }
+  return json
 }
