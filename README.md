@@ -2,7 +2,7 @@
   <img src="public/assets/icons/icon-192x192.png" alt="Portfolio Logo" width="120" />
   <h1>Yunosuke Yoshino Portfolio</h1>
   <p>
-    A modern portfolio site built with Astro 5, React 19, and Tailwind CSS v4
+    A modern portfolio site built with Astro 7, React 19, and Tailwind CSS v4
   </p>
   <p>
     <a href="https://yunosukeyoshino.com">Live Site</a> •
@@ -15,7 +15,7 @@
 
 ## Overview
 
-A personal portfolio and blog built with Astro 5. microCMS-managed articles are rendered
+A personal portfolio and blog built with Astro 7. microCMS-managed articles are rendered
 into a single-column editorial paper layout, prerendered at build time, and served from a
 Cloudflare Worker via the `@astrojs/cloudflare` adapter.
 
@@ -23,7 +23,7 @@ Cloudflare Worker via the `@astrojs/cloudflare` adapter.
 
 | Category | Technology |
 |----------|------------|
-| Framework | [Astro 5](https://astro.build/) |
+| Framework | [Astro 7](https://astro.build/) |
 | UI | [React 19](https://react.dev/) islands, [Tailwind CSS v4](https://tailwindcss.com/) |
 | Data Fetching | Astro Content Layer + on-demand SSR (`export const prerender = false`) |
 | CMS | [microCMS](https://microcms.io/) |

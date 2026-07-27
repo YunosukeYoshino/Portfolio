@@ -9,14 +9,14 @@ Please reason in English and respond in Japanese.
 ## Project Overview
 - **WHAT**: Personal portfolio site showcasing skills, projects, and microCMS-backed blog articles.
 - **WHY**: Serve as a high-performance, accessible, and editorial web identity for Yunosuke Yoshino.
-- **HOW**: Built with Astro 5, React 19, Tailwind CSS v4, Clean Architecture / Content Layer, and deployed to Cloudflare Workers.
+- **HOW**: Built with Astro 7, React 19, Tailwind CSS v4, Clean Architecture / Content Layer, and deployed to Cloudflare Workers.
 
 ## Tech Stack
-- **Framework**: Astro 5 (`output: 'static'` with per-route SSR via `export const prerender = false`) + React 19 islands
+- **Framework**: Astro 7 (`output: 'static'` with per-route SSR via `export const prerender = false`) + React 19 islands
 - **CMS**: microCMS (synced via Astro Content Layer API — see `src/content.config.ts`)
 - **Styling**: Tailwind CSS v4 (CSS-first, loaded through `@tailwindcss/vite`)
 - **Data Fetching**: Astro Content Layer (`getCollection`) & Clean Architecture `useCases`
-- **Deploy**: Cloudflare Workers via `@astrojs/cloudflare` (built artifacts under `dist/`)
+- **Deploy**: Cloudflare Workers via `@astrojs/cloudflare` v14 (built artifacts under `dist/`)
 
 ## Package Manager
 **Required**: Use **Bun**, not `npm`.
@@ -88,7 +88,7 @@ src/
 ```
 
 ## Known Constraints
-- **Zod v3**: Pinned to `^3.25.76`. Schemas in `src/lib/contactSchema.ts` rely on the v3 API; verify behavior before upgrading to v4.
+- **Zod v4**: Upgraded to `^4.4.3`. Schemas live in `src/lib/contactSchema.ts`.
 
 ## Testing
 - Repo-wide config tests live in `src/tests/` (Astro build output, deploy workflow)
