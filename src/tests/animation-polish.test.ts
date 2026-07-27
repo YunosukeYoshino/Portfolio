@@ -65,11 +65,32 @@ describe('contact form feedback animates in (#111)', () => {
   })
 
   it('reduced-motion media query also disables the new fade-in animations', () => {
-    const reducedMotionBlockMatch = globalsCssSource.match(
-      /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\n {2}\}\n\}/
+    // The fade-in override must sit in the UNLAYERED reduced-motion block
+    // (alongside the view-transition rules), not inside @layer base. Tailwind
+    // declares layer order as `theme, base, components, utilities`, so a
+    // base-layer `animation: none` is silently beaten by the utilities-layer
+    // animation regardless of specificity — only unlayered CSS wins. Mirrors
+    // the "keeps view-transition rules unlayered" test in viewTransitions.test.ts.
+    const layerBaseStart = globalsCssSource.indexOf('@layer base {')
+    expect(layerBaseStart).toBeGreaterThan(-1)
+    const bodyStart = globalsCssSource.indexOf('{', layerBaseStart) + 1
+    let depth = 1
+    let i = bodyStart
+    while (depth > 0 && i < globalsCssSource.length) {
+      if (globalsCssSource[i] === '{') depth++
+      else if (globalsCssSource[i] === '}') depth--
+      i++
+    }
+    const layerBaseBody = globalsCssSource.slice(bodyStart, i - 1)
+    // A base-layer override would lose to the utilities-layer animation.
+    expect(layerBaseBody).not.toMatch(/animate-fade-in/)
+
+    // The override must instead live in the unlayered reduced-motion block.
+    const unlayeredReducedMotion = globalsCssSource.match(
+      /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?::view-transition-old\(\*\)[\s\S]*?\n\}/
     )
-    expect(reducedMotionBlockMatch).not.toBeNull()
-    expect(reducedMotionBlockMatch?.[0]).toMatch(/animate-fade-in/)
+    expect(unlayeredReducedMotion).not.toBeNull()
+    expect(unlayeredReducedMotion?.[0]).toMatch(/\.animate-fade-in/)
   })
 
   it('submit status banner has an opacity/translate enter animation', () => {

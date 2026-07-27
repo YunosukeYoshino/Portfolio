@@ -155,11 +155,6 @@
     html {
       scroll-behavior: auto;
     }
-
-    .animate-fade-in,
-    .animate-fade-in-up {
-      animation: none;
-    }
   }
 }
 
@@ -251,6 +246,11 @@ html:active-view-transition-type(nav-back)::view-transition-new(page-shell) {
   ::view-transition-group(*) {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
+  }
+
+  .animate-fade-in,
+  .animate-fade-in-up {
+    animation: none;
   }
 }
 
