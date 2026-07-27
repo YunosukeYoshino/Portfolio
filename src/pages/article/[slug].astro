@@ -61,8 +61,8 @@ const prevArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[cu
     <div aria-hidden="true" class="paper-grid-background"></div>
 
     {/* メイン記事コンテナ (Sue Park 風のペーパーカードレイアウト) */}
-    <main class="relative z-10 w-full min-[1280px]:pl-[240px] pt-6 sm:pt-10 md:pt-14 pb-20">
-      <div class="px-6 min-[1280px]:px-0 max-w-[560px] mx-auto">
+    <main class="relative z-10 w-full min-[1280px]:pl-[200px] pt-6 sm:pt-10 md:pt-14 pb-20">
+      <div class="px-6 min-[1280px]:px-0 max-w-[720px] mx-auto">
         {/* モバイル用パンくずナビ */}
         <nav
           aria-label="パンくずリスト"
@@ -99,7 +99,7 @@ const prevArticle = currentIndex < sortedArticles.length - 1 ? sortedArticles[cu
 
         {/* 記事本文 */}
         <div
-          class="prose prose-base text-ink-body leading-relaxed max-w-[560px] mx-auto prose-headings:font-serif prose-a:font-medium prose-a:underline prose-a:underline-offset-4 prose-a:decoration-rule-strong hover:prose-a:decoration-ink"
+          class="prose prose-base text-ink-body leading-relaxed max-w-[720px] mx-auto prose-headings:font-serif prose-a:font-medium prose-a:underline prose-a:underline-offset-4 prose-a:decoration-rule-strong hover:prose-a:decoration-ink"
           set:html={renderedContent}
         />
 
