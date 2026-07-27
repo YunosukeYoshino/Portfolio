@@ -34,12 +34,14 @@ bun run deploy:preview  # Deploy to preview branch
 bun run cf:typegen      # Regenerate Cloudflare binding types (wrangler types)
 bun run seo:optimize    # Regenerate src/data/seo-metadata.json (:dry / :force variants)
 bun run verify:deployment # Check deployment assets after a build
+bun run lighthouse        # Build & run Lighthouse CI automated audit
 ```
 
 ## Key Locations
 | Location | Purpose |
 | --- | --- |
 | `astro.config.mjs` | Astro config (output mode, adapter, integrations, redirects) |
+| `lighthouserc.cjs` | Lighthouse CI audit configuration & assertions |
 | `src/content.config.ts` | microCMS Content Layer loader |
 | `src/layouts/Layout.astro` | Site shell (head, GA, google-site-verification, JSON-LD) |
 | `src/infrastructure/di/` | DI container (`useCases`) |

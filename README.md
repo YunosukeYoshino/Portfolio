@@ -74,6 +74,7 @@ bun run dev
 | `bun test` | Run the test suite |
 | `bun run deploy` | Deploy to Cloudflare Workers |
 | `bun run deploy:preview` | Deploy to the preview environment |
+| `bun run lighthouse` | Build & run Lighthouse CI automated audit |
 
 ### Notes
 
