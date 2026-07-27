@@ -21,10 +21,40 @@ export async function renderArticleContent(content: string): Promise<string> {
 
 /**
  * 元実装の CodeHighlight ref コールバック相当の HTML 後処理。
- * ビルド時（サーバー）に文字列置換で完結させることで React island を不要にする。
+ * ビルド時（サーバー）に文字列置換で完結させることで React island 不要にする。
  */
 function applyClientPostProcessing(html: string): string {
-  return addTldrCallout(addExternalLinkAttrs(html))
+  return transformArticleHeadings(addTldrCallout(addExternalLinkAttrs(html)))
+}
+
+/** <h2> 見出しに Sue Park 風のドットディバイダーとサブテキスト(年代など)を付与する。 */
+function transformArticleHeadings(html: string): string {
+  return html.replace(
+    /<h2((?:\s[^>]*)?)>([\s\S]*?)<\/h2>/gi,
+    (_match, _attrs: string, body: string) => {
+      const rawText = body.replace(/<[^>]+>/g, '').trim()
+      let title = body.trim()
+      let meta = ''
+
+      if (rawText.includes('|')) {
+        const parts = body.split('|')
+        title = parts[0].trim()
+        meta = parts.slice(1).join('|').trim()
+      }
+
+      const idAttr = title
+        .replace(/<[^>]+>/g, '')
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+
+      return `<h2 id="${idAttr}" class="flex items-center gap-3 mt-14 mb-6 group">
+      <span class="font-serif text-xl sm:text-2xl text-ink font-normal tracking-tight">${title}</span>
+      <span class="flex-1 h-[2px] heading-divider-line opacity-40"></span>
+      ${meta ? `<span class="font-mono text-xs text-ink-label whitespace-nowrap">${meta}</span>` : ''}
+    </h2>`
+    }
+  )
 }
 
 /** TL;DR で始まる段落に .tldr-callout を付与する。 */
