@@ -31,7 +31,7 @@ describe('deploy workflow verification target', () => {
 
 describe('wrangler configuration', () => {
   it('Astro の Worker エントリと assets ディレクトリを指定する', () => {
-    expect(wranglerSource).toContain('main = "dist/_worker.js/index.js"')
-    expect(wranglerSource).toContain('directory = "dist"')
+    expect(wranglerSource).toContain('main = "@astrojs/cloudflare/entrypoints/server"')
+    expect(wranglerSource).toContain('directory = "dist/client"')
   })
 })

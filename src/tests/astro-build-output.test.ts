@@ -4,6 +4,8 @@ import { resolve } from 'node:path'
 
 const repoRoot = resolve(import.meta.dir, '../..')
 const distDir = resolve(repoRoot, 'dist')
+const distClientDir = resolve(distDir, 'client')
+const distServerDir = resolve(distDir, 'server')
 
 const astroConfigSource = readFileSync(resolve(repoRoot, 'astro.config.mjs'), 'utf8')
 const middlewareSource = readFileSync(resolve(repoRoot, 'src/middleware.ts'), 'utf8')
@@ -11,9 +13,8 @@ const wranglerSource = readFileSync(resolve(repoRoot, 'wrangler.toml'), 'utf8')
 const contactApiSource = readFileSync(resolve(repoRoot, 'src/pages/api/contact.ts'), 'utf8')
 
 const SKIP_BUILD = process.env.SKIP_BUILD_TESTS === '1'
-// ビルド成果物が無いと検証できないので、`bun run build` 済みの場合のみ回す。
-// CI のテスト段階でも build step の後に実行される前提。
-const hasBuild = existsSync(resolve(distDir, '_worker.js', 'index.js'))
+// Astro 7 / Adapter v14 の成果物 (dist/server/entry.mjs) がある場合のみ実行
+const hasBuild = existsSync(resolve(distServerDir, 'entry.mjs'))
 
 describe('Astro Cloudflare adapter / output configuration', () => {
   it('output: static でルート単位の prerender=false に opt-in する', () => {
@@ -51,62 +52,41 @@ describe('contact / markdown サーバーエンドポイント', () => {
 })
 
 describe.skipIf(SKIP_BUILD || !hasBuild)('Astro ビルド成果物（dist/）', () => {
-  it('Cloudflare Worker エントリを _worker.js/index.js に生成する', () => {
-    expect(existsSync(resolve(distDir, '_worker.js', 'index.js'))).toBe(true)
+  it('Cloudflare Worker エントリを dist/server/entry.mjs に生成する', () => {
+    expect(existsSync(resolve(distServerDir, 'entry.mjs'))).toBe(true)
   })
 
   it('クライアントアセットを _astro/ に出力する', () => {
-    expect(existsSync(resolve(distDir, '_astro'))).toBe(true)
+    expect(existsSync(resolve(distClientDir, '_astro'))).toBe(true)
   })
 
   it('固定ページと記事一覧の静的 HTML を生成する', () => {
     const pages = ['about', 'contact', 'privacy-policy', 'article/page/1']
     for (const page of pages) {
-      expect(existsSync(resolve(distDir, page, 'index.html'))).toBe(true)
+      expect(existsSync(resolve(distClientDir, page, 'index.html'))).toBe(true)
     }
   })
 
   it('sitemap.xml を生成しサイト URL を含む', () => {
-    const sitemap = readFileSync(resolve(distDir, 'sitemap.xml'), 'utf8')
+    const sitemap = readFileSync(resolve(distClientDir, 'sitemap.xml'), 'utf8')
     expect(sitemap).toContain('<urlset')
     expect(sitemap).toContain('yunosukeyoshino.com')
   })
 
-  it('Cloudflare ルーティングマニフェスト（_routes.json）を生成する', () => {
-    const routes = readFileSync(resolve(distDir, '_routes.json'), 'utf8')
-    expect(routes).toContain('"exclude"')
-    // 静的化されたルートは Worker を経由せず配信される
-    expect(routes).toContain('/about')
-    expect(routes).toContain('/sitemap.xml')
-  })
-
-  it('Worker エントリとルーティングマニフェストを .assetsignore で除外する', () => {
-    const assetsignore = readFileSync(resolve(distDir, '.assetsignore'), 'utf8')
-    expect(assetsignore).toContain('_worker.js')
-    // Workers では _routes.json は無視されるため、静的アセットとして公開しない
-    expect(assetsignore).toContain('_routes.json')
-  })
-
   it('_astro/* に immutable、/assets/* に短期キャッシュヘッダを配信する', () => {
-    const headers = readFileSync(resolve(distDir, '_headers'), 'utf8')
+    const headers = readFileSync(resolve(distClientDir, '_headers'), 'utf8')
     expect(headers).toMatch(/\/_astro\/\*\n\s+Cache-Control: public, max-age=31536000, immutable/)
-    // /assets/* はハッシュを持たない静的ファイルなので immutable にしない
     expect(headers).toMatch(
       /\/assets\/\*\n\s+Cache-Control: public, max-age=86400, stale-while-revalidate=604800/
     )
   })
 
   it('api-catalog well-known エンドポイントを静的配置する', () => {
-    expect(existsSync(resolve(distDir, '.well-known', 'api-catalog'))).toBe(true)
-  })
-
-  it('contact / 記事詳細の SSR ページを Worker にバンドルする', () => {
-    expect(existsSync(resolve(distDir, '_worker.js', 'pages', 'api'))).toBe(true)
-    expect(existsSync(resolve(distDir, '_worker.js', 'pages', 'article'))).toBe(true)
+    expect(existsSync(resolve(distClientDir, '.well-known', 'api-catalog'))).toBe(true)
   })
 
   it('/article → /article/page/1 のリダイレクトを _redirects に出力する', () => {
-    const redirects = readFileSync(resolve(distDir, '_redirects'), 'utf8')
+    const redirects = readFileSync(resolve(distClientDir, '_redirects'), 'utf8')
     expect(redirects).toContain('/article')
     expect(redirects).toContain('/article/page/1')
   })
