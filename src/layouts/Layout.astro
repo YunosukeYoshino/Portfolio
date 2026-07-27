@@ -74,10 +74,12 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
     <link rel="api-catalog" href="/.well-known/api-catalog" />
     <link rel="describedby" type="application/xml" href="/sitemap.xml" />
     <ClientRouter />
-    {/* astro:before-swap で page-shell の view-transition-type を決定する。
-        Previous/Next 記事リンクの data-transition-type を優先し、
-        なければ記事一覧⇔記事詳細の遷移から forward/back を推測、
-        それ以外は route-fade にフォールバックする。 */}
+    {/* astro:before-swap で page-shell の view-transition-type (nav-forward / nav-back)
+        を決定する。優先順位:
+        1. data-transition-type（記事 Previous/Next リンク）
+        2. rel="prev"/"next"（ページネーション矢印）
+        3. 記事一覧⇔記事詳細の遷移からの forward/back 推測
+        4. ブラウザの実ナビゲーション方向（戻る操作なら back、それ以外は forward） */}
     <script is:inline>
       if (!window.__vtTypeListenerAttached) {
         window.__vtTypeListenerAttached = true
@@ -86,23 +88,33 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
           const types = event.viewTransition?.types
           if (!types) return
 
-          const explicit = event.sourceElement?.getAttribute?.('data-transition-type')
+          const source = event.sourceElement
+          const explicit = source?.getAttribute?.('data-transition-type')
+          const rel = source?.getAttribute?.('rel')
+
+          let direction
           if (explicit === 'forward' || explicit === 'back') {
-            types.add(explicit === 'forward' ? 'nav-forward' : 'nav-back')
-            return
-          }
-
-          const isArticle = (value) => /^\/article\/(?!page\/)/.test(new URL(String(value), location.origin).pathname)
-          const fromArticle = isArticle(event.from)
-          const toArticle = isArticle(event.to)
-
-          if (toArticle && !fromArticle) {
-            types.add('nav-forward')
-          } else if (fromArticle && !toArticle) {
-            types.add('nav-back')
+            direction = explicit
+          } else if (rel === 'prev') {
+            direction = 'back'
+          } else if (rel === 'next') {
+            direction = 'forward'
           } else {
-            types.add('route-fade')
+            const isArticle = (value) =>
+              /^\/article\/(?!page\/)/.test(new URL(String(value), location.origin).pathname)
+            const fromArticle = isArticle(event.from)
+            const toArticle = isArticle(event.to)
+
+            if (toArticle && !fromArticle) {
+              direction = 'forward'
+            } else if (fromArticle && !toArticle) {
+              direction = 'back'
+            } else {
+              direction = event.direction === 'back' ? 'back' : 'forward'
+            }
           }
+
+          types.add(direction === 'forward' ? 'nav-forward' : 'nav-back')
         })
       }
     </script>

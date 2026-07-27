@@ -239,14 +239,6 @@ html:active-view-transition-type(nav-back)::view-transition-new(page-shell) {
     var(--vt-duration-move) var(--vt-ease-enter) both vt-slide-x;
 }
 
-html:active-view-transition-type(route-fade)::view-transition-old(page-shell) {
-  animation: var(--vt-duration-exit) var(--vt-ease-exit) both vt-fade reverse;
-}
-
-html:active-view-transition-type(route-fade)::view-transition-new(page-shell) {
-  animation: var(--vt-duration-enter) var(--vt-ease-enter) var(--vt-duration-exit) both vt-fade;
-}
-
 ::view-transition-group(site-header),
 ::view-transition-group(site-footer) {
   animation: none;
