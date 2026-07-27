@@ -124,20 +124,30 @@ export async function sendResendEmail(
     throw new Error(`Failed to send main email: ${errorText}`)
   }
 
-  await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      from: 'Yoshino Yunosuke <noreply@yunosukeyoshino.com>',
-      to: [data.email],
-      subject: '【受付完了】お問い合わせありがとうございます',
-      reply_to: 'info@yunosukeyoshino.com',
-      html: confirmationHtml,
-    }),
-  })
+  try {
+    const confirmationResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        from: 'Yoshino Yunosuke <noreply@yunosukeyoshino.com>',
+        to: [data.email],
+        subject: '【受付完了】お問い合わせありがとうございます',
+        reply_to: 'info@yunosukeyoshino.com',
+        html: confirmationHtml,
+      }),
+    })
+    if (!confirmationResponse.ok) {
+      const detail = await confirmationResponse.text()
+      // biome-ignore lint/suspicious/noConsole: Auto-reply failure logging
+      console.warn('Confirmation email failed:', confirmationResponse.status, detail)
+    }
+  } catch (error) {
+    // biome-ignore lint/suspicious/noConsole: Auto-reply failure logging
+    console.warn('Confirmation email threw:', error)
+  }
 
   return (await mainResponse.json()) as { id: string }
 }
