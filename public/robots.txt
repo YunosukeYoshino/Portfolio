@@ -1,4 +1,20 @@
 User-agent: *
 Allow: /
 Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+# AI Crawlers for Search & Citation
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://yunosukeyoshino.com/sitemap.xml
+# llms.txt: https://yunosukeyoshino.com/llms.txt
+
