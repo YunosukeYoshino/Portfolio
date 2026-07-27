@@ -478,7 +478,7 @@ html:active-view-transition-type(nav-back)::view-transition-new(page-shell) {
     top: -5px;
     margin-left: 2px;
     color: var(--color-ink-label);
-    transition: color 0.2s ease-out;
+    transition: color 0.2s;
     cursor: pointer;
   }
 
