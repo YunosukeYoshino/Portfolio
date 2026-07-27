@@ -11,7 +11,6 @@ const { backUrl = '/article/page/1', backLabel = 'Writing' } = Astro.props
   <div class="relative flex flex-col gap-6 pt-[200px] pl-12 pointer-events-auto">
     <a
       class="flex items-center gap-2 w-fit text-sm font-medium text-ink-label hover:text-ink transition-colors duration-300 active:scale-[0.97] px-3 py-2 -mx-3 -my-2 rounded"
-      aria-label={`Back to ${backLabel}`}
       href={backUrl}
     >
       <svg
@@ -38,7 +37,6 @@ const { backUrl = '/article/page/1', backLabel = 'Writing' } = Astro.props
     id="back-to-top-btn"
     type="button"
     class="pointer-events-auto fixed bottom-16 left-12 flex items-center gap-2 w-fit text-sm font-medium text-ink-label hover:text-ink transition-all duration-300 opacity-0 blur-[4px] pointer-events-none cursor-pointer px-3 py-2 -mx-3 -my-2 rounded"
-    aria-label="Back to top"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

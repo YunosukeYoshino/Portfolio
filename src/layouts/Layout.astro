@@ -20,10 +20,13 @@ interface Props {
   readonly canonicalPath?: string
 }
 
+const DEFAULT_DESCRIPTION =
+  'Personal portfolio and blog of Yunosuke Yoshino. Frontend engineer focused on high-performance web applications, React, Astro, and AI agents.'
+
 const {
   siteRoot = false,
   title = 'Yunosuke Yoshino',
-  description,
+  description = DEFAULT_DESCRIPTION,
   robots,
   ogType = 'website',
   image,
@@ -31,6 +34,7 @@ const {
 } = Astro.props
 
 const canonicalUrl = canonicalPath ? toCanonicalUrl(canonicalPath) : undefined
+const pageDescription = description || DEFAULT_DESCRIPTION
 const ogImage = image ?? DEFAULT_OG_IMAGE_URL
 ---
 
@@ -51,17 +55,17 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#F3F3F1" />
-    {description && <meta name="description" content={description} />}
+    <meta name="description" content={pageDescription} />
     {robots && <meta name="robots" content={robots} />}
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <meta property="og:title" content={title} />
-    {description && <meta property="og:description" content={description} />}
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content={ogType} />
     {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />
     {/* LLM クライアント向けの発見手がかり（HTTP Link ヘッダの静的ルート代替） */}

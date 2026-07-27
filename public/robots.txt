@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Content-Signal: search=yes, ai-train=no, ai-input=yes
+# Content-Signal: search=yes, ai-train=no, ai-input=yes
 
 # AI Crawlers for Search & Citation
 User-agent: GPTBot
