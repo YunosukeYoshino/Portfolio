@@ -91,7 +91,7 @@ const breadcrumbSchema = createBreadcrumbSchema([
             const href = item.externalUrl ?? `/article/${item.id}`
             return (
               <a
-                class="article-item group block w-full py-2.5 transition-all duration-300"
+                class="article-item group block w-full py-2.5 transition-[opacity,filter] duration-300"
                 href={href}
                 {...(!isInternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               >

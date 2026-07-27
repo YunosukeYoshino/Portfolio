@@ -36,7 +36,7 @@ const { backUrl = '/article/page/1', backLabel = 'Writing' } = Astro.props
   <button
     id="back-to-top-btn"
     type="button"
-    class="pointer-events-auto fixed bottom-16 left-12 flex items-center gap-2 w-fit text-sm font-medium text-ink-label hover:text-ink transition-all duration-300 opacity-0 blur-[4px] pointer-events-none cursor-pointer px-3 py-2 -mx-3 -my-2 rounded"
+    class="pointer-events-auto fixed bottom-16 left-12 flex items-center gap-2 w-fit text-sm font-medium text-ink-label hover:text-ink transition-[opacity,filter] duration-300 opacity-0 blur-[4px] pointer-events-none cursor-pointer px-3 py-2 -mx-3 -my-2 rounded"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +75,8 @@ const { backUrl = '/article/page/1', backLabel = 'Writing' } = Astro.props
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     btn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' })
     })
 
     handleScroll()

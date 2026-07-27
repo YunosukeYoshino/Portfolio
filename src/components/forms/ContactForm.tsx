@@ -38,7 +38,7 @@ type SubmitStatus =
 
 const fieldClass =
   'w-full border-b border-rule bg-transparent py-2.5 text-base text-ink transition-colors placeholder:text-ink-faint/60 focus:border-ink focus:outline-none aria-invalid:border-alert'
-const errorClass = 'mt-2 font-mono text-[12px] text-alert'
+const errorClass = 'mt-2 font-mono text-[12px] text-alert animate-fade-in'
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -192,7 +192,7 @@ export default function ContactForm() {
       {submitStatus.type && (
         <p
           role="alert"
-          className={`border-l-2 py-2 pl-4 text-[15px] ${
+          className={`border-l-2 py-2 pl-4 text-[15px] animate-fade-in-up ${
             submitStatus.type === 'success'
               ? 'border-affirm text-affirm'
               : 'border-alert text-alert'

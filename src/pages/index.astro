@@ -63,7 +63,7 @@ const recentArticles = articleEntries
   <section class="mb-[var(--sectiongap)]">
     <div class="flex flex-col project-list">
       {works.map((work) => (
-        <div class="project-item group block w-full py-2 transition-all duration-300">
+        <div class="project-item group block w-full py-2 transition-[opacity,filter] duration-300">
           <div class="flex items-center gap-3 not-italic">
             <span class="text-base font-serif italic text-ink-body group-hover:text-ink transition-colors duration-150">
               {work.title}
@@ -89,7 +89,7 @@ const recentArticles = articleEntries
         <div class="flex flex-col article-list">
           {recentArticles.map((entry) => (
             <a
-              class="article-item group block w-full py-2.5 transition-all duration-300"
+              class="article-item group block w-full py-2.5 transition-[opacity,filter] duration-300"
               href={`/article/${entry.id}`}
             >
               <div class="flex items-center gap-3 not-italic">
