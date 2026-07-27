@@ -37,6 +37,7 @@
     "seo:optimize:force": "bun run scripts/seo-optimize.ts --force",
     "seo:optimize:dry": "bun run scripts/seo-optimize.ts --dry-run",
     "verify:deployment": "bun run scripts/verify-deployment-assets.ts",
+    "lighthouse": "bun run build && lhci autorun",
     "prepare": "husky"
   },
   "dependencies": {
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
+    "@lhci/cli": "^0.15.1",
     "@markuplint/jsx-parser": "^4.18.3",
     "@markuplint/react-spec": "^4.18.0",
     "@tailwindcss/vite": "^4.3.3",
