@@ -168,9 +168,9 @@
    specificity: an unlayered rule beats any layered one regardless of
    selector weight or declaration order). */
 :root {
-  --vt-duration-exit: 160ms;
-  --vt-duration-enter: 220ms;
-  --vt-duration-move: 520ms;
+  --vt-duration-exit: 220ms;
+  --vt-duration-enter: 300ms;
+  --vt-duration-move: 640ms;
   --vt-slide-distance: 72px;
   --vt-slide-offset: var(--vt-slide-distance);
   --vt-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
