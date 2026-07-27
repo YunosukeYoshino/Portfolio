@@ -40,6 +40,13 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    {/* ファビコン・アイコン（実体は public/assets/icons/ 配下） */}
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/icon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/icon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#F3F3F1" />
     {description && <meta name="description" content={description} />}
     {robots && <meta name="robots" content={robots} />}
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
