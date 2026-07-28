@@ -35,7 +35,7 @@ const breadcrumbSchema = createBreadcrumbSchema([
 ])
 
 const allArticles = await getCollection('articles')
-const sortedArticles = allArticles.sort(
+const sortedArticles = allArticles.toSorted(
   (a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime()
 )
 const currentIndex = sortedArticles.findIndex((item) => item.id === slug)

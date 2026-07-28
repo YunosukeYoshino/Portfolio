@@ -2,7 +2,7 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "types": ["vite/client", "bun", "astro/client"],
-    "lib": ["dom", "dom.iterable", "es2022"],
+    "lib": ["dom", "dom.iterable", "es2023"],
     "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",
     "incremental": true,
