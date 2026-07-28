@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
 /* Theme Variables - Editorial paper theme (Manila stock) */
@@ -16,9 +16,9 @@
   --color-affirm: #3f6144;
 
   --font-sans:
-    "Inter", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-  --font-serif: "Crimson Pro", Garamond, Georgia, serif;
-  --font-mono: "JetBrains Mono", "Monaco", "Menlo", monospace;
+    'Inter', -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  --font-serif: 'Crimson Pro', Garamond, Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Monaco', 'Menlo', monospace;
 }
 
 /* Layout rhythm - Editorial density */
@@ -70,7 +70,7 @@
     color: var(--color-ink);
     background: var(--color-paper);
     font-family: var(--font-sans);
-    font-feature-settings: "kern";
+    font-feature-settings: 'kern';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
@@ -78,7 +78,7 @@
 
   /* Paper grain */
   body::before {
-    content: "";
+    content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
@@ -90,7 +90,7 @@
 
   /* Page vignette */
   body::after {
-    content: "";
+    content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
@@ -113,17 +113,17 @@
 
   a[href],
   button,
-  [role="button"],
+  [role='button'],
   summary,
   select,
   label[for],
-  input[type="submit"],
-  input[type="button"],
-  input[type="reset"] {
+  input[type='submit'],
+  input[type='button'],
+  input[type='reset'] {
     cursor: pointer;
   }
 
-  input:not([type="submit"]):not([type="button"]):not([type="reset"]),
+  input:not([type='submit']):not([type='button']):not([type='reset']),
   textarea {
     cursor: text;
   }

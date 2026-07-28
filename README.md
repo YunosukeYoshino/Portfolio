@@ -30,7 +30,7 @@ Cloudflare Worker via the `@astrojs/cloudflare` adapter.
 | Content | [marked](https://marked.js.org/), [Shiki](https://shiki.style/) |
 | Forms | [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/), [Resend](https://resend.com/) |
 | Hosting | [Cloudflare Workers](https://workers.cloudflare.com/) |
-| Tooling | [Biome](https://biomejs.dev/), [TypeScript](https://www.typescriptlang.org/), [Bun](https://bun.sh/) |
+| Tooling | [Oxc](https://oxc.rs/) (Oxlint + Oxfmt), [TypeScript](https://www.typescriptlang.org/), [Bun](https://bun.sh/) |
 
 ## Project Structure
 
@@ -68,7 +68,7 @@ bun run dev
 |---------|-------------|
 | `bun run dev` | Start development server |
 | `bun run build` | Build for production |
-| `bun run lint` | Run Biome + TypeScript + Markuplint checks |
+| `bun run lint` | Run Oxlint + Oxfmt + TypeScript + Markuplint checks |
 | `bun run fix` | Auto-fix linting issues |
 | `bun run typecheck` | TypeScript type-checking only |
 | `bun test` | Run the test suite |

@@ -150,11 +150,11 @@ export async function sendResendEmail(
     })
     if (!confirmationResponse.ok) {
       const detail = await confirmationResponse.text()
-      // biome-ignore lint/suspicious/noConsole: Auto-reply failure logging
+      // eslint-disable-next-line no-console -- Auto-reply failure logging
       console.warn('Confirmation email failed:', confirmationResponse.status, detail)
     }
   } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: Auto-reply failure logging
+    // eslint-disable-next-line no-console -- Auto-reply failure logging
     console.warn('Confirmation email threw:', error)
   }
 
