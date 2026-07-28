@@ -36,7 +36,7 @@ export class MicroCMSBlogRepository implements BlogRepository {
         return createEmptyBlogResponse(queries?.offset, queries?.limit)
       }
 
-      throw new Error('Failed to fetch blogs')
+      throw new Error('Failed to fetch blogs', { cause: error })
     }
   }
 
@@ -56,7 +56,7 @@ export class MicroCMSBlogRepository implements BlogRepository {
         return createMockBlog(id)
       }
 
-      throw new Error(`Failed to fetch blog: ${id}`)
+      throw new Error(`Failed to fetch blog: ${id}`, { cause: error })
     }
   }
 
@@ -82,17 +82,17 @@ export class MicroCMSBlogRepository implements BlogRepository {
   }
 
   private logDev(...args: readonly unknown[]): void {
-    // biome-ignore lint/suspicious/noConsole: Development logging
+    // eslint-disable-next-line no-console -- Development logging
     console.log(...args)
   }
 
   private logDevWarning(...args: readonly unknown[]): void {
-    // biome-ignore lint/suspicious/noConsole: Development warning
+    // eslint-disable-next-line no-console -- Development warning
     console.warn(...args)
   }
 
   private logError(...args: readonly unknown[]): void {
-    // biome-ignore lint/suspicious/noConsole: Error logging
+    // eslint-disable-next-line no-console -- Error logging
     console.error(...args)
   }
 }

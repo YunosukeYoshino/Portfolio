@@ -18,7 +18,7 @@ function contextFor(pathname: string, headers: Record<string, string> = {}) {
   return { request: new Request(url, { headers }), url }
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: Astro の MiddlewareHandler 引数を最小構成で模す
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Astro の MiddlewareHandler 引数を最小構成で模す
 const invoke = (context: unknown, next: unknown) => (onRequest as any)(context, next)
 
 describe('middleware の Vary / Cache-Control 付与', () => {

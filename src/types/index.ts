@@ -8,12 +8,7 @@
 import type { Blog } from '@/domain/entities/blog'
 
 // Re-export from domain layer for backward compatibility
-export type {
-  Blog,
-  BlogCategory,
-  BlogEyecatch,
-  BlogResponse,
-} from '@/domain/entities/blog'
+export type { Blog, BlogCategory, BlogEyecatch, BlogResponse } from '@/domain/entities/blog'
 
 /**
  * 記事フィードのソース種別。新しい記事ソースを足すときはここを拡張する。
