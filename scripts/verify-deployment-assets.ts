@@ -81,6 +81,7 @@ async function verifyAssets(targetUrl: string) {
   const failures: string[] = []
 
   for (const asset of assets) {
+    // eslint-disable-next-line no-await-in-loop -- sequential asset verification
     const result = await fetchText(asset.url)
     const expectedContentType =
       asset.kind === 'style'
@@ -128,6 +129,7 @@ async function main() {
 
   for (let attempt = 1; attempt <= retryCount; attempt += 1) {
     try {
+      // eslint-disable-next-line no-await-in-loop -- retry attempts are sequential
       const assets = await verifyAssets(targetUrl)
       log(`Verified ${assets.length} assets for ${targetUrl}`)
       return
@@ -137,6 +139,7 @@ async function main() {
       logError(lastError.message)
 
       if (attempt < retryCount) {
+        // eslint-disable-next-line no-await-in-loop -- backoff between retries
         await sleep(retryDelayMs)
       }
     }

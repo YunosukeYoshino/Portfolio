@@ -91,6 +91,7 @@ async function fetchAllArticles(config: {
 
   while (true) {
     const url = `${config.baseUrl}/blogs?offset=${offset}&limit=${limit}`
+    // eslint-disable-next-line no-await-in-loop -- paginated fetch depends on prior total
     const response = await fetch(url, {
       headers: { 'X-MICROCMS-API-KEY': config.apiKey },
     })
@@ -99,6 +100,7 @@ async function fetchAllArticles(config: {
       throw new Error(`microCMS API error: ${response.status} ${response.statusText}`)
     }
 
+    // eslint-disable-next-line no-await-in-loop -- part of paginated fetch
     const data = (await response.json()) as BlogListResponse
     allArticles.push(...data.contents)
 
@@ -255,6 +257,7 @@ async function main(): Promise<void> {
       continue
     }
 
+    // eslint-disable-next-line no-await-in-loop -- sequential to respect API rate limit
     const result = await generateSeoMetadata(article)
 
     if (!result) {
@@ -276,6 +279,7 @@ async function main(): Promise<void> {
     printDiff(article.id, article.title, entry)
 
     if (targetArticles.indexOf(article) < targetArticles.length - 1) {
+      // eslint-disable-next-line no-await-in-loop -- deliberate rate-limit delay
       await new Promise((resolve) => setTimeout(resolve, DELAY_MS))
     }
   }
