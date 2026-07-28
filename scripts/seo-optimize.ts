@@ -208,7 +208,7 @@ async function saveCache(cache: SeoMetadataCache): Promise<void> {
   }
 
   const sorted = Object.keys(cache)
-    .sort()
+    .toSorted()
     .reduce<Record<string, SeoEntry>>((acc, key) => {
       acc[key] = cache[key]
       return acc

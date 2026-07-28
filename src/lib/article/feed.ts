@@ -35,7 +35,7 @@ export function buildArticleFeed<TSourceItem>(
 ): readonly ArticleFeedItem[] {
   return sources
     .flatMap((source) => source.adapter.toFeedItems(source.items))
-    .sort((left, right) => {
+    .toSorted((left, right) => {
       return new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime()
     })
 }

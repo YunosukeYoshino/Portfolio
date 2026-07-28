@@ -35,7 +35,7 @@ const works = [
 // Writing セクション用：最新記事を publishedAt 降順で上位3件
 const articleEntries = await getCollection('articles')
 const recentArticles = articleEntries
-  .sort(
+  .toSorted(
     (left, right) =>
       new Date(right.data.publishedAt).getTime() - new Date(left.data.publishedAt).getTime()
   )
