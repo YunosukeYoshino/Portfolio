@@ -21,6 +21,7 @@ export async function fetchAllArticles(): Promise<Blog[]> {
   let totalCount = Number.POSITIVE_INFINITY
 
   while (offset < totalCount) {
+    // eslint-disable-next-line no-await-in-loop -- paginated fetch depends on prior total
     const response = await useCases.getBlogs.execute({
       limit: PAGE_LIMIT,
       offset,
