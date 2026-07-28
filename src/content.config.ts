@@ -24,6 +24,7 @@ const articles = defineCollection({
     // 開発時のみサンプル記事を表示して UI（リスト・ページネーション・詳細）を確認できるようにする。
     if (blogs.length === 0 && import.meta.env.DEV) {
       const now = Date.now()
+      // eslint-disable-next-line no-map-spread -- readability over micro-optimization
       blogs = DEV_SAMPLE_IDS.map((id, index) => ({
         ...createMockBlog(id),
         title: `サンプル記事 ${index + 1}`,
@@ -32,6 +33,7 @@ const articles = defineCollection({
       }))
     }
 
+    // eslint-disable-next-line no-map-spread -- readability over micro-optimization
     return blogs.map((blog) => ({
       ...blog,
       id: blog.id,
