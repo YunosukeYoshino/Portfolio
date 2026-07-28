@@ -78,11 +78,12 @@ async function verifyAssets(targetUrl: string) {
     throw new Error('No asset references (/_astro/* or /assets/*) found in HTML')
   }
 
-  const failures: string[] = []
+  const results = await Promise.all(
+    assets.map(async (asset) => ({ asset, fetched: await fetchText(asset.url) }))
+  )
 
-  for (const asset of assets) {
-    // eslint-disable-next-line no-await-in-loop -- sequential asset verification
-    const result = await fetchText(asset.url)
+  const failures: string[] = []
+  for (const { asset, fetched: result } of results) {
     const expectedContentType =
       asset.kind === 'style'
         ? result.contentType.includes('text/css')

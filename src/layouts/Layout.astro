@@ -81,6 +81,9 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
         3. 記事一覧⇔記事詳細の遷移からの forward/back 推測
         4. ブラウザの実ナビゲーション方向（戻る操作なら back、それ以外は forward） */}
     <script is:inline>
+      const isArticle = (value) =>
+        /^\/article\/(?!page\/)/.test(new URL(String(value), location.origin).pathname)
+
       if (!window.__vtTypeListenerAttached) {
         window.__vtTypeListenerAttached = true
 
@@ -100,8 +103,6 @@ const ogImage = image ?? DEFAULT_OG_IMAGE_URL
           } else if (rel === 'next') {
             direction = 'forward'
           } else {
-            const isArticle = (value) =>
-              /^\/article\/(?!page\/)/.test(new URL(String(value), location.origin).pathname)
             const fromArticle = isArticle(event.from)
             const toArticle = isArticle(event.to)
 
