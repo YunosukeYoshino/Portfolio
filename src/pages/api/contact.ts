@@ -9,7 +9,7 @@ export const prerender = false
 // 許可するリクエスト元 (Origin) のホワイトリスト。
 const PROD_ALLOWED_ORIGINS = [
   SITE_URL,
-  // プレビュー環境 (wrangler.toml の env.preview.name 由来)
+  // プレビュー環境 (cloudflare.config.ts の preview mode の worker name 由来)
   'https://yunosuke-portfolio-preview.workers.dev',
 ]
 // astro dev (デフォルト 4321 番) は本番ビルドでは絶対に許可しない。

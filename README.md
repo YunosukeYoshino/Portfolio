@@ -80,11 +80,11 @@ bun run dev
 
 - Internal implementation guidance for contributors and coding agents lives in `CLAUDE.md`.
 - In development, microCMS-backed routes fall back to mock data when credentials are missing.
-- Routes are prerendered at build time and served from a Cloudflare Worker via the `@astrojs/cloudflare` adapter (see `wrangler.toml`).
+- Routes are prerendered at build time and served from a Cloudflare Worker via the `@astrojs/cloudflare` adapter (see `cloudflare.config.ts`).
 
 ## Deployment
 
-Deployed to Cloudflare Workers with Wrangler. Pushes to `main` deploy automatically via
+Deployed to Cloudflare Workers with `cf`. Pushes to `main` deploy automatically via
 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 
 ```bash

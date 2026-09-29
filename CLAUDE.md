@@ -31,7 +31,7 @@ bun run typecheck       # TypeScript type-checking only
 bun test                # Run the test suite
 bun run deploy          # Deploy to main branch
 bun run deploy:preview  # Deploy to preview branch
-bun run cf:typegen      # Regenerate Cloudflare binding types (wrangler types)
+bun run cf:typegen      # Regenerate Cloudflare binding types (cf workers types)
 bun run seo:optimize    # Regenerate src/data/seo-metadata.json (:dry / :force variants)
 bun run verify:deployment # Check deployment assets after a build
 bun run lighthouse        # Build & run Lighthouse CI automated audit
@@ -48,7 +48,7 @@ bun run lighthouse        # Build & run Lighthouse CI automated audit
 | `src/domain/` | Domain layer (no external dependencies) |
 | `src/pages/api/contact.ts` | Contact form endpoint (Resend-backed) |
 | `src/lib/server/markdown/home.ts` | Homepage markdown for LLM clients; keep in sync with `src/pages/index.astro` |
-| `wrangler.toml` | Cloudflare Workers configuration |
+| `cloudflare.config.ts` | Cloudflare Workers (cf) configuration |
 | `src/globals.css` | Tailwind v4 theme + paper design tokens |
 
 ## Directory Structure
@@ -113,7 +113,7 @@ src/
 
 ### Cloudflare Workers Deploy
 - The `@astrojs/cloudflare` adapter builds artifacts into `dist/`.
-- Worker entry point is emitted at `dist/_worker.js/index.js` (referenced by `main` in `wrangler.toml`).
+- Worker entry point is emitted at `dist/_worker.js/index.js` (referenced by `entrypoint` in `cloudflare.config.ts`).
 - Static assets are served from `dist/` (`[assets]`). `dist/.assetsignore` ignores `_worker.js` and `_routes.json`.
 - Post-deploy verification script `bun run verify:deployment <url>` verifies static assets (including `dist/_astro/*` scripts or `public/assets/*`).
 

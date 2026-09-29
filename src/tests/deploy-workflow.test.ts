@@ -4,34 +4,37 @@ import { resolve } from 'node:path'
 
 const workflowPath = resolve(import.meta.dir, '../../.github/workflows/deploy.yml')
 const workflowSource = readFileSync(workflowPath, 'utf8')
-const wranglerPath = resolve(import.meta.dir, '../../wrangler.toml')
-const wranglerSource = readFileSync(wranglerPath, 'utf8')
+const configPath = resolve(import.meta.dir, '../../cloudflare.config.ts')
+const configSource = readFileSync(configPath, 'utf8')
+const wranglerConfigPath = resolve(import.meta.dir, '../../wrangler.config.ts')
+const wranglerConfigSource = readFileSync(wranglerConfigPath, 'utf8')
 
 describe('deploy workflow verification target', () => {
   it('デプロイ直後の asset 検証は custom domain を使う', () => {
     expect(workflowSource).toContain('bun run verify:deployment https://yunosukeyoshino.com/')
   })
 
-  it('Pages deploy コマンドではなく Workers deploy を使う', () => {
-    expect(workflowSource).toContain('command: deploy')
+  it('Pages deploy コマンドではなく cf deploy を使う', () => {
+    expect(workflowSource).toContain('cf deploy')
     expect(workflowSource).not.toContain('pages deploy')
+    expect(workflowSource).not.toContain('wrangler-action')
   })
 
-  it('build 用 .env.local を生成し、worker secrets を同期する', () => {
+  it('build 用 .env.local を生成し、worker secrets を deploy 時に渡す', () => {
     expect(workflowSource).toContain('Prepare build env')
-    expect(workflowSource).toContain('Sync worker secrets')
-    expect(workflowSource).toContain('wrangler secret bulk .worker-secrets.env')
+    expect(workflowSource).toContain('cf-wrangler build')
+    expect(workflowSource).toContain('cf deploy --prebuilt --secrets-file .worker-secrets.env')
   })
 
   it('Astro ビルド成果物経由でデプロイする', () => {
     expect(workflowSource).toContain('bun run build')
-    expect(workflowSource).toContain('Deploy to Cloudflare Workers via Wrangler')
+    expect(workflowSource).toContain('Deploy to Cloudflare Workers via cf')
   })
 })
 
-describe('wrangler configuration', () => {
-  it('Astro の Worker エントリと assets ディレクトリを指定する', () => {
-    expect(wranglerSource).toContain('main = "@astrojs/cloudflare/entrypoints/server"')
-    expect(wranglerSource).toContain('directory = "dist/client"')
+describe('cloudflare configuration', () => {
+  it('Astro の Worker エントリを指定する', () => {
+    expect(configSource).toContain("entrypoint: './dist/server/entry.mjs'")
+    expect(wranglerConfigSource).toContain("assetsDirectory: 'dist/client'")
   })
 })
