@@ -31,12 +31,12 @@ data in development.
 Both of these must pass; CI runs the same commands.
 
 ```bash
-bun run lint
-bun test
+bun run lint   # vp check — Oxfmt + Oxlint + type-aware typecheck
+bun run test   # vp test — Vitest suite
 ```
 
-`bun run fix` auto-fixes most Biome findings. A `lint-staged` pre-commit hook also
-formats staged files.
+`bun run fix` auto-fixes most findings. The `vp staged` pre-commit hook
+(`.vite-hooks/pre-commit`, installed by `vp config`) also formats staged files.
 
 ## Conventions
 

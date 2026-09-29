@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test'
+import { describe, expect, it } from 'vite-plus/test'
 import type { Blog } from '@/domain/entities/blog'
 import { buildArticleFeed, getArticleFeedPage, microcmsArticleSourceAdapter } from '../feed'
 

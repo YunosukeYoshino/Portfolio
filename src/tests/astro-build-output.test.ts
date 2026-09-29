@@ -1,8 +1,11 @@
-import { describe, expect, it } from 'bun:test'
+import { describe, expect, it } from 'vite-plus/test'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const repoRoot = resolve(import.meta.dir, '../..')
+const TEST_DIR = fileURLToPath(new URL('.', import.meta.url))
+
+const repoRoot = resolve(TEST_DIR, '../..')
 const distDir = resolve(repoRoot, 'dist')
 const distClientDir = resolve(distDir, 'client')
 const distServerDir = resolve(distDir, 'server')

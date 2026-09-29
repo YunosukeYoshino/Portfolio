@@ -1,13 +1,11 @@
-import { describe, expect, it, mock } from 'bun:test'
+import { describe, expect, it, vi } from 'vite-plus/test'
 
-// astro:middleware は Astro ランタイム専用の仮想モジュール。
-// defineMiddleware は恒等関数なのでテスト側で差し替える。
-mock.module('astro:middleware', () => ({
-  defineMiddleware: (handler: unknown) => handler,
-}))
+// astro:middleware は vite.config.ts の resolve.alias で恒等 stub に解決される。
 // 記事 markdown は microCMS に到達するため、ヘッダ検証には不要な依存を切る。
-const ARTICLE_MARKDOWN = '# サンプル記事 1\n\npublished: 2026-07-26\n\n本文\n'
-mock.module('@/lib/server/markdown/article', () => ({
+const { ARTICLE_MARKDOWN } = vi.hoisted(() => ({
+  ARTICLE_MARKDOWN: '# サンプル記事 1\n\npublished: 2026-07-26\n\n本文\n',
+}))
+vi.mock('@/lib/server/markdown/article', () => ({
   getArticleMarkdown: async (slug: string) => (slug === 'sample-blog-1' ? ARTICLE_MARKDOWN : null),
 }))
 

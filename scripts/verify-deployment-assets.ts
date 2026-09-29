@@ -114,7 +114,7 @@ async function verifyAssets(targetUrl: string) {
   return assets
 }
 
-async function main() {
+export async function main() {
   const targetUrl = normalizeTargetUrl(
     process.argv[2] ||
       process.env.VERIFY_DEPLOYMENT_URL ||

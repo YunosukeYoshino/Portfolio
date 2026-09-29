@@ -30,7 +30,7 @@ Cloudflare Worker via the `@astrojs/cloudflare` adapter.
 | Content | [marked](https://marked.js.org/), [Shiki](https://shiki.style/) |
 | Forms | [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/), [Resend](https://resend.com/) |
 | Hosting | [Cloudflare Workers](https://workers.cloudflare.com/) |
-| Tooling | [Oxc](https://oxc.rs/) (Oxlint + Oxfmt), [TypeScript](https://www.typescriptlang.org/), [Bun](https://bun.sh/) |
+| Tooling | [Vite+](https://viteplus.dev/) 1.0 (`vp` CLI: Vite + Oxlint/Oxfmt + tsgolint + Vitest), [Bun](https://bun.sh/) |
 
 ## Project Structure
 
@@ -66,15 +66,32 @@ bun run dev
 
 | Command | Description |
 |---------|-------------|
-| `bun run dev` | Start development server |
-| `bun run build` | Build for production |
-| `bun run lint` | Run Oxlint + Oxfmt + TypeScript checks |
-| `bun run fix` | Auto-fix linting issues |
-| `bun run typecheck` | TypeScript type-checking only |
-| `bun test` | Run the test suite |
-| `bun run deploy` | Deploy to Cloudflare Workers |
+| `bun run dev` | Start development server (Astro; equivalent: `vp run dev`) |
+| `bun run build` | Build for production (`vp run build`) |
+| `bun run lint` | `vp check` — Oxfmt check + Oxlint + type-aware typecheck |
+| `bun run fix` | Auto-fix linting + formatting issues |
+| `bun run typecheck` | `vp check --no-fmt --no-lint` (types only) |
+| `bun run test` | `vp test` — run the Vitest suite |
+| `bun run deploy` | Deploy to Cloudflare Workers via `cf` CLI |
 | `bun run deploy:preview` | Deploy to the preview environment |
 | `bun run lighthouse` | Build & run Lighthouse CI automated audit |
+
+### Toolchain
+
+This repo uses [Vite+](https://viteplus.dev/) 1.0, installed project-locally as the
+`vite-plus` devDependency (`vp` is run via `bunx vp` or the package.json scripts above).
+It unifies the dev toolchain:
+
+- `vp check` — Oxfmt format check + Oxlint + type-aware typecheck (tsgolint)
+- `vp test` — Vitest test runner (`vite-plus/test` import surface)
+- `vp run dev` / `vp run build` — invoke the Astro scripts (the `vp dev`/`vp build`
+  built-ins do not apply to Astro projects)
+- `vp staged` — lint-staged equivalent for pre-commit hooks
+
+All formatting, linting, and staged settings live in `vite.config.ts` (there are no
+`.oxlintrc`/`.oxfmtrc`/ESLint/Prettier configs). Git hooks are managed by `vp hooks`
+— `.vite-hooks/pre-commit` runs `vp staged`, and `bun install` re-installs the
+dispatcher via the `prepare` script (`vp config`). `vp` runs on Node.js.
 
 ### Notes
 
@@ -84,8 +101,10 @@ bun run dev
 
 ## Deployment
 
-Deployed to Cloudflare Workers with `cf`. Pushes to `main` deploy automatically via
-[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+Deployed to Cloudflare Workers with the [`cf` CLI](https://github.com/cloudflare/cf)
+(`bun run deploy` = `astro build` → `cf-wrangler build` → `cf deploy --prebuilt`).
+Pushes to `main` deploy automatically via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+Worker bindings, secrets and environments are declared in `cloudflare.config.ts`.
 
 ```bash
 # Production deploy
@@ -96,7 +115,8 @@ bun run deploy:preview
 ```
 
 > [!IMPORTANT]
-> The deploy workflow runs on Node.js 22. Use Node.js 22 or higher for local deploys as well.
+> The `cf` and `vp` CLIs run on Node.js — use Node.js 24 or higher locally
+> (`vp staged` requires Node >= 22.22.1 or >= 24.11; the deploy workflow uses Node.js 22).
 
 ## Contributing
 

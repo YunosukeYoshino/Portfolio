@@ -1,12 +1,15 @@
-import { describe, expect, it } from 'bun:test'
+import { describe, expect, it } from 'vite-plus/test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const workflowPath = resolve(import.meta.dir, '../../.github/workflows/deploy.yml')
+const TEST_DIR = fileURLToPath(new URL('.', import.meta.url))
+
+const workflowPath = resolve(TEST_DIR, '../../.github/workflows/deploy.yml')
 const workflowSource = readFileSync(workflowPath, 'utf8')
-const configPath = resolve(import.meta.dir, '../../cloudflare.config.ts')
+const configPath = resolve(TEST_DIR, '../../cloudflare.config.ts')
 const configSource = readFileSync(configPath, 'utf8')
-const wranglerConfigPath = resolve(import.meta.dir, '../../wrangler.config.ts')
+const wranglerConfigPath = resolve(TEST_DIR, '../../wrangler.config.ts')
 const wranglerConfigSource = readFileSync(wranglerConfigPath, 'utf8')
 
 describe('deploy workflow verification target', () => {

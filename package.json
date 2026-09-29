@@ -18,15 +18,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro build && astro preview",
-    "typecheck": "tsc --noEmit",
-    "test": "bun test",
-    "lint": "bun run lint:oxlint && bun run lint:oxfmt && bun run lint:tsc",
-    "lint:oxlint": "oxlint .",
-    "lint:oxfmt": "oxfmt --check .",
-    "lint:tsc": "tsc --noEmit",
-    "fix": "bun run fix:oxlint && bun run format",
-    "fix:oxlint": "oxlint --fix .",
-    "format": "oxfmt --write .",
+    "typecheck": "vp check --no-fmt --no-lint",
+    "test": "vp test",
+    "lint": "vp check",
+    "fix": "vp lint --fix . && vp fmt",
+    "format": "vp fmt",
     "deploy": "bun run build && cf-wrangler build && grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .worker-secrets.env && cf deploy --prebuilt --secrets-file .worker-secrets.env && rm -f .worker-secrets.env",
     "deploy:preview": "bun run build && cf-wrangler build --mode preview && cf deploy --prebuilt --mode preview",
     "cf:typegen": "cf workers types",
@@ -35,7 +31,7 @@
     "seo:optimize:dry": "bun run scripts/seo-optimize.ts --dry-run",
     "verify:deployment": "bun run scripts/verify-deployment-assets.ts",
     "lighthouse": "bun run build && lhci autorun",
-    "prepare": "husky"
+    "prepare": "vp config"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.1.4",
@@ -60,13 +56,9 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "cf": "1.0.0-beta.5",
-    "husky": "^9.1.7",
-    "lint-staged": "^17.2.0",
-    "oxfmt": "^0.68.0",
-    "oxlint": "^1.75.0",
     "tailwindcss": "^4.3.3",
-    "typescript": "^7.0.2",
-    "vite": "^8.1.5",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0",
+    "vite-plus": "1.0.0",
     "wrangler": "^4.136.0"
   },
   "overrides": {
@@ -75,19 +67,15 @@
     "picomatch": ">=2.3.2",
     "undici": ">=7.25.0 <8",
     "uuid": ">=14.0.0",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0",
     "yaml": ">=2.8.3"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "oxlint --fix",
-      "oxfmt --write"
-    ],
-    "*.astro": [
-      "oxlint --fix"
-    ],
-    "src/**/*.{json,css,scss}": [
-      "oxfmt --write"
-    ]
+  "devEngines": {
+    "packageManager": {
+      "name": "bun",
+      "version": "1.4.2",
+      "onFail": "download"
+    }
   },
   "trustedDependencies": []
 }
