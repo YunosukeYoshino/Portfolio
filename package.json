@@ -70,7 +70,6 @@
     "wrangler": "^4.112.0"
   },
   "overrides": {
-    "@typescript-eslint/typescript-estree": "^8.65.0",
     "diff": ">=8.0.3",
     "mdast-util-to-hast": ">=13.2.1",
     "picomatch": ">=2.3.2",
