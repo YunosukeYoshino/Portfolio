@@ -5,7 +5,7 @@
 ## Verification
 
 - [ ] `bun run lint` passes
-- [ ] `bun test` passes
+- [ ] `bun run test` passes
 - [ ] UI changes checked in a browser at a desktop **and** a mobile viewport (or: no UI change)
 
 <!-- Screenshots for UI changes are appreciated. -->

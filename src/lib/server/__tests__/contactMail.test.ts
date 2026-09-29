@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'bun:test'
+import { afterEach, describe, expect, it } from 'vite-plus/test'
 import type { ContactPayload } from '@/lib/contactSchema'
 import { sendResendEmail } from '@/lib/server/contactMail'
 
@@ -33,7 +33,7 @@ function buildFetchSequence(responses: Response[], throws?: (Error | undefined)[
     const body: EmailPayload | null = init?.body
       ? (JSON.parse(init.body as string) as EmailPayload)
       : null
-    calls.push({ url: input.toString(), body })
+    calls.push({ url: input instanceof Request ? input.url : input.toString(), body })
     const nextThrow = throwQueue.shift()
     if (nextThrow) throw nextThrow
     const next = responses.shift()

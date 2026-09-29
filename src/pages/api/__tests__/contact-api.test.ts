@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'bun:test'
+import { afterEach, describe, expect, it } from 'vite-plus/test'
 
 const { POST, OPTIONS } = await import('@/pages/api/contact')
 
@@ -37,7 +37,7 @@ function stubFetch(): { calls: FetchCall[]; restore: () => void } {
   const original = globalThis.fetch
   globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
     const body = init?.body ? JSON.parse(init.body as string) : null
-    calls.push({ url: input.toString(), body })
+    calls.push({ url: input instanceof Request ? input.url : input.toString(), body })
     return new Response(JSON.stringify({ id: 're_test' }), { status: 200 })
   }) as typeof fetch
   return { calls, restore: () => (globalThis.fetch = original) }

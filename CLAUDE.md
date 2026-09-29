@@ -25,10 +25,10 @@ Please reason in English and respond in Japanese.
 ```bash
 bun run dev             # Astro dev server (http://localhost:4321)
 bun run build           # Production build (astro build -> dist/)
-bun run lint            # Oxlint + Oxfmt + TypeScript
+bun run lint            # vp check — Oxfmt + Oxlint + type-aware typecheck
 bun run fix             # Auto-fix
-bun run typecheck       # TypeScript type-checking only
-bun test                # Run the test suite
+bun run typecheck       # vp check --no-fmt --no-lint (types only)
+bun run test            # vp test — Vitest suite
 bun run deploy          # Deploy to main branch
 bun run deploy:preview  # Deploy to preview branch
 bun run cf:typegen      # Regenerate Cloudflare binding types (cf workers types)
@@ -49,6 +49,7 @@ bun run lighthouse        # Build & run Lighthouse CI automated audit
 | `src/pages/api/contact.ts` | Contact form endpoint (Resend-backed) |
 | `src/lib/server/markdown/home.ts` | Homepage markdown for LLM clients; keep in sync with `src/pages/index.astro` |
 | `cloudflare.config.ts` | Cloudflare Workers (cf) configuration |
+| `vite.config.ts` | Vite+ unified toolchain config (fmt, lint, staged, vitest) |
 | `src/globals.css` | Tailwind v4 theme + paper design tokens |
 
 ## Directory Structure
@@ -94,7 +95,7 @@ src/
 
 ## Testing
 - Repo-wide config tests live in `src/tests/` (Astro build output, deploy workflow)
-- Run with `bun test`
+- Run with `bun run test` (`vp test`)
 
 ## Important Patterns
 

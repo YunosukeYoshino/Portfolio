@@ -1,8 +1,11 @@
-import { describe, expect, it } from 'bun:test'
+import { describe, expect, it } from 'vite-plus/test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const repoRoot = resolve(import.meta.dir, '../..')
+const TEST_DIR = fileURLToPath(new URL('.', import.meta.url))
+
+const repoRoot = resolve(TEST_DIR, '../..')
 
 const articleSidebarSource = readFileSync(
   resolve(repoRoot, 'src/components/article/ArticleSidebar.astro'),
