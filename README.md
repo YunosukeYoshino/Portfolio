@@ -68,7 +68,7 @@ bun run dev
 |---------|-------------|
 | `bun run dev` | Start development server |
 | `bun run build` | Build for production |
-| `bun run lint` | Run Oxlint + Oxfmt + TypeScript + Markuplint checks |
+| `bun run lint` | Run Oxlint + Oxfmt + TypeScript checks |
 | `bun run fix` | Auto-fix linting issues |
 | `bun run typecheck` | TypeScript type-checking only |
 | `bun test` | Run the test suite |

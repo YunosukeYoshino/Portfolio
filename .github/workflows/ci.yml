@@ -37,7 +37,7 @@ jobs:
       - name: Generate Cloudflare binding types
         run: bun run cf:typegen
 
-      - name: Lint (Biome + TypeScript + Markuplint)
+      - name: Lint (Oxlint + Oxfmt + TypeScript)
         run: bun run lint
 
       - name: Test
