@@ -27,7 +27,7 @@
     "fix": "bun run fix:oxlint && bun run format",
     "fix:oxlint": "oxlint --fix .",
     "format": "oxfmt --write .",
-    "deploy": "bun run build && cf-wrangler build && cf deploy --prebuilt",
+    "deploy": "bun run build && cf-wrangler build && grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .worker-secrets.env && cf deploy --prebuilt --secrets-file .worker-secrets.env && rm -f .worker-secrets.env",
     "deploy:preview": "bun run build && cf-wrangler build --mode preview && cf deploy --prebuilt --mode preview",
     "cf:typegen": "cf workers types",
     "seo:optimize": "bun run scripts/seo-optimize.ts",
