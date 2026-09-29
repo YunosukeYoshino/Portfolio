@@ -113,8 +113,8 @@ src/
 
 ### Cloudflare Workers Deploy
 - The `@astrojs/cloudflare` adapter builds artifacts into `dist/`.
-- Worker entry point is emitted at `dist/_worker.js/index.js` (referenced by `entrypoint` in `cloudflare.config.ts`).
-- Static assets are served from `dist/` (`[assets]`). `dist/.assetsignore` ignores `_worker.js` and `_routes.json`.
+- Worker entry point is emitted at `dist/server/entry.mjs` (referenced by `entrypoint` in `cloudflare.config.ts`).
+- Static assets are served from `dist/client` (`assetsDirectory` in `wrangler.config.ts`).
 - Post-deploy verification script `bun run verify:deployment <url>` verifies static assets (including `dist/_astro/*` scripts or `public/assets/*`).
 
 ## Safety & Guardrails
