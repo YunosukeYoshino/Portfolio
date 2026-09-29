@@ -25,7 +25,7 @@ Please reason in English and respond in Japanese.
 ```bash
 bun run dev             # Astro dev server (http://localhost:4321)
 bun run build           # Production build (astro build -> dist/)
-bun run lint            # Biome + TypeScript + Markuplint
+bun run lint            # Oxlint + Oxfmt + TypeScript
 bun run fix             # Auto-fix
 bun run typecheck       # TypeScript type-checking only
 bun test                # Run the test suite
