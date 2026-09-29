@@ -90,8 +90,14 @@ It unifies the dev toolchain:
 
 All formatting, linting, and staged settings live in `vite.config.ts` (there are no
 `.oxlintrc`/`.oxfmtrc`/ESLint/Prettier configs). Git hooks are managed by `vp hooks`
-— `.vite-hooks/pre-commit` runs `vp staged`, and `bun install` re-installs the
-dispatcher via the `prepare` script (`vp config`). `vp` runs on Node.js.
+— `.vite-hooks/pre-commit` runs `vp staged`. Because `bunfig.toml` disables
+lifecycle scripts (`ignoreScripts`), install the hook dispatcher once after cloning:
+
+```bash
+bunx vp hooks enable
+```
+
+`vp` runs on Node.js.
 
 ### Notes
 
