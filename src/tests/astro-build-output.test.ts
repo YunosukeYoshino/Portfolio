@@ -9,7 +9,7 @@ const distServerDir = resolve(distDir, 'server')
 
 const astroConfigSource = readFileSync(resolve(repoRoot, 'astro.config.mjs'), 'utf8')
 const middlewareSource = readFileSync(resolve(repoRoot, 'src/middleware.ts'), 'utf8')
-const wranglerSource = readFileSync(resolve(repoRoot, 'wrangler.toml'), 'utf8')
+const cfConfigSource = readFileSync(resolve(repoRoot, 'cloudflare.config.ts'), 'utf8')
 const contactApiSource = readFileSync(resolve(repoRoot, 'src/pages/api/contact.ts'), 'utf8')
 
 const SKIP_BUILD = process.env.SKIP_BUILD_TESTS === '1'
@@ -26,8 +26,8 @@ describe('Astro Cloudflare adapter / output configuration', () => {
     expect(astroConfigSource).toMatch(/integrations:\s*\[react\(\)\]/)
   })
 
-  it('Wrangler は nodejs_compat 互換フラグを維持する', () => {
-    expect(wranglerSource).toContain('nodejs_compat')
+  it('Worker は nodejs_compat 互換フラグを維持する', () => {
+    expect(cfConfigSource).toContain('nodejs_compat')
   })
 })
 

@@ -27,10 +27,9 @@
     "fix": "bun run fix:oxlint && bun run format",
     "fix:oxlint": "oxlint --fix .",
     "format": "oxfmt --write .",
-    "deploy": "bun run build && wrangler deploy",
-    "deploy:preview": "bun run build && wrangler deploy --env preview",
-    "wrangler": "wrangler",
-    "cf:typegen": "wrangler types",
+    "deploy": "bun run build && cf-wrangler build && cf deploy --prebuilt",
+    "deploy:preview": "bun run build && cf-wrangler build --mode preview && cf deploy --prebuilt --mode preview",
+    "cf:typegen": "cf workers types",
     "seo:optimize": "bun run scripts/seo-optimize.ts",
     "seo:optimize:force": "bun run scripts/seo-optimize.ts --force",
     "seo:optimize:dry": "bun run scripts/seo-optimize.ts --dry-run",
@@ -60,6 +59,7 @@
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "cf": "1.0.0-beta.5",
     "husky": "^9.1.7",
     "lint-staged": "^17.2.0",
     "oxfmt": "^0.68.0",
@@ -67,7 +67,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.1.5",
-    "wrangler": "^4.112.0"
+    "wrangler": "^4.136.0"
   },
   "overrides": {
     "diff": ">=8.0.3",
