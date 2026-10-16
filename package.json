@@ -23,7 +23,9 @@
     "lint": "vp check",
     "fix": "vp lint --fix . && vp fmt",
     "format": "vp fmt",
-    "deploy": "bun run build && cf-wrangler build && grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .worker-secrets.env && cf deploy --prebuilt --secrets-file .worker-secrets.env && rm -f .worker-secrets.env",
+    "deploy": "void deploy --platform cloudflare",
+    "deploy:cf": "bun run build && cf-wrangler build && grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .worker-secrets.env && cf deploy --prebuilt --secrets-file .worker-secrets.env && rm -f .worker-secrets.env",
+    "secrets:sync": "grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .void-secrets.env && void secret sync .void-secrets.env && rm -f .void-secrets.env",
     "deploy:preview": "bun run build && cf-wrangler build --mode preview && cf deploy --prebuilt --mode preview",
     "cf:typegen": "cf workers types",
     "seo:optimize": "bun run scripts/seo-optimize.ts",
@@ -59,6 +61,7 @@
     "tailwindcss": "^4.3.3",
     "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0",
     "vite-plus": "1.0.0",
+    "void": "1.1.11",
     "wrangler": "^4.136.0"
   },
   "overrides": {

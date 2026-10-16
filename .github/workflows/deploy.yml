@@ -61,27 +61,19 @@ jobs:
           VITE_PUBLIC_SITE_URL=https://yunosukeyoshino.com
           EOF
 
-      - name: Build application
-        run: bun run build
+      - name: Deploy to Cloudflare Workers via Void
+        # `void deploy` runs `astro build` internally; the .env.local written
+        # above feeds the Content Layer. The three server keys must already
+        # exist as Worker secrets (see `bun run secrets:sync`).
+        run: bunx void deploy --platform cloudflare
         env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_WORKERS_SUBDOMAIN: yunosuke
           MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           SITE_URL: https://yunosukeyoshino.com
-
-      - name: Deploy to Cloudflare Workers via cf
-        run: |
-          cat > .worker-secrets.env <<EOF
-          MICROCMS_SERVICE_DOMAIN=${{ secrets.MICROCMS_SERVICE_DOMAIN }}
-          MICROCMS_API_KEY=${{ secrets.MICROCMS_API_KEY }}
-          RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
-          EOF
-          bunx cf-wrangler build
-          bunx cf deploy --prebuilt --secrets-file .worker-secrets.env
-          rm -f .worker-secrets.env
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Verify deployed assets
         run: bun run verify:deployment https://yunosukeyoshino.com/
