@@ -75,7 +75,7 @@ bun run dev
 | `bun run deploy` | Deploy to Cloudflare Workers via `void deploy` |
 | `bun run deploy:preview` | Deploy to the preview environment (`cf` CLI) |
 | `bun run deploy:cf` | Deploy via the legacy `cf` CLI path (fallback) |
-| `bun run secrets:sync` | Upload server secrets from `.env.local` via `void secret sync` |
+| `bun run secrets:sync` | Upload server secrets via `void secret sync` (reads `.env.local`, falling back to `.env`) |
 | `bun run lighthouse` | Build & run Lighthouse CI automated audit |
 
 ### Toolchain
@@ -120,7 +120,7 @@ are declared in `env.ts` and uploaded once with `void secret sync`.
 ```bash
 # One-time setup
 bunx void cloudflare login   # Cloudflare account auth (browser)
-bun run secrets:sync         # register Worker secrets from .env.local
+bun run secrets:sync         # register Worker secrets from .env.local (or .env)
 
 # Production deploy
 bun run deploy

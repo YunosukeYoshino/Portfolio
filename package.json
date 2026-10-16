@@ -25,7 +25,7 @@
     "format": "vp fmt",
     "deploy": "void deploy --platform cloudflare",
     "deploy:cf": "bun run build && cf-wrangler build && grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .worker-secrets.env && cf deploy --prebuilt --secrets-file .worker-secrets.env && rm -f .worker-secrets.env",
-    "secrets:sync": "grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .void-secrets.env && void secret sync .void-secrets.env && rm -f .void-secrets.env",
+    "secrets:sync": "f=.env.local; [ -f \"$f\" ] || f=.env; grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' \"$f\" > .void-secrets.env && void secret sync .void-secrets.env && rm -f .void-secrets.env",
     "deploy:preview": "bun run build && cf-wrangler build --mode preview && cf deploy --prebuilt --mode preview",
     "cf:typegen": "cf workers types",
     "seo:optimize": "bun run scripts/seo-optimize.ts",

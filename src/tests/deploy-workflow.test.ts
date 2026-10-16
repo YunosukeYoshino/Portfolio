@@ -13,7 +13,6 @@ const wranglerConfigPath = resolve(TEST_DIR, '../../wrangler.config.ts')
 const wranglerConfigSource = readFileSync(wranglerConfigPath, 'utf8')
 const voidConfigPath = resolve(TEST_DIR, '../../void.config.ts')
 const voidConfigSource = readFileSync(voidConfigPath, 'utf8')
-const packageJsonSource = readFileSync(resolve(TEST_DIR, '../../package.json'), 'utf8')
 
 describe('deploy workflow verification target', () => {
   it('デプロイ直後の asset 検証は custom domain を使う', () => {
@@ -32,9 +31,9 @@ describe('deploy workflow verification target', () => {
     expect(workflowSource).toContain('CLOUDFLARE_API_TOKEN')
   })
 
-  it('Worker secrets はデプロイ時アップロードではなく事前登録を参照する', () => {
+  it('Worker secrets をデプロイ前に GitHub Secrets から同期する', () => {
+    expect(workflowSource).toContain('void secret sync')
     expect(workflowSource).not.toContain('.worker-secrets.env')
-    expect(packageJsonSource).toContain('void secret sync')
   })
 })
 
