@@ -17,7 +17,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  NODE_VERSION: "22"
+  # Node 24+ required: void's Cloudflare secret/deploy ops import
+  # setGlobalProxyFromEnv from node:http (Node >= 24).
+  NODE_VERSION: "24"
   BUN_VERSION: "latest"
   BUN_INSTALL_FLAGS: "--frozen-lockfile --ignore-scripts"
 
