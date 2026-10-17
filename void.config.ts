@@ -11,6 +11,9 @@ export default defineConfig({
     // void/* runtime helpers in Astro framework mode.
     compatibility_flags: ['nodejs_compat', 'nodejs_als'],
     workers_dev: true,
+    // Mirror the existing Worker's dashboard-managed traffic state so Void
+    // can safely republish (preview URLs are enabled on the current worker).
+    preview_urls: true,
     routes: [{ pattern: 'yunosukeyoshino.com', custom_domain: true }],
   },
 })
