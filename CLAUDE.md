@@ -16,7 +16,7 @@ Please reason in English and respond in Japanese.
 - **CMS**: microCMS (synced via Astro Content Layer API — see `src/content.config.ts`)
 - **Styling**: Tailwind CSS v4 (CSS-first, loaded through `@tailwindcss/vite`)
 - **Data Fetching**: Astro Content Layer (`getCollection`) & Clean Architecture `useCases`
-- **Deploy**: Cloudflare Workers via `@astrojs/cloudflare` v14 (built artifacts under `dist/`)
+- **Deploy**: Cloudflare Workers via `@astrojs/cloudflare` v14 + [Void](https://void.cloud) (`void deploy` builds and deploys in one command)
 
 ## Package Manager
 **Required**: Use **Bun**, not `npm`.
@@ -29,8 +29,10 @@ bun run lint            # vp check — Oxfmt + Oxlint + type-aware typecheck
 bun run fix             # Auto-fix
 bun run typecheck       # vp check --no-fmt --no-lint (types only)
 bun run test            # vp test — Vitest suite
-bun run deploy          # Deploy to main branch
-bun run deploy:preview  # Deploy to preview branch
+bun run deploy          # Deploy to production via `void deploy`
+bun run deploy:preview  # Deploy to preview worker via `cf` CLI
+bun run deploy:cf       # Legacy cf-based production deploy (fallback)
+bun run secrets:sync    # Upload server secrets via `void secret sync`
 bun run cf:typegen      # Regenerate Cloudflare binding types (cf workers types)
 bun run seo:optimize    # Regenerate src/data/seo-metadata.json (:dry / :force variants)
 bun run verify:deployment # Check deployment assets after a build
@@ -48,7 +50,9 @@ bun run lighthouse        # Build & run Lighthouse CI automated audit
 | `src/domain/` | Domain layer (no external dependencies) |
 | `src/pages/api/contact.ts` | Contact form endpoint (Resend-backed) |
 | `src/lib/server/markdown/home.ts` | Homepage markdown for LLM clients; keep in sync with `src/pages/index.astro` |
-| `cloudflare.config.ts` | Cloudflare Workers (cf) configuration |
+| `void.config.ts` | Void/Cloudflare Worker settings for `void deploy` (name, compat flags, routes) |
+| `env.ts` | Void env schema — declares server secrets (`MICROCMS_*`, `RESEND_API_KEY`) |
+| `cloudflare.config.ts` | Cloudflare Workers (cf) configuration — preview worker + legacy deploy fallback |
 | `vite.config.ts` | Vite+ unified toolchain config (fmt, lint, staged, vitest) |
 | `src/globals.css` | Tailwind v4 theme + paper design tokens |
 
@@ -113,14 +117,16 @@ src/
 - Motion is strictly limited to View Transitions.
 
 ### Cloudflare Workers Deploy
+- `void deploy --platform cloudflare` builds with `astro build` and deploys to the `yunosuke-portfolio` Worker; settings live in `void.config.ts` and generated `.void-wrangler.jsonc` feeds the `@astrojs/cloudflare` adapter (`configPath`).
+- Server secrets are managed by `void secret put`/`sync` against the `env.ts` schema — never by per-deploy secrets files.
 - The `@astrojs/cloudflare` adapter builds artifacts into `dist/`.
-- Worker entry point is emitted at `dist/server/entry.mjs` (referenced by `entrypoint` in `cloudflare.config.ts`).
+- Worker entry point is emitted at `dist/server/entry.mjs` (referenced by `entrypoint` in `cloudflare.config.ts` — still used by `deploy:preview`/`deploy:cf`).
 - Static assets are served from `dist/client` (`assetsDirectory` in `wrangler.config.ts`).
 - Post-deploy verification script `bun run verify:deployment <url>` verifies static assets (including `dist/_astro/*` scripts or `public/assets/*`).
 
 ## Safety & Guardrails
 - **Destructive Commands**: Never execute `git reset --hard`, `git clean -fd`, or force pushes without user explicit instruction. Keep commits local.
-- **Secrets Management**: Secrets (`MICROCMS_*`, `RESEND_API_KEY`) must remain in `.env.local` or Cloudflare Worker bindings. Never commit raw keys.
+- **Secrets Management**: Secrets (`MICROCMS_*`, `RESEND_API_KEY`) must remain in `.env` / `.env.local` or Cloudflare Worker secrets (`void secret`). Never commit raw keys.
 
 ## Git Workflow
 - Main branch: `main`

@@ -4,6 +4,7 @@ import react from '@astrojs/react'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 import { loadEnv } from 'vite'
+import { voidPlugin } from 'void'
 import { SITE_URL } from './src/lib/siteMetadata.ts'
 
 // Content Layer loader (src/content.config.ts) が process.env 経由で
@@ -19,13 +20,13 @@ export default defineConfig({
   // SSG by default; per-route `export const prerender = false` opts into
   // on-demand server rendering (contact API, LLM markdown).
   output: 'static',
-  adapter: cloudflare(),
+  adapter: cloudflare({ configPath: './.void-wrangler.jsonc' }),
   integrations: [react()],
   // /article は最新記事一覧（1 ページ目）へ統一。
   redirects: {
     '/article': '/article/page/1',
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), voidPlugin()],
   },
 })

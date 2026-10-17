@@ -61,27 +61,39 @@ jobs:
           VITE_PUBLIC_SITE_URL=https://yunosukeyoshino.com
           EOF
 
-      - name: Build application
-        run: bun run build
-        env:
-          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
-          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          SITE_URL: https://yunosukeyoshino.com
-
-      - name: Deploy to Cloudflare Workers via cf
+      - name: Sync Worker secrets
+        # Keep Worker secrets in sync with GitHub Secrets on every deploy
+        # (parity with the old cf --secrets-file flow). `void secret sync`
+        # validates each key against env.ts and leaves other remote secrets
+        # untouched. It resolves the target from .void/project.json, which we
+        # write here (the same {"platform":"cloudflare"} `void connect` writes;
+        # `void cloudflare login` is interactive, so CI uses the API token).
         run: |
-          cat > .worker-secrets.env <<EOF
+          mkdir -p .void
+          printf '{"platform":"cloudflare"}\n' > .void/project.json
+          cat > .void-secrets.env <<EOF
           MICROCMS_SERVICE_DOMAIN=${{ secrets.MICROCMS_SERVICE_DOMAIN }}
           MICROCMS_API_KEY=${{ secrets.MICROCMS_API_KEY }}
           RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
           EOF
-          bunx cf-wrangler build
-          bunx cf deploy --prebuilt --secrets-file .worker-secrets.env
-          rm -f .worker-secrets.env
+          bunx void secret sync .void-secrets.env
+          rm -f .void-secrets.env
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Deploy to Cloudflare Workers via Void
+        # `void deploy` runs `astro build` internally; the .env.local written
+        # above feeds the Content Layer.
+        run: bunx void deploy --platform cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_WORKERS_SUBDOMAIN: yunosuke
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          SITE_URL: https://yunosukeyoshino.com
 
       - name: Verify deployed assets
         run: bun run verify:deployment https://yunosukeyoshino.com/

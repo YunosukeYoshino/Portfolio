@@ -23,6 +23,7 @@ lerna-debug.log*
 
 # environment variables
 .worker-secrets.env
+.void-secrets.env
 .env
 .env.local
 .env.development.local
@@ -60,6 +61,9 @@ tsconfig.json.astro
 settings.local.json
 .playwright-mcp
 .wrangler/
+# Void CLI generated config and local state (void.config.ts and void.lock.json stay committed)
+.void/
+.void-wrangler.jsonc
 # cf CLI state and generated binding types (regenerate with `bun run cf:typegen`)
 .cloudflare/
 worker-configuration.d.ts
