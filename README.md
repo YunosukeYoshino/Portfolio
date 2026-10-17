@@ -108,7 +108,7 @@ bunx vp hooks enable
 ## Deployment
 
 Deployed to Cloudflare Workers with [Wrangler](https://developers.cloudflare.com/workers/wrangler/)
-(`bun run deploy` = `astro build` → `wrangler secret bulk` → `wrangler deploy`).
+(`bun run deploy` = `astro build` → `wrangler deploy` → `wrangler secret bulk`).
 Pushes to `main` deploy automatically via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 The deploy-time Worker config is `wrangler.jsonc`; binding/secrets declarations are mirrored in `cloudflare.config.ts`.
 

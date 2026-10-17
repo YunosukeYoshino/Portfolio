@@ -27,7 +27,9 @@ describe('deploy workflow verification target', () => {
 
   it('build 用 .env.local を生成し、worker secrets を deploy 時に同期する', () => {
     expect(workflowSource).toContain('Prepare build env')
-    expect(workflowSource).toContain('wrangler secret bulk .worker-secrets.env')
+    expect(workflowSource).toContain(
+      'bunx wrangler deploy\n          bunx wrangler secret bulk .worker-secrets.env'
+    )
     expect(workflowSource).toContain('bunx wrangler deploy')
   })
 

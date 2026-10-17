@@ -23,7 +23,7 @@
     "lint": "vp check",
     "fix": "vp lint --fix . && vp fmt",
     "format": "vp fmt",
-    "deploy": "bun run build && grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .worker-secrets.env && wrangler secret bulk .worker-secrets.env && wrangler deploy && rm -f .worker-secrets.env",
+    "deploy": "bun run build && wrangler deploy && grep -E '^(MICROCMS_SERVICE_DOMAIN|MICROCMS_API_KEY|RESEND_API_KEY)=' .env.local > .worker-secrets.env && wrangler secret bulk .worker-secrets.env && rm -f .worker-secrets.env",
     "deploy:preview": "bun run build && wrangler deploy --env preview",
     "cf:typegen": "cf workers types",
     "seo:optimize": "bun run scripts/seo-optimize.ts",
