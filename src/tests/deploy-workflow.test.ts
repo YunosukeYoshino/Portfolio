@@ -44,7 +44,7 @@ describe('cloudflare configuration', () => {
   })
 
   it('wrangler.jsonc が同じエントリとアセットを指す', () => {
-    expect(wranglerJsoncSource).toContain('"main": "dist/server/entry.mjs"')
+    expect(wranglerJsoncSource).toContain('"main": "@astrojs/cloudflare/entrypoints/server"')
     expect(wranglerJsoncSource).toContain('"directory": "dist/client"')
     expect(wranglerJsoncSource).toContain('"name": "yunosuke-portfolio"')
   })
