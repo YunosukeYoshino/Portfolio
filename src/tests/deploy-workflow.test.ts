@@ -32,7 +32,7 @@ describe('deploy workflow verification target', () => {
   })
 
   it('Worker secrets をデプロイ前に GitHub Secrets から同期する', () => {
-    expect(workflowSource).toContain('void secret sync')
+    expect(workflowSource).toContain('void secret put')
     expect(workflowSource).not.toContain('.worker-secrets.env')
   })
 })

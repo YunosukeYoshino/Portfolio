@@ -32,7 +32,7 @@ bun run test            # vp test — Vitest suite
 bun run deploy          # Deploy to production via `void deploy`
 bun run deploy:preview  # Deploy to preview worker via `cf` CLI
 bun run deploy:cf       # Legacy cf-based production deploy (fallback)
-bun run secrets:sync    # Upload server secrets via `void secret sync`
+bun run secrets:sync    # Upload server secrets via `void secret put`
 bun run cf:typegen      # Regenerate Cloudflare binding types (cf workers types)
 bun run seo:optimize    # Regenerate src/data/seo-metadata.json (:dry / :force variants)
 bun run verify:deployment # Check deployment assets after a build
@@ -118,7 +118,7 @@ src/
 
 ### Cloudflare Workers Deploy
 - `void deploy --platform cloudflare` builds with `astro build` and deploys to the `yunosuke-portfolio` Worker; settings live in `void.config.ts` and generated `.void-wrangler.jsonc` feeds the `@astrojs/cloudflare` adapter (`configPath`).
-- Server secrets are managed by `void secret put`/`sync` against the `env.ts` schema — never by per-deploy secrets files.
+- Server secrets are managed by `void secret put` against the `env.ts` schema — never by per-deploy secrets files. CI runs `void secret put` from GitHub Secrets before every `void deploy` (`void secret sync` prompts interactively and is not used in CI).
 - The `@astrojs/cloudflare` adapter builds artifacts into `dist/`.
 - Worker entry point is emitted at `dist/server/entry.mjs` (referenced by `entrypoint` in `cloudflare.config.ts` — still used by `deploy:preview`/`deploy:cf`).
 - Static assets are served from `dist/client` (`assetsDirectory` in `wrangler.config.ts`).
@@ -126,7 +126,7 @@ src/
 
 ## Safety & Guardrails
 - **Destructive Commands**: Never execute `git reset --hard`, `git clean -fd`, or force pushes without user explicit instruction. Keep commits local.
-- **Secrets Management**: Secrets (`MICROCMS_*`, `RESEND_API_KEY`) must remain in `.env` / `.env.local` or Cloudflare Worker secrets (`void secret`). Never commit raw keys.
+- **Secrets Management**: Secrets (`MICROCMS_*`, `RESEND_API_KEY`) must remain in `.env` or Cloudflare Worker secrets (`void secret`). Void accepts only `.env` as the local dotenv file — `.env.local`/`.env.example` make `void deploy` fail. Never commit raw keys.
 
 ## Git Workflow
 - Main branch: `main`
