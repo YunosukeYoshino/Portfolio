@@ -20,6 +20,9 @@ export default defineConfig({
   // on-demand server rendering (contact API, LLM markdown).
   output: 'static',
   adapter: cloudflare(),
+  // Sessions are unused; without a driver the adapter auto-injects a
+  // Cloudflare KV SESSION binding that requires provisioning.
+  session: { driver: 'memory' },
   integrations: [react()],
   // /article は最新記事一覧（1 ページ目）へ統一。
   redirects: {
