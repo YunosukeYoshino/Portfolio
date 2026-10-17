@@ -69,15 +69,15 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           SITE_URL: https://yunosukeyoshino.com
 
-      - name: Deploy to Cloudflare Workers via cf
+      - name: Deploy to Cloudflare Workers via Wrangler
         run: |
           cat > .worker-secrets.env <<EOF
           MICROCMS_SERVICE_DOMAIN=${{ secrets.MICROCMS_SERVICE_DOMAIN }}
           MICROCMS_API_KEY=${{ secrets.MICROCMS_API_KEY }}
           RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
           EOF
-          bunx cf-wrangler build
-          bunx cf deploy --prebuilt --secrets-file .worker-secrets.env
+          bunx wrangler secret bulk .worker-secrets.env
+          bunx wrangler deploy
           rm -f .worker-secrets.env
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

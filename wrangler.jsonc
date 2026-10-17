@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "yunosuke-portfolio",
+  "main": "dist/server/entry.mjs",
+  "compatibility_date": "2026-03-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "dist/client",
+    "binding": "ASSETS",
+  },
+  "env": {
+    "preview": {
+      "name": "yunosuke-portfolio-preview",
+      "workers_dev": true,
+    },
+  },
+}

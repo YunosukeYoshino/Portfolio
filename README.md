@@ -72,7 +72,7 @@ bun run dev
 | `bun run fix` | Auto-fix linting + formatting issues |
 | `bun run typecheck` | `vp check --no-fmt --no-lint` (types only) |
 | `bun run test` | `vp test` — run the Vitest suite |
-| `bun run deploy` | Deploy to Cloudflare Workers via `cf` CLI |
+| `bun run deploy` | Deploy to Cloudflare Workers via Wrangler |
 | `bun run deploy:preview` | Deploy to the preview environment |
 | `bun run lighthouse` | Build & run Lighthouse CI automated audit |
 
@@ -107,10 +107,10 @@ bunx vp hooks enable
 
 ## Deployment
 
-Deployed to Cloudflare Workers with the [`cf` CLI](https://github.com/cloudflare/cf)
-(`bun run deploy` = `astro build` → `cf-wrangler build` → `cf deploy --prebuilt`).
+Deployed to Cloudflare Workers with [Wrangler](https://developers.cloudflare.com/workers/wrangler/)
+(`bun run deploy` = `astro build` → `wrangler secret bulk` → `wrangler deploy`).
 Pushes to `main` deploy automatically via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
-Worker bindings, secrets and environments are declared in `cloudflare.config.ts`.
+The deploy-time Worker config is `wrangler.jsonc`; binding/secrets declarations are mirrored in `cloudflare.config.ts`.
 
 ```bash
 # Production deploy
@@ -121,7 +121,7 @@ bun run deploy:preview
 ```
 
 > [!IMPORTANT]
-> The `cf` and `vp` CLIs run on Node.js — use Node.js 24 or higher locally
+> The `vp` CLI runs on Node.js — use Node.js 24 or higher locally
 > (`vp staged` requires Node >= 22.22.1 or >= 24.11; the deploy workflow uses Node.js 22).
 
 ## Contributing
