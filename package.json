@@ -18,7 +18,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro build && astro preview",
-    "typecheck": "vp check --no-fmt --no-lint",
+    "typecheck": "bun check . scripts",
     "test": "vp test",
     "lint": "vp check",
     "fix": "vp lint --fix . && vp fmt",
@@ -73,7 +73,7 @@
   "devEngines": {
     "packageManager": {
       "name": "bun",
-      "version": "1.4.2",
+      "version": "1.4.3",
       "onFail": "download"
     }
   },

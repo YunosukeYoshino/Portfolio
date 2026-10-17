@@ -27,7 +27,7 @@ bun run dev             # Astro dev server (http://localhost:4321)
 bun run build           # Production build (astro build -> dist/)
 bun run lint            # vp check — Oxfmt + Oxlint + type-aware typecheck
 bun run fix             # Auto-fix
-bun run typecheck       # vp check --no-fmt --no-lint (types only)
+bun run typecheck       # bun check . scripts — Bun built-in typechecker (Bun >=1.4.3)
 bun run test            # vp test — Vitest suite
 bun run deploy          # Deploy to main branch
 bun run deploy:preview  # Deploy to preview branch

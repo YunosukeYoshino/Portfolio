@@ -70,7 +70,7 @@ bun run dev
 | `bun run build` | Build for production (`vp run build`) |
 | `bun run lint` | `vp check` — Oxfmt check + Oxlint + type-aware typecheck |
 | `bun run fix` | Auto-fix linting + formatting issues |
-| `bun run typecheck` | `vp check --no-fmt --no-lint` (types only) |
+| `bun run typecheck` | `bun check . scripts` — Bun's built-in typechecker (Bun >=1.4.3) |
 | `bun run test` | `vp test` — run the Vitest suite |
 | `bun run deploy` | Deploy to Cloudflare Workers via Wrangler |
 | `bun run deploy:preview` | Deploy to the preview environment |
