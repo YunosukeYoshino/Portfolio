@@ -92,12 +92,6 @@ jobs:
         # --debug mirrors the deploy jsonl log to stderr so trigger-sync
         # failures surface the underlying Cloudflare API error in CI output.
         run: bunx void deploy --platform cloudflare --debug
-
-      - name: Dump Void deploy log on failure
-        if: failure()
-        run: |
-          f=$(ls -t "$HOME/.void/logs/"*.jsonl 2>/dev/null | head -1)
-          if [ -n "$f" ]; then tail -n 200 "$f"; else echo "no void deploy log found"; fi
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -106,6 +100,12 @@ jobs:
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           SITE_URL: https://yunosukeyoshino.com
+
+      - name: Dump Void deploy log on failure
+        if: failure()
+        run: |
+          f=$(ls -t "$HOME/.void/logs/"*.jsonl 2>/dev/null | head -1)
+          if [ -n "$f" ]; then tail -n 200 "$f"; else echo "no void deploy log found"; fi
 
       - name: Verify deployed assets
         run: bun run verify:deployment https://yunosukeyoshino.com/
