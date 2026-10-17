@@ -89,7 +89,15 @@ jobs:
       - name: Deploy to Cloudflare Workers via Void
         # `void deploy` runs `astro build` internally; the .env written
         # above feeds the Content Layer.
-        run: bunx void deploy --platform cloudflare
+        # --debug mirrors the deploy jsonl log to stderr so trigger-sync
+        # failures surface the underlying Cloudflare API error in CI output.
+        run: bunx void deploy --platform cloudflare --debug
+
+      - name: Dump Void deploy log on failure
+        if: failure()
+        run: |
+          f=$(ls -t "$HOME/.void/logs/"*.jsonl 2>/dev/null | head -1)
+          if [ -n "$f" ]; then tail -n 200 "$f"; else echo "no void deploy log found"; fi
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
