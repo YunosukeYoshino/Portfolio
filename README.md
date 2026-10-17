@@ -144,8 +144,9 @@ bun run deploy:cf
 After the first `void deploy`, commit the generated `void.lock.json`.
 
 > [!IMPORTANT]
-> The `void`, `cf`, and `vp` CLIs run on Node.js — use Node.js 24 or higher locally
-> (`vp staged` requires Node >= 22.22.1 or >= 24.11; the deploy workflow uses Node.js 22).
+> The `void`, `cf`, and `vp` CLIs run on Node.js — use Node.js 24 or higher
+> (`vp staged` requires Node >= 22.22.1 or >= 24.11; `void` needs >= 24 for
+> `setGlobalProxyFromEnv`; the deploy workflow uses Node.js 24).
 
 ## Contributing
 
