@@ -53,7 +53,8 @@ src/
 git clone https://github.com/YunosukeYoshino/portfolio.git
 cd portfolio
 bun install
-cp .env.example .env.local
+# Create .env with your secrets (MICROCMS_SERVICE_DOMAIN, MICROCMS_API_KEY,
+# RESEND_API_KEY — schema in env.ts)
 bun run dev
 ```
 
@@ -75,7 +76,7 @@ bun run dev
 | `bun run deploy` | Deploy to Cloudflare Workers via `void deploy` |
 | `bun run deploy:preview` | Deploy to the preview environment (`cf` CLI) |
 | `bun run deploy:cf` | Deploy via the legacy `cf` CLI path (fallback) |
-| `bun run secrets:sync` | Upload server secrets via `void secret sync` (reads `.env.local`, falling back to `.env`) |
+| `bun run secrets:sync` | Upload server secrets via `void secret put` (reads `.env`, falling back to `.env.local`) |
 | `bun run lighthouse` | Build & run Lighthouse CI automated audit |
 
 ### Toolchain
@@ -115,12 +116,20 @@ provisions resources, and deploys in one command).
 Pushes to `main` deploy automatically via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
 Worker settings are declared in `void.config.ts`; Void generates `.void-wrangler.jsonc`
 for the `@astrojs/cloudflare` adapter. Server secrets (`MICROCMS_*`, `RESEND_API_KEY`)
-are declared in `env.ts` and uploaded once with `void secret sync`.
+are declared in `env.ts` and managed with `void secret put` (`bun run secrets:sync`).
+In CI the deploy workflow pushes them from GitHub Secrets before every `void deploy`,
+so rotating a secret only requires updating GitHub Secrets.
+
+> [!IMPORTANT]
+> Void accepts only `.env` as the local dotenv file — `.env.local` or `.env.example`
+> present in the repo root makes `void deploy` (and `void env check`) fail. Keep
+> secrets in `.env`.
 
 ```bash
 # One-time setup
 bunx void cloudflare login   # Cloudflare account auth (browser)
-bun run secrets:sync         # register Worker secrets from .env.local (or .env)
+export CLOUDFLARE_ACCOUNT_ID=<your account id>  # from the CF dashboard URL (or set `account_id` in void.config.ts)
+bun run secrets:sync         # register Worker secrets from .env (or .env.local)
 
 # Production deploy
 bun run deploy
