@@ -19,6 +19,13 @@ A personal portfolio and blog built with Astro 7. microCMS-managed articles are 
 into a single-column editorial paper layout, prerendered at build time, and served from a
 Cloudflare Worker via the `@astrojs/cloudflare` adapter.
 
+## Architecture
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/architecture-dark.png" />
+  <img src="docs/images/architecture.png" alt="Architecture: the browser reaches a Cloudflare Worker that serves prerendered static assets, renders SSR routes, and sends contact mail via Resend; GitHub Actions builds the Astro site from microCMS content and deploys it to Cloudflare." />
+</picture>
+
 ## Tech Stack
 
 | Category | Technology |
